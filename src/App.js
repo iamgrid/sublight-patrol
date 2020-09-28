@@ -6,15 +6,17 @@ import StarScapeLayer from './components/StarscapeLayer';
 export default class App extends PIXI.Application {
 	constructor() {
 		super({
-			width: window.innerWidth,
-			height: window.innerHeight,
+			width: c.gameCanvas.width,
+			height: c.gameCanvas.height,
 			antialias: true,
 		});
 		document.body.appendChild(this.view); // Create Canvas tag in the body
 
 		this.init();
 
-		window.addEventListener('resize', this.onResize.bind(this));
+		// this.startTime = new Date().getTime();
+
+		// window.addEventListener('resize', this.onResize.bind(this));
 	}
 
 	init() {
@@ -32,19 +34,21 @@ export default class App extends PIXI.Application {
 
 		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
 
-		this.onResize();
+		// this.onResize();
 
 		// Create an update loop
 		this.ticker.add(this.onUpdate.bind(this));
 	}
 
 	onUpdate(delta) {
+		// const currentTime = new Date().getTime();
+		// const elapsedTime = currentTime - this.startTime;
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta * 3));
 	}
 
-	onResize() {
+	/*onResize() {
 		this.renderer.resize(window.innerWidth, window.innerHeight);
 		// const { width, height } = this.renderer;
 		// this.starfield.onResize(width, height);
-	}
+	}*/
 }
