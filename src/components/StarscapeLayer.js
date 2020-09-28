@@ -25,9 +25,9 @@ export default class StarScapeLayer extends PIXI.Graphics {
 	onUpdate(delta) {
 		let newPos = this.position.x - delta * this.speedMultiplier;
 		if (newPos < 0 - c.gameCanvas.width) {
-			newPos = delta * this.speedMultiplier;
+			newPos += c.gameCanvas.width;
 			// console.log('resetting layer');
 		}
-		this.position.x = newPos.toPrecision(5);
+		this.position.x = newPos;
 	}
 }
