@@ -1,6 +1,6 @@
 // const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CopyPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -12,13 +12,12 @@ module.exports = {
 			template: './src/index.template.html',
 			title: 'sublight patrol',
 		}),
-		/* new CopyPlugin([
-			{ from: 'src/wallpapers', to: 'wallpapers' },
-			{ from: 'src/export_json.php', to: 'export_json.php' }
-		]),
+		new CopyPlugin({
+			patterns: [{ from: 'src/assets', to: 'assets' }],
+		}) /*
 		new MiniCssExtractPlugin({
 			filename: '[name].[contenthash].css'
-		}) */
+		}) */,
 	],
 	output: {
 		hashDigestLength: 8,
