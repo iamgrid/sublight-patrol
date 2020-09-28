@@ -1,4 +1,4 @@
-// const path = require('path');
+/* eslint-disable no-undef */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');

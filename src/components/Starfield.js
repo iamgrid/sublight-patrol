@@ -11,7 +11,7 @@ export default class Starfield extends PIXI.TilingSprite {
 		this.width = width;
 	}
 
-	onUpdate(delta) {
+	/*onUpdate(delta) {
 		this.tilePosition.x -= delta * 3;
-	}
+	}*/
 }

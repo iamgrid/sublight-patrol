@@ -1,12 +1,14 @@
 import * as PIXI from './pixi';
-
-import Starfield from './components/Starfield';
+import c from './utils/constants';
+// import Starfield from './components/Starfield';
+import StarScapeLayer from './components/StarscapeLayer';
 
 export default class App extends PIXI.Application {
 	constructor() {
 		super({
 			width: window.innerWidth,
 			height: window.innerHeight,
+			antialias: true,
 		});
 		document.body.appendChild(this.view); // Create Canvas tag in the body
 
@@ -22,9 +24,13 @@ export default class App extends PIXI.Application {
 	}
 
 	draw() {
-		this.starfield = new Starfield();
+		// this.starfield = new Starfield();
 
-		this.stage.addChild(this.starfield);
+		this.starScapeLayers = c.starScapeLayers.map(
+			(el) => new StarScapeLayer(el)
+		);
+
+		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
 
 		this.onResize();
 
@@ -33,12 +39,12 @@ export default class App extends PIXI.Application {
 	}
 
 	onUpdate(delta) {
-		this.starfield.onUpdate(delta);
+		this.starScapeLayers.forEach((el) => el.onUpdate(delta * 3));
 	}
 
 	onResize() {
 		this.renderer.resize(window.innerWidth, window.innerHeight);
-		const { width, height } = this.renderer;
-		this.starfield.onResize(width, height);
+		// const { width, height } = this.renderer;
+		// this.starfield.onResize(width, height);
 	}
 }
