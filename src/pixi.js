@@ -7,16 +7,18 @@ import * as utils from '@pixi/utils';
 export { utils };
 export * from '@pixi/core';
 export * from '@pixi/loaders';
+export * from '@pixi/particles';
 export * from '@pixi/sprite';
 export * from '@pixi/app';
 export * from '@pixi/graphics';
-import '@pixi/graphics-extras';
 export * from '@pixi/sprite-tiling';
 
 // Renderer plugins
 import { Renderer } from '@pixi/core';
 import { BatchRenderer } from '@pixi/core';
 Renderer.registerPlugin('batch', BatchRenderer);
+import { ParticleRenderer } from '@pixi/particles';
+Renderer.registerPlugin('particle', ParticleRenderer);
 import { TilingSpriteRenderer } from '@pixi/sprite-tiling';
 Renderer.registerPlugin('tilingSprite', TilingSpriteRenderer);
 
