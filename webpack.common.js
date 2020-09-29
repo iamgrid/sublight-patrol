@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: {
@@ -14,20 +14,20 @@ module.exports = {
 		}),
 		new CopyPlugin({
 			patterns: [{ from: 'src/assets', to: 'assets' }],
-		}) /*
+		}),
 		new MiniCssExtractPlugin({
-			filename: '[name].[contenthash].css'
-		}) */,
+			filename: '[name].[contenthash].css',
+		}),
 	],
 	output: {
 		hashDigestLength: 8,
 	},
 	module: {
-		/* rules: [
+		rules: [
 			{
 				test: /\.css$/i,
-				use: [MiniCssExtractPlugin.loader, 'css-loader']
-			}
-		] */
+				use: [MiniCssExtractPlugin.loader, 'css-loader'],
+			},
+		],
 	},
 };

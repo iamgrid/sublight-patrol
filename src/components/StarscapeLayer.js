@@ -1,5 +1,6 @@
 import * as PIXI from '../pixi';
 import c from '../utils/constants';
+import { randomNumber } from '../utils/formulas';
 
 export default class StarScapeLayer extends PIXI.Graphics {
 	constructor(props) {
@@ -10,9 +11,9 @@ export default class StarScapeLayer extends PIXI.Graphics {
 		this.lineStyle(0);
 
 		for (let i = 0; i < this.noOfStars; i++) {
-			const x = Math.ceil(Math.random() * c.gameCanvas.width);
-			const y = Math.ceil(Math.random() * c.gameCanvas.height);
-			const size = (0.4 + Math.random() * 1.3).toPrecision(2);
+			const x = randomNumber(0, c.gameCanvas.width);
+			const y = randomNumber(0, c.gameCanvas.height);
+			const size = randomNumber(0.4, 1.4, 2);
 			this.beginFill(0xffffff, 1);
 			this.drawCircle(x, y, size);
 			this.endFill();
