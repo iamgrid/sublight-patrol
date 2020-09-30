@@ -1,7 +1,7 @@
 const c = {
 	gameCanvas: {
 		width: 1200,
-		height: 700,
+		height: 450,
 	},
 	starScapeLayers: [
 		{ noOfStars: 15, speedMultiplier: 0.8 },

@@ -57,6 +57,7 @@
 		"@pixi/sprite": "^5.3.3",
 		"@pixi/sprite-tiling": "^5.3.3",
 		"@pixi/ticker": "^5.3.3",
-		"@pixi/utils": "^5.3.3"
+		"@pixi/utils": "^5.3.3",
+		"pixi.js-keyboard": "^1.0.9"
 	}
 }
