@@ -2,6 +2,7 @@ import * as PIXI from './pixi';
 import c from './utils/constants';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
+import Fenrir from './components/Fenrir';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -16,19 +17,36 @@ export default class App extends PIXI.Application {
 
 		this.state = this.play;
 
+		this.gameState = {
+			player: {
+				x: 100,
+				y: 100,
+			},
+		};
+
 		// this.startTime = new Date().getTime();
 	}
 
 	init() {
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v1.png');
+
 		this.loader.load(this.draw.bind(this));
 	}
 
 	draw() {
+		this.spriteSheet = PIXI.Texture.from('spriteSheet');
+
+		this.fenrir = new Fenrir({ spriteSheet: this.spriteSheet });
+
 		this.starScapeLayers = c.starScapeLayers.map(
 			(el) => new StarScapeLayer(el)
 		);
 
 		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
+
+		this.stage.addChild(this.fenrir);
+
+		this.fenrir.position.set(400, 200);
 
 		this.state = this.play;
 
@@ -46,18 +64,17 @@ export default class App extends PIXI.Application {
 
 	play(delta) {
 		const speed = 5 * delta;
-		const player = {
-			x: 100,
-			y: 100,
-		};
 
 		// Keyboard
-		if (Keyboard.isKeyDown('ArrowLeft', 'KeyA')) player.x -= speed;
-		if (Keyboard.isKeyDown('ArrowRight', 'KeyD')) player.x += speed;
+		if (Keyboard.isKeyDown('ArrowLeft', 'KeyA'))
+			this.gameState.player.x -= speed;
+		if (Keyboard.isKeyDown('ArrowRight', 'KeyD'))
+			this.gameState.player.x += speed;
 
-		if (Keyboard.isKeyDown('ArrowUp', 'KeyW')) player.y -= speed;
-		if (Keyboard.isKeyDown('ArrowDown', 'KeyS')) player.y += speed;
+		if (Keyboard.isKeyDown('ArrowUp', 'KeyW')) this.gameState.player.y -= speed;
+		if (Keyboard.isKeyDown('ArrowDown', 'KeyS'))
+			this.gameState.player.y += speed;
 
-		// console.log(player.x, player.y);
+		this.fenrir.position.set(this.gameState.player.x, this.gameState.player.y);
 	}
 }
