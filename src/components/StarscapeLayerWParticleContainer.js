@@ -13,20 +13,26 @@ export default class StarScapeLayer extends PIXI.ParticleContainer {
 			const y = randomNumber(0, c.gameCanvas.height);
 			const size = randomNumber(0.4, 1.4, 2);
 
-			let sprite1 = PIXI.Sprite.from(starTexture);
-			let sprite2 = PIXI.Sprite.from(starTexture);
+			// let sprite1 = PIXI.Sprite.from(starTexture);
+			// let sprite2 = PIXI.Sprite.from(starTexture);
+			let sprite1 = PIXI.Sprite.from('single_star');
+			let sprite2 = PIXI.Sprite.from('single_star');
 			sprite1.position.set(x, y);
 			sprite2.position.set(x + c.gameCanvas.width, y);
-			sprite1.scale.set(size);
-			sprite2.scale.set(size);
+			sprite1.scale.set(size / 2);
+			sprite2.scale.set(size / 2);
 			this.addChild(sprite1);
 			this.addChild(sprite2);
 		}
 	}
 
 	onUpdate(delta) {
-		let newPos = this.position.x - (this.speedMultiplier * 2 + delta);
-		if (newPos < 0 - c.gameCanvas.width) newPos += c.gameCanvas.width;
+		// let newPos = this.position.x - (this.speedMultiplier * 2 + delta);
+		let newPos = this.position.x - this.speedMultiplier * 3 * delta;
+		if (newPos < 0 - c.gameCanvas.width) {
+			// console.log('repositioning...', newPos, newPos + c.gameCanvas.width);
+			newPos += c.gameCanvas.width;
+		}
 		this.position.x = newPos;
 	}
 }

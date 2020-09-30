@@ -9,7 +9,7 @@ export default class App extends PIXI.Application {
 		super({
 			width: c.gameCanvas.width,
 			height: c.gameCanvas.height,
-			antialias: true,
+			/*antialias: true,*/
 		});
 		document.body.appendChild(this.view); // Create Canvas tag in the body
 
@@ -22,6 +22,7 @@ export default class App extends PIXI.Application {
 
 	init() {
 		// this.loader.add('starfield', './assets/starfield.png');
+		this.loader.add('single_star', './assets/single_star.png');
 		this.loader.load(this.draw.bind(this));
 	}
 
