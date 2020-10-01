@@ -1,5 +1,8 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
+import initialGameState from './initialGameState';
+import reducer from './reducers';
+import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import Fenrir from './components/Fenrir';
@@ -15,14 +18,12 @@ export default class App extends PIXI.Application {
 
 		this.init();
 
-		this.state = this.play;
+		const [state, dispatch] = useReducer(reducer, initialGameState);
 
-		this.gameState = {
-			player: {
-				x: 100,
-				y: 100,
-			},
-		};
+		this.gameState = state;
+		this.dispatch = dispatch;
+
+		this.pixiState = this.play;
 
 		// this.startTime = new Date().getTime();
 	}
@@ -48,7 +49,7 @@ export default class App extends PIXI.Application {
 
 		this.fenrir.position.set(400, 200);
 
-		this.state = this.play;
+		this.pixiState = this.play;
 
 		// Create an update loop
 		this.ticker.add(this.gameLoop.bind(this));
@@ -57,7 +58,7 @@ export default class App extends PIXI.Application {
 	gameLoop(delta) {
 		// const currentTime = new Date().getTime();
 		// const elapsedTime = currentTime - this.startTime;
-		this.state(delta);
+		this.pixiState(delta);
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		Keyboard.update();
 	}
@@ -66,15 +67,39 @@ export default class App extends PIXI.Application {
 		const speed = 5 * delta;
 
 		// Keyboard
-		if (Keyboard.isKeyDown('ArrowLeft', 'KeyA'))
-			this.gameState.player.x -= speed;
-		if (Keyboard.isKeyDown('ArrowRight', 'KeyD'))
-			this.gameState.player.x += speed;
+		if (Keyboard.isKeyDown('ArrowLeft', 'KeyA')) {
+			this.dispatch({
+				type: c.actions.MOVE_PLAYER,
+				axis: 'x',
+				value: -speed,
+			});
+		}
+		if (Keyboard.isKeyDown('ArrowRight', 'KeyD')) {
+			this.dispatch({
+				type: c.actions.MOVE_PLAYER,
+				axis: 'x',
+				value: speed,
+			});
+		}
 
-		if (Keyboard.isKeyDown('ArrowUp', 'KeyW')) this.gameState.player.y -= speed;
-		if (Keyboard.isKeyDown('ArrowDown', 'KeyS'))
-			this.gameState.player.y += speed;
+		if (Keyboard.isKeyDown('ArrowUp', 'KeyW')) {
+			this.dispatch({
+				type: c.actions.MOVE_PLAYER,
+				axis: 'y',
+				value: -speed,
+			});
+		}
+		if (Keyboard.isKeyDown('ArrowDown', 'KeyS')) {
+			this.dispatch({
+				type: c.actions.MOVE_PLAYER,
+				axis: 'y',
+				value: speed,
+			});
+		}
 
-		this.fenrir.position.set(this.gameState.player.x, this.gameState.player.y);
+		this.fenrir.position.set(
+			this.gameState().player.x,
+			this.gameState().player.y
+		);
 	}
 }

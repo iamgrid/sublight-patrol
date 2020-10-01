@@ -1,4 +1,7 @@
 const c = {
+	actions: {
+		MOVE_PLAYER: 'MOVE_PLAYER',
+	},
 	gameCanvas: {
 		width: 1200,
 		height: 450,
