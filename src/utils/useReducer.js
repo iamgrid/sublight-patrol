@@ -1,4 +1,20 @@
 export default function useReducer(reducer, initialArg = {}) {
+	if (typeof initialArg !== 'object') {
+		console.error(
+			'initialArg has to be an object, this was received instead:',
+			initialArg
+		);
+		return null;
+	}
+
+	if (typeof reducer !== 'function') {
+		console.error(
+			'reducer has to be a function, this was received instead:',
+			reducer
+		);
+		return null;
+	}
+
 	const _internalState = {
 		_store: {},
 		get state() {
@@ -12,7 +28,7 @@ export default function useReducer(reducer, initialArg = {}) {
 	try {
 		_internalState.state = initialArg;
 	} catch (error) {
-		console.error('Failed to set initial state based on: ', initialArg);
+		console.error('Failed to set initial state based on:', initialArg);
 	}
 
 	function dispatch(action) {
@@ -20,7 +36,12 @@ export default function useReducer(reducer, initialArg = {}) {
 			const newState = reducer(_internalState.state, action);
 			_internalState.state = newState;
 		} catch (error) {
-			console.error(`Failed to run reducer with action '${action}': ${error}`);
+			console.error(
+				'Failed to run reducer with action:',
+				action,
+				'error:',
+				error
+			);
 		}
 	}
 

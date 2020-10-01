@@ -64,6 +64,8 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
+		const currentState = this.gameState();
+
 		const speed = 5 * delta;
 
 		// Keyboard
@@ -97,9 +99,6 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		this.fenrir.position.set(
-			this.gameState().player.x,
-			this.gameState().player.y
-		);
+		this.fenrir.position.set(currentState.player.x, currentState.player.y);
 	}
 }

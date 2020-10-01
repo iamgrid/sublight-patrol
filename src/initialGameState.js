@@ -1,7 +1,7 @@
 const initialGameState = {
 	player: {
-		x: 100,
-		y: 100,
+		x: 150,
+		y: 225,
 	},
 };
 
