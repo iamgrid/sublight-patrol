@@ -1,7 +1,19 @@
+// source: https://github.com/reduxjs/redux/blob/5ef5fa7ee5a636b16791540233078b9d235c41db/src/utils/isPlainObject.ts
+function isPlainObject(obj) {
+	if (typeof obj !== 'object' || obj === null) return false;
+
+	let proto = obj;
+	while (Object.getPrototypeOf(proto) !== null) {
+		proto = Object.getPrototypeOf(proto);
+	}
+
+	return Object.getPrototypeOf(obj) === proto;
+}
+
 export default function useReducer(reducer, initialArg = {}) {
-	if (typeof initialArg !== 'object') {
+	if (!isPlainObject(initialArg)) {
 		console.error(
-			'initialArg has to be an object, this was received instead:',
+			'initialArg has to be a plain object, this was received instead:',
 			initialArg
 		);
 		return null;
@@ -14,6 +26,8 @@ export default function useReducer(reducer, initialArg = {}) {
 		);
 		return null;
 	}
+
+	let isDispatching = false;
 
 	const _internalState = {
 		_store: {},
@@ -32,16 +46,33 @@ export default function useReducer(reducer, initialArg = {}) {
 	}
 
 	function dispatch(action) {
+		if (isDispatching) {
+			console.error(
+				'Failed to update state, a previous dispatch was still running.'
+			);
+			return null;
+		}
+
+		if (!isPlainObject(action)) {
+			console.error(
+				'Action has to be a plain object, this was received instead:',
+				action
+			);
+			return null;
+		}
+
 		try {
-			const newState = reducer(_internalState.state, action);
-			_internalState.state = newState;
+			isDispatching = true;
+			_internalState.state = reducer(_internalState.state, action);
 		} catch (error) {
 			console.error(
-				'Failed to run reducer with action:',
+				'Failed to execute reducer with action:',
 				action,
 				'error:',
 				error
 			);
+		} finally {
+			isDispatching = false;
 		}
 	}
 

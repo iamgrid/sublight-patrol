@@ -21,7 +21,7 @@ export default function mainReducer(state, action) {
 			return { ...state, player: { ...state.player, x: newX, y: newY } };
 		}
 		default:
-			console.error(`failed to run action: ${action}`);
+			console.error(`Failed to run action: ${action}`);
 			return state;
 	}
 }
