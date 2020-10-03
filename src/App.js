@@ -5,7 +5,7 @@ import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
-import entitySystem from './utils/entitySystem';
+import entitySystem from './entities/entitySystem';
 import Fenrir from './components/Fenrir';
 
 export default class App extends PIXI.Application {
