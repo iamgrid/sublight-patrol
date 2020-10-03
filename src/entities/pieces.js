@@ -41,19 +41,26 @@ const pieces = {
 
 	fenrir: {
 		immutable: {
-			maxHullStrength: 75,
+			maxHullStrength: 125,
 			hasShields: true,
-			maxShieldStrength: 150,
+			maxShieldStrength: 100,
 			shieldRechargeRate: 4,
+		},
+		mutable: {},
+	},
+
+	fenrir_dominator: {
+		immutable: {
+			maxHullStrength: 150,
 		},
 		mutable: {},
 	},
 
 	valkyrie: {
 		immutable: {
-			maxHullStrength: 125,
+			maxHullStrength: 75,
 			hasShields: true,
-			maxShieldStrength: 100,
+			maxShieldStrength: 150,
 			shieldRechargeRate: 2,
 		},
 		mutable: {},

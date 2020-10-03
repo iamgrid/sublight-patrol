@@ -5,6 +5,7 @@ const entities = {
 
 	init() {
 		this.assembleType(['fenrir', 'ship']);
+		this.assembleType(['fenrir_dominator', 'fenrir', 'ship']);
 		this.assembleType(['valkyrie', 'ship']);
 	},
 
@@ -15,7 +16,7 @@ const entities = {
 			mutable: { ...pieces.entity.mutable },
 		};
 		const entityType = fromPieces[fromPieces.length - 1];
-		re.immutable.entityType = entityType;
+		re.immutable.entityType = this.makeTypeName(entityType);
 
 		const hasMaxValue = [];
 
@@ -50,22 +51,33 @@ const entities = {
 		});
 
 		// emitting warning about immutables with a null value
-		let nullWarnings = [];
-		for (let prop in re.immutable) {
-			if (re.immutable[prop] === null) nullWarnings.push(prop);
-		}
-		if (nullWarnings.length > 0)
-			console.warn(
-				`EntitySystem [${entityType}]: the following immutable properties have a null value: ${nullWarnings.join(
-					', '
-				)}`
-			);
+		this.checkForNullValues(`Entity types - ${entityType}`, re.immutable);
 
 		// locking in object keys and values
 		Object.freeze(re.immutable);
 		Object.freeze(re.mutable);
 
 		this.types[entityType] = re;
+	},
+
+	makeTypeName(input) {
+		return input
+			.split('_')
+			.map((el) => `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`)
+			.join(' ');
+	},
+
+	checkForNullValues(identifier, object) {
+		let nullWarnings = [];
+		for (let prop in object) {
+			if (object[prop] === null) nullWarnings.push(prop);
+		}
+		if (nullWarnings.length > 0)
+			console.warn(
+				`[${identifier}]: the following immutable properties have a null value: ${nullWarnings.join(
+					', '
+				)}`
+			);
 	},
 };
 
