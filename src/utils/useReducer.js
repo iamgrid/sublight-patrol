@@ -34,13 +34,10 @@ export default function useReducer(reducer, initialArg = {}) {
 		get state() {
 			return this._store;
 		},
-		set state(newState) {
-			this._store = newState;
-		},
 	};
 
 	try {
-		_internalState.state = initialArg;
+		_internalState._store = initialArg;
 	} catch (error) {
 		console.error('Failed to set initial state based on:', initialArg);
 	}
@@ -63,7 +60,7 @@ export default function useReducer(reducer, initialArg = {}) {
 
 		try {
 			isDispatching = true;
-			_internalState.state = reducer(_internalState.state, action);
+			_internalState._store = reducer(_internalState.state, action);
 		} catch (error) {
 			console.error(
 				'Failed to execute reducer with action:',
