@@ -1,7 +1,7 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
 import initialGameState from './initialGameState';
-import reducer from './reducers';
+import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
@@ -14,11 +14,15 @@ export default class App extends PIXI.Application {
 			height: c.gameCanvas.height,
 			antialias: true,
 		});
+
+		// https://pixijs.download/dev/docs/PIXI.settings.html
+		// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
 		document.body.appendChild(this.view); // Create Canvas tag in the body
 
 		this.init();
 
-		const [state, dispatch] = useReducer(reducer, initialGameState);
+		const [state, dispatch] = useReducer(mainReducer, initialGameState);
 
 		this.gameState = state;
 		this.dispatch = dispatch;
