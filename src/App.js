@@ -5,7 +5,7 @@ import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
-import entitySystem from './entities/entitySystem';
+import entities from './entities/entities';
 import Fenrir from './components/Fenrir';
 
 export default class App extends PIXI.Application {
@@ -32,10 +32,9 @@ export default class App extends PIXI.Application {
 
 		// this.startTime = new Date().getTime();
 
-		entitySystem.prototypeFactory.assemble(['fenrir', 'ship']);
-		entitySystem.prototypeFactory.assemble(['valkyrie', 'ship']);
+		entities.init();
 
-		console.log(entitySystem.prototypes);
+		console.log(entities.types);
 	}
 
 	init() {
