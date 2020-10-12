@@ -1,8 +1,7 @@
 import c from '../utils/constants';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
-import Fenrir from './ships/Fenrir';
-import Valkyrie from './ships/Valkyrie';
+import models from './models';
 
 const entities = {
 	types: {},
@@ -89,7 +88,7 @@ const entities = {
 	spawn(type, props, handlers) {
 		const [dispatch, spriteSheet, stage] = handlers;
 		if (!this.types[type]) {
-			console.error(`Couldn't find type [${type}].`);
+			console.error(`Unable to find type [${type}].`);
 			return null;
 		}
 
@@ -99,27 +98,23 @@ const entities = {
 
 		this.checkForNullValues(`${newShip.id} (type)`, newShip);
 
-		let stageEntity = null;
-
-		switch (newShip.immutable.model) {
-			case '/ships/Fenrir':
-				stageEntity = new Fenrir({ spriteSheet: spriteSheet });
-				break;
-			case '/ships/Valkyrie':
-				stageEntity = new Valkyrie({ spriteSheet: spriteSheet });
-				break;
-			default:
-				console.error(`[${newShip.immutable.model}] could not be found`);
+		if (!models[newShip.immutable.model]) {
+			console.error(`Unable to find model for [${type}].`);
+			return null;
 		}
 
-		if (stageEntity) {
-			stage.addChild(stageEntity);
-			stageEntity.position.set(newShip.posX, newShip.posY);
+		const stageEntity = Reflect.construct(models[newShip.immutable.model], [
+			{
+				spriteSheet: spriteSheet,
+			},
+		]);
 
-			this.stageEntities[newShip.id] = stageEntity;
+		stage.addChild(stageEntity);
+		stageEntity.position.set(newShip.posX, newShip.posY);
 
-			dispatch({ type: c.actions.ADD_ENTITY, newEntity: newShip });
-		}
+		this.stageEntities[newShip.id] = stageEntity;
+
+		dispatch({ type: c.actions.ADD_ENTITY, newEntity: newShip });
 	},
 };
 
