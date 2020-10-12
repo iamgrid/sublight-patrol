@@ -6,7 +6,7 @@ import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
-import Fenrir from './components/Fenrir';
+import Fenrir from './entities/ships/Fenrir';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -45,6 +45,7 @@ export default class App extends PIXI.Application {
 
 	draw() {
 		this.spriteSheet = PIXI.Texture.from('spriteSheet');
+		this.handlers = [this.dispatch, this.spriteSheet, this.stage];
 
 		this.fenrir = new Fenrir({ spriteSheet: this.spriteSheet });
 
@@ -58,6 +59,41 @@ export default class App extends PIXI.Application {
 
 		this.fenrir.position.set(400, 200);
 
+		entities.spawn(
+			'valkyrie',
+			{
+				posX: 800,
+				posY: 200,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			this.handlers
+		);
+
+		entities.spawn(
+			'valkyrie',
+			{
+				posX: 700,
+				posY: 200,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			this.handlers
+		);
+
+		entities.spawn(
+			'valkyrie',
+			{
+				posX: 600,
+				posY: 200,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			this.handlers
+		);
+
+		console.log(this.gameState().entities);
+
 		this.pixiState = this.play;
 
 		// Create an update loop
@@ -67,6 +103,7 @@ export default class App extends PIXI.Application {
 	gameLoop(delta) {
 		// const currentTime = new Date().getTime();
 		// const elapsedTime = currentTime - this.startTime;
+		// console.log(elapsedTime.toLocaleString());
 		this.pixiState(delta);
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		Keyboard.update();

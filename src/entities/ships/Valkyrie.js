@@ -1,8 +1,7 @@
-import * as PIXI from '../pixi';
-import { getFromSpriteSheet } from '../utils/helpers';
-// import c from './utils/constants';
+import * as PIXI from '../../pixi';
+import { getFromSpriteSheet } from '../../utils/helpers';
 
-export default class Fenrir extends PIXI.Container {
+export default class Valkyrie extends PIXI.Container {
 	constructor(props) {
 		super();
 		this.shipBody = getFromSpriteSheet(props.spriteSheet, 3, 3, 60, 60);

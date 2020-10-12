@@ -20,6 +20,9 @@ export default function mainReducer(state, action) {
 			}
 			return { ...state, player: { ...state.player, x: newX, y: newY } };
 		}
+		case c.actions.ADD_ENTITY: {
+			return { ...state, entities: [...state.entities, action.newEntity] };
+		}
 		default:
 			console.error(`Failed to run action: ${action}`);
 			return state;
