@@ -1,4 +1,4 @@
-// source: https://github.com/reduxjs/redux/blob/5ef5fa7ee5a636b16791540233078b9d235c41db/src/utils/isPlainObject.ts
+// isPlainObject source: https://github.com/reduxjs/redux/blob/5ef5fa7ee5a636b16791540233078b9d235c41db/src/utils/isPlainObject.ts
 function isPlainObject(obj) {
 	if (typeof obj !== 'object' || obj === null) return false;
 

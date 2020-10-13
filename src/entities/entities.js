@@ -21,7 +21,7 @@ const entities = {
 			mutable: { ...pieces.entity.mutable },
 		};
 		const entityType = fromPieces[fromPieces.length - 1];
-		re.immutable.entityType = this.makeTypeName(entityType);
+		re.immutable.entityType = this.makeName(entityType);
 
 		const hasMaxValue = [];
 
@@ -65,7 +65,7 @@ const entities = {
 		this.types[entityType] = re;
 	},
 
-	makeTypeName(input) {
+	makeName(input) {
 		return input
 			.split('_')
 			.map((el) => `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`)
@@ -85,7 +85,7 @@ const entities = {
 			);
 	},
 
-	spawn(type, props, handlers) {
+	spawn(handlers, type, props) {
 		const [dispatch, spriteSheet, stage] = handlers;
 		if (!this.types[type]) {
 			console.error(`Unable to find type [${type}].`);
@@ -94,9 +94,15 @@ const entities = {
 
 		const newShip = { ...this.types[type].mutable, ...props };
 		newShip.__proto__ = this.types[type];
-		newShip.id = idCreator.create();
+		
+		if (newShip.id !== null) {
+			newShip.displayId = this.makeName(newShip.id);
+		} else {
+			newShip.id = idCreator.create();
+			newShip.displayId = "-";
+		}
 
-		this.checkForNullValues(`${newShip.id} (type)`, newShip);
+		this.checkForNullValues(`${newShip.id} (type ${type})`, newShip);
 
 		if (!models[newShip.immutable.model]) {
 			console.error(`Unable to find model for [${type}].`);

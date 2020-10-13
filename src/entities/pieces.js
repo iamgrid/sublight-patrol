@@ -8,6 +8,7 @@ const pieces = {
 			posX: null,
 			posY: null,
 			id: null,
+			displayId: null
 		},
 	},
 
@@ -23,6 +24,7 @@ const pieces = {
 			longVelocity: null,
 			isDisabled: false,
 			eMPResistance: null,
+			playerRelation: 'neutral'
 		},
 	},
 
