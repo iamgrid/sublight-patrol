@@ -28,6 +28,19 @@ const pieces = {
 		},
 	},
 
+	container: {
+		immutable: {
+			hasHull: true,
+			maxHullStrength: 75,
+		},
+		mutable: {
+			playerRelation: 'neutral',
+			contents: null,
+			hasBeenScanned: false,
+			hullStrength: null,
+		}
+	},
+
 	hasHull: {
 		immutable: {
 			maxHullStrength: null,

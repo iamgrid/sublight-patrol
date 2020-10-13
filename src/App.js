@@ -7,6 +7,7 @@ import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
 import Fenrir from './entities/ships/Fenrir';
+import story from './story/story';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -35,6 +36,7 @@ export default class App extends PIXI.Application {
 		entities.init();
 
 		console.log(entities.types);
+		console.log(story);
 	}
 
 	init() {

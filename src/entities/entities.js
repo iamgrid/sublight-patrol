@@ -8,6 +8,7 @@ const entities = {
 	stageEntities: {},
 
 	init() {
+		this.assembleType(['container']);
 		this.assembleType(['fenrir', 'ship']);
 		this.assembleType(['fenrir_dominator', 'fenrir', 'ship']);
 		this.assembleType(['valkyrie', 'ship']);
@@ -79,7 +80,7 @@ const entities = {
 		}
 		if (nullWarnings.length > 0)
 			console.warn(
-				`[${identifier}]: the following immutable properties have a null value: ${nullWarnings.join(
+				`[${identifier}] The following properties have a null value: ${nullWarnings.join(
 					', '
 				)}`
 			);
