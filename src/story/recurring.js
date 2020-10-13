@@ -22,11 +22,11 @@ const r = {
 		},
 	},
 	slipstreamJump: [
-		{ type: 'animation', model: 'player', duration: '1s', do: 'extendHarness' },
-		{ type: 'animation', model: 'player', duration: '2s', do: 'spoolUpSlipstreamDrive' },
-		{ type: 'animation', model: 'player', duration: '8s', do: 'slipstreamTravel'},
-		{ type: 'animation', model: 'player', duration: '1s', do: 'spoolDownSlipstreamDrive' },
-		{ type: 'animation', model: 'player', duration: '0.5s', do: 'retractHarness' }
+		{ type: 'animation', id: 'player', duration: '1s', do: 'extendHarness' },
+		{ type: 'animation', id: 'player', duration: '2s', do: 'spoolUpSlipstreamDrive' },
+		{ type: 'animation', id: 'player', duration: '8s', do: 'slipstreamTravel'},
+		{ type: 'animation', id: 'player', duration: '1s', do: 'spoolDownSlipstreamDrive' },
+		{ type: 'animation', id: 'player', duration: '0.5s', do: 'retractHarness' }
 	]
 }
 

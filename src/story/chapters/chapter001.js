@@ -7,21 +7,21 @@ const chapter001 = {
 	scenes: [
 		{
 			sceneType: 'cutscene',
-			entities: [],
+			addEntities: [],
 			events: [ ...r.slipstreamJump ]
 		},
 		{
 			sceneType: 'cutscene',
-			entities: [
+			addEntities: [
 				{
 					entityType: 'valkyrie',
 					props: {
+						id: 'commander_shepherd',
+						playerRelation: 'friendly',
 						posX: 800,
 						posY: 225,
 						latVelocity: 0,
 						longVelocity: 0,
-						playerRelation: 'friendly',
-						id: 'commander_shepherd'
 					}
 				}
 			],
@@ -30,6 +30,7 @@ const chapter001 = {
 				{ type: 'dialog', speaker: r.characters.player, say: 'Good day Commander Shepherd!' },
 				{ type: 'dialog', speaker: r.characters.purslane, say: 'More dialog...'},
 				{ type: 'dialog', speaker: r.characters.player, say: 'Even more dialog...' },
+				{ type: 'animation', id: 'commander_shepherd', duration: '1s', do: 'move' },
 			]
 		},
 		{
@@ -39,7 +40,8 @@ const chapter001 = {
 				{ type: 'scan', target: 'container_2' },
 				{ type: 'scan', target: 'container_3' },
 			],
-			entities: [
+			removeEntities: ['commander_shepherd'],
+			addEntities: [
 				{
 					entityType: 'container',
 					props: { id: 'container_1',	cargo: 'Empty',	posX: 800, posY: 275 }
