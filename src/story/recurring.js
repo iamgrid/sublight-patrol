@@ -5,7 +5,7 @@ const r = {
 			lastName: 'Rivero',
 			title: 'Ensign'
 		},
-		purslane: {
+		shepherd: {
 			firstName: 'Purslane',
 			lastName: 'Shepherd',
 			title: 'Commander'
@@ -15,7 +15,7 @@ const r = {
 			lastName: 'Wells',
 			title: 'Lieutenant'
 		},
-		cadence: {
+		covox: {
 			firstName: 'Cadence',
 			lastName: 'Covox',
 			title: 'Dr.'

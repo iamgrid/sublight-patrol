@@ -1,12 +1,12 @@
 import * as PIXI from '../../pixi';
-import { getFromSpriteSheet } from '../../utils/helpers';
+import { fromSpriteSheet } from '../../utils/helpers';
 
 export default class Valkyrie extends PIXI.Container {
-	constructor(props) {
+	constructor() {
 		super();
-		this.shipBody = getFromSpriteSheet(props.spriteSheet, 3, 3, 60, 60);
+		this.shipBody = fromSpriteSheet.create(3, 3, 60, 60);
 
-		this.harness = getFromSpriteSheet(props.spriteSheet, 66, 3, 60, 60);
+		this.harness = fromSpriteSheet.create(66, 3, 60, 60);
 
 		this.harness.x = -6;
 

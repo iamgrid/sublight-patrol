@@ -7,14 +7,25 @@ const chapter001 = {
 	scenes: [
 		{
 			sceneType: 'cutscene',
-			addEntities: [],
+			spawn: [{
+				entityType: 'valkyrie',
+					props: {
+						id: 'player',
+						playerRelation: 'self',
+						posX: 50,
+						posY: 225,
+						latVelocity: 0,
+						longVelocity: 0,
+					}
+				
+			}],
 			events: [ ...r.slipstreamJump ]
 		},
 		{
 			sceneType: 'cutscene',
-			addEntities: [
-				{
-					entityType: 'valkyrie',
+			spawn: [],
+			events: [
+				{ type: 'spawn', entityType: 'valkyrie',
 					props: {
 						id: 'commander_shepherd',
 						playerRelation: 'friendly',
@@ -23,36 +34,42 @@ const chapter001 = {
 						latVelocity: 0,
 						longVelocity: 0,
 					}
-				}
-			],
-			events: [
-				{ type: 'dialog', speaker: r.characters.purslane , say: 'Hello Ensign!' },
-				{ type: 'dialog', speaker: r.characters.player, say: 'Good day Commander Shepherd!' },
-				{ type: 'dialog', speaker: r.characters.purslane, say: 'More dialog...'},
-				{ type: 'dialog', speaker: r.characters.player, say: 'Even more dialog...' },
+				},
+				{ type: 'dialog', speaker: r.characters.shepherd, 
+					say: 'Hello Ensign!' 
+				},
+				{ type: 'dialog', speaker: r.characters.player, 
+					say: 'Good day Commander Shepherd!' 
+				},
+				{ type: 'dialog', speaker: r.characters.shepherd, 
+					say: 'More dialog...'
+				},
+				{ type: 'dialog', speaker: r.characters.player, 
+					say: 'Even more dialog...' 
+				},
 				{ type: 'animation', id: 'commander_shepherd', duration: '1s', do: 'move' },
+				{ type: 'despawn', id: 'commander_shepherd' }
 			]
 		},
 		{
 			sceneType: 'gameplay',
-			goals: [
+			objectives: [
 				{ type: 'scan', target: 'container_1' },
 				{ type: 'scan', target: 'container_2' },
 				{ type: 'scan', target: 'container_3' },
 			],
-			removeEntities: ['commander_shepherd'],
-			addEntities: [
+			spawn: [
 				{
 					entityType: 'container',
-					props: { id: 'container_1',	cargo: 'Empty',	posX: 800, posY: 275 }
+					props: { id: 'container_1', cargo: 'Empty', posX: 800, posY: 275 }
 				},
 				{
 					entityType: 'container',
-					props: { id: 'container_2',	cargo: 'Medical Supplies', posX: 700, posY: 225 }
+					props: { id: 'container_2', cargo: 'Medical Supplies', posX: 700, posY: 225 }
 				},
 				{
 					entityType: 'container',
-					props: { id: 'container_3',	cargo: 'Farming Equipment', posX: 800, posY: 175 }
+					props: { id: 'container_3', cargo: 'Farming Equipment', posX: 800, posY: 175 }
 				}
 			],
 		}

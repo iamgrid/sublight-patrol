@@ -87,7 +87,7 @@ const entities = {
 	},
 
 	spawn(handlers, type, props) {
-		const [dispatch, spriteSheet, stage] = handlers;
+		const [dispatch, stage] = handlers;
 		if (!this.types[type]) {
 			console.error(`Unable to find type [${type}].`);
 			return null;
@@ -110,11 +110,7 @@ const entities = {
 			return null;
 		}
 
-		const stageEntity = Reflect.construct(models[newShip.immutable.model], [
-			{
-				spriteSheet: spriteSheet,
-			},
-		]);
+		const stageEntity = Reflect.construct(models[newShip.immutable.model], []);
 
 		stage.addChild(stageEntity);
 		stageEntity.position.set(newShip.posX, newShip.posY);

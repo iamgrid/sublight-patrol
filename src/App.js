@@ -1,5 +1,6 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
+import { fromSpriteSheet } from './utils/helpers';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
@@ -47,9 +48,11 @@ export default class App extends PIXI.Application {
 
 	draw() {
 		this.spriteSheet = PIXI.Texture.from('spriteSheet');
-		this.handlers = [this.dispatch, this.spriteSheet, this.stage];
+		fromSpriteSheet.defaultSpriteSheet = this.spriteSheet;
 
-		this.fenrir = new Fenrir({ spriteSheet: this.spriteSheet });
+		this.handlers = [this.dispatch, this.stage];
+
+		this.fenrir = new Fenrir();
 
 		this.starScapeLayers = c.starScapeLayers.map(
 			(el) => new StarScapeLayer(el)
