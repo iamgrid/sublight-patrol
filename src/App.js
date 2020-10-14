@@ -64,43 +64,31 @@ export default class App extends PIXI.Application {
 
 		this.fenrir.position.set(400, 200);
 
-		entities.spawn(
-			this.handlers,
-			'valkyrie',
-			{
-				posX: 800,
-				posY: 225,
-				latVelocity: 0,
-				longVelocity: 0,
-				playerRelation: 'friendly',
-				id: 'valkyrie_1'
-			}
-		);
+		entities.spawn(this.handlers, 'valkyrie', {
+			posX: 800,
+			posY: 225,
+			latVelocity: 0,
+			longVelocity: 0,
+			playerRelation: 'friendly',
+			id: 'valkyrie_1',
+		});
 
-		entities.spawn(
-			this.handlers,
-			'valkyrie',
-			{
-				posX: 700,
-				posY: 225,
-				latVelocity: 0,
-				longVelocity: 0,
-				playerRelation: 'friendly',
-				id: 'valkyrie_2'
-			}
-		);
+		entities.spawn(this.handlers, 'valkyrie', {
+			posX: 700,
+			posY: 225,
+			latVelocity: 0,
+			longVelocity: 0,
+			playerRelation: 'friendly',
+			id: 'valkyrie_2',
+		});
 
-		entities.spawn(
-			this.handlers,
-			'fenrir',
-			{
-				posX: 600,
-				posY: 225,
-				latVelocity: 0,
-				longVelocity: 0,
-				playerRelation: 'neutral'
-			}
-		);
+		entities.spawn(this.handlers, 'fenrir', {
+			posX: 600,
+			posY: 225,
+			latVelocity: 0,
+			longVelocity: 0,
+			playerRelation: 'neutral',
+		});
 
 		console.log(this.gameState());
 
