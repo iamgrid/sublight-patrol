@@ -41,7 +41,7 @@ const chapter001 = {
 					type: 'dialog',
 					speaker: r.characters.shepherd,
 					say:
-						'Good morning Ensign. Thank you for helping out with our little shakedown event.',
+						'Good morning Ensign Rivero. Thank you for helping out with our little shakedown event.',
 				},
 				{
 					type: 'dialog',
@@ -52,7 +52,7 @@ const chapter001 = {
 					type: 'dialog',
 					speaker: r.characters.shepherd,
 					say:
-						"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting a fresh graduate's feedback on the Valkyrie's control scheme and calibration turned out to be a huge help.",
+						"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help.",
 				},
 				{
 					type: 'dialog',

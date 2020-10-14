@@ -21,7 +21,7 @@ export default class App extends PIXI.Application {
 		// https://pixijs.download/dev/docs/PIXI.settings.html
 		// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-		document.body.appendChild(this.view); // Create Canvas tag in the body
+		document.getElementById('main').appendChild(this.view); // Create Canvas tag in the body
 
 		this.init();
 
