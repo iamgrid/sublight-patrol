@@ -16,3 +16,34 @@ export const fromSpriteSheet = {
 		return sprite;
 	},
 };
+
+export function dialog(speaker, say, hide = false) {
+	const containerDiv = document.getElementById('main__dialog');
+	const speakerDiv = document.getElementById('main__dialog-speaker');
+	const messageDiv = document.getElementById('main__dialog-message');
+
+	if (hide) {
+		containerDiv.style.opacity = '0';
+		window.setTimeout(() => {
+			document.getElementById('main__dialog').style.visibility = 'hidden';
+		}, 500);
+		return;
+	}
+
+	containerDiv.style.visibility = 'visible';
+
+	function dialogHelper(sp, sa) {
+		containerDiv.style.opacity = '0.7';
+		speakerDiv.innerHTML = sp + ' :';
+		messageDiv.innerHTML = sa;
+	}
+
+	if (containerDiv.style.opacity != '0.7') {
+		dialogHelper(speaker, say);
+	} else {
+		containerDiv.style.opacity = '0';
+		window.setTimeout(() => {
+			dialogHelper(speaker, say);
+		}, 400);
+	}
+}

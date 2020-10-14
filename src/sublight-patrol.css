@@ -57,12 +57,61 @@ h1 {
 main {
 	margin: 0;
 	padding: 0;
+	width: 1200px;
+	height: 450px;
+	position: relative;
 }
 
-canvas {
+#pixicanvas {
 	box-shadow: 0 0 10px #000000a0;
 	margin: 0;
 	padding: 0;
+	position: relative;
+	z-index: 0;
+	outline: 0;
+}
+
+.main__dialog {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	visibility: hidden;
+	transition: opacity 0.4s;
+}
+
+.main__dialog-speaker {
+	flex-shrink: 0;
+	flex-grow: 0;
+	background-color: #606060;
+	border: 1px solid #909090;
+	border-radius: 20px;
+	padding: 0.3em 1em 0.3em 1.2em;
+	margin-left: 3em;
+	margin-right: auto;
+	transform: translateY(18px);
+	color: #ffffffb0;
+	font-weight: 700;
+	letter-spacing: 0.2em;
+	cursor: default;
+}
+
+.main__dialog-message {
+	flex-grow: 1;
+	background-color: #303030;
+	padding: 27px 8em 0.9em;
+	text-align: justify;
+	margin: 0 1em 1em;
+	border: 1px solid #909090;
+	border-radius: 10px;
+	font-size: 1.1em;
+	line-height: 1.6em;
+	box-shadow: 0 0 10px #ffffff90;
+	cursor: default;
 }
 
 .controls {
@@ -121,10 +170,10 @@ footer {
 }
 
 .footer__home {
-	height: 48px;
+	height: 44px;
 	width: 110px;
-	margin-top: 0.1em;
-	margin-bottom: 0.1em;
+	margin-top: 0.15em;
+	margin-bottom: 0.15em;
 	display: flex;
 	padding: 2px 10px;
 	text-decoration: none;
@@ -132,8 +181,8 @@ footer {
 	background-color: #ffffff00;
 	border-radius: 10px;
 	align-items: center;
-	transition: var(--bezier), box-shadow 0.2s ease,
-		width 0.2s cubic-bezier(0.47, 0, 0.59, 1) 0.25s;
+	transition: var(--bezier) 0.1s, box-shadow 0.2s ease,
+		width 0.2s cubic-bezier(0.47, 0, 0.59, 1) 0.35s;
 }
 
 .footer__home:hover {
@@ -145,10 +194,11 @@ footer {
 
 .footer__home_svg {
 	width: 80px;
+	margin-top: 2px;
 	opacity: 0.2;
 	flex-grow: 0;
 	flex-shrink: 0;
-	transition: var(--bezier);
+	transition: var(--bezier) 0.1s;
 }
 
 .footer__home:hover .footer__home_svg {
@@ -170,7 +220,7 @@ footer {
 	width: 38px;
 	color: #ffffff90;
 	margin-left: 0.9em;
-	transition: color 0.2s ease-in-out 0.6s;
+	transition: color 0.2s ease-in-out 0.7s;
 }
 
 .toggle-footer {

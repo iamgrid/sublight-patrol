@@ -21,4 +21,15 @@ function toggleFooter() {
 
 document.getElementById('toggle-footer__link').onclick = toggleFooter;
 
+// prevent keyboard scroll events (space and arrow keys) on window
+window.addEventListener(
+	'keydown',
+	function (e) {
+		if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+			e.preventDefault();
+		}
+	},
+	false
+);
+
 new App();

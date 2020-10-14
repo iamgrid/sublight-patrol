@@ -1,6 +1,6 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
-import { fromSpriteSheet } from './utils/helpers';
+import { fromSpriteSheet, dialog } from './utils/helpers';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
@@ -21,9 +21,17 @@ export default class App extends PIXI.Application {
 		// https://pixijs.download/dev/docs/PIXI.settings.html
 		// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
+		this.view.id = 'pixicanvas';
 		document.getElementById('main').appendChild(this.view); // Create Canvas tag in the body
+		document.getElementById('pixicanvas').tabIndex = 0;
+		document.getElementById('pixicanvas').focus();
 
 		this.init();
+
+		this.triggered1 = false;
+		this.triggered2 = false;
+		this.triggered3 = false;
+		this.triggered4 = false;
 
 		const [state, dispatch] = useReducer(mainReducer, initialGameState);
 
@@ -32,7 +40,7 @@ export default class App extends PIXI.Application {
 
 		this.pixiState = this.play;
 
-		// this.startTime = new Date().getTime();
+		this.startTime = new Date().getTime();
 
 		entities.init();
 
@@ -99,9 +107,31 @@ export default class App extends PIXI.Application {
 	}
 
 	gameLoop(delta) {
-		// const currentTime = new Date().getTime();
-		// const elapsedTime = currentTime - this.startTime;
-		// console.log(elapsedTime.toLocaleString());
+		const currentTime = new Date().getTime();
+		const elapsedTime = currentTime - this.startTime;
+		if (!this.triggered1 && elapsedTime > 2000) {
+			dialog(
+				'Commander Shepherd',
+				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
+			);
+			this.triggered1 = true;
+		}
+
+		if (!this.triggered2 && elapsedTime > 8000) {
+			dialog('Love Eternal', 'Prepare to be assimilated.');
+			this.triggered2 = true;
+		}
+
+		if (!this.triggered3 && elapsedTime > 16000) {
+			dialog('Death Herself', 'Resistance is futile.');
+			this.triggered3 = true;
+		}
+
+		if (!this.triggered4 && elapsedTime > 20000) {
+			dialog('', '', true);
+			this.triggered4 = true;
+		}
+
 		this.pixiState(delta);
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		Keyboard.update();
