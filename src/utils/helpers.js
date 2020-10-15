@@ -1,4 +1,5 @@
 import * as PIXI from '../pixi';
+import c from './constants';
 
 export const fromSpriteSheet = {
 	defaultSpriteSheet: null, // gets its value in App.js once the spritesheet finished loading
@@ -25,17 +26,17 @@ export function dialog(speaker, say, hide = false) {
 	if (hide) {
 		containerDiv.style.opacity = '0';
 		window.setTimeout(() => {
-			document.getElementById('main__dialog').style.visibility = 'hidden';
+			containerDiv.style.visibility = 'hidden';
 		}, 500);
 		return;
 	}
 
 	containerDiv.style.visibility = 'visible';
 
-	function dialogHelper(sp, sa) {
+	function dialogHelper(speakerH, sayH) {
 		containerDiv.style.opacity = '0.7';
-		speakerDiv.innerHTML = sp + ' :';
-		messageDiv.innerHTML = sa;
+		speakerDiv.innerHTML = speakerH + ' :';
+		messageDiv.innerHTML = sayH;
 	}
 
 	if (containerDiv.style.opacity != '0.7') {
@@ -47,3 +48,73 @@ export function dialog(speaker, say, hide = false) {
 		}, 400);
 	}
 }
+
+export const alertsAndWarnings = {
+	hiderTimeout: null,
+	warnings: new Set(),
+	alerts: new Set(),
+
+	add(value) {
+		this[`${value.type}s`].add(value.k);
+		this.update();
+	},
+
+	remove(value) {
+		this[`${value.type}s`].delete(value.k);
+		if (this.warnings.size < 1 && this.alerts.size < 1) {
+			this.update(true);
+		} else {
+			this.update();
+		}
+	},
+
+	update(hide = false) {
+		const containerDiv = document.getElementById('main__warnings');
+		const messageDiv = document.getElementById('main__warnings-proper');
+
+		if (hide) {
+			containerDiv.style.opacity = '0';
+			alertsAndWarnings.hiderTimeout = window.setTimeout(() => {
+				containerDiv.style.visibility = 'hidden';
+			}, 500);
+			return;
+		}
+
+		window.clearTimeout(this.hiderTimeout);
+
+		containerDiv.style.visibility = 'visible';
+
+		function warningHelper() {
+			const types = ['warnings', 'alerts'];
+			const classNamePrefix = 'main__warnings-proper--';
+			let showing = 'warnings';
+
+			if (alertsAndWarnings.alerts.size > 0) showing = 'alerts';
+			types.forEach((t) => messageDiv.classList.remove(classNamePrefix + t));
+			messageDiv.classList.add(classNamePrefix + showing);
+
+			containerDiv.style.opacity = '0.6';
+
+			let displayText = [];
+
+			alertsAndWarnings[showing].forEach((el) =>
+				displayText.push(
+					`${showing.substr(0, showing.length - 1)}: ${
+						c.alertsAndWarnings[el].m
+					}`
+				)
+			);
+
+			messageDiv.innerHTML = displayText.join('<br />');
+		}
+
+		if (containerDiv.style.opacity != '0.6') {
+			warningHelper();
+		} else {
+			containerDiv.style.opacity = '0';
+			window.setTimeout(() => {
+				warningHelper();
+			}, 400);
+		}
+	},
+};

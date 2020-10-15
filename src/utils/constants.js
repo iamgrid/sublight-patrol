@@ -15,6 +15,20 @@ const c = {
 		{ noOfStars: 35, speedMultiplier: 0.3 },
 		{ noOfStars: 40, speedMultiplier: 0.2 },
 	],
+	alertsAndWarnings: {
+		collision: { type: 'warning', k: 'collision', m: 'Collision imminent!' },
+		otherWarning: {
+			type: 'warning',
+			k: 'otherWarning',
+			m: 'Other warning text!',
+		},
+		systemsOffline: {
+			type: 'alert',
+			k: 'systemsOffline',
+			m: 'Systems offline.',
+		},
+		otherAlert: { type: 'alert', k: 'otherAlert', m: 'Other alert text!' },
+	},
 };
 
 export default c;

@@ -1,6 +1,6 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
-import { fromSpriteSheet, dialog } from './utils/helpers';
+import { fromSpriteSheet, dialog, alertsAndWarnings } from './utils/helpers';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
@@ -157,21 +157,27 @@ export default class App extends PIXI.Application {
 				'Commander Shepherd',
 				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
 			);
+			alertsAndWarnings.add(c.alertsAndWarnings.collision);
+			alertsAndWarnings.add(c.alertsAndWarnings.otherWarning);
 			this.triggered1 = true;
 		}
 
 		if (!this.triggered2 && elapsedTime > 8000) {
 			dialog('Love Eternal', 'Prepare to be assimilated.');
+			alertsAndWarnings.remove(c.alertsAndWarnings.collision);
+			alertsAndWarnings.add(c.alertsAndWarnings.systemsOffline);
 			this.triggered2 = true;
 		}
 
 		if (!this.triggered3 && elapsedTime > 16000) {
 			dialog('Death Herself', 'Resistance is futile.');
+			alertsAndWarnings.remove(c.alertsAndWarnings.systemsOffline);
 			this.triggered3 = true;
 		}
 
 		if (!this.triggered4 && elapsedTime > 20000) {
 			dialog('', '', true);
+			alertsAndWarnings.remove(c.alertsAndWarnings.otherWarning);
 			this.triggered4 = true;
 		}
 	}
