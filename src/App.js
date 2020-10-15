@@ -43,6 +43,7 @@ export default class App extends PIXI.Application {
 		this.startTime = new Date().getTime();
 
 		entities.init();
+		c.init();
 
 		console.log(entities.types);
 		console.log(story);
@@ -157,27 +158,27 @@ export default class App extends PIXI.Application {
 				'Commander Shepherd',
 				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
 			);
-			alertsAndWarnings.add(c.alertsAndWarnings.collision);
-			alertsAndWarnings.add(c.alertsAndWarnings.otherWarning);
+			alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
+			alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
 			this.triggered1 = true;
 		}
 
 		if (!this.triggered2 && elapsedTime > 8000) {
 			dialog('Love Eternal', 'Prepare to be assimilated.');
-			alertsAndWarnings.remove(c.alertsAndWarnings.collision);
-			alertsAndWarnings.add(c.alertsAndWarnings.systemsOffline);
+			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
+			alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 			this.triggered2 = true;
 		}
 
 		if (!this.triggered3 && elapsedTime > 16000) {
 			dialog('Death Herself', 'Resistance is futile.');
-			alertsAndWarnings.remove(c.alertsAndWarnings.systemsOffline);
+			alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
 			this.triggered3 = true;
 		}
 
 		if (!this.triggered4 && elapsedTime > 20000) {
 			dialog('', '', true);
-			alertsAndWarnings.remove(c.alertsAndWarnings.otherWarning);
+			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
 			this.triggered4 = true;
 		}
 	}

@@ -16,18 +16,28 @@ const c = {
 		{ noOfStars: 40, speedMultiplier: 0.2 },
 	],
 	alertsAndWarnings: {
-		collision: { type: 'warning', k: 'collision', m: 'Collision imminent!' },
-		otherWarning: {
-			type: 'warning',
-			k: 'otherWarning',
-			m: 'Other warning text!',
+		warnings: {
+			collision: { m: 'Collision imminent!' },
+			otherWarning: {
+				m: 'Other warning text!',
+			},
 		},
-		systemsOffline: {
-			type: 'alert',
-			k: 'systemsOffline',
-			m: 'Systems offline.',
+		alerts: {
+			systemsOffline: {
+				m: 'Systems offline.',
+			},
+			otherAlert: { m: 'Other alert text!' },
 		},
-		otherAlert: { type: 'alert', k: 'otherAlert', m: 'Other alert text!' },
+	},
+	init() {
+		for (let key in this.alertsAndWarnings.warnings) {
+			this.alertsAndWarnings.warnings[key].type = 'warning';
+			this.alertsAndWarnings.warnings[key].k = key;
+		}
+		for (let key in this.alertsAndWarnings.alerts) {
+			this.alertsAndWarnings.alerts[key].type = 'alert';
+			this.alertsAndWarnings.alerts[key].k = key;
+		}
 	},
 };
 

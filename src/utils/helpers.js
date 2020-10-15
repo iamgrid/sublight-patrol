@@ -53,10 +53,16 @@ export const alertsAndWarnings = {
 	hiderTimeout: null,
 	warnings: new Set(),
 	alerts: new Set(),
+	isFading: false,
+	isVisible: false,
 
 	add(value) {
 		this[`${value.type}s`].add(value.k);
-		this.update();
+		if (!this.isFading) {
+			this.update();
+		} else {
+			window.setTimeout(alertsAndWarnings.update, 500);
+		}
 	},
 
 	remove(value) {
@@ -74,8 +80,11 @@ export const alertsAndWarnings = {
 
 		if (hide) {
 			containerDiv.style.opacity = '0';
-			alertsAndWarnings.hiderTimeout = window.setTimeout(() => {
+			this.isFading = true;
+			this.hiderTimeout = window.setTimeout(() => {
 				containerDiv.style.visibility = 'hidden';
+				alertsAndWarnings.isFading = false;
+				alertsAndWarnings.isVisible = false;
 			}, 500);
 			return;
 		}
@@ -94,13 +103,18 @@ export const alertsAndWarnings = {
 			messageDiv.classList.add(classNamePrefix + showing);
 
 			containerDiv.style.opacity = '0.6';
+			alertsAndWarnings.isFading = true;
+			window.setTimeout(() => {
+				alertsAndWarnings.isFading = false;
+				alertsAndWarnings.isVisible = true;
+			}, 400);
 
 			let displayText = [];
 
 			alertsAndWarnings[showing].forEach((el) =>
 				displayText.push(
 					`${showing.substr(0, showing.length - 1)}: ${
-						c.alertsAndWarnings[el].m
+						c.alertsAndWarnings[showing][el].m
 					}`
 				)
 			);
@@ -108,10 +122,11 @@ export const alertsAndWarnings = {
 			messageDiv.innerHTML = displayText.join('<br />');
 		}
 
-		if (containerDiv.style.opacity != '0.6') {
+		if (!this.isVisible) {
 			warningHelper();
 		} else {
 			containerDiv.style.opacity = '0';
+			this.isFading = true;
 			window.setTimeout(() => {
 				warningHelper();
 			}, 400);
