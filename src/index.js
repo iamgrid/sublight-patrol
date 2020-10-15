@@ -22,14 +22,12 @@ function toggleFooter() {
 document.getElementById('toggle-footer__link').onclick = toggleFooter;
 
 // prevent keyboard scroll events (space and arrow keys) on window
-window.addEventListener(
-	'keydown',
-	function (e) {
-		if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-			e.preventDefault();
-		}
-	},
-	false
-);
+// https://keycode.info/
+function preventDefaultOnKeys(event) {
+	const prevent = ['Space', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+	if (prevent.includes(event.code)) event.preventDefault();
+}
+
+window.addEventListener('keydown', preventDefaultOnKeys, false);
 
 new App();

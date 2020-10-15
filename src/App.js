@@ -107,31 +107,6 @@ export default class App extends PIXI.Application {
 	}
 
 	gameLoop(delta) {
-		const currentTime = new Date().getTime();
-		const elapsedTime = currentTime - this.startTime;
-		if (!this.triggered1 && elapsedTime > 2000) {
-			dialog(
-				'Commander Shepherd',
-				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
-			);
-			this.triggered1 = true;
-		}
-
-		if (!this.triggered2 && elapsedTime > 8000) {
-			dialog('Love Eternal', 'Prepare to be assimilated.');
-			this.triggered2 = true;
-		}
-
-		if (!this.triggered3 && elapsedTime > 16000) {
-			dialog('Death Herself', 'Resistance is futile.');
-			this.triggered3 = true;
-		}
-
-		if (!this.triggered4 && elapsedTime > 20000) {
-			dialog('', '', true);
-			this.triggered4 = true;
-		}
-
 		this.pixiState(delta);
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		Keyboard.update();
@@ -174,5 +149,30 @@ export default class App extends PIXI.Application {
 		}
 
 		this.fenrir.position.set(currentState.player.x, currentState.player.y);
+
+		const currentTime = new Date().getTime();
+		const elapsedTime = currentTime - this.startTime;
+		if (!this.triggered1 && elapsedTime > 2000) {
+			dialog(
+				'Commander Shepherd',
+				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
+			);
+			this.triggered1 = true;
+		}
+
+		if (!this.triggered2 && elapsedTime > 8000) {
+			dialog('Love Eternal', 'Prepare to be assimilated.');
+			this.triggered2 = true;
+		}
+
+		if (!this.triggered3 && elapsedTime > 16000) {
+			dialog('Death Herself', 'Resistance is futile.');
+			this.triggered3 = true;
+		}
+
+		if (!this.triggered4 && elapsedTime > 20000) {
+			dialog('', '', true);
+			this.triggered4 = true;
+		}
 	}
 }
