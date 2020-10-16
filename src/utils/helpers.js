@@ -132,22 +132,45 @@ export const alertsAndWarnings = {
 			}, 400);
 		}
 	},
+
+	clear() {
+		this.warnings = new Set();
+		this.alerts = new Set();
+		this.update(true);
+	},
 };
+
+export function formatElapsedTime(seconds) {
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor(seconds / 60);
+	const secondsDisp = seconds % 60;
+
+	function doPad(input) {
+		return String(input).padStart(2, '0');
+	}
+
+	return `${doPad(hours)}:${doPad(minutes)}:${doPad(secondsDisp)}`;
+}
 
 export const status = {
 	store: [],
 	isHidden: true,
 	hiderTimeout: null,
+	startTime: null,
 
 	add(color, text) {
 		class Message {
-			constructor(color, text) {
+			constructor(color, text, at) {
 				this.color = color;
 				this.text = text;
+				this.at = at;
 			}
 		}
 
-		this.store.push(new Message(color, text));
+		const now = new Date().getTime();
+		const atRaw = Math.trunc((now - this.startTime) / 1000);
+
+		this.store.push(new Message(color, text, formatElapsedTime(atRaw)));
 
 		this.update();
 	},
@@ -159,9 +182,12 @@ export const status = {
 			properDiv.classList.add('main__status-proper--with-scrollbar');
 		}
 
-		const disp = this.store
+		const disp = [...this.store]
 			.reverse()
-			.map(({ color, text }) => `<span class='${color}'>${text}</span>`);
+			.map(
+				({ color, text, at }) =>
+					`<span class='time'>${at}&nbsp;</span> <span class='${color}'>${text}</span>`
+			);
 
 		properDiv.innerHTML = disp.join('<br />');
 
@@ -193,5 +219,15 @@ export const status = {
 	init() {
 		document.getElementById('main__status').onclick =
 			status.toggleStatusExpansion;
+
+		this.startTime = new Date().getTime();
+	},
+
+	clear() {
+		this.startTime = new Date().getTime();
+		this.store = [];
+
+		document.getElementById('main__status-proper').innerHTML = '';
+		this.toggleHide();
 	},
 };

@@ -213,11 +213,15 @@ main {
 .main__status--expanded .main__status-proper {
 	margin-top: 5px;
 	margin-bottom: 5px;
-	height: 92px;
+	height: 90px;
 }
 
 .main__status--expanded .main__status-proper--with-scrollbar {
 	overflow-y: scroll;
+}
+
+.main__status-proper .time {
+	color: #ffffff60;
 }
 
 .main__status-proper .aqua {

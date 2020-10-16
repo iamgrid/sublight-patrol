@@ -166,8 +166,8 @@ export default class App extends PIXI.Application {
 			);
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('aqua', 'Aqua test.');
-			status.add('yellow', 'Yellow test.');
+			status.add('aqua', 'Aqua test. #1');
+			status.add('yellow', 'Yellow test. #2');
 			this.triggered1 = true;
 		}
 
@@ -175,7 +175,7 @@ export default class App extends PIXI.Application {
 			dialog('Love Eternal', 'Prepare to be assimilated.');
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
-			status.add('green', 'Green test.');
+			status.add('green', 'Green test. #3');
 			this.triggered2 = true;
 		}
 
@@ -188,9 +188,9 @@ export default class App extends PIXI.Application {
 		if (!this.triggered4 && elapsedTime > 20000) {
 			dialog('', '', true);
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('red', 'Red test.');
-			status.add('aqua', 'Aqua test.');
-			status.add('yellow', 'Yellow test.');
+			status.add('red', 'Red test. #4');
+			status.add('aqua', 'Aqua test. #5');
+			status.add('yellow', 'Yellow test. #6');
 			this.triggered4 = true;
 		}
 	}
