@@ -206,16 +206,30 @@ export default class App extends PIXI.Application {
 		if (Keyboard.isKeyPressed('Escape')) {
 			this.togglePause();
 		}
+
+		const statusProperDiv = document.getElementById('main__status-proper');
+
+		if (status.store.length > 4) {
+			if (Keyboard.isKeyDown('ArrowUp')) {
+				statusProperDiv.scrollBy(0, -4);
+			}
+			if (Keyboard.isKeyDown('ArrowDown')) {
+				statusProperDiv.scrollBy(0, 4);
+			}
+		}
 	}
 
 	togglePause() {
 		const statusDiv = document.getElementById('main__status');
+		const pauseDiv = document.getElementById('main__pause');
 		if (!this.paused) {
 			statusDiv.classList.add('main__status--expanded');
+			pauseDiv.classList.add('main__pause--show');
 			this.paused = true;
 			this.pixiState = this.pause;
 		} else {
 			statusDiv.classList.remove('main__status--expanded');
+			pauseDiv.classList.remove('main__pause--show');
 			this.paused = false;
 			this.pixiState = this.play;
 		}

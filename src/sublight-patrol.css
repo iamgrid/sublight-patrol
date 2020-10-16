@@ -138,11 +138,11 @@ main {
 	color: var(--msg-color);
 	box-shadow: 0 0 5px var(--msg-color), inset 0 0 7px var(--msg-color);
 	text-shadow: 0 0 5px var(--msg-color);
-	animation: 0.5s ease-in-out infinite alternate messagePulse;
+	animation: 0.5s ease-in-out infinite alternate doPulse;
 	animation-fill-mode: forwards;
 }
 
-@keyframes messagePulse {
+@keyframes doPulse {
 	0% {
 		transform: scale(0.95, 0.95);
 		opacity: 0.8;
@@ -159,6 +159,38 @@ main {
 
 .main__warnings-proper--alerts {
 	--msg-color: #e63232;
+}
+
+.main__pause {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 9;
+	background-color: #000000c0;
+	opacity: 0;
+	visibility: hidden;
+}
+
+.main__pause-text {
+	text-align: center;
+	margin-top: 50px;
+	font-size: 0.8em;
+	letter-spacing: 1em;
+	transform: translateX(-0.5em);
+	color: #ffffffc0;
+	animation: none;
+}
+
+.main__pause--show {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity ease 0.5s;
+}
+
+.main__pause--show .main__pause-text {
+	animation: 0.5s ease-in-out infinite alternate doPulse;
 }
 
 .main__status {
