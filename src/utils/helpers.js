@@ -158,7 +158,7 @@ export const status = {
 	hiderTimeout: null,
 	startTime: null,
 
-	add(color, text) {
+	add(color, text, atRaw) {
 		class Message {
 			constructor(color, text, at) {
 				this.color = color;
@@ -167,10 +167,9 @@ export const status = {
 			}
 		}
 
-		const now = new Date().getTime();
-		const atRaw = Math.trunc((now - this.startTime) / 1000);
+		const atRawTrunc = Math.trunc(atRaw / 1000);
 
-		this.store.push(new Message(color, text, formatElapsedTime(atRaw)));
+		this.store.push(new Message(color, text, formatElapsedTime(atRawTrunc)));
 
 		this.update();
 	},

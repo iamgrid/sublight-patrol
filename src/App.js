@@ -43,19 +43,21 @@ export default class App extends PIXI.Application {
 		this.gameState = state;
 		this.dispatch = dispatch;
 
+		this.paused = false;
 		this.pixiState = this.play;
 
 		this.startTime = new Date().getTime();
-
-		entities.init();
-		c.init();
-		status.init();
+		this.gameTime = 0;
 
 		console.log(entities.types);
 		console.log(story);
 	}
 
 	init() {
+		entities.init();
+		c.init();
+		status.init();
+
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v1.png');
 
 		this.loader.load(this.draw.bind(this));
@@ -115,24 +117,25 @@ export default class App extends PIXI.Application {
 
 	gameLoop(delta) {
 		this.pixiState(delta);
-		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		Keyboard.update();
 	}
 
 	play(delta) {
+		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		const currentState = this.gameState();
 
 		const speed = 5 * delta;
 
 		// Keyboard
-		if (Keyboard.isKeyDown('ArrowLeft', 'KeyA')) {
+		// https://www.npmjs.com/package/pixi.js-keyboard
+		if (Keyboard.isKeyDown('ArrowLeft')) {
 			this.dispatch({
 				type: c.actions.MOVE_PLAYER,
 				axis: 'x',
 				value: -speed,
 			});
 		}
-		if (Keyboard.isKeyDown('ArrowRight', 'KeyD')) {
+		if (Keyboard.isKeyDown('ArrowRight')) {
 			this.dispatch({
 				type: c.actions.MOVE_PLAYER,
 				axis: 'x',
@@ -140,58 +143,81 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		if (Keyboard.isKeyDown('ArrowUp', 'KeyW')) {
+		if (Keyboard.isKeyDown('ArrowUp')) {
 			this.dispatch({
 				type: c.actions.MOVE_PLAYER,
 				axis: 'y',
 				value: -speed,
 			});
 		}
-		if (Keyboard.isKeyDown('ArrowDown', 'KeyS')) {
+		if (Keyboard.isKeyDown('ArrowDown')) {
 			this.dispatch({
 				type: c.actions.MOVE_PLAYER,
 				axis: 'y',
 				value: speed,
 			});
+		}
+
+		if (Keyboard.isKeyPressed('Escape')) {
+			this.togglePause();
 		}
 
 		this.fenrir.position.set(currentState.player.x, currentState.player.y);
 
-		const currentTime = new Date().getTime();
-		const elapsedTime = currentTime - this.startTime;
-		if (!this.triggered1 && elapsedTime > 2000) {
+		this.gameTime += this.ticker.deltaMS;
+
+		if (!this.triggered1 && this.gameTime > 2000) {
 			dialog(
 				'Commander Shepherd',
 				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
 			);
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('aqua', 'Aqua test. #1');
-			status.add('yellow', 'Yellow test. #2');
+			status.add('aqua', 'Aqua test. #1', this.gameTime);
+			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			this.triggered1 = true;
 		}
 
-		if (!this.triggered2 && elapsedTime > 8000) {
+		if (!this.triggered2 && this.gameTime > 8000) {
 			dialog('Love Eternal', 'Prepare to be assimilated.');
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
-			status.add('green', 'Green test. #3');
+			status.add('green', 'Green test. #3', this.gameTime);
 			this.triggered2 = true;
 		}
 
-		if (!this.triggered3 && elapsedTime > 16000) {
+		if (!this.triggered3 && this.gameTime > 16000) {
 			dialog('Death Herself', 'Resistance is futile.');
 			alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
 			this.triggered3 = true;
 		}
 
-		if (!this.triggered4 && elapsedTime > 20000) {
+		if (!this.triggered4 && this.gameTime > 20000) {
 			dialog('', '', true);
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('red', 'Red test. #4');
-			status.add('aqua', 'Aqua test. #5');
-			status.add('yellow', 'Yellow test. #6');
+			status.add('red', 'Red test. #4', this.gameTime);
+			status.add('aqua', 'Aqua test. #5', this.gameTime);
+			status.add('yellow', 'Yellow test. #6', this.gameTime);
 			this.triggered4 = true;
+		}
+	}
+
+	pause() {
+		if (Keyboard.isKeyPressed('Escape')) {
+			this.togglePause();
+		}
+	}
+
+	togglePause() {
+		const statusDiv = document.getElementById('main__status');
+		if (!this.paused) {
+			statusDiv.classList.add('main__status--expanded');
+			this.paused = true;
+			this.pixiState = this.pause;
+		} else {
+			statusDiv.classList.remove('main__status--expanded');
+			this.paused = false;
+			this.pixiState = this.play;
 		}
 	}
 }
