@@ -133,3 +133,24 @@ export const alertsAndWarnings = {
 		}
 	},
 };
+
+export const messages = {
+	store: [],
+
+	add(color, text) {
+		class Message {
+			constructor(color, text) {
+				this.color = color;
+				this.text = text;
+			}
+		}
+
+		this.store.push(new Message(color, text));
+
+		this.update();
+	},
+
+	update() {
+		console.log(this.store);
+	},
+};

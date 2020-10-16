@@ -105,7 +105,7 @@ main {
 	background-color: #303030;
 	padding: 27px 8em 0.9em;
 	text-align: justify;
-	margin: 0 1em 1em;
+	margin: 0 1em 1.5em;
 	border: 1px solid #909090;
 	border-radius: 10px;
 	font-size: 1.1em;
@@ -153,16 +153,95 @@ main {
 	}
 }
 
-/*.main__warnings-proper--message {
-	--msg-color: #32ade6;
-}*/
-
 .main__warnings-proper--warnings {
 	--msg-color: #e6b632;
 }
 
 .main__warnings-proper--alerts {
 	--msg-color: #e63232;
+}
+
+.main__messages {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	background-color: #ffffff10;
+	display: flex;
+	cursor: pointer;
+	transition: background-color ease 0.25s;
+}
+
+.main__messages:hover {
+	background-color: #ffffff15;
+}
+
+.main__messages--hidden {
+	background-color: #ffffff00;
+}
+
+.main__messages-proper {
+	flex: 1 0;
+	font-size: 0.7em;
+	text-align-last: left;
+	margin-left: 5px;
+	opacity: 1;
+	transition: opacity ease 0.25s;
+	height: 25px;
+	overflow-y: hidden;
+}
+
+.main__messages--hidden .main__messages-proper {
+	opacity: 0;
+}
+
+.main__messages--expanded .main__messages-proper {
+	height: 100px;
+	overflow-y: scroll;
+}
+
+.main__messages-proper .aqua {
+	color: #32ade6;
+}
+
+.main__messages-proper .red {
+	color: #e63232;
+}
+
+.main__messages-proper .yellow {
+	color: #e6b632;
+}
+
+.main__messages-proper .green {
+	color: #37d837;
+}
+
+.main__messages-expand {
+	flex: 0 0;
+	margin: 0 5px;
+}
+
+.main__messages-expand-chevron {
+	transform: scale(0.6) rotate(90deg);
+}
+
+.main__messages-expand-chevron-path,
+.main__messages:hover .main__messages-expand-chevron-path {
+	stroke: #ffffffff;
+	transition: stroke ease 0.25s;
+}
+
+.main__messages--hidden .main__messages-expand-chevron-path {
+	stroke: #ffffff60;
+}
+
+.main__messages:hover .main__messages-expand-chevron {
+	transform: scale(0.6) rotate(0deg);
+}
+
+.main__messages--expanded:hover .main__messages-expand-chevron {
+	transform: scale(0.6) rotate(180deg);
 }
 
 .controls {
