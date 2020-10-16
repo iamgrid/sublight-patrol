@@ -213,6 +213,9 @@ export const status = {
 	toggleStatusExpansion() {
 		const mainDivClasses = document.getElementById('game__status').classList;
 		mainDivClasses.toggle('game__status--expanded');
+		window.setTimeout(() => {
+			document.getElementById('game__status-proper').scrollTo(0, 0);
+		}, 300);
 	},
 
 	init() {

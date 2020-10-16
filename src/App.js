@@ -229,6 +229,9 @@ export default class App extends PIXI.Application {
 			this.pixiState = this.pause;
 		} else {
 			statusDiv.classList.remove('game__status--expanded');
+			window.setTimeout(() => {
+				document.getElementById('game__status-proper').scrollTo(0, 0);
+			}, 300);
 			pauseDiv.classList.remove('game__pause--show');
 			this.paused = false;
 			this.pixiState = this.play;
