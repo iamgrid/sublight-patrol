@@ -27,7 +27,7 @@ export default class App extends PIXI.Application {
 		// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 		this.view.id = 'pixicanvas';
-		document.getElementById('main').appendChild(this.view); // Create Canvas tag in the body
+		document.getElementById('game').appendChild(this.view); // Create Canvas tag in the body
 		document.getElementById('pixicanvas').tabIndex = 0;
 		document.getElementById('pixicanvas').focus();
 
@@ -207,7 +207,7 @@ export default class App extends PIXI.Application {
 			this.togglePause();
 		}
 
-		const statusProperDiv = document.getElementById('main__status-proper');
+		const statusProperDiv = document.getElementById('game__status-proper');
 
 		if (status.store.length > 4) {
 			if (Keyboard.isKeyDown('ArrowUp')) {
@@ -220,16 +220,16 @@ export default class App extends PIXI.Application {
 	}
 
 	togglePause() {
-		const statusDiv = document.getElementById('main__status');
-		const pauseDiv = document.getElementById('main__pause');
+		const statusDiv = document.getElementById('game__status');
+		const pauseDiv = document.getElementById('game__pause');
 		if (!this.paused) {
-			statusDiv.classList.add('main__status--expanded');
-			pauseDiv.classList.add('main__pause--show');
+			statusDiv.classList.add('game__status--expanded');
+			pauseDiv.classList.add('game__pause--show');
 			this.paused = true;
 			this.pixiState = this.pause;
 		} else {
-			statusDiv.classList.remove('main__status--expanded');
-			pauseDiv.classList.remove('main__pause--show');
+			statusDiv.classList.remove('game__status--expanded');
+			pauseDiv.classList.remove('game__pause--show');
 			this.paused = false;
 			this.pixiState = this.play;
 		}

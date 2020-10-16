@@ -54,7 +54,7 @@ h1 {
 	transform: translateX(0.5em);
 }
 
-main {
+.game {
 	margin: 0;
 	padding: 0;
 	width: 1200px;
@@ -71,7 +71,7 @@ main {
 	outline: 0;
 }
 
-.main__dialog {
+.game__dialog {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -84,7 +84,7 @@ main {
 	transition: opacity 0.4s;
 }
 
-.main__dialog-speaker {
+.game__dialog-speaker {
 	flex-shrink: 0;
 	flex-grow: 0;
 	background-color: #606060;
@@ -100,7 +100,7 @@ main {
 	cursor: default;
 }
 
-.main__dialog-message {
+.game__dialog-message {
 	flex-grow: 1;
 	background-color: #303030;
 	padding: 27px 8em 0.9em;
@@ -114,7 +114,7 @@ main {
 	cursor: default;
 }
 
-.main__warnings {
+.game__warnings {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -129,7 +129,7 @@ main {
 	align-items: center;
 }
 
-.main__warnings-proper {
+.game__warnings-proper {
 	padding: 0.6em 0.8em;
 	text-transform: uppercase;
 	font-weight: 700;
@@ -153,15 +153,15 @@ main {
 	}
 }
 
-.main__warnings-proper--warnings {
+.game__warnings-proper--warnings {
 	--msg-color: #e6b632;
 }
 
-.main__warnings-proper--alerts {
+.game__warnings-proper--alerts {
 	--msg-color: #e63232;
 }
 
-.main__pause {
+.game__pause {
 	position: absolute;
 	bottom: 0;
 	top: 0;
@@ -173,7 +173,7 @@ main {
 	visibility: hidden;
 }
 
-.main__pause-text {
+.game__pause-text {
 	text-align: center;
 	margin-top: 50px;
 	font-size: 0.8em;
@@ -183,17 +183,17 @@ main {
 	animation: none;
 }
 
-.main__pause--show {
+.game__pause--show {
 	opacity: 1;
 	visibility: visible;
 	transition: opacity ease 0.5s;
 }
 
-.main__pause--show .main__pause-text {
+.game__pause--show .game__pause-text {
 	animation: 0.5s ease-in-out infinite alternate doPulse;
 }
 
-.main__status {
+.game__status {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -205,17 +205,17 @@ main {
 	transition: background-color ease 0.25s;
 }
 
-.main__status:hover,
-.main__status--expanded,
-.main__status--hidden.main__status--expanded {
+.game__status:hover,
+.game__status--expanded,
+.game__status--hidden.game__status--expanded {
 	background-color: #ffffff15;
 }
 
-.main__status--hidden {
+.game__status--hidden {
 	background-color: #ffffff00;
 }
 
-.main__status-proper {
+.game__status-proper {
 	flex: 1 0;
 	font-size: 0.7em;
 	text-align-last: left;
@@ -229,83 +229,83 @@ main {
 	line-height: 2em;
 }
 
-.main__status--hidden .main__status-proper {
+.game__status--hidden .game__status-proper {
 	opacity: 0;
 }
 
-.main__status--hidden.main__status--expanded .main__status-proper {
+.game__status--hidden.game__status--expanded .game__status-proper {
 	opacity: 1;
 }
 
-.main__status:hover .main__status-proper,
-.main__status--expanded .main__status-proper {
+.game__status:hover .game__status-proper,
+.game__status--expanded .game__status-proper {
 	opacity: 1;
 }
 
-.main__status--expanded .main__status-proper {
+.game__status--expanded .game__status-proper {
 	margin-top: 5px;
 	margin-bottom: 5px;
 	height: 90px;
 }
 
-.main__status--expanded .main__status-proper--with-scrollbar {
+.game__status--expanded .game__status-proper--with-scrollbar {
 	overflow-y: scroll;
 }
 
-.main__status-proper .time {
+.game__status-proper .time {
 	color: #ffffff60;
 }
 
-.main__status-proper .aqua {
+.game__status-proper .aqua {
 	color: #32ade6;
 }
 
-.main__status-proper .red {
+.game__status-proper .red {
 	color: #e63232;
 }
 
-.main__status-proper .yellow {
+.game__status-proper .yellow {
 	color: #e6b632;
 }
 
-.main__status-proper .green {
+.game__status-proper .green {
 	color: #37d837;
 }
 
-.main__status-expand {
+.game__status-expand {
 	flex: 0 0;
 	margin: 0 5px;
 }
 
-.main__status-expand-chevron {
+.game__status-expand-chevron {
 	transform: scale(0.6) rotate(90deg);
 	margin-top: 0;
 	transition: transform ease 0.1s;
 }
 
-.main__status--expanded .main__status-expand-chevron {
+.game__status--expanded .game__status-expand-chevron {
 	margin-top: 11px;
 }
 
-.main__status-expand-chevron-path {
+.game__status-expand-chevron-path {
 	transition: stroke ease 0.25s;
 }
 
-.main__status-expand-chevron-path,
-.main__status:hover .main__status-expand-chevron-path,
-.main__status--hidden.main__status--expanded .main__status-expand-chevron-path {
+.game__status-expand-chevron-path,
+.game__status:hover .game__status-expand-chevron-path,
+.game__status--hidden.game__status--expanded .game__status-expand-chevron-path {
 	stroke: #ffffffff;
 }
 
-.main__status--hidden .main__status-expand-chevron-path {
+.game__status--hidden .game__status-expand-chevron-path {
 	stroke: #ffffff60;
 }
 
-.main__status:hover .main__status-expand-chevron {
+.game__status:hover .game__status-expand-chevron {
 	transform: scale(0.6) rotate(0deg);
 }
 
-.main__status--expanded:hover .main__status-expand-chevron {
+.game__status--expanded:hover .game__status-expand-chevron {
 	transform: scale(0.6) rotate(180deg);
 }
 

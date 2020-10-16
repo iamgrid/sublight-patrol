@@ -19,9 +19,9 @@ export const fromSpriteSheet = {
 };
 
 export function dialog(speaker, say, hide = false) {
-	const containerDiv = document.getElementById('main__dialog');
-	const speakerDiv = document.getElementById('main__dialog-speaker');
-	const messageDiv = document.getElementById('main__dialog-message');
+	const containerDiv = document.getElementById('game__dialog');
+	const speakerDiv = document.getElementById('game__dialog-speaker');
+	const messageDiv = document.getElementById('game__dialog-message');
 
 	if (hide) {
 		containerDiv.style.opacity = '0';
@@ -75,8 +75,8 @@ export const alertsAndWarnings = {
 	},
 
 	update(hide = false) {
-		const containerDiv = document.getElementById('main__warnings');
-		const messageDiv = document.getElementById('main__warnings-proper');
+		const containerDiv = document.getElementById('game__warnings');
+		const messageDiv = document.getElementById('game__warnings-proper');
 
 		if (hide) {
 			containerDiv.style.opacity = '0';
@@ -95,7 +95,7 @@ export const alertsAndWarnings = {
 
 		function warningHelper() {
 			const types = ['warnings', 'alerts'];
-			const classNamePrefix = 'main__warnings-proper--';
+			const classNamePrefix = 'game__warnings-proper--';
 			let showing = 'warnings';
 
 			if (alertsAndWarnings.alerts.size > 0) showing = 'alerts';
@@ -175,10 +175,10 @@ export const status = {
 	},
 
 	update() {
-		const properDiv = document.getElementById('main__status-proper');
+		const properDiv = document.getElementById('game__status-proper');
 
 		if (this.store.length > 4) {
-			properDiv.classList.add('main__status-proper--with-scrollbar');
+			properDiv.classList.add('game__status-proper--with-scrollbar');
 		}
 
 		const disp = [...this.store]
@@ -199,24 +199,24 @@ export const status = {
 	},
 
 	toggleHide(toggle = 'hide') {
-		const mainDivClasses = document.getElementById('main__status').classList;
+		const mainDivClasses = document.getElementById('game__status').classList;
 		if (toggle === 'hide') {
-			mainDivClasses.add('main__status--hidden');
+			mainDivClasses.add('game__status--hidden');
 			status.isHidden = true;
 			window.clearTimeout(status.hiderTimeout);
 		} else {
-			mainDivClasses.remove('main__status--hidden');
+			mainDivClasses.remove('game__status--hidden');
 			status.isHidden = false;
 		}
 	},
 
 	toggleStatusExpansion() {
-		const mainDivClasses = document.getElementById('main__status').classList;
-		mainDivClasses.toggle('main__status--expanded');
+		const mainDivClasses = document.getElementById('game__status').classList;
+		mainDivClasses.toggle('game__status--expanded');
 	},
 
 	init() {
-		document.getElementById('main__status').onclick =
+		document.getElementById('game__status').onclick =
 			status.toggleStatusExpansion;
 
 		this.startTime = new Date().getTime();
@@ -226,7 +226,7 @@ export const status = {
 		this.startTime = new Date().getTime();
 		this.store = [];
 
-		document.getElementById('main__status-proper').innerHTML = '';
+		document.getElementById('game__status-proper').innerHTML = '';
 		this.toggleHide();
 	},
 };
