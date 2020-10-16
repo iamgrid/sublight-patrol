@@ -161,7 +161,7 @@ main {
 	--msg-color: #e63232;
 }
 
-.main__messages {
+.main__status {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -173,74 +173,103 @@ main {
 	transition: background-color ease 0.25s;
 }
 
-.main__messages:hover {
+.main__status:hover,
+.main__status--expanded,
+.main__status--hidden.main__status--expanded {
 	background-color: #ffffff15;
 }
 
-.main__messages--hidden {
+.main__status--hidden {
 	background-color: #ffffff00;
 }
 
-.main__messages-proper {
+.main__status-proper {
 	flex: 1 0;
 	font-size: 0.7em;
 	text-align-last: left;
 	margin-left: 5px;
+	margin-top: 1px;
+	margin-bottom: 0;
 	opacity: 1;
 	transition: opacity ease 0.25s;
 	height: 25px;
 	overflow-y: hidden;
+	line-height: 2em;
 }
 
-.main__messages--hidden .main__messages-proper {
+.main__status--hidden .main__status-proper {
 	opacity: 0;
 }
 
-.main__messages--expanded .main__messages-proper {
-	height: 100px;
+.main__status--hidden.main__status--expanded .main__status-proper {
+	opacity: 1;
+}
+
+.main__status:hover .main__status-proper,
+.main__status--expanded .main__status-proper {
+	opacity: 1;
+}
+
+.main__status--expanded .main__status-proper {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	height: 92px;
+}
+
+.main__status--expanded .main__status-proper--with-scrollbar {
 	overflow-y: scroll;
 }
 
-.main__messages-proper .aqua {
+.main__status-proper .aqua {
 	color: #32ade6;
 }
 
-.main__messages-proper .red {
+.main__status-proper .red {
 	color: #e63232;
 }
 
-.main__messages-proper .yellow {
+.main__status-proper .yellow {
 	color: #e6b632;
 }
 
-.main__messages-proper .green {
+.main__status-proper .green {
 	color: #37d837;
 }
 
-.main__messages-expand {
+.main__status-expand {
 	flex: 0 0;
 	margin: 0 5px;
 }
 
-.main__messages-expand-chevron {
+.main__status-expand-chevron {
 	transform: scale(0.6) rotate(90deg);
+	margin-top: 0;
+	transition: transform ease 0.1s;
 }
 
-.main__messages-expand-chevron-path,
-.main__messages:hover .main__messages-expand-chevron-path {
-	stroke: #ffffffff;
+.main__status--expanded .main__status-expand-chevron {
+	margin-top: 11px;
+}
+
+.main__status-expand-chevron-path {
 	transition: stroke ease 0.25s;
 }
 
-.main__messages--hidden .main__messages-expand-chevron-path {
+.main__status-expand-chevron-path,
+.main__status:hover .main__status-expand-chevron-path,
+.main__status--hidden.main__status--expanded .main__status-expand-chevron-path {
+	stroke: #ffffffff;
+}
+
+.main__status--hidden .main__status-expand-chevron-path {
 	stroke: #ffffff60;
 }
 
-.main__messages:hover .main__messages-expand-chevron {
+.main__status:hover .main__status-expand-chevron {
 	transform: scale(0.6) rotate(0deg);
 }
 
-.main__messages--expanded:hover .main__messages-expand-chevron {
+.main__status--expanded:hover .main__status-expand-chevron {
 	transform: scale(0.6) rotate(180deg);
 }
 

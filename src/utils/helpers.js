@@ -134,8 +134,10 @@ export const alertsAndWarnings = {
 	},
 };
 
-export const messages = {
+export const status = {
 	store: [],
+	isHidden: true,
+	hiderTimeout: null,
 
 	add(color, text) {
 		class Message {
@@ -151,6 +153,45 @@ export const messages = {
 	},
 
 	update() {
-		console.log(this.store);
+		const properDiv = document.getElementById('main__status-proper');
+
+		if (this.store.length > 4) {
+			properDiv.classList.add('main__status-proper--with-scrollbar');
+		}
+
+		const disp = this.store
+			.reverse()
+			.map(({ color, text }) => `<span class='${color}'>${text}</span>`);
+
+		properDiv.innerHTML = disp.join('<br />');
+
+		if (this.isHidden) {
+			this.toggleHide('show');
+		}
+
+		window.clearTimeout(status.hiderTimeout);
+		this.hiderTimeout = window.setTimeout(status.toggleHide, 10000);
+	},
+
+	toggleHide(toggle = 'hide') {
+		const mainDivClasses = document.getElementById('main__status').classList;
+		if (toggle === 'hide') {
+			mainDivClasses.add('main__status--hidden');
+			status.isHidden = true;
+			window.clearTimeout(status.hiderTimeout);
+		} else {
+			mainDivClasses.remove('main__status--hidden');
+			status.isHidden = false;
+		}
+	},
+
+	toggleStatusExpansion() {
+		const mainDivClasses = document.getElementById('main__status').classList;
+		mainDivClasses.toggle('main__status--expanded');
+	},
+
+	init() {
+		document.getElementById('main__status').onclick =
+			status.toggleStatusExpansion;
 	},
 };

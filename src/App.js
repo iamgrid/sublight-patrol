@@ -1,6 +1,11 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
-import { fromSpriteSheet, dialog, alertsAndWarnings } from './utils/helpers';
+import {
+	fromSpriteSheet,
+	dialog,
+	alertsAndWarnings,
+	status,
+} from './utils/helpers';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
@@ -44,6 +49,7 @@ export default class App extends PIXI.Application {
 
 		entities.init();
 		c.init();
+		status.init();
 
 		console.log(entities.types);
 		console.log(story);
@@ -160,6 +166,8 @@ export default class App extends PIXI.Application {
 			);
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
+			status.add('aqua', 'Aqua test.');
+			status.add('yellow', 'Yellow test.');
 			this.triggered1 = true;
 		}
 
@@ -167,6 +175,7 @@ export default class App extends PIXI.Application {
 			dialog('Love Eternal', 'Prepare to be assimilated.');
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
+			status.add('green', 'Green test.');
 			this.triggered2 = true;
 		}
 
@@ -179,6 +188,9 @@ export default class App extends PIXI.Application {
 		if (!this.triggered4 && elapsedTime > 20000) {
 			dialog('', '', true);
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
+			status.add('red', 'Red test.');
+			status.add('aqua', 'Aqua test.');
+			status.add('yellow', 'Yellow test.');
 			this.triggered4 = true;
 		}
 	}
