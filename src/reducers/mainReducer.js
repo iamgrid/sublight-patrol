@@ -1,5 +1,6 @@
 import c from '../utils/constants';
 import { targetPointedOrNearest, cycleTargets } from '../utils/formulas';
+import { moveTargetingReticule } from '../utils/helpers';
 
 function move(mode = 'relative', initial, newValue) {
 	if (mode === 'relative') {
@@ -58,7 +59,7 @@ export default function mainReducer(state, action) {
 					);
 					break;
 			}
-			console.log(newTarget);
+			moveTargetingReticule(newTarget, action.stageEntities);
 			return {
 				...state,
 				game: { ...state.game, targeting: newTarget },

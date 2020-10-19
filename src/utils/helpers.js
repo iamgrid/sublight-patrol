@@ -18,6 +18,46 @@ export const fromSpriteSheet = {
 	},
 };
 
+export function createTargetingReticule(params) {
+	let obj = {};
+	obj.TL = fromSpriteSheet.create(332, 12, 11, 11);
+	obj.TR = fromSpriteSheet.create(362, 12, 11, 11);
+	obj.BL = fromSpriteSheet.create(332, 42, 11, 11);
+	obj.BR = fromSpriteSheet.create(362, 42, 11, 11);
+	obj.TL.x = params.xl;
+	obj.TL.y = params.yt;
+	obj.TR.x = params.xr;
+	obj.TR.y = params.yt;
+	obj.BL.x = params.xl;
+	obj.BL.y = params.yb;
+	obj.BR.x = params.xr;
+	obj.BR.y = params.yb;
+	obj.TL.alpha = 0;
+	obj.TR.alpha = 0;
+	obj.BL.alpha = 0;
+	obj.BR.alpha = 0;
+
+	return obj;
+}
+
+export function toggleTargetingReticule(toggle) {
+	let newValue = 1;
+	if (!toggle) newValue = 0;
+
+	this.targetingReticule.TL.alpha = newValue;
+	this.targetingReticule.TR.alpha = newValue;
+	this.targetingReticule.BL.alpha = newValue;
+	this.targetingReticule.BR.alpha = newValue;
+}
+
+export function moveTargetingReticule(newTarget, stageEntities) {
+	for (const p in stageEntities) {
+		stageEntities[p].toggleTargetingReticule(false);
+	}
+
+	if (newTarget) stageEntities[newTarget].toggleTargetingReticule(true);
+}
+
 export function dialog(speaker, say, hide = false) {
 	const containerDiv = document.getElementById('game__dialog');
 	const speakerDiv = document.getElementById('game__dialog-speaker');

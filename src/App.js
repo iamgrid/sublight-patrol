@@ -58,7 +58,7 @@ export default class App extends PIXI.Application {
 		c.init();
 		status.init();
 
-		this.loader.add('spriteSheet', './assets/sprite_sheet_v1.png');
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v2.png');
 
 		this.loader.load(this.draw.bind(this));
 	}
@@ -105,6 +105,7 @@ export default class App extends PIXI.Application {
 			latVelocity: 0,
 			longVelocity: 0,
 			playerRelation: 'neutral',
+			id: 'fenrir_1',
 		});
 
 		console.log(this.gameState());
@@ -162,6 +163,7 @@ export default class App extends PIXI.Application {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'pointed-nearest',
+				stageEntities: entities.stageEntities,
 			});
 		}
 
@@ -169,6 +171,7 @@ export default class App extends PIXI.Application {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'next',
+				stageEntities: entities.stageEntities,
 			});
 		}
 
@@ -176,6 +179,7 @@ export default class App extends PIXI.Application {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'previous',
+				stageEntities: entities.stageEntities,
 			});
 		}
 
