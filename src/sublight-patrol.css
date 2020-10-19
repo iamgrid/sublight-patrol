@@ -335,14 +335,18 @@ h1 {
 }
 
 .controls {
-	padding: 0 0 0.5em 0;
+	width: 100%;
+	padding: 0.5em 0 0.7em 0;
+	margin-bottom: 0.5em;
 	text-align: center;
+	border-bottom: 1px dotted #ffffff20;
 }
 
 .controls__control {
 	display: inline-block;
-	margin: 0.5em 1em;
+	margin: 0 1em;
 	font-size: 0.7em;
+	line-height: 1em;
 }
 
 .controls__key {
@@ -368,23 +372,30 @@ footer {
 	justify-items: center;
 }
 
-.footer__like {
+.footer__text {
 	font-size: 0.8em;
 	line-height: 1.7em;
 	color: #ffffff30;
 	padding-bottom: 0.6em;
+	padding-top: 0.6em;
 }
 
-.footer__like-link {
-	color: #ffffff30;
+.footer__text-separator {
+	color: #ffffff10;
+	padding: 0 1em;
+}
+
+.footer__text-link {
+	color: #ffffff50;
+	/* text-decoration: none; */
 	transition: var(--bezier);
 }
 
-.footer__like-link:hover {
+.footer__text-link:hover {
 	color: #ffffff70;
 }
 
-.footer__like-emoji {
+.footer__text-emoji {
 	color: transparent;
 	text-shadow: 0 0 0 #ddaaaa60;
 }

@@ -155,6 +155,7 @@ export function formatElapsedTime(seconds) {
 export const status = {
 	store: [],
 	isHidden: true,
+	isExpanded: false,
 	hiderTimeout: null,
 	startTime: null,
 
@@ -210,23 +211,38 @@ export const status = {
 		}
 	},
 
-	toggleStatusExpansion() {
+	toggleStatusExpansion(event, toggle) {
 		const mainDivClasses = document.getElementById('game__status').classList;
-		mainDivClasses.toggle('game__status--expanded');
-		window.setTimeout(() => {
+
+		let doExpand = !this.isExpanded;
+		switch (toggle) {
+			case 'show':
+				doExpand = true;
+				break;
+			case 'hide':
+				doExpand = false;
+				break;
+		}
+
+		if (doExpand) {
+			mainDivClasses.add('game__status--expanded');
+			this.isExpanded = true;
+		} else {
 			document.getElementById('game__status-proper').scrollTo(0, 0);
-		}, 300);
+			this.isExpanded = false;
+			window.setTimeout(() => {
+				mainDivClasses.remove('game__status--expanded');
+			}, 50);
+		}
 	},
 
 	init() {
-		document.getElementById('game__status').onclick =
-			status.toggleStatusExpansion;
-
-		this.startTime = new Date().getTime();
+		document.getElementById(
+			'game__status'
+		).onclick = status.toggleStatusExpansion.bind(status);
 	},
 
 	clear() {
-		this.startTime = new Date().getTime();
 		this.store = [];
 
 		document.getElementById('game__status-proper').innerHTML = '';

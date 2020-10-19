@@ -220,18 +220,14 @@ export default class App extends PIXI.Application {
 	}
 
 	togglePause() {
-		const statusDiv = document.getElementById('game__status');
 		const pauseDiv = document.getElementById('game__pause');
 		if (!this.paused) {
-			statusDiv.classList.add('game__status--expanded');
+			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			this.paused = true;
 			this.pixiState = this.pause;
 		} else {
-			statusDiv.classList.remove('game__status--expanded');
-			window.setTimeout(() => {
-				document.getElementById('game__status-proper').scrollTo(0, 0);
-			}, 300);
+			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			this.paused = false;
 			this.pixiState = this.play;
