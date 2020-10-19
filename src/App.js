@@ -5,6 +5,7 @@ import {
 	dialog,
 	alertsAndWarnings,
 	status,
+	moveTargetingReticule,
 } from './utils/helpers';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
@@ -159,11 +160,15 @@ export default class App extends PIXI.Application {
 			});
 		}
 
+		const targetingCallback = (newTargetId) =>
+			moveTargetingReticule(newTargetId, entities.stageEntities);
+
 		if (Keyboard.isKeyPressed('KeyA')) {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'pointed-nearest',
 				stageEntities: entities.stageEntities,
+				callbackFn: targetingCallback,
 			});
 		}
 
@@ -172,6 +177,7 @@ export default class App extends PIXI.Application {
 				type: c.actions.TARGET,
 				do: 'next',
 				stageEntities: entities.stageEntities,
+				callbackFn: targetingCallback,
 			});
 		}
 
@@ -180,6 +186,7 @@ export default class App extends PIXI.Application {
 				type: c.actions.TARGET,
 				do: 'previous',
 				stageEntities: entities.stageEntities,
+				callbackFn: targetingCallback,
 			});
 		}
 
