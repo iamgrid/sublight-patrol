@@ -3,12 +3,14 @@ const pieces = {
 		immutable: {
 			entityType: null,
 			model: null,
+			width: null,
+			length: null,
 		},
 		mutable: {
 			posX: null,
 			posY: null,
 			id: null,
-			displayId: null
+			displayId: null,
 		},
 	},
 
@@ -24,7 +26,7 @@ const pieces = {
 			longVelocity: null,
 			isDisabled: false,
 			eMPResistance: null,
-			playerRelation: 'neutral'
+			playerRelation: 'neutral',
 		},
 	},
 
@@ -32,13 +34,15 @@ const pieces = {
 		immutable: {
 			hasHull: true,
 			maxHullStrength: 75,
+			width: 40,
+			length: 60,
 		},
 		mutable: {
 			playerRelation: 'neutral',
 			contents: null,
 			hasBeenScanned: false,
 			hullStrength: null,
-		}
+		},
 	},
 
 	hasHull: {
@@ -81,6 +85,8 @@ const pieces = {
 			hasEMP: true,
 			eMPStrength: 1,
 			eMPRechargeRate: 0.25,
+			width: 49,
+			length: 50,
 		},
 		mutable: {},
 	},
@@ -106,6 +112,8 @@ const pieces = {
 			hasEMP: true,
 			eMPStrength: 1,
 			eMPRechargeRate: 0.25,
+			width: 49,
+			length: 52,
 		},
 		mutable: {},
 	},
@@ -116,6 +124,8 @@ const pieces = {
 			hasShields: false,
 			maxEMPResistance: 4,
 			hasEMP: false,
+			width: 49,
+			length: 38,
 		},
 		mutable: {},
 	},

@@ -83,7 +83,7 @@ export default class App extends PIXI.Application {
 
 		entities.spawn(this.handlers, 'valkyrie', {
 			posX: 800,
-			posY: 225,
+			posY: 175,
 			latVelocity: 0,
 			longVelocity: 0,
 			playerRelation: 'friendly',
@@ -101,7 +101,7 @@ export default class App extends PIXI.Application {
 
 		entities.spawn(this.handlers, 'fenrir', {
 			posX: 600,
-			posY: 225,
+			posY: 240,
 			latVelocity: 0,
 			longVelocity: 0,
 			playerRelation: 'neutral',
@@ -158,11 +158,35 @@ export default class App extends PIXI.Application {
 			});
 		}
 
+		if (Keyboard.isKeyPressed('KeyA')) {
+			this.dispatch({
+				type: c.actions.TARGET,
+				do: 'pointed-nearest',
+			});
+		}
+
+		if (Keyboard.isKeyPressed('KeyD')) {
+			this.dispatch({
+				type: c.actions.TARGET,
+				do: 'next',
+			});
+		}
+
+		if (Keyboard.isKeyPressed('KeyS')) {
+			this.dispatch({
+				type: c.actions.TARGET,
+				do: 'previous',
+			});
+		}
+
 		if (Keyboard.isKeyPressed('Escape')) {
 			this.togglePause();
 		}
 
-		this.fenrir.position.set(currentState.player.x, currentState.player.y);
+		this.fenrir.position.set(
+			currentState.game.playerX,
+			currentState.game.playerY
+		);
 
 		this.gameTime += this.ticker.deltaMS;
 

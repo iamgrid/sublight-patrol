@@ -1,7 +1,9 @@
 const initialGameState = {
-	player: {
-		x: 150,
-		y: 225,
+	game: {
+		playerX: 150,
+		playerY: 225,
+		facing: 'right',
+		targeting: null,
 	},
 	entities: [],
 };

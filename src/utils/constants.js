@@ -2,6 +2,7 @@ const c = {
 	actions: {
 		MOVE_PLAYER: 'MOVE_PLAYER',
 		ADD_ENTITY: 'ADD_ENTITY',
+		TARGET: 'TARGET',
 	},
 	gameCanvas: {
 		width: 1200,
