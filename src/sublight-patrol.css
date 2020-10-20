@@ -200,7 +200,7 @@ h1 {
 
 .game__pause-text {
 	text-align: center;
-	margin-top: 50px;
+	margin-top: 60px;
 	font-size: 0.8em;
 	letter-spacing: 1em;
 	transform: translateX(-0.5em);
@@ -332,6 +332,147 @@ h1 {
 
 .game__status--expanded:hover .game__status-expand-chevron {
 	transform: scale(0.6) rotate(180deg);
+}
+
+.game__hud {
+	height: 56px;
+	top: 0;
+	left: 0;
+	right: 0;
+	position: absolute;
+	z-index: 11;
+	display: flex;
+	justify-content: center;
+}
+
+.game__hud-proper {
+	height: 56px;
+	display: flex;
+	overflow-y: hidden;
+}
+
+.game__hud-left-edge {
+	background: bottom left url('./assets/hud--left-edge.png') no-repeat;
+	width: 21px;
+}
+
+.game__hud-right-edge {
+	background: bottom left url('./assets/hud--right-edge.png') no-repeat;
+	width: 21px;
+}
+
+.game__hud-player-desc,
+.game__hud-target-desc {
+	background: bottom left url('./assets/hud--stretch.png') repeat-x;
+	width: 152px;
+	text-align: center;
+}
+
+.game__hud-id-text {
+	font-size: 12px;
+	text-transform: uppercase;
+	line-height: 14px;
+	overflow: hidden;
+	margin-top: 9px;
+}
+
+.game__hud-contains-text {
+	margin-top: 4px;
+	font-size: 12px;
+	line-height: 14px;
+	color: #ffffff90;
+	overflow: hidden;
+}
+
+.game__hud-meters {
+	background: bottom left url('./assets/hud--middle.png') no-repeat;
+	width: 310px;
+}
+
+.game__hud-meter {
+	position: absolute;
+	width: 100px;
+	height: 9px;
+}
+
+.game__hud-meters .meter-text {
+	display: block;
+	height: 9px;
+	font-size: 7px;
+	padding: 0;
+	margin: 0;
+	line-height: 9px;
+	width: 100px;
+	text-align: center;
+	position: absolute;
+	z-index: 101;
+	top: 0;
+	overflow: hidden;
+}
+
+.game__hud-meters .meter-text--disabled {
+	background: center url('./assets/hud--disabled.png') no-repeat;
+	color: #ffffff00;
+}
+
+.game__hud-meters .meter-bar {
+	display: block;
+	width: 100px;
+	height: 1px;
+	margin-top: 4px;
+	position: absolute;
+	z-index: 100;
+	background-color: #909090;
+	top: 0;
+}
+
+#game__hud-meter-player-shld .meter-bar,
+#game__hud-meter-target-shld .meter-bar {
+	background-color: #32ade6;
+}
+
+#game__hud-meter-player-hull .meter-bar,
+#game__hud-meter-target-hull .meter-bar {
+	background-color: #ff5353;
+}
+
+#game__hud-meter-player-sys .meter-bar,
+#game__hud-meter-target-sys .meter-bar {
+	background-color: #e6b632;
+}
+
+#game__hud-meter-player-shld {
+	margin-top: 10px;
+	margin-left: 40px;
+}
+
+#game__hud-meter-player-hull {
+	margin-top: 20px;
+	margin-left: 40px;
+}
+
+#game__hud-meter-player-sys {
+	margin-top: 30px;
+	margin-left: 40px;
+}
+
+#game__hud-meter-target-shld {
+	margin-top: 10px;
+	margin-left: 170px;
+}
+
+#game__hud-meter-target-hull {
+	margin-top: 20px;
+	margin-left: 170px;
+}
+
+#game__hud-meter-target-sys {
+	margin-top: 30px;
+	margin-left: 170px;
+}
+
+#game__hud-meter-target-hull-bar {
+	width: 100px;
 }
 
 .controls {
