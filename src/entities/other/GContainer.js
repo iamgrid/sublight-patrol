@@ -6,27 +6,22 @@ import {
 	reticuleRelation,
 } from '../../utils/helpers';
 
-export default class Fenrir extends PIXI.Container {
+export default class GContainer extends PIXI.Container {
 	constructor() {
 		super();
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 
-		this.shipBody = fromSpriteSheet.create(3, 66, 60, 60);
-
-		this.harness = fromSpriteSheet.create(66, 66, 60, 60);
-
-		this.harness.x = -6;
+		this.containerBody = fromSpriteSheet.create(386, 3, 60, 60);
 
 		this.targetingReticule = createTargetingReticule({
-			xl: -30,
+			xl: -26,
 			xr: 26,
-			yt: -28,
-			yb: 28,
+			yt: -24,
+			yb: 22,
 		});
 
-		this.addChild(this.shipBody);
-		this.addChild(this.harness);
+		this.addChild(this.containerBody);
 		for (const key in this.targetingReticule)
 			this.addChild(this.targetingReticule[key]);
 	}

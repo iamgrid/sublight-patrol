@@ -113,6 +113,7 @@ const entities = {
 		const stageEntity = Reflect.construct(models[newShip.immutable.model], []);
 
 		stage.addChild(stageEntity);
+		stageEntity.reticuleRelation(newShip.playerRelation);
 		stageEntity.position.set(newShip.posX, newShip.posY);
 
 		this.stageEntities[newShip.id] = stageEntity;

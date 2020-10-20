@@ -133,6 +133,26 @@ export default function mainReducer(state, action) {
 				game: { ...state.game, targeting: newTarget },
 			};
 		}
+		case c.actions.CHANGE_PLAYER_RELATION: {
+			const entityId = action.entityId;
+			const newRelation = action.newRelation;
+			const entityIndex = state.entities.findIndex(
+				(entity) => entity.id === entityId
+			);
+			let modifiedEntity = { ...state.entities[entityIndex] };
+			modifiedEntity.__proto__ = state.entities[entityIndex].__proto__;
+			modifiedEntity.playerRelation = newRelation;
+
+			action.callbackFn(newRelation);
+
+			return {
+				...state,
+				entities: [
+					...state.entities.filter((_, idx) => idx !== entityIndex),
+					modifiedEntity,
+				],
+			};
+		}
 		default:
 			console.error(`Failed to run action: ${action}`);
 			return state;

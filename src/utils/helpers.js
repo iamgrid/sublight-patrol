@@ -50,6 +50,21 @@ export function toggleTargetingReticule(toggle) {
 	this.targetingReticule.BR.alpha = newValue;
 }
 
+export function reticuleRelation(playerRelation) {
+	const tints = {
+		friendly: 0x37d837,
+		neutral: 0xe6b632,
+		hostile: 0xe63232,
+	};
+
+	const newTint = tints[playerRelation];
+
+	this.targetingReticule.TL.tint = newTint;
+	this.targetingReticule.TR.tint = newTint;
+	this.targetingReticule.BL.tint = newTint;
+	this.targetingReticule.BR.tint = newTint;
+}
+
 export function moveTargetingReticule(newTarget, stageEntities) {
 	for (const p in stageEntities) {
 		stageEntities[p].toggleTargetingReticule(false);

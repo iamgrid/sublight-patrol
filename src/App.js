@@ -59,7 +59,7 @@ export default class App extends PIXI.Application {
 		c.init();
 		status.init();
 
-		this.loader.add('spriteSheet', './assets/sprite_sheet_v2.png');
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v3.png');
 
 		this.loader.load(this.draw.bind(this));
 	}
@@ -88,7 +88,7 @@ export default class App extends PIXI.Application {
 			latVelocity: 0,
 			longVelocity: 0,
 			playerRelation: 'friendly',
-			id: 'valkyrie_1',
+			id: 'alpha_1',
 		});
 
 		entities.spawn(this.handlers, 'valkyrie', {
@@ -97,7 +97,7 @@ export default class App extends PIXI.Application {
 			latVelocity: 0,
 			longVelocity: 0,
 			playerRelation: 'friendly',
-			id: 'valkyrie_2',
+			id: 'alpha_2',
 		});
 
 		entities.spawn(this.handlers, 'fenrir', {
@@ -106,7 +106,13 @@ export default class App extends PIXI.Application {
 			latVelocity: 0,
 			longVelocity: 0,
 			playerRelation: 'neutral',
-			id: 'fenrir_1',
+			id: 'beta_1',
+		});
+
+		entities.spawn(this.handlers, 'container', {
+			posX: 900,
+			posY: 350,
+			id: 'b2508-012',
 		});
 
 		console.log(this.gameState());
@@ -218,12 +224,26 @@ export default class App extends PIXI.Application {
 			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 			status.add('green', 'Green test. #3', this.gameTime);
+			this.dispatch({
+				type: c.actions.CHANGE_PLAYER_RELATION,
+				entityId: 'beta_1',
+				newRelation: 'hostile',
+				callbackFn: (newRelation) => {
+					entities.stageEntities['beta_1'].reticuleRelation(newRelation);
+					status.add(
+						'red',
+						'[Beta 1] relation switched to hostile.',
+						this.gameTime
+					);
+				},
+			});
 			this.triggered2 = true;
 		}
 
 		if (!this.triggered3 && this.gameTime > 16000) {
 			dialog('Death Herself', 'Resistance is futile.');
 			alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
+			console.log(currentState);
 			this.triggered3 = true;
 		}
 

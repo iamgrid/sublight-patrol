@@ -3,12 +3,14 @@ import {
 	fromSpriteSheet,
 	createTargetingReticule,
 	toggleTargetingReticule,
+	reticuleRelation,
 } from '../../utils/helpers';
 
 export default class Valkyrie extends PIXI.Container {
 	constructor() {
 		super();
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
+		this.reticuleRelation = reticuleRelation.bind(this);
 
 		this.shipBody = fromSpriteSheet.create(3, 3, 60, 60);
 

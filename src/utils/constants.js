@@ -3,6 +3,7 @@ const c = {
 		MOVE_PLAYER: 'MOVE_PLAYER',
 		ADD_ENTITY: 'ADD_ENTITY',
 		TARGET: 'TARGET',
+		CHANGE_PLAYER_RELATION: 'CHANGE_PLAYER_RELATION',
 	},
 	gameCanvas: {
 		width: 1200,

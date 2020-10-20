@@ -32,6 +32,7 @@ const pieces = {
 
 	container: {
 		immutable: {
+			model: '/other/GContainer',
 			hasHull: true,
 			maxHullStrength: 75,
 			width: 40,
