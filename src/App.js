@@ -113,6 +113,7 @@ export default class App extends PIXI.Application {
 			posX: 900,
 			posY: 350,
 			id: 'b2508-012',
+			contents: 'Food rations',
 		});
 
 		console.log(this.gameState());

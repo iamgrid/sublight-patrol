@@ -12,7 +12,7 @@ const entities = {
 		this.assembleType(['fenrir', 'ship']);
 		this.assembleType(['fenrir_dominator', 'fenrir', 'ship']);
 		this.assembleType(['valkyrie', 'ship']);
-		this.assembleType(['enemy_type_1', 'ship']);
+		this.assembleType(['enemy_fighter_type_1', 'ship']);
 	},
 
 	assembleType(fromPiecesReversed) {
@@ -106,7 +106,9 @@ const entities = {
 		this.checkForNullValues(`${newShip.id} (type ${type})`, newShip);
 
 		if (!models[newShip.immutable.model]) {
-			console.error(`Unable to find model for [${type}].`);
+			console.error(
+				`Unable to find model for [${type}]. (Have you updated /entities/models.js?)`
+			);
 			return null;
 		}
 

@@ -2,6 +2,7 @@ const pieces = {
 	entity: {
 		immutable: {
 			entityType: null,
+			typeShorthand: null,
 			model: null,
 			width: null,
 			length: null,
@@ -11,6 +12,7 @@ const pieces = {
 			posY: null,
 			id: null,
 			displayId: null,
+			hasBeenScanned: false,
 		},
 	},
 
@@ -27,11 +29,13 @@ const pieces = {
 			isDisabled: false,
 			eMPResistance: null,
 			playerRelation: 'neutral',
+			contents: 'Fuselage',
 		},
 	},
 
 	container: {
 		immutable: {
+			typeShorthand: 'CON',
 			model: '/other/GContainer',
 			hasHull: true,
 			maxHullStrength: 75,
@@ -41,7 +45,6 @@ const pieces = {
 		mutable: {
 			playerRelation: 'neutral',
 			contents: null,
-			hasBeenScanned: false,
 			hullStrength: null,
 		},
 	},
@@ -77,6 +80,7 @@ const pieces = {
 
 	fenrir: {
 		immutable: {
+			typeShorthand: 'F/R',
 			model: '/ships/Fenrir',
 			maxHullStrength: 125,
 			hasShields: true,
@@ -94,6 +98,7 @@ const pieces = {
 
 	fenrir_dominator: {
 		immutable: {
+			typeShorthand: 'F/D',
 			model: '/ships/Fenrir',
 			maxHullStrength: 150,
 			maxEMPResistance: 6,
@@ -104,6 +109,7 @@ const pieces = {
 
 	valkyrie: {
 		immutable: {
+			typeShorthand: 'V/E',
 			model: '/ships/Valkyrie',
 			maxHullStrength: 75,
 			hasShields: true,
@@ -118,9 +124,9 @@ const pieces = {
 		},
 		mutable: {},
 	},
-	enemy_type_1: {
+	enemy_fighter_type_1: {
 		immutable: {
-			model: '/ships/Fenrir',
+			typeShorthand: 'E-1',
 			maxHullStrength: 75,
 			hasShields: false,
 			maxEMPResistance: 4,
