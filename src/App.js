@@ -14,7 +14,6 @@ import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
-import Fenrir from './entities/ships/Fenrir';
 import story from './story/story';
 
 export default class App extends PIXI.Application {
@@ -71,17 +70,25 @@ export default class App extends PIXI.Application {
 
 		this.handlers = [this.dispatch, this.stage];
 
-		this.fenrir = new Fenrir();
-
 		this.starScapeLayers = c.starScapeLayers.map(
 			(el) => new StarScapeLayer(el)
 		);
 
 		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
 
-		this.stage.addChild(this.fenrir);
-
-		this.fenrir.position.set(400, 200);
+		entities.spawn(
+			this.handlers,
+			'fenrir',
+			{
+				posX: 100,
+				posY: 225,
+				latVelocity: 0,
+				longVelocity: 0,
+				playerRelation: 'self',
+				id: 'beta_2',
+			},
+			'player'
+		);
 
 		entities.spawn(this.handlers, 'valkyrie', {
 			posX: 800,
@@ -202,9 +209,10 @@ export default class App extends PIXI.Application {
 			this.togglePause();
 		}
 
-		this.fenrir.position.set(
-			currentState.game.playerX,
-			currentState.game.playerY
+		const playerId = currentState.entities.player.id;
+		entities.stageEntities[playerId].position.set(
+			currentState.entities.player.posX,
+			currentState.entities.player.posY
 		);
 
 		this.gameTime += this.ticker.deltaMS;

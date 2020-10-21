@@ -1,6 +1,12 @@
 import c from '../utils/constants';
 import { calculateDistance } from '../utils/formulas';
 
+function assignWPrototype(sourceObj, modifications = {}) {
+	let re = Object.assign({}, sourceObj, modifications);
+	re.__proto__ = sourceObj.__proto__;
+	return re;
+}
+
 function move(mode = 'relative', initial, newValue) {
 	if (mode === 'relative') {
 		return initial + newValue;
@@ -81,16 +87,23 @@ function cycleTargets(current, direction, entities) {
 export default function mainReducer(state, action) {
 	switch (action.type) {
 		case c.actions.MOVE_PLAYER: {
-			let newX = state.game.playerX;
-			let newY = state.game.playerY;
+			let newX = state.entities.player.posX;
+			let newY = state.entities.player.posY;
 			if (action.axis === 'x') {
-				newX = move(action.mode, state.game.playerX, action.value);
+				newX = move(action.mode, state.entities.player.posX, action.value);
 			} else if (action.axis === 'y') {
-				newY = move(action.mode, state.game.playerY, action.value);
+				newY = move(action.mode, state.entities.player.posY, action.value);
 			}
+			const modifiedPlayer = assignWPrototype(state.entities.player, {
+				posX: newX,
+				posY: newY,
+			});
 			return {
 				...state,
-				game: { ...state.game, playerX: newX, playerY: newY },
+				entities: {
+					...state.entities,
+					player: modifiedPlayer,
+				},
 			};
 		}
 		case c.actions.ADD_ENTITY: {
@@ -132,8 +145,8 @@ export default function mainReducer(state, action) {
 				case 'pointed-nearest':
 					newTarget = targetPointedOrNearest(
 						{
-							x: state.game.playerX,
-							y: state.game.playerY,
+							x: state.entities.player.posX,
+							y: state.entities.player.posY,
 							facing: state.game.facing,
 						},
 						state.entities.targetable
@@ -166,10 +179,11 @@ export default function mainReducer(state, action) {
 			const entityIndex = state.entities.targetable.findIndex(
 				(entity) => entity.id === entityId
 			);
-			let modifiedEntity = { ...state.entities.targetable[entityIndex] };
-			modifiedEntity.__proto__ =
-				state.entities.targetable[entityIndex].__proto__;
-			modifiedEntity.playerRelation = newRelation;
+
+			const modifiedEntity = assignWPrototype(
+				state.entities.targetable[entityIndex],
+				{ playerRelation: newRelation }
+			);
 
 			action.callbackFn(newRelation);
 
