@@ -5,7 +5,11 @@ const initialGameState = {
 		facing: 'right',
 		targeting: null,
 	},
-	entities: [],
+	entities: {
+		player: {},
+		targetable: [],
+		other: [],
+	},
 };
 
 export default initialGameState;

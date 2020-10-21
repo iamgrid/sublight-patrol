@@ -86,7 +86,7 @@ const entities = {
 			);
 	},
 
-	spawn(handlers, type, props) {
+	spawn(handlers, type, props, storeIn = 'targetable') {
 		const [dispatch, stage] = handlers;
 		if (!this.types[type]) {
 			console.error(`Unable to find type [${type}].`);
@@ -120,7 +120,11 @@ const entities = {
 
 		this.stageEntities[newShip.id] = stageEntity;
 
-		dispatch({ type: c.actions.ADD_ENTITY, newEntity: newShip });
+		dispatch({
+			type: c.actions.ADD_ENTITY,
+			storeIn: storeIn,
+			newEntity: newShip,
+		});
 	},
 };
 

@@ -94,7 +94,34 @@ export default function mainReducer(state, action) {
 			};
 		}
 		case c.actions.ADD_ENTITY: {
-			return { ...state, entities: [...state.entities, action.newEntity] };
+			const storeIn = action.storeIn;
+			switch (storeIn) {
+				case 'player':
+					return {
+						...state,
+						entities: {
+							...state.entities,
+							player: action.newEntity,
+						},
+					};
+				case 'targetable':
+					return {
+						...state,
+						entities: {
+							...state.entities,
+							targetable: [...state.entities.targetable, action.newEntity],
+						},
+					};
+				case 'other':
+					return {
+						...state,
+						entities: {
+							...state.entities,
+							other: [...state.entities.other, action.newEntity],
+						},
+					};
+			}
+			break;
 		}
 		case c.actions.TARGET: {
 			let newTarget;
@@ -109,21 +136,21 @@ export default function mainReducer(state, action) {
 							y: state.game.playerY,
 							facing: state.game.facing,
 						},
-						state.entities
+						state.entities.targetable
 					);
 					break;
 				case 'next':
 					newTarget = cycleTargets(
 						state.game.targeting,
 						'next',
-						state.entities
+						state.entities.targetable
 					);
 					break;
 				case 'previous':
 					newTarget = cycleTargets(
 						state.game.targeting,
 						'previous',
-						state.entities
+						state.entities.targetable
 					);
 					break;
 			}
@@ -136,21 +163,27 @@ export default function mainReducer(state, action) {
 		case c.actions.CHANGE_PLAYER_RELATION: {
 			const entityId = action.entityId;
 			const newRelation = action.newRelation;
-			const entityIndex = state.entities.findIndex(
+			const entityIndex = state.entities.targetable.findIndex(
 				(entity) => entity.id === entityId
 			);
-			let modifiedEntity = { ...state.entities[entityIndex] };
-			modifiedEntity.__proto__ = state.entities[entityIndex].__proto__;
+			let modifiedEntity = { ...state.entities.targetable[entityIndex] };
+			modifiedEntity.__proto__ =
+				state.entities.targetable[entityIndex].__proto__;
 			modifiedEntity.playerRelation = newRelation;
 
 			action.callbackFn(newRelation);
 
 			return {
 				...state,
-				entities: [
-					...state.entities.filter((_, idx) => idx !== entityIndex),
-					modifiedEntity,
-				],
+				entities: {
+					...state.entities,
+					targetable: [
+						...state.entities.targetable.filter(
+							(_, idx) => idx !== entityIndex
+						),
+						modifiedEntity,
+					],
+				},
 			};
 		}
 		default:
