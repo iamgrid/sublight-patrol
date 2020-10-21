@@ -306,6 +306,22 @@ export const status = {
 };
 
 export const hud = {
+	currentDisplay: {
+		playerShield: null,
+		playerHull: null,
+		playerSystem: null,
+		playerIsDisabled: null,
+		playerContents: null,
+		playerId: null,
+		targetExists: false,
+		targetShield: null,
+		targetHull: null,
+		targetSystem: null,
+		targetIsDisabled: null,
+		targetContents: null,
+		targetId: null,
+	},
+
 	toggle(show = false) {
 		const hudDiv = document.getElementById('game__hud');
 		if (show) {
@@ -313,5 +329,123 @@ export const hud = {
 		} else {
 			hudDiv.classList.remove('game__hud--visible');
 		}
+	},
+
+	update(targeting, allEntities) {
+		let newDisplay = {
+			playerShield: allEntities.player.shieldStrength,
+			playerHull: allEntities.player.hullStrength,
+			playerSystem: allEntities.player.systemStrength,
+			playerIsDisabled: allEntities.player.isDisabled,
+			playerContents: allEntities.player.contents,
+			playerId: `${allEntities.player.immutable.typeShorthand} ${allEntities.player.displayId}`,
+		};
+
+		let newTargetDisplay = {};
+
+		if (!targeting) {
+			newTargetDisplay = {
+				targetExists: false,
+				targetShield: 0,
+				targetHull: 0,
+				targetSystem: 0,
+				targetIsDisabled: 0,
+				targetContains: '',
+				targetId: '',
+			};
+		} else {
+			const targetIdx = allEntities.targetable.findIndex(
+				(entity) => entity.id === targeting
+			);
+
+			if (targetIdx === -1) {
+				console.error(`Unable to find target: ${targeting}`);
+				return;
+			}
+
+			newTargetDisplay = {
+				targetShield: allEntities.targetable[targetIdx].shieldStrength,
+				targetHull: allEntities.targetable[targetIdx].hullStrength,
+				targetSystem: allEntities.targetable[targetIdx].systemStrength,
+				targetIsDisabled: allEntities.targetable[targetIdx].isDisabled,
+				targetContents: allEntities.targetable[targetIdx].contents,
+				targetId: `${allEntities.targetable[targetIdx].immutable.typeShorthand} ${allEntities.targetable[targetIdx].displayId}`,
+			};
+		}
+		Object.assign(newDisplay, newTargetDisplay);
+
+		for (const key in newDisplay) {
+			if (newDisplay[key] !== hud.currentDisplay[key])
+				hud.updateReadout(key, newDisplay[key], allEntities, targeting);
+		}
+
+		hud.currentDisplay = newDisplay;
+	},
+
+	updateReadout(id, newValue, allEntities, targeting) {
+		const entity = id.substr(0, 6);
+		// console.log(id, entity, newValue);
+		switch (id) {
+			case entity + 'Id':
+				document.getElementById(`game__hud-${entity}-id`).innerText = newValue;
+				break;
+			case entity + 'Contents':
+				document.getElementById(
+					`game__hud-${entity}-contents`
+				).innerText = newValue;
+				break;
+			case entity + 'Shield':
+				hud.updateMeter(entity, 'Shield', newValue, allEntities, targeting);
+				break;
+			case entity + 'Hull':
+				hud.updateMeter(entity, 'Hull', newValue, allEntities, targeting);
+				break;
+			case entity + 'System':
+				hud.updateMeter(entity, 'System', newValue, allEntities, targeting);
+				break;
+			case entity + 'IsDisabled': {
+				const meterDiv = document.getElementById(
+					`game__hud-meter-${entity}-system-text`
+				);
+				if (newValue) {
+					meterDiv.classList.add('meter-text--disabled');
+				} else {
+					meterDiv.classList.remove('meter-text--disabled');
+				}
+				break;
+			}
+		}
+	},
+
+	updateMeter(entity, key, newValue, allEntities, targeting) {
+		// console.log(entity, key, newValue, targeting);
+		let meterValue;
+		let meterText = newValue;
+		if (newValue === 0 || newValue === undefined) {
+			meterText = '';
+			meterValue = 0;
+		} else {
+			let maxValue = -1;
+			if (entity === 'player') {
+				maxValue = allEntities.player.immutable[`max${key}Strength`];
+			} else {
+				const targetIdx = allEntities.targetable.findIndex(
+					(entity) => entity.id === targeting
+				);
+				maxValue =
+					allEntities.targetable[targetIdx].immutable[`max${key}Strength`];
+			}
+			meterValue = Math.round((newValue / maxValue) * 100);
+			// console.log({ maxValue, meterValue });
+		}
+
+		const meter = key.toLowerCase();
+
+		document.getElementById(
+			`game__hud-meter-${entity}-${meter}-text`
+		).innerText = meterText;
+		document.getElementById(
+			`game__hud-meter-${entity}-${meter}-bar`
+		).style.width = `${meterValue}px`;
 	},
 };

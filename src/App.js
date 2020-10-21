@@ -140,6 +140,7 @@ export default class App extends PIXI.Application {
 	play(delta) {
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		const currentState = this.gameState();
+		hud.update(currentState.game.targeting, currentState.entities);
 
 		const speed = 5 * delta;
 
@@ -248,7 +249,7 @@ export default class App extends PIXI.Application {
 					);
 				},
 			});
-			hud.toggle(false);
+			// hud.toggle(false);
 			this.triggered2 = true;
 		}
 

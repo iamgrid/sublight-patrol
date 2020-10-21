@@ -388,7 +388,7 @@ h1 {
 	transition: opacity var(--hud-fade-time) ease-in-out;
 }
 
-.game__hud-contains-text {
+.game__hud-contents-text {
 	margin-top: 4px;
 	font-size: 12px;
 	line-height: 14px;
@@ -399,7 +399,7 @@ h1 {
 }
 
 .game__hud--visible .game__hud-id-text,
-.game__hud--visible .game__hud-contains-text {
+.game__hud--visible .game__hud-contents-text {
 	opacity: 1;
 	transition: opacity var(--hud-fade-time) ease-in-out var(--hud-slide-time);
 }
@@ -456,8 +456,8 @@ h1 {
 	top: 0;
 }
 
-#game__hud-meter-player-shld .meter-bar,
-#game__hud-meter-target-shld .meter-bar {
+#game__hud-meter-player-shield .meter-bar,
+#game__hud-meter-target-shield .meter-bar {
 	background-color: #32ade6;
 }
 
@@ -466,12 +466,12 @@ h1 {
 	background-color: #ff5353;
 }
 
-#game__hud-meter-player-sys .meter-bar,
-#game__hud-meter-target-sys .meter-bar {
+#game__hud-meter-player-system .meter-bar,
+#game__hud-meter-target-system .meter-bar {
 	background-color: #e6b632;
 }
 
-#game__hud-meter-player-shld {
+#game__hud-meter-player-shield {
 	margin-top: 10px;
 	margin-left: 40px;
 }
@@ -481,12 +481,12 @@ h1 {
 	margin-left: 40px;
 }
 
-#game__hud-meter-player-sys {
+#game__hud-meter-player-system {
 	margin-top: 30px;
 	margin-left: 40px;
 }
 
-#game__hud-meter-target-shld {
+#game__hud-meter-target-shield {
 	margin-top: 10px;
 	margin-left: 170px;
 }
@@ -496,7 +496,7 @@ h1 {
 	margin-left: 170px;
 }
 
-#game__hud-meter-target-sys {
+#game__hud-meter-target-system {
 	margin-top: 30px;
 	margin-left: 170px;
 }
