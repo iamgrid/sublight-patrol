@@ -304,3 +304,14 @@ export const status = {
 		this.toggleHide();
 	},
 };
+
+export const hud = {
+	toggle(show = false) {
+		const hudDiv = document.getElementById('game__hud');
+		if (show) {
+			hudDiv.classList.add('game__hud--visible');
+		} else {
+			hudDiv.classList.remove('game__hud--visible');
+		}
+	},
+};

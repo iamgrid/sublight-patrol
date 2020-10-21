@@ -1,5 +1,8 @@
 :root {
 	--bezier: all 0.2s cubic-bezier(0.1, -2.2, 1, 2.2);
+	--hud-slide-time: 0.5s;
+	--hud-slide-function: cubic-bezier(0, 0.3, 0.7, 1);
+	--hud-fade-time: 0.35s;
 }
 
 * {
@@ -346,9 +349,16 @@ h1 {
 }
 
 .game__hud-proper {
-	height: 56px;
+	height: 0px;
 	display: flex;
 	overflow-y: hidden;
+	transition: height var(--hud-slide-time) var(--hud-slide-function)
+		var(--hud-fade-time);
+}
+
+.game__hud--visible .game__hud-proper {
+	height: 56px;
+	transition: height var(--hud-slide-time) var(--hud-slide-function);
 }
 
 .game__hud-left-edge {
@@ -374,6 +384,8 @@ h1 {
 	line-height: 14px;
 	overflow: hidden;
 	margin-top: 9px;
+	opacity: 0;
+	transition: opacity var(--hud-fade-time) ease-in-out;
 }
 
 .game__hud-contains-text {
@@ -382,11 +394,29 @@ h1 {
 	line-height: 14px;
 	color: #ffffff90;
 	overflow: hidden;
+	opacity: 0;
+	transition: opacity var(--hud-fade-time) ease-in-out;
+}
+
+.game__hud--visible .game__hud-id-text,
+.game__hud--visible .game__hud-contains-text {
+	opacity: 1;
+	transition: opacity var(--hud-fade-time) ease-in-out var(--hud-slide-time);
 }
 
 .game__hud-meters {
 	background: bottom left url('./assets/hud--middle.png') no-repeat;
 	width: 310px;
+}
+
+.game__hud-meters-proper {
+	opacity: 0;
+	transition: opacity var(--hud-fade-time) ease-in-out;
+}
+
+.game__hud--visible .game__hud-meters-proper {
+	opacity: 1;
+	transition: opacity var(--hud-fade-time) ease-in-out var(--hud-slide-time);
 }
 
 .game__hud-meter {

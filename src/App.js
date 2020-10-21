@@ -5,6 +5,7 @@ import {
 	dialog,
 	alertsAndWarnings,
 	status,
+	hud,
 	moveTargetingReticule,
 } from './utils/helpers';
 import initialGameState from './initialGameState';
@@ -217,6 +218,7 @@ export default class App extends PIXI.Application {
 			alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
 			status.add('aqua', 'Aqua test. #1', this.gameTime);
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
+			hud.toggle(true);
 			this.triggered1 = true;
 		}
 
@@ -238,13 +240,13 @@ export default class App extends PIXI.Application {
 					);
 				},
 			});
+			hud.toggle(false);
 			this.triggered2 = true;
 		}
 
 		if (!this.triggered3 && this.gameTime > 16000) {
 			dialog('Death Herself', 'Resistance is futile.');
 			alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
-			console.log(currentState);
 			this.triggered3 = true;
 		}
 

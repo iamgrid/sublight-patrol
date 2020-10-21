@@ -35,7 +35,7 @@ const pieces = {
 
 	container: {
 		immutable: {
-			typeShorthand: 'CON',
+			typeShorthand: 'CNT',
 			model: '/other/GContainer',
 			hasHull: true,
 			maxHullStrength: 75,
