@@ -1,5 +1,6 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
+import overlays from './overlays';
 import {
 	fromSpriteSheet,
 	dialog,
@@ -28,6 +29,8 @@ export default class App extends PIXI.Application {
 		// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 		this.view.id = 'pixicanvas';
+
+		document.getElementById('game').innerHTML = overlays();
 		document.getElementById('game').appendChild(this.view); // Create Canvas tag in the body
 		document.getElementById('pixicanvas').tabIndex = 0;
 		document.getElementById('pixicanvas').focus();
