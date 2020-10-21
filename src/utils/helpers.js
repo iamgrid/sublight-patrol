@@ -347,6 +347,8 @@ export const hud = {
 				'target',
 				allEntities.targetable[targetIdx]
 			);
+			newTargetDisplay.targetPlayerRelation =
+				allEntities.targetable[targetIdx].playerRelation;
 		}
 		Object.assign(newDisplay, newTargetDisplay);
 
@@ -411,6 +413,16 @@ export const hud = {
 					meterDiv.classList.remove('meter-text--disabled');
 				}
 				break;
+			}
+			case entity + 'PlayerRelation': {
+				const targetNameDivClasses = document.getElementById(
+					'game__hud-target-id'
+				).classList;
+				const possibleRelations = ['friendly', 'neutral', 'hostile'];
+				possibleRelations.forEach((rel) =>
+					targetNameDivClasses.remove(`game__hud-target-id--${rel}`)
+				);
+				targetNameDivClasses.add(`game__hud-target-id--${newValue}`);
 			}
 		}
 	},

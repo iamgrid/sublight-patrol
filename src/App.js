@@ -106,6 +106,9 @@ export default class App extends PIXI.Application {
 			longVelocity: 0,
 			playerRelation: 'friendly',
 			id: 'alpha_2',
+			shieldStrength: 75,
+			systemStrength: 0,
+			isDisabled: true,
 		});
 
 		entities.spawn(this.handlers, 'fenrir', {

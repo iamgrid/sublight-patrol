@@ -385,14 +385,27 @@ h1 {
 	overflow: hidden;
 	margin-top: 9px;
 	opacity: 0;
+	/* text-shadow: -1px -1px 1px #ffffff50, 1px 1px 1px #ffffff50; */
 	transition: opacity var(--hud-fade-time) ease-in-out;
+}
+
+.game__hud-target-id--friendly {
+	color: #37d837;
+}
+
+.game__hud-target-id--neutral {
+	color: #e6b632;
+}
+
+.game__hud-target-id--hostile {
+	color: #ff6161;
 }
 
 .game__hud-contents-text {
 	margin-top: 4px;
-	font-size: 12px;
+	font-size: 11px;
 	line-height: 14px;
-	color: #ffffff90;
+	color: #ffffff70;
 	overflow: hidden;
 	opacity: 0;
 	transition: opacity var(--hud-fade-time) ease-in-out;
