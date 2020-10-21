@@ -306,21 +306,8 @@ export const status = {
 };
 
 export const hud = {
-	currentDisplay: {
-		playerShield: null,
-		playerHull: null,
-		playerSystem: null,
-		playerIsDisabled: null,
-		playerContents: null,
-		playerId: null,
-		targetExists: false,
-		targetShield: null,
-		targetHull: null,
-		targetSystem: null,
-		targetIsDisabled: null,
-		targetContents: null,
-		targetId: null,
-	},
+	currentDisplay: {},
+	maximums: {},
 
 	toggle(show = false) {
 		const hudDiv = document.getElementById('game__hud');
@@ -332,14 +319,7 @@ export const hud = {
 	},
 
 	update(targeting, allEntities) {
-		let newDisplay = {
-			playerShield: allEntities.player.shieldStrength,
-			playerHull: allEntities.player.hullStrength,
-			playerSystem: allEntities.player.systemStrength,
-			playerIsDisabled: allEntities.player.isDisabled,
-			playerContents: allEntities.player.contents,
-			playerId: `${allEntities.player.immutable.typeShorthand} ${allEntities.player.displayId}`,
-		};
+		let newDisplay = hud.assembleDisplayObject('player', allEntities.player);
 
 		let newTargetDisplay = {};
 
@@ -363,14 +343,10 @@ export const hud = {
 				return;
 			}
 
-			newTargetDisplay = {
-				targetShield: allEntities.targetable[targetIdx].shieldStrength,
-				targetHull: allEntities.targetable[targetIdx].hullStrength,
-				targetSystem: allEntities.targetable[targetIdx].systemStrength,
-				targetIsDisabled: allEntities.targetable[targetIdx].isDisabled,
-				targetContents: allEntities.targetable[targetIdx].contents,
-				targetId: `${allEntities.targetable[targetIdx].immutable.typeShorthand} ${allEntities.targetable[targetIdx].displayId}`,
-			};
+			newTargetDisplay = hud.assembleDisplayObject(
+				'target',
+				allEntities.targetable[targetIdx]
+			);
 		}
 		Object.assign(newDisplay, newTargetDisplay);
 
@@ -382,7 +358,29 @@ export const hud = {
 		hud.currentDisplay = newDisplay;
 	},
 
-	updateReadout(id, newValue, allEntities, targeting) {
+	assembleDisplayObject(entityName, entity) {
+		const re = {};
+
+		re[entityName + 'Shield'] = entity.shieldStrength;
+		re[entityName + 'Hull'] = entity.hullStrength;
+		re[entityName + 'System'] = entity.systemStrength;
+		re[entityName + 'IsDisabled'] = entity.isDisabled;
+		re[entityName + 'Contents'] = entity.contents;
+
+		const name = `${entity.immutable.typeShorthand} ${entity.displayId}`;
+		re[entityName + 'Id'] = name;
+
+		if (name !== hud.currentDisplay[entityName + 'Id']) {
+			// console.log(`updating maximums on ${entityName}`);
+			hud.maximums[entityName + 'Shield'] = entity.immutable.maxShieldStrength;
+			hud.maximums[entityName + 'Hull'] = entity.immutable.maxHullStrength;
+			hud.maximums[entityName + 'System'] = entity.immutable.maxSystemStrength;
+		}
+
+		return re;
+	},
+
+	updateReadout(id, newValue) {
 		const entity = id.substr(0, 6);
 		// console.log(id, entity, newValue);
 		switch (id) {
@@ -395,13 +393,13 @@ export const hud = {
 				).innerText = newValue;
 				break;
 			case entity + 'Shield':
-				hud.updateMeter(entity, 'Shield', newValue, allEntities, targeting);
+				hud.updateMeter(entity, 'Shield', newValue);
 				break;
 			case entity + 'Hull':
-				hud.updateMeter(entity, 'Hull', newValue, allEntities, targeting);
+				hud.updateMeter(entity, 'Hull', newValue);
 				break;
 			case entity + 'System':
-				hud.updateMeter(entity, 'System', newValue, allEntities, targeting);
+				hud.updateMeter(entity, 'System', newValue);
 				break;
 			case entity + 'IsDisabled': {
 				const meterDiv = document.getElementById(
@@ -417,24 +415,15 @@ export const hud = {
 		}
 	},
 
-	updateMeter(entity, key, newValue, allEntities, targeting) {
-		// console.log(entity, key, newValue, targeting);
+	updateMeter(entity, key, newValue) {
+		// console.log(entity, key, newValue);
 		let meterValue;
 		let meterText = newValue;
 		if (newValue === 0 || newValue === undefined) {
 			meterText = '';
 			meterValue = 0;
 		} else {
-			let maxValue = -1;
-			if (entity === 'player') {
-				maxValue = allEntities.player.immutable[`max${key}Strength`];
-			} else {
-				const targetIdx = allEntities.targetable.findIndex(
-					(entity) => entity.id === targeting
-				);
-				maxValue =
-					allEntities.targetable[targetIdx].immutable[`max${key}Strength`];
-			}
+			const maxValue = hud.maximums[`${entity}${key}`];
 			meterValue = Math.round((newValue / maxValue) * 100);
 			// console.log({ maxValue, meterValue });
 		}
