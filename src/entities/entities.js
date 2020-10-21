@@ -86,7 +86,7 @@ const entities = {
 			);
 	},
 
-	spawn(handlers, type, props, storeIn = 'targetable') {
+	spawn(handlers, type, pos, props, storeIn = 'targetable') {
 		const [dispatch, stage] = handlers;
 		if (!this.types[type]) {
 			console.error(`Unable to find type [${type}].`);
@@ -105,6 +105,11 @@ const entities = {
 
 		this.checkForNullValues(`${newShip.id} (type ${type})`, newShip);
 
+		let positionStore = 'canMove';
+		if (!newShip.immutable.canMove) positionStore = 'cantMove';
+
+		let positionArray = [pos.posX, pos.posY, pos.latVelocity, pos.longVelocity];
+
 		if (!models[newShip.immutable.model]) {
 			console.error(
 				`Unable to find model for [${type}]. (Have you updated /entities/models.js?)`
@@ -116,7 +121,7 @@ const entities = {
 
 		stage.addChild(stageEntity);
 		stageEntity.reticuleRelation(newShip.playerRelation);
-		stageEntity.position.set(newShip.posX, newShip.posY);
+		stageEntity.position.set(pos.posX, pos.posY);
 
 		this.stageEntities[newShip.id] = stageEntity;
 
@@ -124,6 +129,8 @@ const entities = {
 			type: c.actions.ADD_ENTITY,
 			storeIn: storeIn,
 			newEntity: newShip,
+			positionStore: positionStore,
+			positionArray: positionArray,
 		});
 	},
 };

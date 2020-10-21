@@ -15,7 +15,26 @@ function move(mode = 'relative', initial, newValue) {
 	}
 }
 
-function targetPointedOrNearest(from, entities) {
+function getPosition(entityId, positions) {
+	if (positions.canMove[`${entityId}--posX`]) {
+		return [
+			positions.canMove[`${entityId}--posX`],
+			positions.canMove[`${entityId}--posY`],
+		];
+	}
+
+	if (positions.cantMove[`${entityId}--posX`]) {
+		return [
+			positions.cantMove[`${entityId}--posX`],
+			positions.cantMove[`${entityId}--posY`],
+		];
+	}
+
+	console.error(`Unable to ascertain position for ${entityId}`);
+	// console.log(positions);
+}
+
+function targetPointedOrNearest(from, entities, positions) {
 	//pointed
 	let current = null;
 
@@ -25,10 +44,11 @@ function targetPointedOrNearest(from, entities) {
 	const candidates = entities.filter((entity) => {
 		const rangeTop = pointerY - entity.immutable.width / 2;
 		const rangeBottom = pointerY + entity.immutable.width / 2;
-		if (entity.posY >= rangeTop && entity.posY <= rangeBottom) {
+		const [entityX, entityY] = getPosition(entity.id, positions);
+		if (entityY >= rangeTop && entityY <= rangeBottom) {
 			if (
-				(facing === 'right' && from.x < entity.posX) ||
-				(facing === 'left' && from.x > entity.posX)
+				(facing === 'right' && from.x < entityX) ||
+				(facing === 'left' && from.x > entityX)
 			)
 				return true;
 		}
@@ -36,10 +56,13 @@ function targetPointedOrNearest(from, entities) {
 
 	let bestDistance = Infinity;
 	candidates.forEach((entity) => {
-		const currentDistance = Math.abs(from.x - entity.posX);
+		const entityId = entity.id;
+
+		const [entityX2] = getPosition(entityId, positions);
+		const currentDistance = Math.abs(from.x - entityX2);
 		if (currentDistance < bestDistance) {
 			bestDistance = currentDistance;
-			current = entity.id;
+			current = entityId;
 		}
 	});
 
@@ -51,16 +74,18 @@ function targetPointedOrNearest(from, entities) {
 	// nearest
 	let bestDistance2 = Infinity;
 	entities.forEach((entity) => {
+		const entityId2 = entity.id;
+		const [entityX3, entityY3] = getPosition(entityId2, positions);
 		const currentDistance2 = calculateDistance(
 			from.x,
 			from.y,
-			entity.posX,
-			entity.posY
+			entityX3,
+			entityY3
 		);
 
 		if (currentDistance2 < bestDistance2) {
 			bestDistance2 = currentDistance2;
-			current = entity.id;
+			current = entityId2;
 		}
 	});
 
@@ -87,26 +112,55 @@ function cycleTargets(current, direction, entities) {
 export default function mainReducer(state, action) {
 	switch (action.type) {
 		case c.actions.MOVE_PLAYER: {
-			let newX = state.entities.player.posX;
-			let newY = state.entities.player.posY;
+			const playerId = state.entities.player.id;
+			const [currentX, currentY] = getPosition(playerId, state.positions);
+			let newX = currentX;
+			let newY = currentY;
+
 			if (action.axis === 'x') {
-				newX = move(action.mode, state.entities.player.posX, action.value);
+				newX = move(action.mode, currentX, action.value);
 			} else if (action.axis === 'y') {
-				newY = move(action.mode, state.entities.player.posY, action.value);
+				newY = move(action.mode, currentY, action.value);
 			}
-			const modifiedPlayer = assignWPrototype(state.entities.player, {
-				posX: newX,
-				posY: newY,
-			});
+
+			let newPosProps = {};
+			newPosProps[`${playerId}--posX`] = newX;
+			newPosProps[`${playerId}--posY`] = newY;
+
 			return {
 				...state,
-				entities: {
-					...state.entities,
-					player: modifiedPlayer,
+				positions: {
+					canMove: { ...state.positions.canMove, ...newPosProps },
+					cantMove: state.positions.cantMove,
 				},
 			};
 		}
 		case c.actions.ADD_ENTITY: {
+			// position
+			const entityId = action.newEntity.id;
+			const positionStoreName = action.positionStore;
+			const [posX, posY, latVelocity, longVelocity] = action.positionArray;
+			const newPosProps = {};
+			newPosProps[`${entityId}--posX`] = posX;
+			newPosProps[`${entityId}--posY`] = posY;
+			if (latVelocity !== undefined) {
+				newPosProps[`${entityId}--latVelocity`] = latVelocity;
+				newPosProps[`${entityId}--longVelocity`] = longVelocity;
+			}
+			let newPositionStore = {};
+			if (positionStoreName === 'canMove') {
+				newPositionStore = {
+					canMove: { ...state.positions.canMove, ...newPosProps },
+					cantMove: state.positions.cantMove,
+				};
+			} else {
+				newPositionStore = {
+					canMove: state.positions.canMove,
+					cantMove: { ...state.positions.cantMove, ...newPosProps },
+				};
+			}
+
+			// other props
 			const storeIn = action.storeIn;
 			switch (storeIn) {
 				case 'player':
@@ -116,6 +170,7 @@ export default function mainReducer(state, action) {
 							...state.entities,
 							player: action.newEntity,
 						},
+						positions: newPositionStore,
 					};
 				case 'targetable':
 					return {
@@ -124,6 +179,7 @@ export default function mainReducer(state, action) {
 							...state.entities,
 							targetable: [...state.entities.targetable, action.newEntity],
 						},
+						positions: newPositionStore,
 					};
 				case 'other':
 					return {
@@ -132,6 +188,7 @@ export default function mainReducer(state, action) {
 							...state.entities,
 							other: [...state.entities.other, action.newEntity],
 						},
+						positions: newPositionStore,
 					};
 			}
 			break;
@@ -142,16 +199,20 @@ export default function mainReducer(state, action) {
 				case 'clear':
 					newTarget = null;
 					break;
-				case 'pointed-nearest':
+				case 'pointed-nearest': {
+					const playerId = state.entities.player.id;
+					const [currentX, currentY] = getPosition(playerId, state.positions);
 					newTarget = targetPointedOrNearest(
 						{
-							x: state.entities.player.posX,
-							y: state.entities.player.posY,
+							x: currentX,
+							y: currentY,
 							facing: state.game.facing,
 						},
-						state.entities.targetable
+						state.entities.targetable,
+						state.positions
 					);
 					break;
+				}
 				case 'next':
 					newTarget = cycleTargets(
 						state.game.targeting,

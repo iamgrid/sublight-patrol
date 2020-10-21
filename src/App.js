@@ -84,48 +84,74 @@ export default class App extends PIXI.Application {
 				posY: 225,
 				latVelocity: 0,
 				longVelocity: 0,
+			},
+			{
 				playerRelation: 'self',
 				id: 'beta_2',
 			},
 			'player'
 		);
 
-		entities.spawn(this.handlers, 'valkyrie', {
-			posX: 800,
-			posY: 175,
-			latVelocity: 0,
-			longVelocity: 0,
-			playerRelation: 'friendly',
-			id: 'alpha_1',
-		});
+		entities.spawn(
+			this.handlers,
+			'valkyrie',
+			{
+				posX: 800,
+				posY: 175,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				id: 'alpha_1',
+			}
+		);
 
-		entities.spawn(this.handlers, 'valkyrie', {
-			posX: 700,
-			posY: 225,
-			latVelocity: 0,
-			longVelocity: 0,
-			playerRelation: 'friendly',
-			id: 'alpha_2',
-			shieldStrength: 75,
-			systemStrength: 0,
-			isDisabled: true,
-		});
+		entities.spawn(
+			this.handlers,
+			'valkyrie',
+			{
+				posX: 700,
+				posY: 225,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				id: 'alpha_2',
+				shieldStrength: 75,
+				systemStrength: 0,
+				isDisabled: true,
+			}
+		);
 
-		entities.spawn(this.handlers, 'fenrir', {
-			posX: 600,
-			posY: 240,
-			latVelocity: 0,
-			longVelocity: 0,
-			playerRelation: 'neutral',
-			id: 'beta_1',
-		});
+		entities.spawn(
+			this.handlers,
+			'fenrir',
+			{
+				posX: 600,
+				posY: 240,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'neutral',
+				id: 'beta_1',
+			}
+		);
 
-		entities.spawn(this.handlers, 'container', {
-			posX: 900,
-			posY: 350,
-			id: 'b2508-012',
-			contents: 'Food rations',
-		});
+		entities.spawn(
+			this.handlers,
+			'container',
+			{
+				posX: 900,
+				posY: 350,
+			},
+			{
+				id: 'b2508-012',
+				contents: 'Food rations',
+			}
+		);
 
 		console.log(this.gameState());
 
@@ -215,8 +241,8 @@ export default class App extends PIXI.Application {
 
 		const playerId = currentState.entities.player.id;
 		entities.stageEntities[playerId].position.set(
-			currentState.entities.player.posX,
-			currentState.entities.player.posY
+			currentState.positions.canMove[`${playerId}--posX`],
+			currentState.positions.canMove[`${playerId}--posY`]
 		);
 
 		this.gameTime += this.ticker.deltaMS;

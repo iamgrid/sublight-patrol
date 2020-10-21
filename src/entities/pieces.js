@@ -6,10 +6,9 @@ const pieces = {
 			model: null,
 			width: null,
 			length: null,
+			canMove: false,
 		},
 		mutable: {
-			posX: null,
-			posY: null,
 			id: null,
 			displayId: null,
 			hasBeenScanned: false,
@@ -22,10 +21,9 @@ const pieces = {
 			hasShields: false,
 			hasEMP: false,
 			maxSystemStrength: null,
+			canMove: true,
 		},
 		mutable: {
-			latVelocity: null,
-			longVelocity: null,
 			isDisabled: false,
 			systemStrength: null,
 			playerRelation: 'neutral',

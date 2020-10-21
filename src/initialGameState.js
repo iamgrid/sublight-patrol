@@ -8,6 +8,10 @@ const initialGameState = {
 		targetable: [],
 		other: [],
 	},
+	positions: {
+		canMove: {},
+		cantMove: {},
+	},
 };
 
 export default initialGameState;
