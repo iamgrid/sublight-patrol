@@ -2,6 +2,7 @@ const initialGameState = {
 	game: {
 		facing: 'right',
 		targeting: null,
+		targetHasBeenScanned: false,
 	},
 	entities: {
 		player: {},

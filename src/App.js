@@ -53,6 +53,8 @@ export default class App extends PIXI.Application {
 		this.startTime = new Date().getTime();
 		this.gameTime = 0;
 
+		this.triedScanning = false;
+
 		console.log(entities.types);
 		console.log(story);
 	}
@@ -140,6 +142,7 @@ export default class App extends PIXI.Application {
 			{
 				playerRelation: 'neutral',
 				id: 'beta_1',
+				hasBeenScanned: true,
 			}
 		);
 
@@ -170,8 +173,13 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
+		// starscape movement
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
+
+		// current state
 		const currentState = this.gameState();
+
+		// hud updates
 		hud.update(currentState.game.targeting, currentState.entities);
 
 		const speed = 5 * delta;
@@ -242,12 +250,22 @@ export default class App extends PIXI.Application {
 			this.togglePause();
 		}
 
+		// player position
 		const playerId = currentState.entities.player.id;
 		entities.stageEntities[playerId].position.set(
 			currentState.positions.canMove[`${playerId}--posX`],
 			currentState.positions.canMove[`${playerId}--posY`]
 		);
 
+		// scanning
+		if (
+			!currentState.game.targetHasBeenScanned &&
+			currentState.game.targeting
+		) {
+			this.dispatch({ type: c.actions.SCAN });
+		}
+
+		// gametime
 		this.gameTime += this.ticker.deltaMS;
 
 		if (!this.triggered1 && this.gameTime > 2000) {

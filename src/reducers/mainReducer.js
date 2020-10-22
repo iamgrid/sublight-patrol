@@ -34,6 +34,21 @@ function getPosition(entityId, positions) {
 	// console.log(positions);
 }
 
+function nearEnoughToScan(playerId, targetId, positions) {
+	const [playerX, playerY] = getPosition(playerId, positions);
+	const [targetX, targetY] = getPosition(targetId, positions);
+
+	const distance = calculateDistance(playerX, playerY, targetX, targetY);
+
+	// console.log(distance);
+
+	if (distance < 200) {
+		return true;
+	}
+
+	return false;
+}
+
 function targetPointedOrNearest(from, entities, positions) {
 	//pointed
 	let current = null;
@@ -231,7 +246,11 @@ export default function mainReducer(state, action) {
 			action.callbackFn(newTarget);
 			return {
 				...state,
-				game: { ...state.game, targeting: newTarget },
+				game: {
+					...state.game,
+					targeting: newTarget,
+					targetHasBeenScanned: false,
+				},
 			};
 		}
 		case c.actions.CHANGE_PLAYER_RELATION: {
@@ -260,6 +279,51 @@ export default function mainReducer(state, action) {
 					],
 				},
 			};
+		}
+		case c.actions.SCAN: {
+			const targetId = state.game.targeting;
+			if (
+				nearEnoughToScan(state.entities.player.id, targetId, state.positions)
+			) {
+				const targetIdx = state.entities.targetable.findIndex(
+					(entity) => entity.id === targetId
+				);
+
+				// no update needed
+				if (state.entities.targetable[targetIdx].hasBeenScanned) {
+					return {
+						...state,
+						game: {
+							...state.game,
+							targetHasBeenScanned: true,
+						},
+					};
+				}
+
+				// really hasnt been scanned yet
+				const newEntityObj = assignWPrototype(
+					state.entities.targetable[targetIdx],
+					{ hasBeenScanned: true }
+				);
+				return {
+					...state,
+					game: {
+						...state.game,
+						targetHasBeenScanned: true,
+					},
+					entities: {
+						...state.entities,
+						targetable: [
+							...state.entities.targetable.filter(
+								(_, idx) => idx !== targetIdx
+							),
+							newEntityObj,
+						],
+					},
+				};
+			} else {
+				return { ...state };
+			}
 		}
 		default:
 			console.error(`Failed to run action: ${action}`);

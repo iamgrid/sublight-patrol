@@ -34,6 +34,11 @@ export default function useReducer(reducer, initialArg = {}) {
 		get state() {
 			return this._store;
 		},
+		set state(badSet) {
+			console.error(
+				`Out of bounds state update attempt detected, this should not be happening! Incoming attribute: ${badSet}`
+			);
+		},
 	};
 
 	try {
@@ -60,7 +65,17 @@ export default function useReducer(reducer, initialArg = {}) {
 
 		try {
 			isDispatching = true;
-			_internalState._store = reducer(_internalState.state, action);
+			const newStore = reducer(_internalState.state, action);
+			if (!isPlainObject(newStore)) {
+				console.error(
+					'Failed to execute reducer with action:',
+					action,
+					', the return value was:',
+					newStore
+				);
+				return null;
+			}
+			_internalState._store = newStore;
 		} catch (error) {
 			console.error(
 				'Failed to execute reducer with action:',
@@ -68,6 +83,7 @@ export default function useReducer(reducer, initialArg = {}) {
 				'error:',
 				error
 			);
+			return null;
 		} finally {
 			isDispatching = false;
 		}

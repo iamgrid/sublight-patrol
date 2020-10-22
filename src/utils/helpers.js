@@ -332,6 +332,8 @@ export const hud = {
 				targetIsDisabled: 0,
 				targetContains: '',
 				targetId: '',
+				targetPlayerRelation: null,
+				targetHasBeenScanned: null,
 			};
 		} else {
 			const targetIdx = allEntities.targetable.findIndex(
@@ -347,14 +349,17 @@ export const hud = {
 				'target',
 				allEntities.targetable[targetIdx]
 			);
+			newTargetDisplay.targetExists = true;
 			newTargetDisplay.targetPlayerRelation =
 				allEntities.targetable[targetIdx].playerRelation;
+			newTargetDisplay.targetHasBeenScanned =
+				allEntities.targetable[targetIdx].hasBeenScanned;
 		}
 		Object.assign(newDisplay, newTargetDisplay);
 
 		for (const key in newDisplay) {
 			if (newDisplay[key] !== hud.currentDisplay[key])
-				hud.updateReadout(key, newDisplay[key], allEntities, targeting);
+				hud.updateReadout(key, newDisplay[key], newDisplay);
 		}
 
 		hud.currentDisplay = newDisplay;
@@ -382,18 +387,38 @@ export const hud = {
 		return re;
 	},
 
-	updateReadout(id, newValue) {
+	updateReadout(id, newValue, completeDisplayObj) {
 		const entity = id.substr(0, 6);
-		// console.log(id, entity, newValue);
+		// console.log(id, entity, newValue, completeDisplayObj);
 		switch (id) {
 			case entity + 'Id':
 				document.getElementById(`game__hud-${entity}-id`).innerText = newValue;
 				break;
-			case entity + 'Contents':
+			case entity + 'HasBeenScanned':
+			case entity + 'Contents': {
+				let contentsDisp = '';
+				if (entity === 'target') {
+					const targetContentsDivClasses = document.getElementById(
+						'game__hud-target-contents'
+					).classList;
+					targetContentsDivClasses.remove('game__hud-contents-text--unknown');
+					if (
+						completeDisplayObj.targetExists &&
+						!completeDisplayObj.targetHasBeenScanned
+					) {
+						contentsDisp = '- unknown -';
+						targetContentsDivClasses.add('game__hud-contents-text--unknown');
+					}
+				}
+
+				if (entity === 'player' || completeDisplayObj.targetHasBeenScanned)
+					contentsDisp = completeDisplayObj[`${entity}Contents`];
+
 				document.getElementById(
 					`game__hud-${entity}-contents`
-				).innerText = newValue;
+				).innerText = contentsDisp;
 				break;
+			}
 			case entity + 'Shield':
 				hud.updateMeter(entity, 'Shield', newValue);
 				break;

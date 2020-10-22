@@ -334,6 +334,10 @@
 	transition: opacity var(--hud-fade-time) ease-in-out;
 }
 
+.game__hud-contents-text--unknown {
+	color: #ffffff40;
+}
+
 .game__hud--visible .game__hud-id-text,
 .game__hud--visible .game__hud-contents-text {
 	opacity: 1;

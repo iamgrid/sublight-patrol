@@ -4,6 +4,7 @@ const c = {
 		ADD_ENTITY: 'ADD_ENTITY',
 		TARGET: 'TARGET',
 		CHANGE_PLAYER_RELATION: 'CHANGE_PLAYER_RELATION',
+		SCAN: 'SCAN',
 	},
 	gameCanvas: {
 		width: 1200,

@@ -82,6 +82,12 @@ const pieces = {
 		immutable: {
 			cannonPower: null,
 			cannonPositions: null,
+			maxCannonOperation: null,
+			maxCannonCooldown: null,
+		},
+		mutable: {
+			cannonOperation: null,
+			cannonCooldown: null,
 		},
 	},
 
@@ -99,6 +105,8 @@ const pieces = {
 			eMPRechargeRate: 0.25,
 			hasCannons: true,
 			cannonPower: 4,
+			maxCannonOperation: 6,
+			maxCannonCooldown: 4,
 			cannonPositions: [
 				{ lengthWise: 15, widthWise: 20 },
 				{ lengthWise: 15, widthWise: -20 },
