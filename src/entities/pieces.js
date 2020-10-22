@@ -20,6 +20,7 @@ const pieces = {
 			hasHull: true,
 			hasShields: false,
 			hasEMP: false,
+			hasCannons: false,
 			maxSystemStrength: null,
 			canMove: true,
 		},
@@ -77,6 +78,12 @@ const pieces = {
 			eMPIsCharging: false,
 		},
 	},
+	hasCannons: {
+		immutable: {
+			cannonPower: null,
+			cannonPositions: null,
+		},
+	},
 
 	fenrir: {
 		immutable: {
@@ -90,6 +97,12 @@ const pieces = {
 			hasEMP: true,
 			eMPStrength: 1,
 			eMPRechargeRate: 0.25,
+			hasCannons: true,
+			cannonPower: 4,
+			cannonPositions: [
+				{ lengthWise: 15, widthWise: 20 },
+				{ lengthWise: 15, widthWise: -20 },
+			],
 			width: 49,
 			length: 50,
 		},

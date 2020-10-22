@@ -67,7 +67,7 @@ function targetPointedOrNearest(from, entities, positions) {
 	});
 
 	if (current !== null) {
-		console.log(`Found pointed entity: ${current}`);
+		// console.log(`Found pointed entity: ${current}`);
 		return current;
 	}
 
