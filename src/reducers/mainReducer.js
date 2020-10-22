@@ -325,6 +325,37 @@ export default function mainReducer(state, action) {
 				return { ...state };
 			}
 		}
+		case c.actions.ADD_SHOT: {
+			const newId = action.id;
+			const newSightLines = { ...state.shotSightLines };
+			const currentSightLine = newSightLines[action.sightLine];
+			if (currentSightLine) {
+				newSightLines[action.sightLine]++;
+			} else {
+				newSightLines[action.sightLine] = 1;
+			}
+
+			return {
+				...state,
+				shotIds: [...state.shotIds, newId],
+				shotSightLines: { ...newSightLines },
+			};
+		}
+		case c.actions.REMOVE_SHOT: {
+			const removeId = action.id;
+			const newSightLines = { ...state.shotSightLines };
+			const currentSightLine = newSightLines[action.sightLine];
+			if (currentSightLine > 1) {
+				newSightLines[action.sightLine]--;
+			} else {
+				delete newSightLines[action.sightLine];
+			}
+			return {
+				...state,
+				shotIds: [...state.shotIds.filter((shotId) => shotId !== removeId)],
+				shotSightLines: { ...newSightLines },
+			};
+		}
 		default:
 			console.error(`Failed to run action: ${action}`);
 			return state;

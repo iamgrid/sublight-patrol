@@ -9,6 +9,8 @@ const initialGameState = {
 		targetable: [],
 		other: [],
 	},
+	shotIds: [],
+	shotSightLines: {},
 	positions: {
 		canMove: {},
 		cantMove: {},

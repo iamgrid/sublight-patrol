@@ -15,8 +15,10 @@ export default class Shot extends PIXI.Graphics {
 		this.position.set(props.posX, props.posY);
 
 		this.traveled = 0;
+		this.power = props.power;
 		this.hasBeenDestroyed = false;
 		this.id = props.id;
+		this.sightLine = props.posY;
 		this.direction = props.direction;
 		this.callbackFn = props.callbackFn;
 	}
@@ -28,7 +30,7 @@ export default class Shot extends PIXI.Graphics {
 
 			if (this.traveled > 800) {
 				// remove shot
-				this.callbackFn(this.id);
+				this.callbackFn(this.id, this.sightLine);
 				return;
 			}
 

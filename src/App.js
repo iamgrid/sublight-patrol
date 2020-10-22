@@ -80,21 +80,39 @@ export default class App extends PIXI.Application {
 
 		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
 
-		this.removeShot = (id) => {
+		this.stageShots = {};
+
+		this.removeShot = (id, sightLine) => {
 			console.log(`removing shot ${id}`);
 			this.stage.removeChild(this.shot);
 			this.shot.hasBeenDestroyed = true;
 			this.shot.destroy();
+			this.dispatch({
+				type: c.actions.REMOVE_SHOT,
+				id: id,
+				sightLine: sightLine,
+			});
 		};
 
+		this.tempShotId = new Date().getTime();
+		this.tempSightLine = 225;
 		this.shot = new Shot({
-			id: new Date().getTime(),
+			id: this.tempShotId,
 			color: 0xff4040,
+			power: 4,
 			posX: 100,
-			posY: 225,
+			posY: this.tempSightLine,
 			direction: 1,
-			callbackFn: (shotId) => this.removeShot(shotId),
+			callbackFn: (shotId, sightLine) => this.removeShot(shotId, sightLine),
 		});
+
+		this.dispatch({
+			type: c.actions.ADD_SHOT,
+			id: this.tempShotId,
+			sightLine: this.tempSightLine,
+		});
+
+		this.stageShots[this.tempShotId] = this.shot;
 
 		this.stage.addChild(this.shot);
 
@@ -298,6 +316,7 @@ export default class App extends PIXI.Application {
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			hud.toggle(true);
 			// this.removeShot('bla');
+			console.log(currentState);
 			this.triggered1 = true;
 		}
 
@@ -320,12 +339,14 @@ export default class App extends PIXI.Application {
 				},
 			});
 			// hud.toggle(false);
+			console.log(currentState);
 			this.triggered2 = true;
 		}
 
 		if (!this.triggered3 && this.gameTime > 16000) {
 			// dialog('Death Herself', 'Resistance is futile.');
 			// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
+			console.log(currentState);
 			this.triggered3 = true;
 		}
 
@@ -335,6 +356,7 @@ export default class App extends PIXI.Application {
 			status.add('red', 'Red test. #4', this.gameTime);
 			status.add('aqua', 'Aqua test. #5', this.gameTime);
 			status.add('yellow', 'Yellow test. #6', this.gameTime);
+			console.log(currentState);
 			this.triggered4 = true;
 		}
 	}
