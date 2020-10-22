@@ -1,7 +1,9 @@
 'use strict';
 import App from './App';
 // eslint-disable-next-line no-unused-vars
-import css from './sublight-patrol.css';
+import css1 from './page.css';
+// eslint-disable-next-line no-unused-vars
+import css2 from './game.css';
 
 function toggleFooter() {
 	const footer = document.getElementById('footer');

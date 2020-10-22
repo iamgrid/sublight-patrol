@@ -137,16 +137,16 @@ export const alertsAndWarnings = {
 			containerDiv.style.opacity = '0';
 			this.isFading = true;
 			this.hiderTimeout = window.setTimeout(() => {
-				containerDiv.style.visibility = 'hidden';
+				containerDiv.classList.remove('game__warnings--shown');
 				alertsAndWarnings.isFading = false;
 				alertsAndWarnings.isVisible = false;
-			}, 500);
+			}, 900);
 			return;
 		}
 
 		window.clearTimeout(this.hiderTimeout);
 
-		containerDiv.style.visibility = 'visible';
+		containerDiv.classList.add('game__warnings--shown');
 
 		function warningHelper() {
 			const types = ['warnings', 'alerts'];
