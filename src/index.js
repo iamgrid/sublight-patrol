@@ -32,4 +32,4 @@ function preventDefaultOnKeys(event) {
 
 window.addEventListener('keydown', preventDefaultOnKeys, false);
 
-new App();
+window.pixiapp = new App();

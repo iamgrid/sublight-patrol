@@ -14,6 +14,7 @@ import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
+import Shot from './components/Shot';
 import entities from './entities/entities';
 import story from './story/story';
 
@@ -53,8 +54,6 @@ export default class App extends PIXI.Application {
 		this.startTime = new Date().getTime();
 		this.gameTime = 0;
 
-		this.triedScanning = false;
-
 		console.log(entities.types);
 		console.log(story);
 	}
@@ -80,6 +79,24 @@ export default class App extends PIXI.Application {
 		);
 
 		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
+
+		this.removeShot = (id) => {
+			console.log(`removing shot ${id}`);
+			this.stage.removeChild(this.shot);
+			this.shot.hasBeenDestroyed = true;
+			this.shot.destroy();
+		};
+
+		this.shot = new Shot({
+			id: new Date().getTime(),
+			color: 0xff4040,
+			posX: 100,
+			posY: 225,
+			direction: 1,
+			callbackFn: (shotId) => this.removeShot(shotId),
+		});
+
+		this.stage.addChild(this.shot);
 
 		entities.spawn(
 			this.handlers,
@@ -175,6 +192,8 @@ export default class App extends PIXI.Application {
 	play(delta) {
 		// starscape movement
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
+		// console.log(this.shot._destroyed);
+		if (!this.shot.hasBeenDestroyed) this.shot.onUpdate(delta);
 
 		// current state
 		const currentState = this.gameState();
@@ -269,22 +288,23 @@ export default class App extends PIXI.Application {
 		this.gameTime += this.ticker.deltaMS;
 
 		if (!this.triggered1 && this.gameTime > 2000) {
-			dialog(
+			/*dialog(
 				'Commander Shepherd',
 				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
-			);
-			alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
-			alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
+			);*/
+			// alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
+			// alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
 			status.add('aqua', 'Aqua test. #1', this.gameTime);
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			hud.toggle(true);
+			// this.removeShot('bla');
 			this.triggered1 = true;
 		}
 
 		if (!this.triggered2 && this.gameTime > 8000) {
-			dialog('Love Eternal', 'Prepare to be assimilated.');
-			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
-			alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
+			// dialog('Love Eternal', 'Prepare to be assimilated.');
+			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
+			// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 			status.add('green', 'Green test. #3', this.gameTime);
 			this.dispatch({
 				type: c.actions.CHANGE_PLAYER_RELATION,
@@ -304,14 +324,14 @@ export default class App extends PIXI.Application {
 		}
 
 		if (!this.triggered3 && this.gameTime > 16000) {
-			dialog('Death Herself', 'Resistance is futile.');
-			alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
+			// dialog('Death Herself', 'Resistance is futile.');
+			// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
 			this.triggered3 = true;
 		}
 
 		if (!this.triggered4 && this.gameTime > 20000) {
-			dialog('', '', true);
-			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
+			// dialog('', '', true);
+			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
 			status.add('red', 'Red test. #4', this.gameTime);
 			status.add('aqua', 'Aqua test. #5', this.gameTime);
 			status.add('yellow', 'Yellow test. #6', this.gameTime);
