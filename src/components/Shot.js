@@ -25,7 +25,7 @@ export default class Shot extends PIXI.Graphics {
 
 	onUpdate(delta) {
 		if (!this.hasBeenDestroyed) {
-			const travel = delta * 5;
+			const travel = delta * 8;
 			this.traveled += travel;
 
 			if (this.traveled > 800) {

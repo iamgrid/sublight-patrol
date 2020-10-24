@@ -12,15 +12,16 @@ export default class Fenrir extends PIXI.Container {
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 
-		this.shipBody = fromSpriteSheet.create(3, 66, 60, 60);
+		this.shipBody = fromSpriteSheet.create(17, 72, 40, 50);
 
 		this.harness = fromSpriteSheet.create(66, 66, 60, 60);
 
-		this.harness.x = -6;
+		this.harness.x = -10;
+		this.harness.y = -1;
 
 		this.targetingReticule = createTargetingReticule({
-			xl: -30,
-			xr: 26,
+			xl: -34,
+			xr: 22,
 			yt: -28,
 			yb: 28,
 		});

@@ -36,7 +36,7 @@ const shots = {
 		shots.cannonStates[entityId].activeCannon = 0;
 		if (!shots.cannonStates[entityId].remainingShots)
 			shots.cannonStates[entityId].remainingShots =
-				storeEntity.immutable.maxCannonShots;
+				storeEntity.immutable.cannonShots;
 
 		// immediate first shot
 		shots.shoot(entityId);
@@ -67,14 +67,21 @@ const shots = {
 		if (shots.cannonStates[entityId].remainingShots > 0) {
 			const activeCannon = shots.cannonStates[entityId].activeCannon;
 			const [eX, eY] = getPosition(entityId, currentState.positions);
-			const cannonX =
+			const cannonX = Math.round(
 				eX +
-				storeEntity.facing *
-					storeEntity.immutable.cannonPositions[activeCannon].lengthWise;
-			const cannonY =
+					storeEntity.facing *
+						storeEntity.immutable.cannonPositions[activeCannon].lengthWise
+			);
+
+			let correction = 0;
+			if (storeEntity.immutable.cannonPositions[activeCannon].widthWise < 0)
+				correction = -2;
+			const cannonY = Math.round(
 				eY +
-				storeEntity.facing *
-					storeEntity.immutable.cannonPositions[activeCannon].widthWise;
+					storeEntity.facing *
+						storeEntity.immutable.cannonPositions[activeCannon].widthWise +
+					correction
+			);
 
 			shots.addShot(
 				cannonX,
@@ -100,8 +107,8 @@ const shots = {
 		if (shots.cannonStates[entityId].remainingShots === 0) {
 			this.cannonCooldowns[entityId] = window.setTimeout(() => {
 				shots.cannonStates[entityId].remainingShots =
-					storeEntity.immutable.maxCannonShots;
-			}, storeEntity.immutable.maxCannonCooldown * 1000);
+					storeEntity.immutable.cannonShots;
+			}, storeEntity.immutable.cannonCooldown * 1000);
 		}
 	},
 
