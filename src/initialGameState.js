@@ -1,6 +1,6 @@
 const initialGameState = {
 	game: {
-		facing: 'right',
+		facing: 1,
 		targeting: null,
 		targetHasBeenScanned: false,
 	},
@@ -9,8 +9,10 @@ const initialGameState = {
 		targetable: [],
 		other: [],
 	},
-	shotIds: [],
-	shotSightLines: {},
+	shots: {
+		ids: [],
+		sightLines: {},
+	},
 	positions: {
 		canMove: {},
 		cantMove: {},

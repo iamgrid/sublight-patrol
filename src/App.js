@@ -14,8 +14,8 @@ import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
-import Shot from './components/Shot';
 import entities from './entities/entities';
+import shots from './shots';
 import story from './story/story';
 
 export default class App extends PIXI.Application {
@@ -74,47 +74,13 @@ export default class App extends PIXI.Application {
 
 		this.handlers = [this.dispatch, this.stage];
 
+		shots.handlers = { dispatch: this.dispatch, stage: this.stage };
+
 		this.starScapeLayers = c.starScapeLayers.map(
 			(el) => new StarScapeLayer(el)
 		);
 
 		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
-
-		this.stageShots = {};
-
-		this.removeShot = (id, sightLine) => {
-			console.log(`removing shot ${id}`);
-			this.stage.removeChild(this.shot);
-			this.shot.hasBeenDestroyed = true;
-			this.shot.destroy();
-			this.dispatch({
-				type: c.actions.REMOVE_SHOT,
-				id: id,
-				sightLine: sightLine,
-			});
-		};
-
-		this.tempShotId = new Date().getTime();
-		this.tempSightLine = 225;
-		this.shot = new Shot({
-			id: this.tempShotId,
-			color: 0xff4040,
-			power: 4,
-			posX: 100,
-			posY: this.tempSightLine,
-			direction: 1,
-			callbackFn: (shotId, sightLine) => this.removeShot(shotId, sightLine),
-		});
-
-		this.dispatch({
-			type: c.actions.ADD_SHOT,
-			id: this.tempShotId,
-			sightLine: this.tempSightLine,
-		});
-
-		this.stageShots[this.tempShotId] = this.shot;
-
-		this.stage.addChild(this.shot);
 
 		entities.spawn(
 			this.handlers,
@@ -211,7 +177,10 @@ export default class App extends PIXI.Application {
 		// starscape movement
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
 		// console.log(this.shot._destroyed);
-		if (!this.shot.hasBeenDestroyed) this.shot.onUpdate(delta);
+		for (const shotK in shots.stageShots) {
+			if (!shots.stageShots[shotK].hasBeenDestroyed)
+				shots.stageShots[shotK].onUpdate(delta);
+		}
 
 		// current state
 		const currentState = this.gameState();
@@ -315,6 +284,9 @@ export default class App extends PIXI.Application {
 			status.add('aqua', 'Aqua test. #1', this.gameTime);
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			hud.toggle(true);
+			shots.addShot(100, 225, 0xff4040, 4, 1);
+			shots.addShot(100, 235, 0xff4040, 4, 1);
+			shots.addShot(100, 10, 0xff4040, 4, 1);
 			// this.removeShot('bla');
 			console.log(currentState);
 			this.triggered1 = true;
@@ -339,6 +311,9 @@ export default class App extends PIXI.Application {
 				},
 			});
 			// hud.toggle(false);
+			shots.addShot(400, 225, 0xff4040, 4, -1);
+			shots.addShot(400, 235, 0xff4040, 4, -1);
+			shots.addShot(400, 10, 0xff4040, 4, -1);
 			console.log(currentState);
 			this.triggered2 = true;
 		}

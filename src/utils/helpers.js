@@ -1,6 +1,25 @@
 import * as PIXI from '../pixi';
 import c from './constants';
 
+export function getPosition(entityId, positions) {
+	if (positions.canMove[`${entityId}--posX`]) {
+		return [
+			positions.canMove[`${entityId}--posX`],
+			positions.canMove[`${entityId}--posY`],
+		];
+	}
+
+	if (positions.cantMove[`${entityId}--posX`]) {
+		return [
+			positions.cantMove[`${entityId}--posX`],
+			positions.cantMove[`${entityId}--posY`],
+		];
+	}
+
+	console.error(`Unable to ascertain position for ${entityId}`);
+	// console.log(positions);
+}
+
 export const fromSpriteSheet = {
 	defaultSpriteSheet: null, // gets its value in App.js once the spritesheet finished loading
 

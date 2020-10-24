@@ -1,5 +1,6 @@
 import c from '../utils/constants';
 import { calculateDistance } from '../utils/formulas';
+import { getPosition } from '../utils/helpers';
 
 function assignWPrototype(sourceObj, modifications = {}) {
 	let re = Object.assign({}, sourceObj, modifications);
@@ -13,25 +14,6 @@ function move(mode = 'relative', initial, newValue) {
 	} else {
 		return newValue;
 	}
-}
-
-function getPosition(entityId, positions) {
-	if (positions.canMove[`${entityId}--posX`]) {
-		return [
-			positions.canMove[`${entityId}--posX`],
-			positions.canMove[`${entityId}--posY`],
-		];
-	}
-
-	if (positions.cantMove[`${entityId}--posX`]) {
-		return [
-			positions.cantMove[`${entityId}--posX`],
-			positions.cantMove[`${entityId}--posY`],
-		];
-	}
-
-	console.error(`Unable to ascertain position for ${entityId}`);
-	// console.log(positions);
 }
 
 function nearEnoughToScan(playerId, targetId, positions) {
@@ -62,8 +44,8 @@ function targetPointedOrNearest(from, entities, positions) {
 		const [entityX, entityY] = getPosition(entity.id, positions);
 		if (entityY >= rangeTop && entityY <= rangeBottom) {
 			if (
-				(facing === 'right' && from.x < entityX) ||
-				(facing === 'left' && from.x > entityX)
+				(facing === 1 && from.x < entityX) ||
+				(facing === -1 && from.x > entityX)
 			)
 				return true;
 		}
@@ -327,33 +309,39 @@ export default function mainReducer(state, action) {
 		}
 		case c.actions.ADD_SHOT: {
 			const newId = action.id;
-			const newSightLines = { ...state.shotSightLines };
-			const currentSightLine = newSightLines[action.sightLine];
+			const currentSightLine = state.shots.sightLines[action.sightLine];
+			let updatedSightLine;
 			if (currentSightLine) {
-				newSightLines[action.sightLine]++;
+				updatedSightLine = [...currentSightLine, newId];
 			} else {
-				newSightLines[action.sightLine] = 1;
+				updatedSightLine = [newId];
 			}
 
 			return {
 				...state,
-				shotIds: [...state.shotIds, newId],
-				shotSightLines: { ...newSightLines },
+				shots: {
+					ids: [...state.shots.ids, newId],
+					sightLines: {
+						...state.shots.sightLines,
+						[action.sightLine]: updatedSightLine,
+					},
+				},
 			};
 		}
 		case c.actions.REMOVE_SHOT: {
 			const removeId = action.id;
-			const newSightLines = { ...state.shotSightLines };
-			const currentSightLine = newSightLines[action.sightLine];
-			if (currentSightLine > 1) {
-				newSightLines[action.sightLine]--;
-			} else {
-				delete newSightLines[action.sightLine];
-			}
+			const updatedSightLine = state.shots.sightLines[action.sightLine].filter(
+				(sl) => sl !== removeId
+			);
 			return {
 				...state,
-				shotIds: [...state.shotIds.filter((shotId) => shotId !== removeId)],
-				shotSightLines: { ...newSightLines },
+				shots: {
+					ids: [...state.shots.ids.filter((shotId) => shotId !== removeId)],
+					sightLines: {
+						...state.shots.sightLines,
+						[action.sightLine]: updatedSightLine,
+					},
+				},
 			};
 		}
 		default:
