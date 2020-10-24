@@ -6,6 +6,7 @@ import models from './models';
 const entities = {
 	types: {},
 	stageEntities: {},
+	zIndexIterator: c.zIndices.entities,
 
 	init() {
 		this.assembleType(['container']);
@@ -122,6 +123,7 @@ const entities = {
 		stage.addChild(stageEntity);
 		stageEntity.reticuleRelation(newShip.playerRelation);
 		stageEntity.position.set(pos.posX, pos.posY);
+		stageEntity.zIndex = this.zIndexIterator;
 
 		this.stageEntities[newShip.id] = stageEntity;
 
@@ -132,6 +134,8 @@ const entities = {
 			positionStore: positionStore,
 			positionArray: positionArray,
 		});
+
+		this.zIndexIterator++;
 	},
 };
 

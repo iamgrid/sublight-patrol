@@ -12,6 +12,11 @@ const c = {
 		width: 1200,
 		height: 450,
 	},
+	zIndices: {
+		environmental: 0,
+		shots: 100000,
+		entities: 200000,
+	},
 	starScapeLayers: [
 		{ noOfStars: 15, speedMultiplier: 0.8 },
 		{ noOfStars: 25, speedMultiplier: 0.7 },

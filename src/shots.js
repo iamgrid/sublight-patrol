@@ -9,6 +9,7 @@ const shots = {
 	shootingIntervals: {},
 	cannonCooldowns: {},
 	cannonStates: {},
+	zIndexIterator: c.zIndices.shots,
 
 	getStoreEntity(entityId, currentState) {
 		if (entityId === currentState.entities.player.id) {
@@ -130,9 +131,14 @@ const shots = {
 			sightLine: posY,
 		});
 
+		stageShot.zIndex = shots.zIndexIterator;
+
 		shots.stageShots[shotId] = stageShot;
 
 		shots.handlers.stage.addChild(stageShot);
+		shots.zIndexIterator++;
+		if (shots.zIndexIterator > c.zIndices.shots - 100)
+			shots.zIndexIterator = c.zIndices.shots;
 	},
 
 	removeShot(id, sightLine) {

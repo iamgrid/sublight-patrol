@@ -1,6 +1,4 @@
 import * as PIXI from '../pixi';
-// import c from '../utils/constants';
-// import { randomNumber } from '../utils/formulas';
 
 export default class Shot extends PIXI.Graphics {
 	constructor(props) {
