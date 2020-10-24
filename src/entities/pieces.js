@@ -1,3 +1,5 @@
+import c from '../utils/constants';
+
 const pieces = {
 	entity: {
 		immutable: {
@@ -29,6 +31,7 @@ const pieces = {
 			systemStrength: null,
 			playerRelation: 'neutral',
 			contents: 'No cargo',
+			facing: 1,
 		},
 	},
 
@@ -80,7 +83,9 @@ const pieces = {
 	},
 	hasCannons: {
 		immutable: {
+			cannonColor: null,
 			cannonPower: null,
+			cannonFiringSpeed: null,
 			cannonPositions: null,
 			maxCannonShots: null,
 			maxCannonCooldown: null,
@@ -104,7 +109,9 @@ const pieces = {
 			eMPStrength: 1,
 			eMPRechargeRate: 0.25,
 			hasCannons: true,
+			cannonColor: c.races.humans.laserColor,
 			cannonPower: 4,
+			cannonFiringSpeed: 0.8,
 			maxCannonShots: 20,
 			maxCannonCooldown: 4,
 			cannonPositions: [
@@ -124,6 +131,8 @@ const pieces = {
 			maxHullStrength: 150,
 			maxSystemStrength: 150,
 			eMPStrength: 2,
+			cannonPower: 5,
+			cannonFiringSpeed: 0.7,
 		},
 		mutable: {},
 	},
@@ -140,12 +149,24 @@ const pieces = {
 			hasEMP: true,
 			eMPStrength: 1,
 			eMPRechargeRate: 0.25,
+			hasCannons: true,
+			cannonColor: c.races.humans.laserColor,
+			cannonPower: 6,
+			cannonFiringSpeed: 0.7,
+			maxCannonShots: 28,
+			maxCannonCooldown: 4,
+			cannonPositions: [
+				{ lengthWise: 15, widthWise: 20 },
+				{ lengthWise: 15, widthWise: -20 },
+				{ lengthWise: 15, widthWise: 28 },
+				{ lengthWise: 15, widthWise: -28 },
+			],
 			width: 49,
 			length: 52,
 		},
 		mutable: {},
 	},
-	enemy_fighter_type_1: {
+	zangari_fighter_type_1: {
 		immutable: {
 			typeShorthand: 'E-1',
 			maxHullStrength: 75,

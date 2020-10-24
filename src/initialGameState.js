@@ -1,6 +1,5 @@
 const initialGameState = {
 	game: {
-		facing: 1,
 		targeting: null,
 		targetHasBeenScanned: false,
 	},

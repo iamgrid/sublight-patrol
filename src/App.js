@@ -296,9 +296,9 @@ export default class App extends PIXI.Application {
 			status.add('aqua', 'Aqua test. #1', this.gameTime);
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			hud.toggle(true);
-			shots.addShot(100, 225, 0xff4040, 4, 1);
-			shots.addShot(100, 235, 0xff4040, 4, 1);
-			shots.addShot(100, 10, 0xff4040, 4, 1);
+			shots.addShot(100, 225, c.races.humans.laserColor, 4, 1);
+			shots.addShot(100, 235, c.races.humans.laserColor, 4, 1);
+			shots.addShot(100, 10, c.races.humans.laserColor, 4, 1);
 			shots.startShooting('alpha_1');
 			// this.removeShot('bla');
 			console.log(currentState);
@@ -324,9 +324,9 @@ export default class App extends PIXI.Application {
 				},
 			});
 			// hud.toggle(false);
-			shots.addShot(400, 225, 0xff4040, 4, -1);
-			shots.addShot(400, 235, 0xff4040, 4, -1);
-			shots.addShot(400, 10, 0xff4040, 4, -1);
+			shots.addShot(400, 225, c.races.humans.laserColor, 4, -1);
+			shots.addShot(400, 235, c.races.humans.laserColor, 4, -1);
+			shots.addShot(400, 10, c.races.humans.laserColor, 4, -1);
 			shots.stopShooting('alpha_1');
 			console.log(currentState);
 			this.triggered2 = true;

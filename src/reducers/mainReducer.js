@@ -203,7 +203,7 @@ export default function mainReducer(state, action) {
 						{
 							x: currentX,
 							y: currentY,
-							facing: state.game.facing,
+							facing: state.entities.player.facing,
 						},
 						state.entities.targetable,
 						state.positions

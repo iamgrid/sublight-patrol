@@ -34,6 +34,14 @@ const c = {
 			otherAlert: { m: 'Other alert text!' },
 		},
 	},
+	races: {
+		humans: {
+			laserColor: 0xff4040,
+		},
+		zangari: {
+			laserColor: 0xffff40,
+		},
+	},
 	init() {
 		for (let key in this.alertsAndWarnings.warnings) {
 			this.alertsAndWarnings.warnings[key].type = 'warning';
