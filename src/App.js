@@ -44,7 +44,6 @@ export default class App extends PIXI.Application {
 		this.triggered4 = false;
 
 		const [state, dispatch] = useReducer(mainReducer, initialGameState);
-
 		this.gameState = state;
 		this.dispatch = dispatch;
 
@@ -74,7 +73,11 @@ export default class App extends PIXI.Application {
 
 		this.handlers = [this.dispatch, this.stage];
 
-		shots.handlers = { dispatch: this.dispatch, stage: this.stage };
+		shots.handlers = {
+			dispatch: this.dispatch,
+			state: this.gameState,
+			stage: this.stage,
+		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
 			(el) => new StarScapeLayer(el)
@@ -185,6 +188,8 @@ export default class App extends PIXI.Application {
 		// current state
 		const currentState = this.gameState();
 
+		const playerId = currentState.entities.player.id;
+
 		// hud updates
 		hud.update(currentState.game.targeting, currentState.entities);
 
@@ -222,6 +227,14 @@ export default class App extends PIXI.Application {
 			});
 		}
 
+		if (Keyboard.isKeyPressed('Space')) {
+			shots.startShooting(playerId);
+		}
+
+		if (Keyboard.isKeyReleased('Space')) {
+			shots.stopShooting(playerId);
+		}
+
 		const targetingCallback = (newTargetId) =>
 			moveTargetingReticule(newTargetId, entities.stageEntities);
 
@@ -257,7 +270,6 @@ export default class App extends PIXI.Application {
 		}
 
 		// player position
-		const playerId = currentState.entities.player.id;
 		entities.stageEntities[playerId].position.set(
 			currentState.positions.canMove[`${playerId}--posX`],
 			currentState.positions.canMove[`${playerId}--posY`]
@@ -287,6 +299,7 @@ export default class App extends PIXI.Application {
 			shots.addShot(100, 225, 0xff4040, 4, 1);
 			shots.addShot(100, 235, 0xff4040, 4, 1);
 			shots.addShot(100, 10, 0xff4040, 4, 1);
+			shots.startShooting('alpha_1');
 			// this.removeShot('bla');
 			console.log(currentState);
 			this.triggered1 = true;
@@ -314,6 +327,7 @@ export default class App extends PIXI.Application {
 			shots.addShot(400, 225, 0xff4040, 4, -1);
 			shots.addShot(400, 235, 0xff4040, 4, -1);
 			shots.addShot(400, 10, 0xff4040, 4, -1);
+			shots.stopShooting('alpha_1');
 			console.log(currentState);
 			this.triggered2 = true;
 		}

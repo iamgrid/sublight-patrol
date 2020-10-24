@@ -5,7 +5,29 @@ import Shot from './components/Shot';
 
 const shots = {
 	stageShots: {},
-	handlers: { dispatch: null, stage: null }, // gets its values in App.js
+	handlers: { dispatch: null, state: null, stage: null }, // gets its values in App.js
+	shootingIntervals: {},
+
+	startShooting(entityId) {
+		shots.shootingIntervals[entityId] = window.setInterval(
+			() => shots.shoot(entityId),
+			250
+		);
+		console.log(shots.shootingIntervals);
+	},
+	stopShooting(entityId) {
+		window.clearInterval(shots.shootingIntervals[entityId]);
+		console.log(shots.shootingIntervals);
+	},
+
+	shoot(entityId) {
+		const currentState = shots.handlers.state();
+		// const entityIdx = currentState.entities.findIndex(entity => entity.id === entityId);
+		console.log(
+			`${entityId} tries to fire a shot!`,
+			getPosition(entityId, currentState.positions)
+		);
+	},
 
 	addShot(posX, posY, color, power, direction) {
 		const shotId = idCreator.create();
