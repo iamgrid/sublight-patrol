@@ -240,7 +240,7 @@ export default class App extends PIXI.Application {
 		const targetingCallback = (newTargetId) =>
 			moveTargetingReticule(newTargetId, entities.stageEntities);
 
-		if (Keyboard.isKeyPressed('KeyA')) {
+		if (Keyboard.isKeyPressed('KeyE')) {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'pointed-nearest',
@@ -249,7 +249,7 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		if (Keyboard.isKeyPressed('KeyD')) {
+		if (Keyboard.isKeyPressed('KeyW')) {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'next',
@@ -258,7 +258,7 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		if (Keyboard.isKeyPressed('KeyS')) {
+		if (Keyboard.isKeyPressed('KeyQ')) {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'previous',

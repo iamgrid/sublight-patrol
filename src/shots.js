@@ -6,9 +6,10 @@ import Shot from './components/Shot';
 const shots = {
 	stageShots: {},
 	handlers: { dispatch: null, state: null, stage: null }, // gets its values in App.js
+	cannonStates: {},
 	shootingIntervals: {},
 	cannonCooldowns: {},
-	cannonStates: {},
+	shotRegenIntervals: {},
 	zIndexIterator: c.zIndices.shots,
 
 	getStoreEntity(entityId, currentState) {
@@ -32,12 +33,20 @@ const shots = {
 
 		if (!shots.cannonStates[entityId]) {
 			shots.cannonStates[entityId] = {};
+			shots.cannonStates[entityId].maxShots = storeEntity.immutable.cannonShots;
+			shots.cannonStates[entityId].maxCannonCooldown =
+				storeEntity.immutable.cannonCooldown;
 		}
 
+		window.clearInterval(shots.shotRegenIntervals[entityId]);
+
 		shots.cannonStates[entityId].activeCannon = 0;
-		if (!shots.cannonStates[entityId].remainingShots)
+		if (!shots.cannonStates[entityId].remainingShots) {
+			// shooting for the first time
 			shots.cannonStates[entityId].remainingShots =
 				storeEntity.immutable.cannonShots;
+			shots.cannonStates[entityId].onCooldown = false;
+		}
 
 		// immediate first shot
 		shots.shoot(entityId);
@@ -54,8 +63,33 @@ const shots = {
 	},
 
 	stopShooting(entityId) {
-		shots.cannonStates[entityId].activeCannon = 0;
+		/*console.log(
+			`${entityId} stopped shooting, remaining shots: ${shots.cannonStates[entityId].remainingShots}`
+		);*/
 		window.clearInterval(shots.shootingIntervals[entityId]);
+		if (!shots.cannonStates[entityId].onCooldown) {
+			shots.triggerShotRegen(entityId);
+		}
+	},
+
+	triggerShotRegen(entityId) {
+		const regenInterval = Math.trunc(
+			(shots.cannonStates[entityId].maxCannonCooldown /
+				shots.cannonStates[entityId].maxShots) *
+				1000
+		);
+
+		shots.shotRegenIntervals[entityId] = window.setInterval(() => {
+			if (
+				shots.cannonStates[entityId].remainingShots <
+				shots.cannonStates[entityId].maxShots
+			) {
+				shots.cannonStates[entityId].remainingShots++;
+				// console.log(`regen - ${shots.cannonStates[entityId].remainingShots}`);
+			} else {
+				window.clearInterval(shots.shotRegenIntervals[entityId]);
+			}
+		}, regenInterval);
 	},
 
 	shoot(entityId) {
@@ -65,7 +99,8 @@ const shots = {
 			return;
 		}
 
-		if (shots.cannonStates[entityId].remainingShots > 0) {
+		if (!shots.cannonStates[entityId].onCooldown) {
+			shots.cannonStates[entityId].onCooldown = false;
 			const activeCannon = shots.cannonStates[entityId].activeCannon;
 			const [eX, eY] = getPosition(entityId, currentState.positions);
 			const cannonX = Math.round(
@@ -99,18 +134,27 @@ const shots = {
 				if (shots.cannonStates[entityId].activeCannon >= noOfCannons)
 					shots.cannonStates[entityId].activeCannon = 0;
 			}
-		} else {
-			console.log(`${entityId}'s cannon is on cooldown!`);
-		}
 
-		// decrease remaining shots or trigger cooldown
-		shots.cannonStates[entityId].remainingShots--;
-		if (shots.cannonStates[entityId].remainingShots === 0) {
-			this.cannonCooldowns[entityId] = window.setTimeout(() => {
-				shots.cannonStates[entityId].remainingShots =
-					storeEntity.immutable.cannonShots;
-			}, storeEntity.immutable.cannonCooldown * 1000);
+			// decrease remaining shots or trigger cooldown
+			shots.cannonStates[entityId].remainingShots--;
+			if (shots.cannonStates[entityId].remainingShots === 0) {
+				shots.triggerCooldown(
+					entityId,
+					storeEntity.immutable.cannonCooldown,
+					storeEntity.immutable.cannonShots
+				);
+			}
+		} else {
+			// console.log(`${entityId}'s cannon is on cooldown!`);
 		}
+	},
+
+	triggerCooldown(entityId, cannonCooldown, maxShots) {
+		shots.cannonStates[entityId].onCooldown = true;
+		shots.cannonCooldowns[entityId] = window.setTimeout(() => {
+			shots.cannonStates[entityId].remainingShots = maxShots;
+			shots.cannonStates[entityId].onCooldown = false;
+		}, cannonCooldown * 1000);
 	},
 
 	addShot(posX, posY, color, power, direction) {
