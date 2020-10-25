@@ -17,7 +17,7 @@ module.exports = {
 			},
 			componentsOptions: {
 				InjectByTag: {
-					fileRegex: /\.+/,
+					fileRegex: /^app.*bundle\.js$/,
 					AIVTagRegexp: /(\[AIV])(([a-zA-Z{} ,:;!()_@\-"'\\/])+)(\[\/AIV])/g,
 					dateFormat: 'dddd, mmmm dS, yyyy, h:MM:ss TT',
 				},
