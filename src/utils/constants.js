@@ -1,4 +1,5 @@
 const c = {
+	gameVersion: '[AIV]v{version} ({date})[/AIV]',
 	actions: {
 		MOVE_PLAYER: 'MOVE_PLAYER',
 		ADD_ENTITY: 'ADD_ENTITY',

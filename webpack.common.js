@@ -2,12 +2,27 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackAutoInject = require('webpack-auto-inject-version');
 
 module.exports = {
 	entry: {
 		app: './src/index.js',
 	},
 	plugins: [
+		new WebpackAutoInject({
+			components: {
+				AutoIncreaseVersion: false,
+				InjectAsComment: false,
+				InjectByTag: true,
+			},
+			componentsOptions: {
+				InjectByTag: {
+					fileRegex: /\.+/,
+					AIVTagRegexp: /(\[AIV])(([a-zA-Z{} ,:;!()_@\-"'\\/])+)(\[\/AIV])/g,
+					dateFormat: 'dddd, mmmm dS, yyyy, h:MM:ss TT',
+				},
+			},
+		}),
 		new HtmlWebpackPlugin({
 			template: './src/index.template.html',
 			title: 'sublight patrol',

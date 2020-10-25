@@ -1,12 +1,12 @@
 {
 	"name": "sublight-patrol",
-	"version": "1.0.1",
+	"version": "0.5.1",
 	"description": "A side-scrolling shooter game built with PixiJS and Webpack.",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "webpack-dev-server --config webpack.dev.js",
-		"build": "webpack --config webpack.prod.js"
+		"build": "npm --no-git-tag-version version patch && webpack --config webpack.prod.js"
 	},
 	"repository": {
 		"type": "git",
@@ -41,6 +41,7 @@
 		"optimize-css-assets-webpack-plugin": "^5.0.4",
 		"url-loader": "^4.1.1",
 		"webpack": "^4.44.2",
+		"webpack-auto-inject-version": "^1.2.2",
 		"webpack-cli": "^3.3.12",
 		"webpack-dev-server": "^3.11.0",
 		"webpack-merge": "^5.1.4"
