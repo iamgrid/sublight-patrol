@@ -362,7 +362,6 @@ export default class App extends PIXI.Application {
 			);
 			console.info(this.gameState());
 			console.info(shots.stageShots);
-			// console.info(shots.shotXs);
 			this.shownStateOnPause = true;
 		}
 		if (Keyboard.isKeyPressed('Escape')) {

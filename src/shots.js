@@ -257,7 +257,7 @@ const shots = {
 
 			const hittingShots = shotIds.filter((shotId) => {
 				const stageShot = stageShots[shotId];
-				const shotX = stageShot.position.x;
+				const shotX = stageShot.position.x + 30;
 				const shotY = stageShot.position.y;
 
 				if (!shotX || !shotY) {

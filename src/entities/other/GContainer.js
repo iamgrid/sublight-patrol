@@ -14,6 +14,8 @@ export default class GContainer extends PIXI.Container {
 
 		this.containerBody = fromSpriteSheet.create(386, 3, 60, 60);
 
+		this.containerBody.alpha = 0.5;
+
 		this.targetingReticule = createTargetingReticule({
 			xl: -26,
 			xr: 26,
