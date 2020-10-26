@@ -10,6 +10,8 @@ const shots = {
 	shootingIntervals: {},
 	cannonCooldowns: {},
 	shotRegenIntervals: {},
+	candidates: {},
+
 	zIndexIterator: c.zIndices.shots,
 
 	getStoreEntity(entityId, currentState) {
@@ -231,19 +233,26 @@ const shots = {
 
 				for (const slKey in sightLines) {
 					const shotsInSightLine = sightLines[slKey];
+					// console.log({ slKey, entityTop, entityBottom, shotsInSightLine });
 					if (
 						slKey >= entityTop &&
 						slKey <= entityBottom &&
 						shotsInSightLine.length > 0
 					) {
-						candidates[entityId] = shotsInSightLine;
+						if (!candidates[entityId]) {
+							candidates[entityId] = [...shotsInSightLine];
+						} else {
+							candidates[entityId] = [
+								...candidates[entityId],
+								...shotsInSightLine,
+							];
+						}
 					}
 				}
 			}
 		}
 
-		// console.log('candidates');
-		// console.log(candidates);
+		// shots.candidates = candidates;
 
 		// checking collisions on candidates
 		const entitiesSufferingHits = {};
@@ -257,7 +266,7 @@ const shots = {
 
 			const hittingShots = shotIds.filter((shotId) => {
 				const stageShot = stageShots[shotId];
-				const shotX = stageShot.position.x + 30;
+				const shotX = stageShot.position.x;
 				const shotY = stageShot.position.y;
 
 				if (!shotX || !shotY) {
@@ -278,7 +287,7 @@ const shots = {
 					entityLength
 				);
 
-				stageShot.hitTests.push({
+				/*stageShot.hitTests.push({
 					entity: cKey,
 					result: hitTest,
 					shotX: shotX,
@@ -287,7 +296,7 @@ const shots = {
 					entityCenterY: entityCenterY,
 					entityWidth: entityWidth,
 					entityLength: entityLength,
-				});
+				});*/
 
 				return hitTest;
 			});
