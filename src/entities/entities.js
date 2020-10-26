@@ -95,6 +95,7 @@ const entities = {
 		}
 
 		const newShip = { ...this.types[type].mutable, ...props };
+		newShip.store = storeIn;
 		newShip.__proto__ = this.types[type];
 
 		if (newShip.id !== null) {

@@ -187,7 +187,6 @@ const shots = {
 
 	removeShot(id, sightLine) {
 		const stageShot = shots.stageShots[id];
-		// console.log(`removing shot ${id}`);
 		shots.handlers.stage.removeChild(stageShot);
 		stageShot.hasBeenDestroyed = true;
 		stageShot.destroy();
@@ -196,6 +195,92 @@ const shots = {
 			id: id,
 			sightLine: sightLine,
 		});
+	},
+
+	detectCollisions() {
+		const currentState = shots.handlers.state();
+		const sightLines = currentState.shots.sightLines;
+		const entities = [
+			currentState.entities.player,
+			...currentState.entities.targetable,
+			...currentState.entities.other,
+		];
+		const positions = {
+			...currentState.positions.canMove,
+			...currentState.positions.cantMove,
+		};
+		const stageShots = shots.stageShots;
+
+		// entities that are in the sightline of a shot
+		let candidates = {};
+		for (const posKey in positions) {
+			const [entityId, posV] = posKey.split('--');
+			if (posV === 'posY') {
+				const entityY = positions[posKey];
+				const entity = entities.find((ent) => ent.id === entityId);
+				const entityWidth = entity.immutable.width;
+				const entityTop = entityY - entityWidth / 2;
+				const entityBottom = entityY + entityWidth / 2;
+
+				for (const slKey in sightLines) {
+					const shotsInSightLine = sightLines[slKey];
+					if (
+						slKey >= entityTop &&
+						slKey <= entityBottom &&
+						shotsInSightLine.length > 0
+					) {
+						candidates[entityId] = shotsInSightLine;
+					}
+				}
+			}
+		}
+
+		// checking collisions on candidates
+		const entitiesSufferingHits = {};
+		for (const cKey in candidates) {
+			const candidate = candidates[cKey];
+			const entityCenterX = positions[`${cKey}--posX`];
+			const entityCenterY = positions[`${cKey}--posY`];
+			const entity = entities.find((ent) => ent.id === cKey);
+			const entityWidth = entity.immutable.width;
+			const entityLength = entity.immutable.length;
+
+			const hittingShots = candidate.filter((shotId) => {
+				const stageShot = stageShots[shotId];
+				const shotX = stageShot.position.x;
+				const shotY = stageShot.position.y;
+
+				return shots.checkCollisionEllipsePoint(
+					shotX,
+					shotY,
+					entityCenterX,
+					entityCenterY,
+					entityWidth,
+					entityLength
+				);
+			});
+
+			if (hittingShots.length > 0) {
+				entitiesSufferingHits[cKey] = hittingShots;
+				console.log(entitiesSufferingHits);
+			}
+		}
+	},
+
+	checkCollisionEllipsePoint(
+		shotX,
+		shotY,
+		entityCenterX,
+		entityCenterY,
+		entityWidth,
+		entityLength
+	) {
+		const calc =
+			Math.pow(shotX - entityCenterX, 2) / Math.pow(entityLength / 2, 2) +
+			Math.pow(shotY - entityCenterY, 2) / Math.pow(entityWidth / 2, 2);
+
+		if (calc < 1) return true;
+		return false;
 	},
 };
 

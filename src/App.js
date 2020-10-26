@@ -8,6 +8,7 @@ import {
 	status,
 	hud,
 	moveTargetingReticule,
+	hello,
 } from './utils/helpers';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
@@ -29,18 +30,7 @@ export default class App extends PIXI.Application {
 		// https://pixijs.download/dev/docs/PIXI.settings.html
 		// PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-		// saying hello
-		let helloPadding = '\n';
-		if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-			helloPadding = '';
-		}
-		console.info(
-			`\n %c %c  🚀 Sublight Patrol %c - ${c.gameVersion} %c \n${helloPadding}`,
-			'background: #32ade6; padding: 5px 3px',
-			'background: #003030; color: #32ade6; padding: 5px 0',
-			'background: #003030; color: #2e769e; padding: 5px 0',
-			''
-		);
+		hello();
 
 		this.stage.sortableChildren = true;
 
@@ -199,6 +189,9 @@ export default class App extends PIXI.Application {
 			if (!shots.stageShots[shotK].hasBeenDestroyed)
 				shots.stageShots[shotK].onUpdate(delta);
 		}
+
+		// collision detection
+		shots.detectCollisions();
 
 		// current state
 		const currentState = this.gameState();

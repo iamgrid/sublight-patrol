@@ -494,3 +494,17 @@ export const hud = {
 		).style.width = `${meterValue}px`;
 	},
 };
+
+export function hello() {
+	let helloPadding = '\n';
+	if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+		helloPadding = '';
+	}
+	console.info(
+		`\n %c %c  🚀 Sublight Patrol %c - ${c.gameVersion} %c \n${helloPadding}`,
+		'background: #32ade6; padding: 5px 3px',
+		'background: #003030; color: #32ade6; padding: 5px 0',
+		'background: #003030; color: #2e769e; padding: 5px 0',
+		''
+	);
+}
