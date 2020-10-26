@@ -42,8 +42,8 @@ const pieces = {
 			hasHull: true,
 			maxHullStrength: 75,
 			maxSystemStrength: 5,
-			width: 40,
-			length: 60,
+			width: 34,
+			length: 44,
 		},
 		mutable: {
 			playerRelation: 'neutral',

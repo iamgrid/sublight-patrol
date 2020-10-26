@@ -60,6 +60,8 @@ export default class App extends PIXI.Application {
 
 		console.log(entities.types);
 		console.log(story);
+
+		this.shownStateOnPause = false;
 	}
 
 	init() {
@@ -359,6 +361,10 @@ export default class App extends PIXI.Application {
 	}
 
 	pause() {
+		if (!this.shownStateOnPause) {
+			console.info(this.gameState());
+			this.shownStateOnPause = true;
+		}
 		if (Keyboard.isKeyPressed('Escape')) {
 			this.togglePause();
 		}
@@ -387,6 +393,7 @@ export default class App extends PIXI.Application {
 			pauseDiv.classList.remove('game__pause--show');
 			this.paused = false;
 			this.pixiState = this.play;
+			this.shownStateOnPause = false;
 		}
 	}
 }

@@ -124,7 +124,8 @@ const shots = {
 				cannonY,
 				storeEntity.immutable.cannonColor,
 				storeEntity.immutable.cannonPower,
-				storeEntity.facing
+				storeEntity.facing,
+				storeEntity.id
 			);
 
 			// cycle cannons on the ship
@@ -157,7 +158,7 @@ const shots = {
 		}, cannonCooldown * 1000);
 	},
 
-	addShot(posX, posY, color, power, direction) {
+	addShot(posX, posY, color, power, direction, origin = null) {
 		const shotId = idCreator.create();
 		const stageShot = new Shot({
 			id: shotId,
@@ -166,6 +167,7 @@ const shots = {
 			posX: posX,
 			posY: posY,
 			direction: direction,
+			origin: origin,
 			callbackFn: (shotId, sightLine) => shots.removeShot(shotId, sightLine),
 		});
 
@@ -186,6 +188,10 @@ const shots = {
 	},
 
 	removeShot(id, sightLine) {
+		if (!id || !sightLine) {
+			console.error(`removeShot called with id ${id}, sightLine ${sightLine}`);
+			return;
+		}
 		const stageShot = shots.stageShots[id];
 		shots.handlers.stage.removeChild(stageShot);
 		stageShot.hasBeenDestroyed = true;
@@ -235,20 +241,32 @@ const shots = {
 			}
 		}
 
+		// console.log('candidates');
+		// console.log(candidates);
+
 		// checking collisions on candidates
 		const entitiesSufferingHits = {};
 		for (const cKey in candidates) {
-			const candidate = candidates[cKey];
+			const shotIds = candidates[cKey];
 			const entityCenterX = positions[`${cKey}--posX`];
 			const entityCenterY = positions[`${cKey}--posY`];
 			const entity = entities.find((ent) => ent.id === cKey);
 			const entityWidth = entity.immutable.width;
 			const entityLength = entity.immutable.length;
 
-			const hittingShots = candidate.filter((shotId) => {
+			const hittingShots = shotIds.filter((shotId) => {
 				const stageShot = stageShots[shotId];
 				const shotX = stageShot.position.x;
 				const shotY = stageShot.position.y;
+
+				if (!shotX || !shotX) {
+					console.error({ shotX, shotY });
+				}
+
+				const shotOrigin = stageShot.origin;
+
+				// disabling self hits
+				if (shotOrigin === cKey) return false;
 
 				return shots.checkCollisionEllipsePoint(
 					shotX,
@@ -262,8 +280,22 @@ const shots = {
 
 			if (hittingShots.length > 0) {
 				entitiesSufferingHits[cKey] = hittingShots;
-				console.log(entitiesSufferingHits);
 			}
+		}
+
+		// damage to state and destroy hitting shots
+		for (const heKey in entitiesSufferingHits) {
+			const hittingShots = entitiesSufferingHits[heKey];
+			hittingShots.forEach((shotId) => {
+				const stageShot = stageShots[shotId];
+				const sightLine = stageShot.position.y;
+
+				// destroy shot
+				/*console.log(
+					`entity ${heKey} shot by ${shotId} on sightline ${sightLine}`
+				);*/
+				shots.removeShot(shotId, sightLine);
+			});
 		}
 	},
 

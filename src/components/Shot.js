@@ -14,6 +14,7 @@ export default class Shot extends PIXI.Graphics {
 
 		this.traveled = 0;
 		this.power = props.power;
+		this.origin = props.origin;
 		this.hasBeenDestroyed = false;
 		this.id = props.id;
 		this.sightLine = props.posY;
@@ -23,7 +24,7 @@ export default class Shot extends PIXI.Graphics {
 
 	onUpdate(delta) {
 		if (!this.hasBeenDestroyed) {
-			const travel = delta * 8;
+			const travel = delta * 1;
 			this.traveled += travel;
 
 			if (this.traveled > 800) {
