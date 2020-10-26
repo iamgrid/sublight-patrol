@@ -12,6 +12,7 @@ export default class Shot extends PIXI.Graphics {
 
 		this.position.set(props.posX, props.posY);
 
+		this.hitTests = [];
 		this.traveled = 0;
 		this.power = props.power;
 		this.origin = props.origin;
@@ -20,6 +21,7 @@ export default class Shot extends PIXI.Graphics {
 		this.sightLine = props.posY;
 		this.direction = props.direction;
 		this.callbackFn = props.callbackFn;
+		// this.handlers = props.handlers;
 	}
 
 	onUpdate(delta) {

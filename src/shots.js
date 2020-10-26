@@ -183,7 +183,7 @@ const shots = {
 
 		shots.handlers.stage.addChild(stageShot);
 		shots.zIndexIterator++;
-		if (shots.zIndexIterator > c.zIndices.shots - 100)
+		if (shots.zIndexIterator > c.zIndices.entities - 100)
 			shots.zIndexIterator = c.zIndices.shots;
 	},
 
@@ -201,6 +201,7 @@ const shots = {
 			id: id,
 			sightLine: sightLine,
 		});
+		delete shots.stageShots[id];
 	},
 
 	detectCollisions() {
@@ -259,7 +260,7 @@ const shots = {
 				const shotX = stageShot.position.x;
 				const shotY = stageShot.position.y;
 
-				if (!shotX || !shotX) {
+				if (!shotX || !shotY) {
 					console.error({ shotX, shotY });
 				}
 
@@ -268,7 +269,7 @@ const shots = {
 				// disabling self hits
 				if (shotOrigin === cKey) return false;
 
-				return shots.checkCollisionEllipsePoint(
+				const hitTest = shots.checkCollisionEllipsePoint(
 					shotX,
 					shotY,
 					entityCenterX,
@@ -276,6 +277,19 @@ const shots = {
 					entityWidth,
 					entityLength
 				);
+
+				stageShot.hitTests.push({
+					entity: cKey,
+					result: hitTest,
+					shotX: shotX,
+					shotY: shotY,
+					entityCenterX: entityCenterX,
+					entityCenterY: entityCenterY,
+					entityWidth: entityWidth,
+					entityLength: entityLength,
+				});
+
+				return hitTest;
 			});
 
 			if (hittingShots.length > 0) {
@@ -288,7 +302,7 @@ const shots = {
 			const hittingShots = entitiesSufferingHits[heKey];
 			hittingShots.forEach((shotId) => {
 				const stageShot = stageShots[shotId];
-				const sightLine = stageShot.position.y;
+				const sightLine = stageShot.sightLine;
 
 				// destroy shot
 				/*console.log(
