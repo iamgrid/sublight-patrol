@@ -90,7 +90,13 @@ function targetPointedOrNearest(from, entities, positions) {
 }
 
 function cycleTargets(current, direction, entities) {
-	if (current === null) return entities[0].id;
+	if (current === null) {
+		if (entities[0]) {
+			return entities[0].id;
+		} else {
+			return null;
+		}
+	}
 
 	const currentIdx = entities.findIndex((entity) => entity.id === current);
 

@@ -245,8 +245,10 @@ export default class App extends PIXI.Application {
 			shots.stopShooting(playerId);
 		}
 
-		const targetingCallback = (newTargetId) =>
+		const targetingCallback = (newTargetId) => {
+			if (newTargetId === null) return;
 			moveTargetingReticule(newTargetId, entities.stageEntities);
+		};
 
 		if (Keyboard.isKeyPressed('KeyE')) {
 			this.dispatch({
