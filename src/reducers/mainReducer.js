@@ -409,7 +409,7 @@ export default function mainReducer(state, action) {
 				};
 			}
 
-			let show = 'shield-damage';
+			let show = c.damageTypes.shieldDamage;
 			let currentShieldStrength = oldEntity.shieldStrength;
 			if (currentShieldStrength === undefined) currentShieldStrength = 0;
 			let newShieldStrength = currentShieldStrength - shotDamage;
@@ -417,13 +417,13 @@ export default function mainReducer(state, action) {
 			if (newShieldStrength < 0) {
 				newHullStrength += newShieldStrength;
 				newShieldStrength = 0;
-				show = 'hull-damage';
+				show = c.damageTypes.hullDamage;
 			}
 			if (newHullStrength < 0) {
-				show = 'destruction';
+				show = c.damageTypes.destruction;
 			}
 
-			if (show !== 'destruction') {
+			if (show !== c.damageTypes.destruction) {
 				const modifiedEntity = assignWPrototype(oldEntity, {
 					shieldStrength: newShieldStrength,
 					hullStrength: newHullStrength,
@@ -445,6 +445,7 @@ export default function mainReducer(state, action) {
 					},
 				];
 			} else {
+				// REMOVE_ENTITY will be called in the callback function
 				return [
 					() => action.callbackFn(show),
 					{

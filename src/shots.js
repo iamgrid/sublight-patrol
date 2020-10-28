@@ -358,7 +358,7 @@ const shots = {
 	showDamage(entityId, entityStore, type) {
 		console.log({ entityId, type });
 
-		if (type === 'destruction') {
+		if (type === c.damageTypes.destruction) {
 			shots.handlers.dispatch({
 				type: c.actions.REMOVE_ENTITY,
 				id: entityId,

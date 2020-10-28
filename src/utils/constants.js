@@ -50,6 +50,12 @@ const c = {
 			laserColor: 0xffff40,
 		},
 	},
+	damageTypes: {
+		shieldDamage: 'shieldDamage',
+		hullDamage: 'hullDamage',
+		destruction: 'destruction',
+	},
+
 	init() {
 		for (let key in this.alertsAndWarnings.warnings) {
 			this.alertsAndWarnings.warnings[key].type = 'warning';
