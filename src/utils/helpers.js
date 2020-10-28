@@ -360,7 +360,7 @@ export const hud = {
 			);
 
 			if (targetIdx === -1) {
-				console.error(`Unable to find target: ${targeting}`);
+				// console.error(`Unable to find target: ${targeting}`);
 				return;
 			}
 

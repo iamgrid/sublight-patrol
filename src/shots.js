@@ -227,25 +227,27 @@ const shots = {
 			if (posV === 'posY') {
 				const entityY = positions[posKey];
 				const entity = entities.find((ent) => ent.id === entityId);
-				const entityWidth = entity.immutable.width;
-				const entityTop = entityY - entityWidth / 2;
-				const entityBottom = entityY + entityWidth / 2;
+				if (entity !== undefined) {
+					const entityWidth = entity.immutable.width;
+					const entityTop = entityY - entityWidth / 2;
+					const entityBottom = entityY + entityWidth / 2;
 
-				for (const slKey in sightLines) {
-					const shotsInSightLine = sightLines[slKey];
-					// console.log({ slKey, entityTop, entityBottom, shotsInSightLine });
-					if (
-						slKey >= entityTop &&
-						slKey <= entityBottom &&
-						shotsInSightLine.length > 0
-					) {
-						if (!candidates[entityId]) {
-							candidates[entityId] = [...shotsInSightLine];
-						} else {
-							candidates[entityId] = [
-								...candidates[entityId],
-								...shotsInSightLine,
-							];
+					for (const slKey in sightLines) {
+						const shotsInSightLine = sightLines[slKey];
+						// console.log({ slKey, entityTop, entityBottom, shotsInSightLine });
+						if (
+							slKey >= entityTop &&
+							slKey <= entityBottom &&
+							shotsInSightLine.length > 0
+						) {
+							if (!candidates[entityId]) {
+								candidates[entityId] = [...shotsInSightLine];
+							} else {
+								candidates[entityId] = [
+									...candidates[entityId],
+									...shotsInSightLine,
+								];
+							}
 						}
 					}
 				}
@@ -313,6 +315,21 @@ const shots = {
 				const stageShot = stageShots[shotId];
 				const sightLine = stageShot.sightLine;
 
+				// do damage
+				const shotDamage = stageShot.power;
+				const entityId = heKey;
+				const entity = entities.find((ent) => ent.id === entityId);
+				const entityStore = entity.store;
+
+				shots.handlers.dispatch({
+					type: c.actions.DAMAGE,
+					entityStore: entityStore,
+					entityId: entityId,
+					shotDamage: shotDamage,
+					callbackFn: (showType) =>
+						shots.showDamage(entityId, entityStore, showType),
+				});
+
 				// destroy shot
 				/*console.log(
 					`entity ${heKey} shot by ${shotId} on sightline ${sightLine}`
@@ -336,6 +353,18 @@ const shots = {
 
 		if (calc < 1) return true;
 		return false;
+	},
+
+	showDamage(entityId, entityStore, type) {
+		console.log({ entityId, type });
+
+		if (type === 'destruction') {
+			shots.handlers.dispatch({
+				type: c.actions.REMOVE_ENTITY,
+				id: entityId,
+				store: entityStore,
+			});
+		}
 	},
 };
 

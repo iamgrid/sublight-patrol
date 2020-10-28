@@ -190,6 +190,47 @@ export default function mainReducer(state, action) {
 			}
 			break;
 		}
+		case c.actions.REMOVE_ENTITY: {
+			const entityId = action.id;
+			const entityStore = action.store;
+			let newTargeting = state.game.targeting;
+			if (state.game.targeting === entityId) newTargeting = null;
+
+			const entity = state.entities[entityStore].find(
+				(en) => en.id === entityId
+			);
+			if (entity === undefined) {
+				return {
+					...state,
+				};
+			}
+
+			const newPositions = {
+				canMove: { ...state.positions.canMove },
+				cantMove: { ...state.positions.cantMove },
+			};
+
+			let posStore = 'canMove';
+			if (!entity.immutable.canMove) posStore = 'cantMove';
+
+			delete newPositions[posStore][`${entityId}--posX`];
+			delete newPositions[posStore][`${entityId}--posY`];
+
+			return {
+				...state,
+				game: {
+					...state.game,
+					targeting: newTargeting,
+				},
+				entities: {
+					...state.entities,
+					[entityStore]: [
+						...state.entities[entityStore].filter((en) => en.id !== entityId),
+					],
+				},
+				positions: newPositions,
+			};
+		}
 		case c.actions.TARGET: {
 			let newTarget;
 			switch (action.do) {
@@ -225,15 +266,18 @@ export default function mainReducer(state, action) {
 					);
 					break;
 			}
-			action.callbackFn(newTarget);
-			return {
-				...state,
-				game: {
-					...state.game,
-					targeting: newTarget,
-					targetHasBeenScanned: false,
+
+			return [
+				() => action.callbackFn(newTarget),
+				{
+					...state,
+					game: {
+						...state.game,
+						targeting: newTarget,
+						targetHasBeenScanned: false,
+					},
 				},
-			};
+			];
 		}
 		case c.actions.CHANGE_PLAYER_RELATION: {
 			const entityId = action.entityId;
@@ -247,20 +291,21 @@ export default function mainReducer(state, action) {
 				{ playerRelation: newRelation }
 			);
 
-			action.callbackFn(newRelation);
-
-			return {
-				...state,
-				entities: {
-					...state.entities,
-					targetable: [
-						...state.entities.targetable.filter(
-							(_, idx) => idx !== entityIndex
-						),
-						modifiedEntity,
-					],
+			return [
+				() => action.callbackFn(newRelation),
+				{
+					...state,
+					entities: {
+						...state.entities,
+						targetable: [
+							...state.entities.targetable.filter(
+								(_, idx) => idx !== entityIndex
+							),
+							modifiedEntity,
+						],
+					},
 				},
-			};
+			];
 		}
 		case c.actions.SCAN: {
 			const targetId = state.game.targeting;
@@ -343,6 +388,64 @@ export default function mainReducer(state, action) {
 					},
 				},
 			};
+		}
+		case c.actions.DAMAGE: {
+			const entityStore = action.entityStore;
+			const entityId = action.entityId;
+			const shotDamage = action.shotDamage;
+			const oldEntity = state.entities[entityStore].find(
+				(entity) => entity.id === entityId
+			);
+
+			if (oldEntity === undefined) {
+				return {
+					...state,
+				};
+			}
+
+			let show = 'shield-damage';
+			let currentShieldStrength = oldEntity.shieldStrength;
+			if (currentShieldStrength === undefined) currentShieldStrength = 0;
+			let newShieldStrength = currentShieldStrength - shotDamage;
+			let newHullStrength = oldEntity.hullStrength;
+			if (newShieldStrength < 0) {
+				newHullStrength += newShieldStrength;
+				newShieldStrength = 0;
+				show = 'hull-damage';
+			}
+			if (newHullStrength < 0) {
+				show = 'destruction';
+			}
+
+			if (show !== 'destruction') {
+				const modifiedEntity = assignWPrototype(oldEntity, {
+					shieldStrength: newShieldStrength,
+					hullStrength: newHullStrength,
+				});
+
+				return [
+					() => action.callbackFn(show),
+					{
+						...state,
+						entities: {
+							...state.entities,
+							[entityStore]: [
+								...state.entities[entityStore].filter(
+									(en) => en.id !== entityId
+								),
+								modifiedEntity,
+							],
+						},
+					},
+				];
+			} else {
+				return [
+					() => action.callbackFn(show),
+					{
+						...state,
+					},
+				];
+			}
 		}
 		default:
 			console.error(`Failed to run action: ${action}`);

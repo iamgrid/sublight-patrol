@@ -65,7 +65,22 @@ export default function useReducer(reducer, initialArg = {}) {
 
 		try {
 			isDispatching = true;
-			const newStore = reducer(_internalState.state, action);
+			let newStore = reducer(_internalState.state, action);
+			let callbackFunction = null;
+			if (Array.isArray(newStore)) {
+				if (typeof newStore[0] === 'function') {
+					callbackFunction = newStore[0];
+					newStore = newStore[1];
+				} else {
+					console.error(
+						'Your callback function has to be of type function! action:',
+						action,
+						', the return value was:',
+						newStore
+					);
+					return null;
+				}
+			}
 			if (!isPlainObject(newStore)) {
 				console.error(
 					'Failed to execute reducer with action:',
@@ -76,6 +91,8 @@ export default function useReducer(reducer, initialArg = {}) {
 				return null;
 			}
 			_internalState._store = newStore;
+			isDispatching = false;
+			if (callbackFunction) callbackFunction();
 		} catch (error) {
 			console.error(
 				'Failed to execute reducer with action:',
