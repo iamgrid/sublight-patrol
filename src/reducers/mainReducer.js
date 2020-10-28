@@ -206,9 +206,7 @@ export default function mainReducer(state, action) {
 				(en) => en.id === entityId
 			);
 			if (entity === undefined) {
-				return {
-					...state,
-				};
+				return null;
 			}
 
 			const newPositions = {
@@ -221,6 +219,8 @@ export default function mainReducer(state, action) {
 
 			delete newPositions[posStore][`${entityId}--posX`];
 			delete newPositions[posStore][`${entityId}--posY`];
+			delete newPositions[posStore][`${entityId}--latVelocity`];
+			delete newPositions[posStore][`${entityId}--longVelocity`];
 
 			return {
 				...state,
@@ -355,7 +355,7 @@ export default function mainReducer(state, action) {
 					},
 				};
 			} else {
-				return { ...state };
+				return null;
 			}
 		}
 		case c.actions.ADD_SHOT: {
@@ -381,19 +381,25 @@ export default function mainReducer(state, action) {
 		}
 		case c.actions.REMOVE_SHOT: {
 			const removeId = action.id;
+			let callbackFn = action.callbackFn;
+
+			// console.log(`removing ${removeId} from ${action.sightLine}`);
 			const updatedSightLine = state.shots.sightLines[action.sightLine].filter(
 				(sl) => sl !== removeId
 			);
-			return {
-				...state,
-				shots: {
-					ids: [...state.shots.ids.filter((shotId) => shotId !== removeId)],
-					sightLines: {
-						...state.shots.sightLines,
-						[action.sightLine]: updatedSightLine,
+			return [
+				callbackFn,
+				{
+					...state,
+					shots: {
+						ids: [...state.shots.ids.filter((shotId) => shotId !== removeId)],
+						sightLines: {
+							...state.shots.sightLines,
+							[action.sightLine]: updatedSightLine,
+						},
 					},
 				},
-			};
+			];
 		}
 		case c.actions.DAMAGE: {
 			const entityStore = action.entityStore;
@@ -404,9 +410,7 @@ export default function mainReducer(state, action) {
 			);
 
 			if (oldEntity === undefined) {
-				return {
-					...state,
-				};
+				return null;
 			}
 
 			let show = c.damageTypes.shieldDamage;
@@ -446,12 +450,7 @@ export default function mainReducer(state, action) {
 				];
 			} else {
 				// REMOVE_ENTITY will be called in the callback function
-				return [
-					() => action.callbackFn(show),
-					{
-						...state,
-					},
-				];
+				return [() => action.callbackFn(show), null];
 			}
 		}
 		default:

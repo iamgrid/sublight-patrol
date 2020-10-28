@@ -1,3 +1,5 @@
+import c from './constants';
+
 // isPlainObject source: https://github.com/reduxjs/redux/blob/5ef5fa7ee5a636b16791540233078b9d235c41db/src/utils/isPlainObject.ts
 function isPlainObject(obj) {
 	if (typeof obj !== 'object' || obj === null) return false;
@@ -68,12 +70,12 @@ export default function useReducer(reducer, initialArg = {}) {
 			let newStore = reducer(_internalState.state, action);
 			let callbackFunction = null;
 			if (Array.isArray(newStore)) {
-				if (typeof newStore[0] === 'function') {
+				if (newStore[0] === null || typeof newStore[0] === 'function') {
 					callbackFunction = newStore[0];
 					newStore = newStore[1];
 				} else {
 					console.error(
-						'Your callback function has to be of type function! action:',
+						'Your callback function has to be null or of type function! action:',
 						action,
 						', the return value was:',
 						newStore
@@ -81,16 +83,19 @@ export default function useReducer(reducer, initialArg = {}) {
 					return null;
 				}
 			}
-			if (!isPlainObject(newStore)) {
-				console.error(
-					'Failed to execute reducer with action:',
-					action,
-					', the return value was:',
-					newStore
-				);
-				return null;
+			if (newStore !== null) {
+				if (c.debug.verboseReducer) console.log(action);
+				if (!isPlainObject(newStore)) {
+					console.error(
+						'Failed to execute reducer with action:',
+						action,
+						', the return value was:',
+						newStore
+					);
+					return null;
+				}
+				_internalState._store = newStore;
 			}
-			_internalState._store = newStore;
 			isDispatching = false;
 			if (callbackFunction) callbackFunction();
 		} catch (error) {

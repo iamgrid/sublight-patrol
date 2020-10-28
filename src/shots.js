@@ -189,7 +189,7 @@ const shots = {
 			shots.zIndexIterator = c.zIndices.shots;
 	},
 
-	removeShot(id, sightLine) {
+	removeShot(id, sightLine, callbackFn = null) {
 		if (!id || !sightLine) {
 			console.error(`removeShot called with id ${id}, sightLine ${sightLine}`);
 			return;
@@ -198,12 +198,13 @@ const shots = {
 		shots.handlers.stage.removeChild(stageShot);
 		stageShot.hasBeenDestroyed = true;
 		stageShot.destroy();
+		delete shots.stageShots[id];
 		shots.handlers.dispatch({
 			type: c.actions.REMOVE_SHOT,
 			id: id,
 			sightLine: sightLine,
+			callbackFn: callbackFn,
 		});
-		delete shots.stageShots[id];
 	},
 
 	detectCollisions() {
@@ -241,12 +242,9 @@ const shots = {
 							shotsInSightLine.length > 0
 						) {
 							if (!candidates[entityId]) {
-								candidates[entityId] = [...shotsInSightLine];
+								candidates[entityId] = [slKey];
 							} else {
-								candidates[entityId] = [
-									...candidates[entityId],
-									...shotsInSightLine,
-								];
+								candidates[entityId].push(slKey);
 							}
 						}
 					}
@@ -259,82 +257,93 @@ const shots = {
 		// checking collisions on candidates
 		const entitiesSufferingHits = {};
 		for (const cKey in candidates) {
-			const shotIds = candidates[cKey];
-			const entityCenterX = positions[`${cKey}--posX`];
-			const entityCenterY = positions[`${cKey}--posY`];
-			const entity = entities.find((ent) => ent.id === cKey);
-			const entityWidth = entity.immutable.width;
-			const entityLength = entity.immutable.length;
+			const entityId = cKey;
+			const entitySightLines = candidates[entityId];
+			let hittingShots = [];
+			entitySightLines.forEach((sightLine) => {
+				const sightLineShots = sightLines[sightLine];
+				const entityCenterX = positions[`${entityId}--posX`];
+				const entityCenterY = positions[`${entityId}--posY`];
+				const entity = entities.find((ent) => ent.id === entityId);
+				const entityWidth = entity.immutable.width;
+				const entityLength = entity.immutable.length;
 
-			const hittingShots = shotIds.filter((shotId) => {
-				const stageShot = stageShots[shotId];
-				const shotX = stageShot.position.x;
-				const shotY = stageShot.position.y;
+				const hittingShotsInSightLine = sightLineShots.filter((shotId) => {
+					const stageShot = stageShots[shotId];
 
-				if (!shotX || !shotY) {
-					console.error({ shotX, shotY });
-				}
+					if (stageShot === undefined) return false;
 
-				const shotOrigin = stageShot.origin;
+					const shotX = stageShot.position.x;
+					const shotY = sightLine;
 
-				// disabling self hits
-				if (shotOrigin === cKey) return false;
+					if (!shotX || !shotY) {
+						console.error({ shotX, shotY });
+					}
 
-				const hitTest = shots.checkCollisionEllipsePoint(
-					shotX,
-					shotY,
-					entityCenterX,
-					entityCenterY,
-					entityWidth,
-					entityLength
-				);
+					const shotOrigin = stageShot.origin;
 
-				/*stageShot.hitTests.push({
-					entity: cKey,
-					result: hitTest,
-					shotX: shotX,
-					shotY: shotY,
-					entityCenterX: entityCenterX,
-					entityCenterY: entityCenterY,
-					entityWidth: entityWidth,
-					entityLength: entityLength,
-				});*/
+					// disabling self hits
+					if (shotOrigin === entityId) return false;
 
-				return hitTest;
+					const hitTest = shots.checkCollisionEllipsePoint(
+						shotX,
+						shotY,
+						entityCenterX,
+						entityCenterY,
+						entityWidth,
+						entityLength
+					);
+
+					/*stageShot.hitTests.push({
+						entity: entityId,
+						result: hitTest,
+						shotX: shotX,
+						shotY: shotY,
+						entityCenterX: entityCenterX,
+						entityCenterY: entityCenterY,
+						entityWidth: entityWidth,
+						entityLength: entityLength,
+					});*/
+
+					return hitTest;
+				});
+				if (hittingShotsInSightLine.length > 0)
+					hittingShots = [...hittingShots, ...hittingShotsInSightLine];
 			});
 
 			if (hittingShots.length > 0) {
-				entitiesSufferingHits[cKey] = hittingShots;
+				entitiesSufferingHits[entityId] = hittingShots;
 			}
 		}
 
 		// damage to state and destroy hitting shots
 		for (const heKey in entitiesSufferingHits) {
 			const hittingShots = entitiesSufferingHits[heKey];
-			hittingShots.forEach((shotId) => {
-				const stageShot = stageShots[shotId];
+			hittingShots.forEach((hittingShotId) => {
+				const stageShot = stageShots[hittingShotId];
 				const sightLine = stageShot.sightLine;
 
-				// do damage
 				const shotDamage = stageShot.power;
 				const entityId = heKey;
 				const entity = entities.find((ent) => ent.id === entityId);
 				const entityStore = entity.store;
 
-				shots.handlers.dispatch({
-					type: c.actions.DAMAGE,
-					entityStore: entityStore,
-					entityId: entityId,
-					shotDamage: shotDamage,
-					callbackFn: (showType) =>
-						shots.showDamage(entityId, entityStore, showType),
-				});
+				/*console.log(
+					`entity ${heKey} shot by ${hittingShotId} on sightline ${sightLine}`
+					);*/
 
 				// destroy shot
-				/*console.log(
-					`entity ${heKey} shot by ${shotId} on sightline ${sightLine}`
-				);*/
-				shots.removeShot(shotId, sightLine);
+				shots.removeShot(hittingShotId, sightLine, () => {
+					// then do damage
+					shots.handlers.dispatch({
+						type: c.actions.DAMAGE,
+						entityStore: entityStore,
+						entityId: entityId,
+						shotDamage: shotDamage,
+						callbackFn: (showType) =>
+							shots.showDamage(entityId, entityStore, showType),
+					});
+				});
 			});
 		}
 	},
