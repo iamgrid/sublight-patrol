@@ -4,6 +4,7 @@ import {
 	createTargetingReticule,
 	toggleTargetingReticule,
 	reticuleRelation,
+	showDamageTint,
 } from '../../utils/helpers';
 
 export default class Fenrir extends PIXI.Container {
@@ -11,6 +12,7 @@ export default class Fenrir extends PIXI.Container {
 		super();
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
+		this.showDamageTint = showDamageTint.bind(this);
 
 		this.shipBody = fromSpriteSheet.create(17, 72, 40, 50);
 
@@ -26,9 +28,15 @@ export default class Fenrir extends PIXI.Container {
 			yb: 28,
 		});
 
+		this.currentTint = 0xffffff;
+
 		this.addChild(this.shipBody);
 		this.addChild(this.harness);
 		for (const key in this.targetingReticule)
 			this.addChild(this.targetingReticule[key]);
+	}
+
+	onUpdate() {
+		this.showDamageTint(['shipBody', 'harness']);
 	}
 }

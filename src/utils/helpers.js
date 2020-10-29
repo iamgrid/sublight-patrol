@@ -1,5 +1,6 @@
 import * as PIXI from '../pixi';
 import c from './constants';
+import { fadeHexColor } from './formulas';
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`]) {
@@ -90,6 +91,17 @@ export function moveTargetingReticule(newTarget, stageEntities) {
 	}
 
 	if (newTarget) stageEntities[newTarget].toggleTargetingReticule(true);
+}
+
+export function showDamageTint(sprites = []) {
+	if (this.currentTint !== 0xffffff) {
+		if (sprites.length < 0) return;
+
+		const newTint = fadeHexColor(this.currentTint, 0x8);
+
+		sprites.forEach((sprite) => (this[sprite].tint = newTint));
+		this.currentTint = newTint;
+	}
 }
 
 export function dialog(speaker, say, hide = false) {

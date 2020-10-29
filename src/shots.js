@@ -5,7 +5,7 @@ import Shot from './components/Shot';
 
 const shots = {
 	stageShots: {},
-	handlers: { dispatch: null, state: null, stage: null }, // gets its values in App.js
+	handlers: { dispatch: null, state: null, stage: null, stageEntities: null }, // gets its values in App.js
 	cannonStates: {},
 	shootingIntervals: {},
 	cannonCooldowns: {},
@@ -185,7 +185,7 @@ const shots = {
 
 		shots.handlers.stage.addChild(stageShot);
 		shots.zIndexIterator++;
-		if (shots.zIndexIterator > c.zIndices.entities - 100)
+		if (shots.zIndexIterator > c.zIndices.shots + 99900)
 			shots.zIndexIterator = c.zIndices.shots;
 	},
 
@@ -341,7 +341,12 @@ const shots = {
 						entityId: entityId,
 						shotDamage: shotDamage,
 						callbackFn: (showType) =>
-							shots.showDamage(entityId, entityStore, showType),
+							shots.showDamage(
+								entityId,
+								entityStore,
+								showType,
+								shots.handlers.stageEntities
+							),
 					});
 				});
 			});
@@ -364,15 +369,27 @@ const shots = {
 		return false;
 	},
 
-	showDamage(entityId, entityStore, type) {
+	showDamage(entityId, entityStore, type, stageEntities) {
 		console.log({ entityId, type });
 
-		if (type === c.damageTypes.destruction) {
-			shots.handlers.dispatch({
-				type: c.actions.REMOVE_ENTITY,
-				id: entityId,
-				store: entityStore,
-			});
+		switch (type) {
+			case c.damageTypes.shieldDamage:
+				// stageEntities[entityId].currentTint = 0xc0ffff;
+				stageEntities[entityId].currentTint = 0x32ade6;
+				break;
+
+			case c.damageTypes.hullDamage:
+				// stageEntities[entityId].currentTint = 0xffc0c0;
+				stageEntities[entityId].currentTint = 0xff9090;
+				break;
+
+			case c.damageTypes.destruction:
+				shots.handlers.dispatch({
+					type: c.actions.REMOVE_ENTITY,
+					id: entityId,
+					store: entityStore,
+				});
+				break;
 		}
 	},
 };

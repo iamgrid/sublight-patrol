@@ -84,6 +84,7 @@ export default class App extends PIXI.Application {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.stage,
+			stageEntities: entities.stageEntities,
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
@@ -94,7 +95,7 @@ export default class App extends PIXI.Application {
 
 		entities.spawn(
 			this.handlers,
-			'fenrir',
+			'valkyrie',
 			{
 				posX: 100,
 				posY: 225,
@@ -186,6 +187,15 @@ export default class App extends PIXI.Application {
 	play(delta) {
 		// starscape movement
 		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
+
+		// damage animations
+		for (const eK in entities.stageEntities) {
+			try {
+				entities.stageEntities[eK].onUpdate(delta);
+			} catch (error) {
+				// console.error(error);
+			}
+		}
 		// console.log(this.shot._destroyed);
 		for (const shotK in shots.stageShots) {
 			if (!shots.stageShots[shotK].hasBeenDestroyed)
