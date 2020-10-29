@@ -373,8 +373,8 @@ export default class App extends PIXI.Application {
 				'padding-top: 10px; color: yellow'
 			);
 			console.info(this.gameState());
-			console.info(shots.stageShots);
-			// console.info(shots.candidates);
+			console.info('stageEntities:', entities.stageEntities);
+			console.info('stageShots:', shots.stageShots);
 			this.shownStateOnPause = true;
 		}
 		if (Keyboard.isKeyPressed('Escape')) {

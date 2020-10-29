@@ -64,10 +64,10 @@ export function toggleTargetingReticule(toggle) {
 	let newValue = 1;
 	if (!toggle) newValue = 0;
 
-	this.targetingReticule.TL.alpha = newValue;
-	this.targetingReticule.TR.alpha = newValue;
-	this.targetingReticule.BL.alpha = newValue;
-	this.targetingReticule.BR.alpha = newValue;
+	this.sprites['targetingReticule'].TL.alpha = newValue;
+	this.sprites['targetingReticule'].TR.alpha = newValue;
+	this.sprites['targetingReticule'].BL.alpha = newValue;
+	this.sprites['targetingReticule'].BR.alpha = newValue;
 }
 
 export function reticuleRelation(playerRelation) {
@@ -79,10 +79,10 @@ export function reticuleRelation(playerRelation) {
 
 	const newTint = tints[playerRelation];
 
-	this.targetingReticule.TL.tint = newTint;
-	this.targetingReticule.TR.tint = newTint;
-	this.targetingReticule.BL.tint = newTint;
-	this.targetingReticule.BR.tint = newTint;
+	this.sprites['targetingReticule'].TL.tint = newTint;
+	this.sprites['targetingReticule'].TR.tint = newTint;
+	this.sprites['targetingReticule'].BL.tint = newTint;
+	this.sprites['targetingReticule'].BR.tint = newTint;
 }
 
 export function moveTargetingReticule(newTarget, stageEntities) {
@@ -93,15 +93,30 @@ export function moveTargetingReticule(newTarget, stageEntities) {
 	if (newTarget) stageEntities[newTarget].toggleTargetingReticule(true);
 }
 
-export function showDamageTint(sprites = []) {
+export function showDamageTint(damagableSprites = []) {
 	if (this.currentTint !== 0xffffff) {
-		if (sprites.length < 0) return;
+		if (damagableSprites.length < 0) return;
 
 		const newTint = fadeHexColor(this.currentTint, 0x8);
 
-		sprites.forEach((sprite) => (this[sprite].tint = newTint));
+		damagableSprites.forEach((sprite) => (this.sprites[sprite].tint = newTint));
 		this.currentTint = newTint;
 	}
+}
+
+export function blowUp(callbackFn = null) {
+	console.log(`blowing up`, this);
+
+	for (const sKey in this.sprites) {
+		if (sKey === 'targetingReticule') {
+			for (const trKey in this.sprites[sKey])
+				this.removeChild(this.sprites[sKey][trKey]);
+		} else {
+			this.removeChild(this.sprites[sKey]);
+		}
+	}
+
+	if (typeof callbackFn === 'function') callbackFn();
 }
 
 export function dialog(speaker, say, hide = false) {

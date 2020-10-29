@@ -292,6 +292,8 @@ export default function mainReducer(state, action) {
 				(entity) => entity.id === entityId
 			);
 
+			if (entityIndex === -1) return null;
+
 			const modifiedEntity = assignWPrototype(
 				state.entities.targetable[entityIndex],
 				{ playerRelation: newRelation }

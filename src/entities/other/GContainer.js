@@ -5,6 +5,7 @@ import {
 	toggleTargetingReticule,
 	reticuleRelation,
 	showDamageTint,
+	blowUp,
 } from '../../utils/helpers';
 
 export default class GContainer extends PIXI.Container {
@@ -13,12 +14,15 @@ export default class GContainer extends PIXI.Container {
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 		this.showDamageTint = showDamageTint.bind(this);
+		this.blowUp = blowUp.bind(this);
 
-		this.containerBody = fromSpriteSheet.create(386, 3, 60, 60);
+		this.sprites = {};
 
-		// this.containerBody.alpha = 0.5;
+		this.sprites['containerBody'] = fromSpriteSheet.create(386, 3, 60, 60);
 
-		this.targetingReticule = createTargetingReticule({
+		// this.sprites['containerBody'].alpha = 0.5;
+
+		this.sprites['targetingReticule'] = createTargetingReticule({
 			xl: -26,
 			xr: 26,
 			yt: -24,
@@ -27,9 +31,9 @@ export default class GContainer extends PIXI.Container {
 
 		this.currentTint = 0xffffff;
 
-		this.addChild(this.containerBody);
-		for (const key in this.targetingReticule)
-			this.addChild(this.targetingReticule[key]);
+		this.addChild(this.sprites['containerBody']);
+		for (const key in this.sprites['targetingReticule'])
+			this.addChild(this.sprites['targetingReticule'][key]);
 	}
 
 	onUpdate() {

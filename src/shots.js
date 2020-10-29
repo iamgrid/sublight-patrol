@@ -370,20 +370,24 @@ const shots = {
 	},
 
 	showDamage(entityId, entityStore, type, stageEntities) {
-		console.log({ entityId, type });
-
 		switch (type) {
 			case c.damageTypes.shieldDamage:
-				// stageEntities[entityId].currentTint = 0xc0ffff;
 				stageEntities[entityId].currentTint = 0x32ade6;
 				break;
 
 			case c.damageTypes.hullDamage:
-				// stageEntities[entityId].currentTint = 0xffc0c0;
 				stageEntities[entityId].currentTint = 0xff9090;
 				break;
 
 			case c.damageTypes.destruction:
+				stageEntities[entityId].blowUp(() => {
+					const stageEntity = shots.handlers.stageEntities[entityId];
+					shots.handlers.stage.removeChild(stageEntity);
+					stageEntity.hasBeenDestroyed = true;
+					stageEntity.destroy();
+					delete shots.handlers.stageEntities[entityId];
+				});
+
 				shots.handlers.dispatch({
 					type: c.actions.REMOVE_ENTITY,
 					id: entityId,
