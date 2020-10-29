@@ -108,9 +108,21 @@ export function blowUp(callbackFn = null) {
 	console.log(`blowing up`, this);
 	const timings = {
 		showExplosions: 0,
-		peakExplosions: 300,
-		explosionsDone: 700,
+		explosionsDone: 7000,
+		s1: 0,
+		s2: 50,
+		s3: 120,
+		h1: 175,
+		h2: 400,
+		peak: 300,
 	};
+
+	this.explosionTimings = timings;
+	this.bubbleSizes = [0.1, 0.1, 0.1, 0.1, 0.3];
+	this.bubbleHolder = [];
+	this.explosionTimer = 0;
+	this.explosionStep = 1;
+	this.showingExplosion = true;
 
 	// remove targeting reticule
 	for (const trKey in this.sprites['targetingReticule'])
@@ -118,12 +130,6 @@ export function blowUp(callbackFn = null) {
 
 	function bUHelper() {
 		// remove remaining entity sprites
-		console.log('removing sprites');
-		for (const sKey in this.sprites) {
-			if (sKey !== 'targetingReticule') {
-				this.removeChild(this.sprites[sKey]);
-			}
-		}
 
 		// delete stage entity
 		if (typeof callbackFn === 'function') {
@@ -131,7 +137,137 @@ export function blowUp(callbackFn = null) {
 		}
 	}
 
-	window.setTimeout(bUHelper, timings.peakExplosions);
+	window.setTimeout(bUHelper.bind(this), timings.peakExplosions);
+}
+
+function makeBubble(x, y, size, fill = true) {
+	const explosionColor = Math.trunc(0xb05353 * (1 + Math.random() / 750));
+	// console.log(explosionColor.toString(16));
+
+	const bubble = new PIXI.Graphics();
+	if (fill) {
+		bubble.lineStyle(0);
+		bubble.beginFill(explosionColor);
+	} else {
+		bubble.lineStyle(1, 0xffffff);
+		bubble.beginFill(0x000000, 0);
+	}
+	bubble.drawCircle(x, y, size);
+	bubble.endFill();
+	bubble.alpha = 0;
+
+	return bubble;
+}
+
+function modifyBubble(bubble, newVal) {
+	bubble.alpha = newVal;
+	bubble.scale.x = newVal;
+	bubble.scale.y = newVal;
+}
+
+export function animateExplosion(delta) {
+	if (!this.showingExplosion) return;
+
+	this.explosionTimer = this.explosionTimer + delta * 16;
+
+	if (
+		this.explosionTimer > this.explosionTimings.s1 &&
+		this.explosionStep === 1
+	) {
+		// making b1
+		this.bubbleHolder[0] = makeBubble(-20, -15, 20);
+		this.addChild(this.bubbleHolder[0]);
+		this.explosionStep++;
+	}
+
+	if (
+		this.explosionStep > 1 &&
+		this.explosionTimer < this.explosionTimings.peak
+	) {
+		// growing b1
+		this.bubbleSizes[0] = Math.min(1, this.bubbleSizes[0] + 0.1);
+		modifyBubble(this.bubbleHolder[0], this.bubbleSizes[0]);
+	}
+
+	if (
+		this.explosionTimer > this.explosionTimings.s2 &&
+		this.explosionStep === 2
+	) {
+		// making b2
+		this.bubbleHolder[1] = makeBubble(20, 15, 17);
+		this.addChild(this.bubbleHolder[1]);
+		this.explosionStep++;
+	}
+
+	if (
+		this.explosionStep > 2 &&
+		this.explosionTimer < this.explosionTimings.peak
+	) {
+		// growing b2
+		this.bubbleSizes[1] = Math.min(1, this.bubbleSizes[1] + 0.1);
+		modifyBubble(this.bubbleHolder[1], this.bubbleSizes[1]);
+	}
+
+	if (
+		this.explosionTimer > this.explosionTimings.s3 &&
+		this.explosionStep === 3
+	) {
+		// making b3
+		this.bubbleHolder[2] = makeBubble(0, 0, 35);
+		this.addChild(this.bubbleHolder[2]);
+		this.explosionStep++;
+	}
+
+	if (
+		this.explosionStep > 3 &&
+		this.explosionTimer < this.explosionTimings.peak
+	) {
+		// growing b3
+		this.bubbleSizes[2] = Math.min(1, this.bubbleSizes[2] + 0.1);
+		modifyBubble(this.bubbleHolder[2], this.bubbleSizes[2]);
+	}
+
+	if (this.explosionTimer > this.explosionTimings.h1) {
+		// shrinking b1
+		this.bubbleSizes[0] = Math.max(0, this.bubbleSizes[0] - 0.7);
+		modifyBubble(this.bubbleHolder[0], this.bubbleSizes[0]);
+	}
+
+	if (this.explosionTimer > this.explosionTimings.h2) {
+		// shrinking b2
+		this.bubbleSizes[1] = Math.max(0, this.bubbleSizes[1] - 0.4);
+		modifyBubble(this.bubbleHolder[1], this.bubbleSizes[1]);
+	}
+
+	if (
+		this.explosionTimer > this.explosionTimings.peak &&
+		this.explosionStep < 5
+	) {
+		// removing entity sprites
+		for (const sKey in this.sprites) {
+			if (sKey !== 'targetingReticule') {
+				this.removeChild(this.sprites[sKey]);
+			}
+		}
+
+		this.bubbleHolder[3] = makeBubble(0, 0, 75, false);
+		this.bubbleHolder[3].alpha = 0.3;
+		this.addChild(this.bubbleHolder[3]);
+
+		this.explosionStep++;
+	}
+
+	if (this.explosionStep > 4) {
+		// shrinking b3
+		this.bubbleSizes[2] = Math.max(0, this.bubbleSizes[2] - 0.05);
+		modifyBubble(this.bubbleHolder[2], this.bubbleSizes[2]);
+
+		this.bubbleSizes[3] = Math.min(1, this.bubbleSizes[3] + 0.05);
+		this.bubbleHolder[3].scale.x = this.bubbleSizes[3];
+		this.bubbleHolder[3].scale.y = this.bubbleSizes[3];
+		this.bubbleSizes[4] = Math.max(0, this.bubbleSizes[4] - 0.01);
+		this.bubbleHolder[3].alpha = this.bubbleSizes[4];
+	}
 }
 
 export function dialog(speaker, say, hide = false) {

@@ -320,6 +320,13 @@ export default class App extends PIXI.Application {
 			hud.toggle(true);
 			// shots.startShooting('alpha_1');
 			// this.removeShot('bla');
+			// entities.stageEntities.beta_1.blowUp();
+			shots.showDamage(
+				'beta_1',
+				'targetable',
+				'destruction',
+				entities.stageEntities
+			);
 			console.log(currentState);
 			this.triggered1 = true;
 		}
