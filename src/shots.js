@@ -381,6 +381,7 @@ const shots = {
 
 			case c.damageTypes.destruction:
 				stageEntities[entityId].blowUp(() => {
+					console.log('removing from stage');
 					const stageEntity = shots.handlers.stageEntities[entityId];
 					shots.handlers.stage.removeChild(stageEntity);
 					stageEntity.hasBeenDestroyed = true;

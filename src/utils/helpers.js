@@ -106,17 +106,32 @@ export function showDamageTint(damagableSprites = []) {
 
 export function blowUp(callbackFn = null) {
 	console.log(`blowing up`, this);
+	const timings = {
+		showExplosions: 0,
+		peakExplosions: 300,
+		explosionsDone: 700,
+	};
 
-	for (const sKey in this.sprites) {
-		if (sKey === 'targetingReticule') {
-			for (const trKey in this.sprites[sKey])
-				this.removeChild(this.sprites[sKey][trKey]);
-		} else {
-			this.removeChild(this.sprites[sKey]);
+	// remove targeting reticule
+	for (const trKey in this.sprites['targetingReticule'])
+		this.removeChild(this.sprites['targetingReticule'][trKey]);
+
+	function bUHelper() {
+		// remove remaining entity sprites
+		console.log('removing sprites');
+		for (const sKey in this.sprites) {
+			if (sKey !== 'targetingReticule') {
+				this.removeChild(this.sprites[sKey]);
+			}
+		}
+
+		// delete stage entity
+		if (typeof callbackFn === 'function') {
+			window.setTimeout(callbackFn, timings.explosionsDone);
 		}
 	}
 
-	if (typeof callbackFn === 'function') callbackFn();
+	window.setTimeout(bUHelper, timings.peakExplosions);
 }
 
 export function dialog(speaker, say, hide = false) {
