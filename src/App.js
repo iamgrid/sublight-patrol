@@ -3,6 +3,7 @@ import c from './utils/constants';
 import overlays from './overlays';
 import {
 	fromSpriteSheet,
+	shields,
 	dialog,
 	alertsAndWarnings,
 	status,
@@ -52,7 +53,7 @@ export default class App extends PIXI.Application {
 		this.gameState = state;
 		this.dispatch = dispatch;
 
-		this.paused = false;
+		this.paused = { proper: false };
 		this.pixiState = this.play;
 
 		this.startTime = new Date().getTime();
@@ -68,6 +69,7 @@ export default class App extends PIXI.Application {
 		entities.init();
 		c.init();
 		status.init();
+		shields.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v3.png');
 
@@ -84,6 +86,13 @@ export default class App extends PIXI.Application {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.stage,
+			stageEntities: entities.stageEntities,
+		};
+
+		shields.handlers = {
+			dispatch: this.dispatch,
+			state: this.gameState,
+			paused: this.paused,
 			stageEntities: entities.stageEntities,
 		};
 
@@ -321,13 +330,13 @@ export default class App extends PIXI.Application {
 			// shots.startShooting('alpha_1');
 			// this.removeShot('bla');
 			// entities.stageEntities.beta_1.blowUp();
-			shots.showDamage(
-				'beta_1',
-				'targetable',
-				'destruction',
-				entities.stageEntities
-			);
-			console.log(currentState);
+			// shots.showDamage(
+			// 	'beta_1',
+			// 	'targetable',
+			// 	'destruction',
+			// 	entities.stageEntities
+			// );
+			// console.log(currentState);
 			this.triggered1 = true;
 		}
 
@@ -351,14 +360,14 @@ export default class App extends PIXI.Application {
 			});
 			// hud.toggle(false);
 			// shots.stopShooting('alpha_1');
-			console.log(currentState);
+			// console.log(currentState);
 			this.triggered2 = true;
 		}
 
 		if (!this.triggered3 && this.gameTime > 16000) {
 			// dialog('Death Herself', 'Resistance is futile.');
 			// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
-			console.log(currentState);
+			// console.log(currentState);
 			this.triggered3 = true;
 		}
 
@@ -368,7 +377,7 @@ export default class App extends PIXI.Application {
 			status.add('red', 'Red test. #4', this.gameTime);
 			status.add('aqua', 'Aqua test. #5', this.gameTime);
 			status.add('yellow', 'Yellow test. #6', this.gameTime);
-			console.log(currentState);
+			// console.log(currentState);
 			this.triggered4 = true;
 		}
 	}
@@ -402,15 +411,15 @@ export default class App extends PIXI.Application {
 
 	togglePause() {
 		const pauseDiv = document.getElementById('game__pause');
-		if (!this.paused) {
+		if (!this.paused.proper) {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
-			this.paused = true;
+			this.paused.proper = true;
 			this.pixiState = this.pause;
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
-			this.paused = false;
+			this.paused.proper = false;
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 		}

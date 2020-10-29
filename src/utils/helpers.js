@@ -21,6 +21,20 @@ export function getPosition(entityId, positions) {
 	// console.log(positions);
 }
 
+export function getStoreEntity(entityId, currentState) {
+	// console.log('LF ', entityId);
+	if (entityId === currentState.entities.player.id) {
+		return currentState.entities.player;
+	} else {
+		const storeEntity = currentState.entities.targetable.find(
+			(entity) => entity.id === entityId
+		);
+		if (!storeEntity)
+			console.info(`Couldn't find ${entityId}, it probably blew up.`);
+		return storeEntity;
+	}
+}
+
 export const fromSpriteSheet = {
 	defaultSpriteSheet: null, // gets its value in App.js once the spritesheet finished loading
 
@@ -105,10 +119,10 @@ export function showDamageTint(damagableSprites = []) {
 }
 
 export function blowUp(callbackFn = null) {
-	console.log(`blowing up`, this);
+	// console.log(`blowing up`, this);
 	const timings = {
 		showExplosions: 0,
-		explosionsDone: 7000,
+		explosionsDone: 1500,
 		s1: 0,
 		s2: 50,
 		s3: 120,
@@ -250,7 +264,7 @@ export function animateExplosion(delta) {
 			}
 		}
 
-		this.bubbleHolder[3] = makeBubble(0, 0, 75, false);
+		this.bubbleHolder[3] = makeBubble(0, 0, 85, false);
 		this.bubbleHolder[3].alpha = 0.3;
 		this.addChild(this.bubbleHolder[3]);
 
@@ -262,13 +276,63 @@ export function animateExplosion(delta) {
 		this.bubbleSizes[2] = Math.max(0, this.bubbleSizes[2] - 0.05);
 		modifyBubble(this.bubbleHolder[2], this.bubbleSizes[2]);
 
-		this.bubbleSizes[3] = Math.min(1, this.bubbleSizes[3] + 0.05);
+		this.bubbleSizes[3] = Math.min(1, this.bubbleSizes[3] + 0.02);
 		this.bubbleHolder[3].scale.x = this.bubbleSizes[3];
 		this.bubbleHolder[3].scale.y = this.bubbleSizes[3];
-		this.bubbleSizes[4] = Math.max(0, this.bubbleSizes[4] - 0.01);
+		this.bubbleSizes[4] = Math.max(0, this.bubbleSizes[4] - 0.008);
 		this.bubbleHolder[3].alpha = this.bubbleSizes[4];
 	}
 }
+
+export const shields = {
+	handlers: { dispatch: null, state: null, paused: null, stageEntities: null }, // gets its values in App.js
+	shieldRegenInterval: null,
+
+	shieldRegenTick() {
+		if (shields.handlers.paused.proper) return;
+
+		const currentState = shields.handlers.state();
+		// console.log(shields.handlers.stageEntities);
+		for (const sEKey in shields.handlers.stageEntities) {
+			let storeEntity = getStoreEntity(sEKey, currentState);
+
+			if (!storeEntity) {
+				continue;
+			}
+
+			if (!storeEntity.immutable.hasShields) {
+				continue;
+			}
+
+			if (storeEntity.isDisabled) {
+				continue;
+			}
+
+			// console.log(sEKey, storeEntity);
+
+			const maxShieldStrength = storeEntity.immutable.maxShieldStrength;
+			const shieldStrength = storeEntity.shieldStrength;
+
+			if (shieldStrength < maxShieldStrength) {
+				const shieldRechargeRate = storeEntity.immutable.shieldRechargeRate;
+
+				shields.handlers.dispatch({
+					type: c.actions.SHIELD_REGEN,
+					id: sEKey,
+					store: storeEntity.store,
+					amount: shieldRechargeRate,
+				});
+			}
+		}
+	},
+
+	init() {
+		shields.shieldRegenInterval = window.setInterval(
+			shields.shieldRegenTick,
+			1000
+		);
+	},
+};
 
 export function dialog(speaker, say, hide = false) {
 	const containerDiv = document.getElementById('game__dialog');

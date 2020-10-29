@@ -1,5 +1,5 @@
 import c from './utils/constants';
-import { getPosition } from './utils/helpers';
+import { getPosition, getStoreEntity } from './utils/helpers';
 import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
 
@@ -14,21 +14,9 @@ const shots = {
 
 	zIndexIterator: c.zIndices.shots,
 
-	getStoreEntity(entityId, currentState) {
-		if (entityId === currentState.entities.player.id) {
-			return currentState.entities.player;
-		} else {
-			const storeEntity = currentState.entities.targetable.find(
-				(entity) => entity.id === entityId
-			);
-			if (!storeEntity) console.error(`Couldn't find ${entityId}`);
-			return storeEntity;
-		}
-	},
-
 	startShooting(entityId) {
 		const currentState = shots.handlers.state();
-		let storeEntity = shots.getStoreEntity(entityId, currentState);
+		let storeEntity = getStoreEntity(entityId, currentState);
 		if (!storeEntity) {
 			return;
 		}
@@ -96,7 +84,7 @@ const shots = {
 
 	shoot(entityId) {
 		const currentState = shots.handlers.state();
-		let storeEntity = shots.getStoreEntity(entityId, currentState);
+		let storeEntity = getStoreEntity(entityId, currentState);
 		if (!storeEntity) {
 			return;
 		}
@@ -381,7 +369,7 @@ const shots = {
 
 			case c.damageTypes.destruction:
 				stageEntities[entityId].blowUp(() => {
-					console.log('removing from stage');
+					// console.log('removing from stage');
 					const stageEntity = shots.handlers.stageEntities[entityId];
 					shots.handlers.stage.removeChild(stageEntity);
 					stageEntity.hasBeenDestroyed = true;

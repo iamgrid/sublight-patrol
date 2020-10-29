@@ -13,6 +13,7 @@ const c = {
 		CHANGE_PLAYER_RELATION: 'CHANGE_PLAYER_RELATION',
 		SCAN: 'SCAN',
 		DAMAGE: 'DAMAGE',
+		SHIELD_REGEN: 'SHIELD_REGEN',
 	},
 	gameCanvas: {
 		width: 1200,

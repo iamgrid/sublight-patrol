@@ -455,6 +455,39 @@ export default function mainReducer(state, action) {
 				return [() => action.callbackFn(show), null];
 			}
 		}
+		case c.actions.SHIELD_REGEN: {
+			const entityId = action.id;
+			const entityStore = action.store;
+			const amount = action.amount;
+			// console.log({ entityId, amount });
+			const oldEntity = state.entities[entityStore].find(
+				(entity) => entity.id === entityId
+			);
+
+			if (oldEntity === undefined) {
+				return null;
+			}
+
+			const newShieldStrength = Math.min(
+				oldEntity.shieldStrength + amount,
+				oldEntity.immutable.maxShieldStrength
+			);
+
+			const modifiedEntity = assignWPrototype(oldEntity, {
+				shieldStrength: newShieldStrength,
+			});
+
+			return {
+				...state,
+				entities: {
+					...state.entities,
+					[entityStore]: [
+						...state.entities[entityStore].filter((en) => en.id !== entityId),
+						modifiedEntity,
+					],
+				},
+			};
+		}
 		default:
 			console.error(`Failed to run action: ${action}`);
 			return state;

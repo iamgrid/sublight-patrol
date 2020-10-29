@@ -9,6 +9,7 @@ const pieces = {
 			width: null,
 			length: null,
 			canMove: false,
+			hasShields: false,
 		},
 		mutable: {
 			id: null,
@@ -20,7 +21,6 @@ const pieces = {
 	ship: {
 		immutable: {
 			hasHull: true,
-			hasShields: false,
 			hasEMP: false,
 			hasCannons: false,
 			maxSystemStrength: null,
