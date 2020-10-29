@@ -121,7 +121,6 @@ export function showDamageTint(damagableSprites = []) {
 export function blowUp(callbackFn = null) {
 	// console.log(`blowing up`, this);
 	const timings = {
-		showExplosions: 0,
 		explosionsDone: 1500,
 		s1: 0,
 		s2: 50,
@@ -132,7 +131,7 @@ export function blowUp(callbackFn = null) {
 	};
 
 	this.explosionTimings = timings;
-	this.bubbleSizes = [0.1, 0.1, 0.1, 0.1, 0.3];
+	this.bubbleAttributes = [0.1, 0.1, 0.1, 0.1, 0.5];
 	this.bubbleHolder = [];
 	this.explosionTimer = 0;
 	this.explosionStep = 1;
@@ -142,16 +141,10 @@ export function blowUp(callbackFn = null) {
 	for (const trKey in this.sprites['targetingReticule'])
 		this.removeChild(this.sprites['targetingReticule'][trKey]);
 
-	function bUHelper() {
-		// remove remaining entity sprites
-
-		// delete stage entity
-		if (typeof callbackFn === 'function') {
-			window.setTimeout(callbackFn, timings.explosionsDone);
-		}
+	// delete stage entity
+	if (typeof callbackFn === 'function') {
+		window.setTimeout(callbackFn, timings.explosionsDone);
 	}
-
-	window.setTimeout(bUHelper.bind(this), timings.peakExplosions);
 }
 
 function makeBubble(x, y, size, fill = true) {
@@ -199,8 +192,8 @@ export function animateExplosion(delta) {
 		this.explosionTimer < this.explosionTimings.peak
 	) {
 		// growing b1
-		this.bubbleSizes[0] = Math.min(1, this.bubbleSizes[0] + 0.1);
-		modifyBubble(this.bubbleHolder[0], this.bubbleSizes[0]);
+		this.bubbleAttributes[0] = Math.min(1, this.bubbleAttributes[0] + 0.1);
+		modifyBubble(this.bubbleHolder[0], this.bubbleAttributes[0]);
 	}
 
 	if (
@@ -218,8 +211,8 @@ export function animateExplosion(delta) {
 		this.explosionTimer < this.explosionTimings.peak
 	) {
 		// growing b2
-		this.bubbleSizes[1] = Math.min(1, this.bubbleSizes[1] + 0.1);
-		modifyBubble(this.bubbleHolder[1], this.bubbleSizes[1]);
+		this.bubbleAttributes[1] = Math.min(1, this.bubbleAttributes[1] + 0.1);
+		modifyBubble(this.bubbleHolder[1], this.bubbleAttributes[1]);
 	}
 
 	if (
@@ -237,20 +230,20 @@ export function animateExplosion(delta) {
 		this.explosionTimer < this.explosionTimings.peak
 	) {
 		// growing b3
-		this.bubbleSizes[2] = Math.min(1, this.bubbleSizes[2] + 0.1);
-		modifyBubble(this.bubbleHolder[2], this.bubbleSizes[2]);
+		this.bubbleAttributes[2] = Math.min(1, this.bubbleAttributes[2] + 0.1);
+		modifyBubble(this.bubbleHolder[2], this.bubbleAttributes[2]);
 	}
 
 	if (this.explosionTimer > this.explosionTimings.h1) {
 		// shrinking b1
-		this.bubbleSizes[0] = Math.max(0, this.bubbleSizes[0] - 0.7);
-		modifyBubble(this.bubbleHolder[0], this.bubbleSizes[0]);
+		this.bubbleAttributes[0] = Math.max(0, this.bubbleAttributes[0] - 0.7);
+		modifyBubble(this.bubbleHolder[0], this.bubbleAttributes[0]);
 	}
 
 	if (this.explosionTimer > this.explosionTimings.h2) {
 		// shrinking b2
-		this.bubbleSizes[1] = Math.max(0, this.bubbleSizes[1] - 0.4);
-		modifyBubble(this.bubbleHolder[1], this.bubbleSizes[1]);
+		this.bubbleAttributes[1] = Math.max(0, this.bubbleAttributes[1] - 0.4);
+		modifyBubble(this.bubbleHolder[1], this.bubbleAttributes[1]);
 	}
 
 	if (
@@ -265,7 +258,7 @@ export function animateExplosion(delta) {
 		}
 
 		this.bubbleHolder[3] = makeBubble(0, 0, 85, false);
-		this.bubbleHolder[3].alpha = 0.3;
+		this.bubbleHolder[3].alpha = this.bubbleAttributes[4];
 		this.addChild(this.bubbleHolder[3]);
 
 		this.explosionStep++;
@@ -273,14 +266,15 @@ export function animateExplosion(delta) {
 
 	if (this.explosionStep > 4) {
 		// shrinking b3
-		this.bubbleSizes[2] = Math.max(0, this.bubbleSizes[2] - 0.05);
-		modifyBubble(this.bubbleHolder[2], this.bubbleSizes[2]);
+		this.bubbleAttributes[2] = Math.max(0, this.bubbleAttributes[2] - 0.05);
+		modifyBubble(this.bubbleHolder[2], this.bubbleAttributes[2]);
 
-		this.bubbleSizes[3] = Math.min(1, this.bubbleSizes[3] + 0.02);
-		this.bubbleHolder[3].scale.x = this.bubbleSizes[3];
-		this.bubbleHolder[3].scale.y = this.bubbleSizes[3];
-		this.bubbleSizes[4] = Math.max(0, this.bubbleSizes[4] - 0.008);
-		this.bubbleHolder[3].alpha = this.bubbleSizes[4];
+		// animating b4
+		this.bubbleAttributes[3] = Math.min(1, this.bubbleAttributes[3] + 0.02);
+		this.bubbleHolder[3].scale.x = this.bubbleAttributes[3];
+		this.bubbleHolder[3].scale.y = this.bubbleAttributes[3];
+		this.bubbleAttributes[4] = Math.max(0, this.bubbleAttributes[4] - 0.01);
+		this.bubbleHolder[3].alpha = this.bubbleAttributes[4];
 	}
 }
 
@@ -296,17 +290,9 @@ export const shields = {
 		for (const sEKey in shields.handlers.stageEntities) {
 			let storeEntity = getStoreEntity(sEKey, currentState);
 
-			if (!storeEntity) {
-				continue;
-			}
-
-			if (!storeEntity.immutable.hasShields) {
-				continue;
-			}
-
-			if (storeEntity.isDisabled) {
-				continue;
-			}
+			if (!storeEntity) continue;
+			if (!storeEntity.immutable.hasShields) continue;
+			if (storeEntity.isDisabled) continue;
 
 			// console.log(sEKey, storeEntity);
 
