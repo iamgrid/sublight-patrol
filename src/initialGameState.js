@@ -2,6 +2,8 @@ const initialGameState = {
 	game: {
 		targeting: null,
 		targetHasBeenScanned: false,
+		cameraX: null,
+		cameraY: null,
 	},
 	entities: {
 		player: {},

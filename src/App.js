@@ -33,7 +33,7 @@ export default class App extends PIXI.Application {
 
 		hello();
 
-		this.stage.sortableChildren = true;
+		// this.stage.sortableChildren = true;
 
 		this.view.id = 'pixicanvas';
 
@@ -80,12 +80,16 @@ export default class App extends PIXI.Application {
 		this.spriteSheet = PIXI.Texture.from('spriteSheet');
 		fromSpriteSheet.defaultSpriteSheet = this.spriteSheet;
 
-		this.handlers = [this.dispatch, this.stage];
+		this.mainStage = new PIXI.Container();
+		this.mainStage.sortableChildren = true;
+		this.stage.addChild(this.mainStage);
+
+		this.handlers = [this.dispatch, this.mainStage];
 
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			stage: this.stage,
+			stage: this.mainStage,
 			stageEntities: entities.stageEntities,
 		};
 
@@ -100,7 +104,7 @@ export default class App extends PIXI.Application {
 			(el) => new StarScapeLayer(el)
 		);
 
-		this.starScapeLayers.forEach((el) => this.stage.addChild(el));
+		this.starScapeLayers.forEach((el) => this.mainStage.addChild(el));
 
 		entities.spawn(
 			this.handlers,
