@@ -44,7 +44,7 @@ export default class App extends PIXI.Application {
 
 		this.init();
 
-		this.tempAttribute = 0;
+		this.inSlipStream = false;
 
 		this.triggered1 = false;
 		this.triggered2 = false;
@@ -82,8 +82,10 @@ export default class App extends PIXI.Application {
 		this.spriteSheet = PIXI.Texture.from('spriteSheet');
 		fromSpriteSheet.defaultSpriteSheet = this.spriteSheet;
 
+		this.starScapeStage = new PIXI.Container();
 		this.mainStage = new PIXI.Container();
 		this.mainStage.sortableChildren = true;
+		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
 
 		this.handlers = [this.dispatch, this.mainStage];
@@ -106,7 +108,7 @@ export default class App extends PIXI.Application {
 			(el) => new StarScapeLayer(el)
 		);
 
-		this.starScapeLayers.forEach((el) => this.mainStage.addChild(el));
+		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
 
 		entities.spawn(
 			this.handlers,
@@ -200,9 +202,6 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
-		// starscape movement
-		this.starScapeLayers.forEach((el) => el.onUpdate(delta));
-
 		// damage animations
 		for (const eK in entities.stageEntities) {
 			try {
@@ -316,6 +315,11 @@ export default class App extends PIXI.Application {
 
 		// player position
 		entities.stageEntities[playerId].position.set(playerX, playerY);
+
+		// starscape movement
+		this.starScapeLayers.forEach((el) =>
+			el.onUpdate(delta, this.inSlipStream, cameraLTX, cameraLTY)
+		);
 
 		// scanning
 		if (
