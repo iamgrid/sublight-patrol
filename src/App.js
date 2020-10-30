@@ -44,6 +44,8 @@ export default class App extends PIXI.Application {
 
 		this.init();
 
+		this.tempAttribute = 0;
+
 		this.triggered1 = false;
 		this.triggered2 = false;
 		this.triggered3 = false;
@@ -304,11 +306,16 @@ export default class App extends PIXI.Application {
 			this.togglePause();
 		}
 
+		const playerX = currentState.positions.canMove[`${playerId}--posX`];
+		const playerY = currentState.positions.canMove[`${playerId}--posY`];
+
+		// camera position
+		const cameraLTX = 0 - playerX + 100;
+		const cameraLTY = 0 - playerY + 225;
+		this.mainStage.position.set(cameraLTX, cameraLTY);
+
 		// player position
-		entities.stageEntities[playerId].position.set(
-			currentState.positions.canMove[`${playerId}--posX`],
-			currentState.positions.canMove[`${playerId}--posY`]
-		);
+		entities.stageEntities[playerId].position.set(playerX, playerY);
 
 		// scanning
 		if (
