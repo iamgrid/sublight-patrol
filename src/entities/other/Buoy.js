@@ -4,20 +4,30 @@ export default class Buoy extends PIXI.Container {
 	constructor(props) {
 		super();
 
-		this.labelText = `[ ${props.coordX}, ${props.coordY} ]`;
+		this.entityStore = props.entityStore;
+		this.labelText = `[ ${props.coordX} , ${props.coordY} ]`;
 		this.sprites = {};
 
-		this.sprites['buoyBody'] = new PIXI.Graphics();
 		this.sprites['buoyLabel'] = new PIXI.Text(this.labelText, {
-			fontSize: 12,
-			fill: 0xffff00,
+			fontSize: 10,
+			fill: 0x00c0c0,
 			align: 'center',
 		});
 
-		this.lineStyle(0);
-		this.beginFill(0xcacaca, 1);
-		this.drawCircle(0, 0, 10);
-		this.endFill();
+		this.sprites['buoyLabel'].anchor.set(0.5);
+		this.sprites['buoyLabel'].position.y = 20;
+
+		this.sprites['buoyBody'] = new PIXI.Graphics();
+
+		this.sprites['buoyBody'].lineStyle(0);
+		this.sprites['buoyBody'].beginFill(0x606060, 1);
+		this.sprites['buoyBody'].drawCircle(0, 0, 7);
+		this.sprites['buoyBody'].endFill();
+
+		this.sprites['buoyBody'].lineStyle(0);
+		this.sprites['buoyBody'].beginFill(0x00c0c0, 1);
+		this.sprites['buoyBody'].drawCircle(0, 0, 3);
+		this.sprites['buoyBody'].endFill();
 
 		// this.sprites['containerBody'] = fromSpriteSheet.create(386, 3, 60, 60);
 

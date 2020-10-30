@@ -12,6 +12,7 @@ export * from '@pixi/loaders';
 export * from '@pixi/sprite';
 export * from '@pixi/app';
 export * from '@pixi/graphics';
+export * from '@pixi/text';
 // export * from '@pixi/sprite-tiling';
 
 // Renderer plugins

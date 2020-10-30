@@ -101,6 +101,7 @@ export function reticuleRelation(playerRelation) {
 
 export function moveTargetingReticule(newTarget, stageEntities) {
 	for (const p in stageEntities) {
+		if (stageEntities[p].entityStore === 'other') continue;
 		stageEntities[p].toggleTargetingReticule(false);
 	}
 
@@ -288,6 +289,9 @@ export const shields = {
 		const currentState = shields.handlers.state();
 		// console.log(shields.handlers.stageEntities);
 		for (const sEKey in shields.handlers.stageEntities) {
+			if (shields.handlers.stageEntities[sEKey].entityStore === 'other')
+				continue;
+
 			let storeEntity = getStoreEntity(sEKey, currentState);
 
 			if (!storeEntity) continue;
@@ -722,6 +726,36 @@ export const hud = {
 		).style.width = `${meterValue}px`;
 	},
 };
+
+export function spawnBuoys(entities, handlers) {
+	const density = 500;
+	for (
+		let x = c.playVolume.minX / density;
+		x <= c.playVolume.maxX / density;
+		x++
+	) {
+		for (
+			let y = c.playVolume.minY / density;
+			y <= c.playVolume.maxY / density;
+			y++
+		) {
+			const coordX = x * density;
+			const coordY = y * density;
+			entities.spawn(
+				handlers,
+				'buoy',
+				{
+					posX: coordX,
+					posY: coordY,
+				},
+				{
+					id: `${coordX}_${coordY}`,
+					contents: '-',
+				}
+			);
+		}
+	}
+}
 
 export function hello() {
 	let helloPadding = '\n';

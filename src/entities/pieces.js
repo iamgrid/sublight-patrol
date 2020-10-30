@@ -10,6 +10,7 @@ const pieces = {
 			length: null,
 			canMove: false,
 			hasShields: false,
+			isTargetable: false,
 		},
 		mutable: {
 			id: null,
@@ -25,6 +26,7 @@ const pieces = {
 			hasCannons: false,
 			maxSystemStrength: null,
 			canMove: true,
+			isTargetable: true,
 		},
 		mutable: {
 			isDisabled: false,
@@ -40,6 +42,7 @@ const pieces = {
 			typeShorthand: 'CNT',
 			model: '/other/GContainer',
 			hasHull: true,
+			isTargetable: true,
 			maxHullStrength: 75,
 			maxSystemStrength: 5,
 			width: 34,
@@ -51,6 +54,16 @@ const pieces = {
 			hullStrength: null,
 			systemStrength: null,
 		},
+	},
+
+	buoy: {
+		immutable: {
+			typeShorthand: 'BUO',
+			model: '/other/Buoy',
+			width: 10,
+			length: 10,
+		},
+		mutable: {},
 	},
 
 	hasHull: {

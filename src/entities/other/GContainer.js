@@ -10,8 +10,10 @@ import {
 } from '../../utils/helpers';
 
 export default class GContainer extends PIXI.Container {
-	constructor() {
+	constructor(props) {
 		super();
+
+		this.entityStore = props.entityStore;
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 		this.showDamageTint = showDamageTint.bind(this);

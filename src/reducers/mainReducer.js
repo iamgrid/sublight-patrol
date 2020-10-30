@@ -130,7 +130,7 @@ export default function mainReducer(state, action) {
 			newPosProps[`${playerId}--posX`] = newX;
 			newPosProps[`${playerId}--posY`] = newY;
 
-			console.log({ newX, newY });
+			// console.log({ newX, newY });
 
 			return {
 				...state,

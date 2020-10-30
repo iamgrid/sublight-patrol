@@ -9,6 +9,7 @@ import {
 	status,
 	hud,
 	moveTargetingReticule,
+	spawnBuoys,
 	hello,
 } from './utils/helpers';
 import initialGameState from './initialGameState';
@@ -109,6 +110,8 @@ export default class App extends PIXI.Application {
 		);
 
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
+
+		spawnBuoys(entities, this.handlers);
 
 		entities.spawn(
 			this.handlers,

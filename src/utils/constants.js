@@ -19,6 +19,12 @@ const c = {
 		width: 1200,
 		height: 450,
 	},
+	playVolume: {
+		minX: -1000,
+		maxX: 1500,
+		minY: -2500,
+		maxY: 3000,
+	},
 	zIndices: {
 		environmental: 0,
 		shots: 100000,

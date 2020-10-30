@@ -10,6 +10,7 @@ const entities = {
 
 	init() {
 		this.assembleType(['container']);
+		this.assembleType(['buoy']);
 		this.assembleType(['fenrir', 'ship']);
 		this.assembleType(['fenrir_dominator', 'fenrir', 'ship']);
 		this.assembleType(['valkyrie', 'ship']);
@@ -95,8 +96,13 @@ const entities = {
 		}
 
 		const newShip = { ...this.types[type].mutable, ...props };
-		newShip.store = storeIn;
+
 		newShip.__proto__ = this.types[type];
+
+		let doStoreIn = storeIn;
+		if (!newShip.immutable.isTargetable) doStoreIn = 'other';
+
+		newShip.store = doStoreIn;
 
 		if (newShip.id !== null) {
 			newShip.displayId = this.makeName(newShip.id);
@@ -119,10 +125,21 @@ const entities = {
 			return null;
 		}
 
-		const stageEntity = Reflect.construct(models[newShip.immutable.model], []);
+		let stageEntityProps = { entityStore: doStoreIn };
+		if (type === 'buoy') {
+			stageEntityProps.coordX = pos.posX;
+			stageEntityProps.coordY = pos.posY;
+		}
+
+		const stageEntity = Reflect.construct(models[newShip.immutable.model], [
+			stageEntityProps,
+		]);
 
 		stage.addChild(stageEntity);
-		stageEntity.reticuleRelation(newShip.playerRelation);
+
+		if (newShip.immutable.isTargetable)
+			stageEntity.reticuleRelation(newShip.playerRelation);
+
 		stageEntity.position.set(pos.posX, pos.posY);
 		stageEntity.zIndex = this.zIndexIterator;
 
@@ -130,7 +147,7 @@ const entities = {
 
 		dispatch({
 			type: c.actions.ADD_ENTITY,
-			storeIn: storeIn,
+			storeIn: doStoreIn,
 			newEntity: newShip,
 			positionStore: positionStore,
 			positionArray: positionArray,
