@@ -46,6 +46,7 @@ export default class App extends PIXI.Application {
 		this.init();
 
 		this.inSlipStream = false;
+		this.showingCoordWarning = false;
 
 		this.triggered1 = false;
 		this.triggered2 = false;
@@ -310,6 +311,28 @@ export default class App extends PIXI.Application {
 
 		const playerX = currentState.positions.canMove[`${playerId}--posX`];
 		const playerY = currentState.positions.canMove[`${playerId}--posY`];
+
+		// out of bounds warning
+		let showCoordWarning = false;
+
+		if (
+			playerX < c.playVolume.minX ||
+			playerX > c.playVolume.maxX ||
+			playerY < c.playVolume.minY ||
+			playerY > c.playVolume.maxY
+		) {
+			showCoordWarning = true;
+		}
+
+		if (showCoordWarning && !this.showingCoordWarning) {
+			this.showingCoordWarning = true;
+			alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+		}
+
+		if (!showCoordWarning && this.showingCoordWarning) {
+			this.showingCoordWarning = false;
+			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
+		}
 
 		// camera position
 		const cameraLTX = 0 - playerX + 100;

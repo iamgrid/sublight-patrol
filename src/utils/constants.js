@@ -20,8 +20,8 @@ const c = {
 		height: 450,
 	},
 	playVolume: {
-		minX: -1000,
-		maxX: 1500,
+		minX: -2500,
+		maxX: 3000,
 		minY: -2500,
 		maxY: 3000,
 	},
@@ -40,6 +40,7 @@ const c = {
 	],
 	alertsAndWarnings: {
 		warnings: {
+			leavingVolume: { m: 'You are beyond the edge of the play volume!' },
 			collision: { m: 'Collision imminent!' },
 			otherWarning: {
 				m: 'Other warning text!',

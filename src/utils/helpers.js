@@ -728,33 +728,30 @@ export const hud = {
 };
 
 export function spawnBuoys(entities, handlers) {
-	const density = 500;
-	for (
-		let x = c.playVolume.minX / density;
-		x <= c.playVolume.maxX / density;
-		x++
-	) {
-		for (
-			let y = c.playVolume.minY / density;
-			y <= c.playVolume.maxY / density;
-			y++
-		) {
-			const coordX = x * density;
-			const coordY = y * density;
-			entities.spawn(
-				handlers,
-				'buoy',
-				{
-					posX: coordX,
-					posY: coordY,
-				},
-				{
-					id: `${coordX}_${coordY}`,
-					contents: '-',
-				}
-			);
-		}
-	}
+	const buoys = [
+		{ x: 0, y: 0 },
+		{ x: c.playVolume.minX, y: 0 },
+		{ x: c.playVolume.maxX, y: 0 },
+		{ x: c.playVolume.minX, y: c.playVolume.minY },
+		{ x: c.playVolume.maxX, y: c.playVolume.minY },
+		{ x: c.playVolume.minX, y: c.playVolume.maxY },
+		{ x: c.playVolume.maxX, y: c.playVolume.maxY },
+	];
+
+	buoys.forEach(({ x, y }) => {
+		entities.spawn(
+			handlers,
+			'buoy',
+			{
+				posX: x,
+				posY: y,
+			},
+			{
+				id: `${x}_${y}`,
+				contents: '-',
+			}
+		);
+	});
 }
 
 export function hello() {

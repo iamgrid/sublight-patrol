@@ -8,7 +8,7 @@ export default class StarScapeLayer extends PIXI.Graphics {
 		this.noOfStars = props.noOfStars;
 		this.speedMultiplier = props.speedMultiplier;
 		this.starScapeToPlayerDivider = 50;
-		this.widthWTolerance = c.gameCanvas.width + 50;
+		this.widthWTolerance = c.gameCanvas.width + 100;
 		this.heightWTolerance = c.gameCanvas.height + 100;
 
 		this.lineStyle(0);
@@ -44,7 +44,7 @@ export default class StarScapeLayer extends PIXI.Graphics {
 			let newX =
 				(playerRelativeX / this.starScapeToPlayerDivider) *
 					this.speedMultiplier -
-				25;
+				50;
 			let newY =
 				(playerRelativeY / this.starScapeToPlayerDivider) *
 					this.speedMultiplier -

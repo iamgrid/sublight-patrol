@@ -143,7 +143,9 @@ export default function mainReducer(state, action) {
 		case c.actions.ADD_ENTITY: {
 			// position
 			const entityId = action.newEntity.id;
-			const positionStoreName = action.positionStore;
+			const storeIn = action.storeIn;
+			let positionStoreName = action.positionStore;
+			if (storeIn === 'other') positionStoreName = 'none';
 			const [posX, posY, latVelocity, longVelocity] = action.positionArray;
 			const newPosProps = {};
 			newPosProps[`${entityId}--posX`] = posX;
@@ -158,15 +160,17 @@ export default function mainReducer(state, action) {
 					canMove: { ...state.positions.canMove, ...newPosProps },
 					cantMove: state.positions.cantMove,
 				};
-			} else {
+			} else if (positionStoreName === 'cantMove') {
 				newPositionStore = {
 					canMove: state.positions.canMove,
 					cantMove: { ...state.positions.cantMove, ...newPosProps },
 				};
+			} else {
+				newPositionStore = state.positions;
 			}
 
 			// other props
-			const storeIn = action.storeIn;
+
 			switch (storeIn) {
 				case 'player':
 					return {
