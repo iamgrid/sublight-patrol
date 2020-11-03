@@ -86,9 +86,11 @@ export default class App extends PIXI.Application {
 
 		this.starScapeStage = new PIXI.Container();
 		this.mainStage = new PIXI.Container();
+		this.hudStage = new PIXI.Container();
 		this.mainStage.sortableChildren = true;
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
+		this.stage.addChild(this.hudStage);
 
 		this.handlers = [this.dispatch, this.mainStage];
 
@@ -226,7 +228,11 @@ export default class App extends PIXI.Application {
 		const playerId = currentState.entities.player.id;
 
 		// hud updates
-		hud.update(currentState.game.targeting, currentState.entities);
+		hud.update(
+			currentState.game.targeting,
+			currentState.entities,
+			currentState.positions
+		);
 
 		const speed = 5 * delta;
 

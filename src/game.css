@@ -269,7 +269,6 @@
 	position: absolute;
 	z-index: 11;
 	display: flex;
-	justify-content: center;
 }
 
 .game__hud-proper {
@@ -278,6 +277,15 @@
 	overflow-y: hidden;
 	transition: height var(--hud-slide-time) var(--hud-slide-function)
 		var(--hud-fade-time);
+}
+
+.game__hud-coords {
+	width: 294px;
+	height: 56px;
+	text-align: center;
+	font-size: 10px;
+	padding-top: 24px;
+	opacity: 0.5;
 }
 
 .game__hud--visible .game__hud-proper {

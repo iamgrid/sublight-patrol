@@ -557,6 +557,7 @@ export const status = {
 };
 
 export const hud = {
+	currentPlayerCoords: '',
 	currentDisplay: {},
 	maximums: {},
 
@@ -569,7 +570,20 @@ export const hud = {
 		}
 	},
 
-	update(targeting, allEntities) {
+	update(targeting, allEntities, positions) {
+		// player coords
+		const playerId = allEntities.player.id;
+		const [playerX, playerY] = getPosition(playerId, positions);
+		const playerCoordsDisp = `${Math.trunc(playerX)} , ${Math.trunc(playerY)}`;
+
+		if (hud.currentPlayerCoords !== playerCoordsDisp) {
+			document.getElementById(
+				'game__hud-coords'
+			).innerHTML = `[ ${playerCoordsDisp} ]`;
+			hud.currentPlayerCoords = playerCoordsDisp;
+		}
+
+		// player / target state
 		let newDisplay = hud.assembleDisplayObject('player', allEntities.player);
 
 		let newTargetDisplay = {};
