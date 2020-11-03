@@ -7,32 +7,6 @@ export default function overlays() {
 		<div class="game__warnings" id="game__warnings">
 			<div class="game__warnings-proper" id="game__warnings-proper"></div>
 		</div>
-		<div class="game__pause" id="game__pause">
-			<div class="game__pause-text">[Paused]</div>
-		</div>
-		<div class="game__status game__status--hidden" id="game__status">
-			<div class="game__status-expand" id="game__status-expand">
-				<svg
-					class="game__status-expand-chevron"
-					id="game__status-expand-chevron"
-					width="16"
-					height="10"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						class="game__status-expand-chevron-path"
-						d="M1 9L8 2L15 9"
-						stroke="white"
-						stroke-width="1.5"
-					/>
-				</svg>
-			</div>
-			<div
-				class="game__status-proper customScroll"
-				id="game__status-proper"
-			></div>
-		</div>
 		<div id="game__hud" class="game__hud">
 			<div class="game__hud-proper">
 				<div class="game__hud-coords-and-lives">
@@ -130,6 +104,32 @@ export default function overlays() {
 				</div>
 				<div class="game__hud-right-edge"></div>
 			</div>
+		</div>
+		<div class="game__pause" id="game__pause">
+			<div class="game__pause-text">[Paused]</div>
+		</div>
+		<div class="game__status game__status--hidden" id="game__status">
+			<div class="game__status-expand" id="game__status-expand">
+				<svg
+					class="game__status-expand-chevron"
+					id="game__status-expand-chevron"
+					width="16"
+					height="10"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						class="game__status-expand-chevron-path"
+						d="M1 9L8 2L15 9"
+						stroke="white"
+						stroke-width="1.5"
+					/>
+				</svg>
+			</div>
+			<div
+				class="game__status-proper customScroll"
+				id="game__status-proper"
+			></div>
 		</div>
 		`;
 }

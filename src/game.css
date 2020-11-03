@@ -267,7 +267,7 @@
 	left: 0;
 	right: 0;
 	position: absolute;
-	z-index: 11;
+	z-index: 5;
 	display: flex;
 }
 
@@ -412,7 +412,7 @@
 	width: 100px;
 	text-align: center;
 	position: absolute;
-	z-index: 101;
+	z-index: 7;
 	top: 0;
 	overflow: hidden;
 }
@@ -428,7 +428,7 @@
 	height: 1px;
 	margin-top: 4px;
 	position: absolute;
-	z-index: 100;
+	z-index: 6;
 	background-color: #909090;
 	top: 0;
 }
