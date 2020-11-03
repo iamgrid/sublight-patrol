@@ -35,7 +35,10 @@ export default function overlays() {
 		</div>
 		<div id="game__hud" class="game__hud">
 			<div class="game__hud-proper">
-				<div class="game__hud-coords" id="game__hud-coords"></div>
+				<div class="game__hud-coords-and-lives">
+					<div class="game__hud-lives" id="game__hud-lives"></div>
+					<div class="game__hud-coords" id="game__hud-coords"></div>
+				</div>
 				<div class="game__hud-left-edge"></div>
 				<div class="game__hud-player-desc">
 					<div

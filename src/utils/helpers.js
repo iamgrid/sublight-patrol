@@ -558,6 +558,8 @@ export const status = {
 
 export const hud = {
 	currentPlayerCoords: '',
+	currentLives: 0,
+	currentShots: 0,
 	currentDisplay: {},
 	maximums: {},
 
@@ -570,7 +572,24 @@ export const hud = {
 		}
 	},
 
-	update(targeting, allEntities, positions) {
+	update(targeting, lives, allEntities, positions) {
+		// player lives
+		const heartEmoji = '&#10084;';
+		if (lives !== hud.currentLives) {
+			let newStr = [];
+			for (let i = 0; i < c.maxLives; i++) {
+				let add = `<span class='game__hud-lives-life--spent'>${heartEmoji}</span>`;
+				if (lives > i) {
+					add = `<span class='game__hud-lives-life--available'>${heartEmoji}</span>`;
+				}
+				newStr.push(add);
+			}
+
+			document.getElementById('game__hud-lives').innerHTML = newStr.join('');
+
+			hud.currentLives = lives;
+		}
+
 		// player coords
 		const playerId = allEntities.player.id;
 		const [playerX, playerY] = getPosition(playerId, positions);

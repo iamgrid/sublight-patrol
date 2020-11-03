@@ -2,6 +2,7 @@ const initialGameState = {
 	game: {
 		targeting: null,
 		targetHasBeenScanned: false,
+		lives: 2,
 		cameraLTX: null,
 		cameraLTY: null,
 	},

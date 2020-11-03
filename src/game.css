@@ -279,18 +279,47 @@
 		var(--hud-fade-time);
 }
 
-.game__hud-coords {
-	width: 294px;
-	height: 56px;
-	text-align: center;
-	font-size: 10px;
-	padding-top: 24px;
-	opacity: 0.5;
-}
-
 .game__hud--visible .game__hud-proper {
 	height: 56px;
 	transition: height var(--hud-slide-time) var(--hud-slide-function);
+}
+
+.game__hud-coords-and-lives {
+	width: 294px;
+	height: 56px;
+	text-align: center;
+	line-height: 12px;
+	opacity: 0;
+	transform: translateY(-56px);
+	transition: all var(--hud-slide-time) var(--hud-slide-function)
+		var(--hud-fade-time);
+}
+
+.game__hud--visible .game__hud-coords-and-lives {
+	transform: translateY(0px);
+	opacity: 1;
+	transition: all var(--hud-slide-time) var(--hud-slide-function);
+}
+
+.game__hud-lives {
+	font-size: 12px;
+	padding-top: 12px;
+}
+
+.game__hud-lives-life--spent {
+	color: #fff;
+	opacity: 0.3;
+}
+
+.game__hud-lives-life--available {
+	/* color: #ff5353; */
+	color: #fff;
+}
+
+.game__hud-coords {
+	font-size: 10px;
+	padding-top: 8px;
+	opacity: 0.7;
 }
 
 .game__hud-left-edge {

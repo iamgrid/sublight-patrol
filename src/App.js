@@ -230,6 +230,7 @@ export default class App extends PIXI.Application {
 		// hud updates
 		hud.update(
 			currentState.game.targeting,
+			currentState.game.lives,
 			currentState.entities,
 			currentState.positions
 		);
@@ -422,6 +423,7 @@ export default class App extends PIXI.Application {
 			status.add('aqua', 'Aqua test. #5', this.gameTime);
 			status.add('yellow', 'Yellow test. #6', this.gameTime);
 			// console.log(currentState);
+			// hud.toggle(false);
 			this.triggered4 = true;
 		}
 	}

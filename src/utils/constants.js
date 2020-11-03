@@ -15,6 +15,7 @@ const c = {
 		DAMAGE: 'DAMAGE',
 		SHIELD_REGEN: 'SHIELD_REGEN',
 	},
+	maxLives: 5,
 	gameCanvas: {
 		width: 1200,
 		height: 450,
