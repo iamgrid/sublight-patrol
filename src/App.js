@@ -207,12 +207,9 @@ export default class App extends PIXI.Application {
 
 	play(delta) {
 		// damage animations
-		for (const eK in entities.stageEntities) {
-			try {
-				entities.stageEntities[eK].onUpdate(delta);
-			} catch (error) {
-				// console.error(error);
-			}
+		for (const sEK in entities.stageEntities) {
+			if (entities.stageEntities[sEK].hasUpdateMethod)
+				entities.stageEntities[sEK].onUpdate(delta);
 		}
 		// console.log(this.shot._destroyed);
 		for (const shotK in shots.stageShots) {

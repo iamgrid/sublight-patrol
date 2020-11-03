@@ -732,6 +732,8 @@ export function spawnBuoys(entities, handlers) {
 		{ x: 0, y: 0 },
 		{ x: c.playVolume.minX, y: 0 },
 		{ x: c.playVolume.maxX, y: 0 },
+		{ x: 0, y: c.playVolume.minY },
+		{ x: 0, y: c.playVolume.maxY },
 		{ x: c.playVolume.minX, y: c.playVolume.minY },
 		{ x: c.playVolume.maxX, y: c.playVolume.minY },
 		{ x: c.playVolume.minX, y: c.playVolume.maxY },

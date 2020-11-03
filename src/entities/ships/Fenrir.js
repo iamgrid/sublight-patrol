@@ -12,6 +12,7 @@ import {
 export default class Fenrir extends PIXI.Container {
 	constructor(props) {
 		super();
+		this.hasUpdateMethod = true;
 
 		this.entityStore = props.entityStore;
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);

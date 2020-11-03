@@ -3,6 +3,7 @@ import * as PIXI from '../pixi';
 export default class Shot extends PIXI.Graphics {
 	constructor(props) {
 		super();
+		this.hasUpdateMethod = true;
 
 		this.lineStyle(0);
 

@@ -5,9 +5,10 @@ import { randomNumber } from '../utils/formulas';
 export default class StarScapeLayer extends PIXI.Graphics {
 	constructor(props) {
 		super();
+		this.hasUpdateMethod = true;
 		this.noOfStars = props.noOfStars;
 		this.speedMultiplier = props.speedMultiplier;
-		this.starScapeToPlayerDivider = 50;
+		this.starScapeToPlayerDivider = 200;
 		this.widthWTolerance = c.gameCanvas.width + 100;
 		this.heightWTolerance = c.gameCanvas.height + 100;
 

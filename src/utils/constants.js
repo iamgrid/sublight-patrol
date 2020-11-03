@@ -1,7 +1,7 @@
 const c = {
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
 	debug: {
-		verboseReducer: false,
+		verboseReducers: false,
 	},
 	actions: {
 		MOVE_PLAYER: 'MOVE_PLAYER',
@@ -40,7 +40,7 @@ const c = {
 	],
 	alertsAndWarnings: {
 		warnings: {
-			leavingVolume: { m: 'You are beyond the edge of the play volume!' },
+			leavingVolume: { m: 'You are close to the edge of the playable volume!' },
 			collision: { m: 'Collision imminent!' },
 			otherWarning: {
 				m: 'Other warning text!',
