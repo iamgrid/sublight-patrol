@@ -7,29 +7,32 @@ export default class HUD extends PIXI.Container {
 		this.maxShots = 0;
 		this.shotsPerLine = 8;
 		this.hShotSpacing = 16;
-		this.vShotSpacing = 8;
+		this.vShotSpacing = 6;
 		this.currentLine = 1;
 		this.needsLastLineShift = false;
 		this.tints = {
-			available: 0x00ff00,
-			spent: 0x00a000,
-			onCooldown: 0xff7070,
+			available: 0xffffff,
+			spent: 0x606060,
+			onCooldown: 0xff0000,
 		};
 		this.cooldownColor = 0x000000;
 		this.cooldownTriggered = false;
-		// 0x00ff00
 
 		this.sprites = {};
 		this.startX = 1015;
 		this.startY = 12;
-		this.currentX = this.startX;
-		this.currentY = this.startY;
-
-		// free hud space: 279 * 49
+		this.currentX = 0;
+		this.currentY = 0;
 	}
+
 	init(maxShots) {
 		this.maxShots = maxShots;
 		if (maxShots % this.shotsPerLine !== 0) this.needsLastLineShift = true;
+		if (Math.ceil(maxShots / this.shotsPerLine) === 4) this.startY = 14; // Valkyrie
+		if (Math.ceil(maxShots / this.shotsPerLine) === 3) this.startY = 18; // Fenrir
+
+		this.currentX = this.startX;
+		this.currentY = this.startY;
 
 		for (let i = 0; i < this.maxShots; i++) {
 			const spriteId = `sr_${i}`;
@@ -37,7 +40,7 @@ export default class HUD extends PIXI.Container {
 
 			this.sprites[spriteId].lineStyle(0);
 			this.sprites[spriteId].beginFill(0xffffff);
-			this.sprites[spriteId].drawRect(this.currentX, this.currentY, 2, 2);
+			this.sprites[spriteId].drawRect(this.currentX, this.currentY, 6, 1);
 			this.sprites[spriteId].endFill();
 
 			this.sprites[spriteId].tint = this.tints.available;
@@ -54,7 +57,7 @@ export default class HUD extends PIXI.Container {
 					this.currentLine === Math.ceil(this.maxShots / this.shotsPerLine)
 				) {
 					const shiftBy =
-						(this.maxShots % this.shotsPerLine) * this.hShotSpacing;
+						((this.maxShots % this.shotsPerLine) * this.hShotSpacing) / 2;
 					this.currentX = this.startX + shiftBy;
 				}
 			}
@@ -62,6 +65,7 @@ export default class HUD extends PIXI.Container {
 			this.addChild(this.sprites[spriteId]);
 		}
 	}
+
 	update(remainingShots, onCooldown = false) {
 		if (!onCooldown) this.cooldownTriggered = false;
 
@@ -74,9 +78,8 @@ export default class HUD extends PIXI.Container {
 					this.cooldownColor = this.tints.onCooldown;
 					this.cooldownTriggered = true;
 				} else {
-					this.cooldownColor = fadeHexColor(this.cooldownColor, 0x8);
+					this.cooldownColor = fadeHexColor(this.cooldownColor, 0x1, 'to gray');
 				}
-				console.log(newColor.toString(16));
 				newColor = this.cooldownColor;
 			} else {
 				if (i > remainingShots) {

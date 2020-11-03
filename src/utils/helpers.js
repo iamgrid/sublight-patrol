@@ -558,6 +558,8 @@ export const status = {
 
 export const hud = {
 	handlers: { pixiHUD: null, cannonStates: null }, // gets its values in App.js
+	pixiHUDInitiated: false,
+	cannonCooldownStraggler: 0,
 	currentPlayerCoords: '',
 	currentLives: 0,
 	currentShots: 0,
@@ -605,11 +607,25 @@ export const hud = {
 
 		// player shots
 		if (hud.handlers.cannonStates[playerId] !== undefined) {
+			// will start showing when the player starts using her cannons
+			if (!hud.pixiHUDInitiated) {
+				hud.handlers.pixiHUD.init(hud.handlers.cannonStates[playerId].maxShots);
+				hud.pixiHUDInitiated = true;
+			}
+
 			const playerShots = hud.handlers.cannonStates[playerId].remainingShots;
 			const onCooldown = hud.handlers.cannonStates[playerId].onCooldown;
 
-			if (onCooldown || playerShots !== hud.currentShots) {
-				hud.handlers.pixiHUD.update(playerShots, onCooldown);
+			if (onCooldown) {
+				hud.cannonCooldownStraggler = hud.cannonCooldownStraggler + 1;
+				if (hud.cannonCooldownStraggler > 3) {
+					hud.handlers.pixiHUD.update(playerShots, true);
+					hud.cannonCooldownStraggler = 0;
+				}
+			}
+
+			if (playerShots !== hud.currentShots) {
+				hud.handlers.pixiHUD.update(playerShots, false);
 				hud.currentShots = playerShots;
 			}
 		}

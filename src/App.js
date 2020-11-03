@@ -48,7 +48,6 @@ export default class App extends PIXI.Application {
 
 		this.inSlipStream = false;
 		this.showingCoordWarning = false;
-		this.pixiHUDInitiated = false;
 
 		this.triggered1 = false;
 		this.triggered2 = false;
@@ -127,7 +126,7 @@ export default class App extends PIXI.Application {
 
 		entities.spawn(
 			this.handlers,
-			'valkyrie',
+			'fenrir',
 			{
 				posX: 100,
 				posY: 225,
@@ -237,11 +236,6 @@ export default class App extends PIXI.Application {
 		const playerId = currentState.entities.player.id;
 
 		// hud updates
-		if (!this.pixiHUDInitiated) {
-			this.pixiHUD.init(currentState.entities.player.immutable.cannonShots);
-			this.pixiHUDInitiated = true;
-		}
-
 		hud.update(
 			currentState.game.targeting,
 			currentState.game.lives,
