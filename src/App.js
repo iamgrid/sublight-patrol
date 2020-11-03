@@ -20,6 +20,7 @@ import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
 import shots from './shots';
 import story from './story/story';
+import HUD from './components/HUD';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -47,6 +48,7 @@ export default class App extends PIXI.Application {
 
 		this.inSlipStream = false;
 		this.showingCoordWarning = false;
+		this.pixiHUDInitiated = false;
 
 		this.triggered1 = false;
 		this.triggered2 = false;
@@ -87,6 +89,8 @@ export default class App extends PIXI.Application {
 		this.starScapeStage = new PIXI.Container();
 		this.mainStage = new PIXI.Container();
 		this.hudStage = new PIXI.Container();
+		this.pixiHUD = new HUD();
+		this.hudStage.addChild(this.pixiHUD);
 		this.mainStage.sortableChildren = true;
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
@@ -106,6 +110,11 @@ export default class App extends PIXI.Application {
 			state: this.gameState,
 			paused: this.paused,
 			stageEntities: entities.stageEntities,
+		};
+
+		hud.handlers = {
+			pixiHUD: this.pixiHUD,
+			cannonStates: shots.cannonStates,
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
@@ -228,6 +237,11 @@ export default class App extends PIXI.Application {
 		const playerId = currentState.entities.player.id;
 
 		// hud updates
+		if (!this.pixiHUDInitiated) {
+			this.pixiHUD.init(currentState.entities.player.immutable.cannonShots);
+			this.pixiHUDInitiated = true;
+		}
+
 		hud.update(
 			currentState.game.targeting,
 			currentState.game.lives,

@@ -557,6 +557,7 @@ export const status = {
 };
 
 export const hud = {
+	handlers: { pixiHUD: null, cannonStates: null }, // gets its values in App.js
 	currentPlayerCoords: '',
 	currentLives: 0,
 	currentShots: 0,
@@ -600,6 +601,17 @@ export const hud = {
 				'game__hud-coords'
 			).innerHTML = `[ ${playerCoordsDisp} ]`;
 			hud.currentPlayerCoords = playerCoordsDisp;
+		}
+
+		// player shots
+		if (hud.handlers.cannonStates[playerId] !== undefined) {
+			const playerShots = hud.handlers.cannonStates[playerId].remainingShots;
+			const onCooldown = hud.handlers.cannonStates[playerId].onCooldown;
+
+			if (onCooldown || playerShots !== hud.currentShots) {
+				hud.handlers.pixiHUD.update(playerShots, onCooldown);
+				hud.currentShots = playerShots;
+			}
 		}
 
 		// player / target state
