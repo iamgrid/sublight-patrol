@@ -22,7 +22,6 @@ export default class Shot extends PIXI.Graphics {
 		this.sightLine = props.posY;
 		this.direction = props.direction;
 		this.callbackFn = props.callbackFn;
-		// this.handlers = props.handlers;
 	}
 
 	onUpdate(delta) {

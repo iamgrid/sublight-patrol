@@ -1,6 +1,7 @@
 import * as PIXI from '../pixi';
 import c from './constants';
-import { fadeHexColor } from './formulas';
+import { fadeHexColor, calculateDistance, calculateAngle } from './formulas';
+import Pointer from '../components/Pointer';
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`]) {
@@ -565,6 +566,12 @@ export const hud = {
 	currentShots: 0,
 	currentDisplay: {},
 	maximums: {},
+	stagePointers: {},
+	currentPointerRelations: {},
+	currentCameraCoords: [],
+	currentPointerCoords: {},
+	pointerZIndexIterator: 0,
+	largestRelevantDistance: 0,
 
 	toggle(show = false) {
 		const hudDiv = document.getElementById('game__hud');
@@ -593,9 +600,12 @@ export const hud = {
 			hud.currentLives = lives;
 		}
 
-		// player coords
+		// off-screen entity pointers
 		const playerId = allEntities.player.id;
 		const [playerX, playerY] = getPosition(playerId, positions);
+		hud.updatePointers(targeting, allEntities, positions, playerX, playerY);
+
+		// player coords
 		const playerCoordsDisp = `${Math.trunc(playerX)} , ${Math.trunc(playerY)}`;
 
 		if (hud.currentPlayerCoords !== playerCoordsDisp) {
@@ -785,6 +795,99 @@ export const hud = {
 		document.getElementById(
 			`game__hud-meter-${entity}-${meter}-bar`
 		).style.width = `${meterValue}px`;
+	},
+
+	updatePointers(targeting, allEntities, positions, playerX, playerY) {
+		const tints = {
+			friendly: 0x37d837,
+			neutral: 0xe6b632,
+			hostile: 0xe63232,
+		};
+
+		if (hud.largestRelevantDistance === 0)
+			hud.largestRelevantDistance =
+				Math.abs(c.playVolume.minX) + c.playVolume.maxX;
+
+		const cameraTLX = Math.round(playerX - 100);
+		const cameraTLY = Math.round(playerY - 225);
+		const cameraBRX = cameraTLX + c.gameCanvas.width;
+		const cameraBRY = cameraTLY + c.gameCanvas.height;
+		const cameraCX = cameraTLX + c.gameCanvas.width / 2;
+		const cameraCY = cameraTLY + c.gameCanvas.height / 2;
+
+		let cameraHasMoved = false;
+
+		if (
+			cameraCX !== hud.currentCameraCoords[0] ||
+			cameraCY !== hud.currentCameraCoords[1]
+		) {
+			cameraHasMoved = true;
+			hud.currentCameraCoords = [cameraCX, cameraCY];
+		}
+
+		allEntities.targetable.forEach((entity) => {
+			const entityId = entity.id;
+			const playerRelation = entity.playerRelation;
+			const [posX, posY] = getPosition(entityId, positions);
+
+			// if we see any new entities create a pointer for them
+			if (hud.stagePointers[entityId] === undefined) {
+				hud.stagePointers[entityId] = new Pointer();
+				hud.stagePointers[entityId].tint = tints[playerRelation];
+				hud.stagePointers[entityId].zIndex = hud.pointerZIndexIterator;
+				hud.stagePointers[entityId].position.set(600, 225);
+				hud.handlers.pixiHUD.addChild(hud.stagePointers[entityId]);
+
+				hud.currentPointerRelations[entityId] = playerRelation;
+				hud.currentPointerCoords[entityId] = [posX, posY];
+
+				// iterate zindex
+				hud.pointerZIndexIterator = hud.pointerZIndexIterator + 1;
+			}
+
+			const stagePointer = hud.stagePointers[entityId];
+
+			// hide pointers for entities currently on the screen
+			const withinX = posX >= cameraTLX && posX <= cameraBRX;
+			const withinY = posY >= cameraTLY && posY <= cameraBRY;
+			if ((withinX && withinY) || playerRelation === 'neutral') {
+				stagePointer.alpha = 0;
+				return;
+			}
+
+			let entityHasMoved = false;
+			if (
+				posX !== hud.currentPointerCoords[entityId][0] ||
+				posY !== hud.currentPointerCoords[entityId][1]
+			) {
+				entityHasMoved = true;
+			}
+
+			if (cameraHasMoved || entityHasMoved) {
+				// change pointer alpha based on entity distance
+				const entityDistance = calculateDistance(
+					cameraCX,
+					cameraCY,
+					posX,
+					posY
+				);
+				stagePointer.alpha = Math.min(
+					0.3,
+					1 - entityDistance / hud.largestRelevantDistance
+				);
+
+				// change pointer rotation
+				stagePointer.rotation = calculateAngle(cameraCX, cameraCY, posX, posY);
+				console.log(stagePointer.rotation);
+
+				// reposition the pointer
+			}
+			// change pointer tint on relation change
+			if (hud.currentPointerRelations[entityId] !== playerRelation) {
+				stagePointer.tint = tints[playerRelation];
+				hud.currentPointerRelations[entityId] = playerRelation;
+			}
+		});
 	},
 };
 

@@ -23,6 +23,7 @@ export default class HUD extends PIXI.Container {
 		this.startY = 12;
 		this.currentX = 0;
 		this.currentY = 0;
+		this.zIndex = 10000;
 	}
 
 	init(maxShots) {
@@ -44,6 +45,7 @@ export default class HUD extends PIXI.Container {
 			this.sprites[spriteId].endFill();
 
 			this.sprites[spriteId].tint = this.tints.available;
+			this.sprites[spriteId].zIndex = this.zIndex;
 
 			// positioning the next shot readout
 			this.currentX = this.currentX + this.hShotSpacing;
@@ -63,6 +65,7 @@ export default class HUD extends PIXI.Container {
 			}
 
 			this.addChild(this.sprites[spriteId]);
+			this.zIndex = this.zIndex + 1;
 		}
 	}
 

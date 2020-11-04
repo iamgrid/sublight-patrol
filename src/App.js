@@ -90,6 +90,7 @@ export default class App extends PIXI.Application {
 		this.hudStage = new PIXI.Container();
 		this.pixiHUD = new HUD();
 		this.hudStage.addChild(this.pixiHUD);
+
 		this.mainStage.sortableChildren = true;
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
@@ -202,6 +203,58 @@ export default class App extends PIXI.Application {
 			}
 		);
 
+		entities.spawn(
+			this.handlers,
+			'container',
+			{
+				posX: 1800,
+				posY: 350,
+			},
+			{
+				id: 'b2508-013',
+				contents: 'Medicine',
+			}
+		);
+
+		entities.spawn(
+			this.handlers,
+			'container',
+			{
+				posX: 900,
+				posY: -200,
+			},
+			{
+				id: 'b2508-014',
+				contents: 'Smithing tools',
+			}
+		);
+
+		entities.spawn(
+			this.handlers,
+			'container',
+			{
+				posX: 900,
+				posY: 1200,
+			},
+			{
+				id: 'b2508-015',
+				contents: 'Farming equipment',
+			}
+		);
+
+		entities.spawn(
+			this.handlers,
+			'container',
+			{
+				posX: -600,
+				posY: 350,
+			},
+			{
+				id: 'b2508-016',
+				contents: 'Fertilizer',
+			}
+		);
+
 		console.log(this.gameState());
 
 		this.pixiState = this.play;
@@ -216,12 +269,13 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
-		// damage animations
+		// stage entity updates
 		for (const sEK in entities.stageEntities) {
 			if (entities.stageEntities[sEK].hasUpdateMethod)
 				entities.stageEntities[sEK].onUpdate(delta);
 		}
-		// console.log(this.shot._destroyed);
+
+		// shot updates
 		for (const shotK in shots.stageShots) {
 			if (!shots.stageShots[shotK].hasBeenDestroyed)
 				shots.stageShots[shotK].onUpdate(delta);
