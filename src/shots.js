@@ -5,7 +5,14 @@ import Shot from './components/Shot';
 
 const shots = {
 	stageShots: {},
-	handlers: { dispatch: null, state: null, stage: null, stageEntities: null }, // gets its values in App.js
+	handlers: {
+		dispatch: null,
+		state: null,
+		stage: null,
+		stageEntities: null,
+		pixiHUD: null,
+		stagePointers: null,
+	}, // gets its values in App.js
 	cannonStates: {},
 	shootingIntervals: {},
 	cannonCooldowns: {},
@@ -375,6 +382,11 @@ const shots = {
 					stageEntity.hasBeenDestroyed = true;
 					stageEntity.destroy();
 					delete shots.handlers.stageEntities[entityId];
+
+					const stagePointer = shots.handlers.stagePointers[entityId];
+					shots.handlers.pixiHUD.removeChild(stagePointer);
+					stagePointer.destroy();
+					delete shots.handlers.stagePointers[entityId];
 				});
 
 				shots.handlers.dispatch({

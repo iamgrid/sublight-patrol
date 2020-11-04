@@ -7,11 +7,11 @@ import {
 	dialog,
 	alertsAndWarnings,
 	status,
-	hud,
 	moveTargetingReticule,
 	spawnBuoys,
 	hello,
 } from './utils/helpers';
+import hud from './hud';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
@@ -103,6 +103,8 @@ export default class App extends PIXI.Application {
 			state: this.gameState,
 			stage: this.mainStage,
 			stageEntities: entities.stageEntities,
+			pixiHUD: this.pixiHUD,
+			stagePointers: hud.stagePointers,
 		};
 
 		shields.handlers = {
