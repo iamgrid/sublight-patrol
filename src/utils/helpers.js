@@ -567,12 +567,13 @@ export const hud = {
 	currentDisplay: {},
 	maximums: {},
 	stagePointers: {},
-	currentPointerRelations: {},
+	currentPointerTints: {},
 	currentCameraCoords: [],
 	currentPointerCoords: {},
 	pointerZIndexIterator: 0,
 	largestRelevantDistance: 0,
 	edgeAngles: null,
+	targetBlinker: 0,
 
 	toggle(show = false) {
 		const hudDiv = document.getElementById('game__hud');
@@ -800,6 +801,7 @@ export const hud = {
 
 	updatePointers(targeting, allEntities, positions, playerX, playerY) {
 		const tints = {
+			targeted: 0xffffff,
 			friendly: 0x37d837,
 			neutral: 0xe6b632,
 			hostile: 0xe63232,
@@ -823,8 +825,6 @@ export const hud = {
 				lb: calculateAngle(cameraCX, cameraCY, cameraTLX, cameraBRY),
 				lt: calculateAngle(cameraCX, cameraCY, cameraTLX, cameraTLY),
 			};
-
-			console.log(hud.edgeAngles);
 		}
 
 		let cameraHasMoved = false;
@@ -850,7 +850,9 @@ export const hud = {
 				hud.stagePointers[entityId].position.set(600, 225);
 				hud.handlers.pixiHUD.addChild(hud.stagePointers[entityId]);
 
-				hud.currentPointerRelations[entityId] = playerRelation;
+				let pt = tints[playerRelation];
+				if (targeting === entityId) pt = tints.targeted;
+				hud.currentPointerTints[entityId] = pt;
 				hud.currentPointerCoords[entityId] = [posX, posY];
 
 				// iterate zindex
@@ -860,12 +862,11 @@ export const hud = {
 			const stagePointer = hud.stagePointers[entityId];
 
 			// hide pointers for entities currently on the screen
-			const withinX = posX >= cameraTLX && posX <= cameraBRX;
-			const withinY = posY >= cameraTLY && posY <= cameraBRY;
 			if (
-				(withinX && withinY) ||
-				playerRelation === 'neutral' ||
-				playerRelation === 'friendly'
+				posX >= cameraTLX &&
+				posX <= cameraBRX &&
+				posY >= cameraTLY &&
+				posY <= cameraBRY
 			) {
 				stagePointer.alpha = 0;
 				return;
@@ -880,63 +881,81 @@ export const hud = {
 			}
 
 			if (cameraHasMoved || entityHasMoved) {
-				// change pointer alpha based on entity distance
 				const entityDistance = calculateDistance(
 					cameraCX,
 					cameraCY,
 					posX,
 					posY
 				);
-				stagePointer.alpha = Math.min(
+
+				// change pointer alpha based on entity distance
+				stagePointer.alpha = Math.max(
 					0.3,
-					1 - entityDistance / hud.largestRelevantDistance
+					(1 - entityDistance / hud.largestRelevantDistance) / 1.2
 				);
 
-				// change pointer rotation
 				const pointerAngle = calculateAngle(cameraCX, cameraCY, posX, posY);
-				console.log(pointerAngle);
+
+				// change pointer rotation
 				stagePointer.rotation = pointerAngle;
 
 				// reposition the pointer
-				let newPointerX, newPointerY;
-				newPointerX = c.gameCanvas.width / 2;
-				newPointerY = c.gameCanvas.height / 2;
-
+				let newPointerX, newPointerY, radius;
 				if (
 					pointerAngle > hud.edgeAngles.lt &&
 					pointerAngle < hud.edgeAngles.rt
 				) {
 					// top edge of the screen
 					newPointerY = 50;
-					// x?
+					radius = c.gameCanvas.height / 2;
+					newPointerX =
+						Math.round(Math.sin(pointerAngle) * radius) +
+						c.gameCanvas.width / 2;
 				} else if (
 					pointerAngle <= hud.edgeAngles.lt &&
 					pointerAngle > hud.edgeAngles.lb
 				) {
 					// left edge of the screen
 					newPointerX = 0;
-					// y?
+					radius = c.gameCanvas.width / 2;
+					newPointerY =
+						c.gameCanvas.height / 2 -
+						Math.round(Math.cos(pointerAngle) * radius);
 				} else if (
 					pointerAngle <= hud.edgeAngles.lb &&
 					pointerAngle > hud.edgeAngles.rb
 				) {
 					// bottom edge of the screen
 					newPointerY = c.gameCanvas.height;
-					// x?
+					radius = c.gameCanvas.height / 2;
+					newPointerX =
+						Math.round(Math.sin(pointerAngle) * radius) +
+						c.gameCanvas.width / 2;
 				} else {
 					// right edge of the screen
 					newPointerX = c.gameCanvas.width;
-					// y?
+					radius = c.gameCanvas.width / 2;
+					newPointerY =
+						c.gameCanvas.height / 2 -
+						Math.round(Math.cos(pointerAngle) * radius);
 				}
 
 				stagePointer.position.set(newPointerX, newPointerY);
 			}
-			// change pointer tint on relation change
-			if (hud.currentPointerRelations[entityId] !== playerRelation) {
-				stagePointer.tint = tints[playerRelation];
-				hud.currentPointerRelations[entityId] = playerRelation;
+
+			// change pointer tint
+			let newPointerTint = tints[playerRelation];
+			if (entityId === targeting && hud.targetBlinker > 15)
+				newPointerTint = tints.targeted;
+
+			if (newPointerTint !== hud.currentPointerTints[entityId]) {
+				stagePointer.tint = newPointerTint;
+				hud.currentPointerTints[entityId] = newPointerTint;
 			}
 		});
+
+		hud.targetBlinker = hud.targetBlinker + 1;
+		if (hud.targetBlinker >= 30) hud.targetBlinker = 0;
 	},
 };
 
