@@ -572,6 +572,7 @@ export const hud = {
 	currentPointerCoords: {},
 	pointerZIndexIterator: 0,
 	largestRelevantDistance: 0,
+	edgeAngles: null,
 
 	toggle(show = false) {
 		const hudDiv = document.getElementById('game__hud');
@@ -815,6 +816,17 @@ export const hud = {
 		const cameraCX = cameraTLX + c.gameCanvas.width / 2;
 		const cameraCY = cameraTLY + c.gameCanvas.height / 2;
 
+		if (hud.edgeAngles === null) {
+			hud.edgeAngles = {
+				rt: calculateAngle(cameraCX, cameraCY, cameraBRX, cameraTLY),
+				rb: calculateAngle(cameraCX, cameraCY, cameraBRX, cameraBRY),
+				lb: calculateAngle(cameraCX, cameraCY, cameraTLX, cameraBRY),
+				lt: calculateAngle(cameraCX, cameraCY, cameraTLX, cameraTLY),
+			};
+
+			console.log(hud.edgeAngles);
+		}
+
 		let cameraHasMoved = false;
 
 		if (
@@ -850,7 +862,11 @@ export const hud = {
 			// hide pointers for entities currently on the screen
 			const withinX = posX >= cameraTLX && posX <= cameraBRX;
 			const withinY = posY >= cameraTLY && posY <= cameraBRY;
-			if ((withinX && withinY) || playerRelation === 'neutral') {
+			if (
+				(withinX && withinY) ||
+				playerRelation === 'neutral' ||
+				playerRelation === 'friendly'
+			) {
 				stagePointer.alpha = 0;
 				return;
 			}
@@ -877,10 +893,43 @@ export const hud = {
 				);
 
 				// change pointer rotation
-				stagePointer.rotation = calculateAngle(cameraCX, cameraCY, posX, posY);
-				console.log(stagePointer.rotation);
+				const pointerAngle = calculateAngle(cameraCX, cameraCY, posX, posY);
+				console.log(pointerAngle);
+				stagePointer.rotation = pointerAngle;
 
 				// reposition the pointer
+				let newPointerX, newPointerY;
+				newPointerX = c.gameCanvas.width / 2;
+				newPointerY = c.gameCanvas.height / 2;
+
+				if (
+					pointerAngle > hud.edgeAngles.lt &&
+					pointerAngle < hud.edgeAngles.rt
+				) {
+					// top edge of the screen
+					newPointerY = 50;
+					// x?
+				} else if (
+					pointerAngle <= hud.edgeAngles.lt &&
+					pointerAngle > hud.edgeAngles.lb
+				) {
+					// left edge of the screen
+					newPointerX = 0;
+					// y?
+				} else if (
+					pointerAngle <= hud.edgeAngles.lb &&
+					pointerAngle > hud.edgeAngles.rb
+				) {
+					// bottom edge of the screen
+					newPointerY = c.gameCanvas.height;
+					// x?
+				} else {
+					// right edge of the screen
+					newPointerX = c.gameCanvas.width;
+					// y?
+				}
+
+				stagePointer.position.set(newPointerX, newPointerY);
 			}
 			// change pointer tint on relation change
 			if (hud.currentPointerRelations[entityId] !== playerRelation) {
