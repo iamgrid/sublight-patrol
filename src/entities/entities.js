@@ -97,6 +97,10 @@ const entities = {
 
 		const newShip = { ...this.types[type].mutable, ...props };
 
+		let facing = 1;
+		if (pos.facing !== undefined) facing = pos.facing;
+		newShip.facing = facing;
+
 		newShip.__proto__ = this.types[type];
 
 		let doStoreIn = storeIn;
@@ -125,7 +129,7 @@ const entities = {
 			return null;
 		}
 
-		let stageEntityProps = { entityStore: doStoreIn };
+		let stageEntityProps = { entityStore: doStoreIn, facing: facing };
 		if (type === 'buoy') {
 			stageEntityProps.coordX = pos.posX;
 			stageEntityProps.coordY = pos.posY;

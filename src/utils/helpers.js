@@ -119,6 +119,24 @@ export function showDamageTint(damagableSprites = []) {
 	}
 }
 
+export function flip(delta) {
+	if (this.currentRotation !== this.targetRotation) {
+		const frameRotation = 0.2 * delta;
+		if (this.targetRotation > this.currentRotation) {
+			this.currentRotation = Math.min(
+				this.targetRotation,
+				this.currentRotation + frameRotation
+			);
+		} else {
+			this.currentRotation = Math.max(
+				this.targetRotation,
+				this.currentRotation - frameRotation
+			);
+		}
+		this.rotation = this.currentRotation;
+	}
+}
+
 export function blowUp(callbackFn = null) {
 	// console.log(`blowing up`, this);
 	const timings = {

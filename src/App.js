@@ -152,6 +152,7 @@ export default class App extends PIXI.Application {
 				posY: 175,
 				latVelocity: 0,
 				longVelocity: 0,
+				facing: -1,
 			},
 			{
 				playerRelation: 'friendly',
@@ -437,6 +438,7 @@ export default class App extends PIXI.Application {
 			status.add('aqua', 'Aqua test. #1', this.gameTime);
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			hud.toggle(true);
+			entities.stageEntities['alpha_1'].targetRotation = 0;
 			// shots.startShooting('alpha_1');
 			// this.removeShot('bla');
 			// entities.stageEntities.beta_1.blowUp();
@@ -455,6 +457,7 @@ export default class App extends PIXI.Application {
 			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 			status.add('green', 'Green test. #3', this.gameTime);
+			entities.stageEntities['alpha_1'].targetRotation = Math.PI;
 			this.dispatch({
 				type: c.actions.CHANGE_PLAYER_RELATION,
 				entityId: 'beta_1',

@@ -5,6 +5,7 @@ import {
 	toggleTargetingReticule,
 	reticuleRelation,
 	showDamageTint,
+	flip,
 	blowUp,
 	animateExplosion,
 } from '../../utils/helpers';
@@ -18,6 +19,7 @@ export default class Valkyrie extends PIXI.Container {
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 		this.showDamageTint = showDamageTint.bind(this);
+		this.flip = flip.bind(this);
 		this.blowUp = blowUp.bind(this);
 		this.animateExplosion = animateExplosion.bind(this);
 
@@ -38,15 +40,25 @@ export default class Valkyrie extends PIXI.Container {
 
 		this.currentTint = 0xffffff;
 		this.showingExplosion = false;
+		this.facing = props.facing;
+		this.currentRotation = 0;
+		this.targetRotation = 0;
 
 		this.addChild(this.sprites['shipBody']);
 		this.addChild(this.sprites['harness']);
 		for (const key in this.sprites['targetingReticule'])
 			this.addChild(this.sprites['targetingReticule'][key]);
+
+		if (this.facing === -1) {
+			this.targetRotation = Math.PI;
+			this.currentRotation = Math.PI;
+		}
+		this.rotation = this.currentRotation;
 	}
 
 	onUpdate(delta) {
 		this.showDamageTint(['shipBody', 'harness']);
 		this.animateExplosion(delta);
+		this.flip(delta);
 	}
 }
