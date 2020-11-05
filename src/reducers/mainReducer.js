@@ -140,6 +140,44 @@ export default function mainReducer(state, action) {
 				},
 			};
 		}
+		case c.actions.FLIP: {
+			const entityId = action.id;
+			let storeEntity;
+			if (action.store === 'player') {
+				storeEntity = state.entities.player;
+			} else {
+				storeEntity = state.entities[action.store].find(
+					(ent) => ent.id === entityId
+				);
+			}
+			const newFacing = -storeEntity.facing;
+			const modifiedEntity = assignWPrototype(storeEntity, {
+				facing: newFacing,
+			});
+
+			if (action.store === 'player') {
+				return {
+					...state,
+					entities: {
+						...state.entities,
+						player: modifiedEntity,
+					},
+				};
+			} else {
+				return {
+					...state,
+					entities: {
+						...state.entities,
+						[action.store]: [
+							...state.entities[action.store].filter(
+								(ent) => ent.id !== entityId
+							),
+							modifiedEntity,
+						],
+					},
+				};
+			}
+		}
 		case c.actions.ADD_ENTITY: {
 			// position
 			const entityId = action.newEntity.id;

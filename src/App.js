@@ -375,6 +375,19 @@ export default class App extends PIXI.Application {
 			});
 		}
 
+		if (Keyboard.isKeyPressed('KeyR')) {
+			if (currentState.entities.player.facing === 1) {
+				entities.stageEntities[playerId].targetRotation = Math.PI;
+			} else {
+				entities.stageEntities[playerId].targetRotation = 0;
+			}
+			this.dispatch({
+				type: c.actions.FLIP,
+				id: playerId,
+				store: 'player',
+			});
+		}
+
 		if (Keyboard.isKeyPressed('Escape')) {
 			this.togglePause();
 		}
@@ -438,6 +451,11 @@ export default class App extends PIXI.Application {
 			status.add('aqua', 'Aqua test. #1', this.gameTime);
 			status.add('yellow', 'Yellow test. #2', this.gameTime);
 			hud.toggle(true);
+			this.dispatch({
+				type: c.actions.FLIP,
+				id: 'alpha_1',
+				store: 'targetable',
+			});
 			entities.stageEntities['alpha_1'].targetRotation = 0;
 			// shots.startShooting('alpha_1');
 			// this.removeShot('bla');
@@ -457,6 +475,11 @@ export default class App extends PIXI.Application {
 			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 			status.add('green', 'Green test. #3', this.gameTime);
+			this.dispatch({
+				type: c.actions.FLIP,
+				id: 'alpha_1',
+				store: 'targetable',
+			});
 			entities.stageEntities['alpha_1'].targetRotation = Math.PI;
 			this.dispatch({
 				type: c.actions.CHANGE_PLAYER_RELATION,

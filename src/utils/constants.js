@@ -14,6 +14,7 @@ const c = {
 		SCAN: 'SCAN',
 		DAMAGE: 'DAMAGE',
 		SHIELD_REGEN: 'SHIELD_REGEN',
+		FLIP: 'FLIP',
 	},
 	maxLives: 5,
 	gameCanvas: {
