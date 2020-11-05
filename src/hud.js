@@ -4,7 +4,7 @@ import { calculateAngle, calculateDistance } from './utils/formulas';
 import Pointer from './components/Pointer';
 
 const hud = {
-	handlers: { pixiHUD: null, cannonStates: null }, // gets its values in App.js
+	handlers: { pixiHUD: null, cannonStates: null, camera: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,
@@ -278,14 +278,16 @@ const hud = {
 			hud.largestRelevantDistance =
 				Math.abs(c.playVolume.minX) + c.playVolume.maxX;
 
-		const cameraTLX = Math.round(playerX - 100);
+		const incomingShift = hud.handlers.camera.currentShift;
+		const cameraTLX = Math.round(playerX - Math.round(incomingShift));
+
 		const cameraTLY = Math.round(playerY - 225);
 		const cameraBRX = cameraTLX + c.gameCanvas.width;
 		const cameraBRY = cameraTLY + c.gameCanvas.height;
 		const cameraCX = cameraTLX + c.gameCanvas.width / 2;
 		const cameraCY = cameraTLY + c.gameCanvas.height / 2;
 
-		if (hud.edgeAngles === null) {
+		if (hud.edgeAngles === null || hud.handlers.camera.isFlipping) {
 			hud.edgeAngles = {
 				rt: calculateAngle(cameraCX, cameraCY, cameraBRX, cameraTLY),
 				rb: calculateAngle(cameraCX, cameraCY, cameraBRX, cameraBRY),

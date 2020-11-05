@@ -50,11 +50,11 @@ export default class App extends PIXI.Application {
 		this.inSlipStream = false;
 		this.showingCoordWarning = false;
 		this.camera = {
-			currentLTX: 0,
+			currentShift: 100,
 			isFlipping: false,
 			newFacing: 1,
 			flipTimer: 0,
-			maxFlipTimer: 60,
+			maxFlipTimer: 50,
 		};
 
 		this.triggered1 = false;
@@ -126,6 +126,7 @@ export default class App extends PIXI.Application {
 		hud.handlers = {
 			pixiHUD: this.pixiHUD,
 			cannonStates: shots.cannonStates,
+			camera: this.camera,
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
@@ -384,22 +385,24 @@ export default class App extends PIXI.Application {
 		}
 
 		if (Keyboard.isKeyPressed('KeyR')) {
-			if (currentState.entities.player.facing === 1) {
-				entities.stageEntities[playerId].targetRotation = Math.PI;
-				this.camera.newFacing = -1;
-			} else {
-				entities.stageEntities[playerId].targetRotation = 0;
-				this.camera.newFacing = 1;
+			if (!this.camera.isFlipping) {
+				if (currentState.entities.player.facing === 1) {
+					entities.stageEntities[playerId].targetRotation = Math.PI;
+					this.camera.newFacing = -1;
+				} else {
+					entities.stageEntities[playerId].targetRotation = 0;
+					this.camera.newFacing = 1;
+				}
+
+				this.dispatch({
+					type: c.actions.FLIP,
+					id: playerId,
+					store: 'player',
+				});
+
+				this.camera.isFlipping = true;
+				this.camera.flipTimer = this.camera.maxFlipTimer;
 			}
-
-			this.dispatch({
-				type: c.actions.FLIP,
-				id: playerId,
-				store: 'player',
-			});
-
-			this.camera.isFlipping = true;
-			this.camera.flipTimer = this.camera.maxFlipTimer;
 		}
 
 		if (Keyboard.isKeyPressed('Escape')) {
@@ -432,41 +435,43 @@ export default class App extends PIXI.Application {
 		}
 
 		// camera position
-		let cameraLTX;
+		let cameraTLX;
 		if (!this.camera.isFlipping) {
 			// static camera
-			cameraLTX = 0 - playerX + 100;
+			cameraTLX = 0 - playerX + 100;
 			if (currentState.entities.player.facing === -1) {
-				cameraLTX = 0 - playerX + (c.gameCanvas.width - 100);
+				cameraTLX = 0 - playerX + (c.gameCanvas.width - 100);
 			}
 		} else {
 			// animated camera
 			const cFMultiplier = this.camera.flipTimer / this.camera.maxFlipTimer;
 			const cFDistance = c.gameCanvas.width - 200;
+			const cFShift = (1 - cFMultiplier) * cFDistance;
+
 			if (this.camera.newFacing === -1) {
-				cameraLTX = 0 - playerX + 100 + (1 - cFMultiplier) * cFDistance;
+				this.camera.currentShift = 100 + cFShift;
+				cameraTLX = 0 - playerX + this.camera.currentShift;
 			} else {
-				cameraLTX =
-					0 -
-					playerX +
-					(c.gameCanvas.width - 100) -
-					(1 - cFMultiplier) * cFDistance;
+				this.camera.currentShift = c.gameCanvas.width - 100 - cFShift;
+				cameraTLX = 0 - playerX + this.camera.currentShift;
 			}
-			this.camera.currentLTX = cameraLTX;
 
 			this.camera.flipTimer = this.camera.flipTimer - 1;
-			if (this.camera.flipTimer <= 0) this.camera.isFlipping = false;
+			if (this.camera.flipTimer < 0) {
+				this.camera.isFlipping = false;
+				this.camera.flipTimer = 0;
+			}
 		}
 
-		const cameraLTY = 0 - playerY + 225;
-		this.mainStage.position.set(cameraLTX, cameraLTY);
+		const cameraTLY = 0 - playerY + 225;
+		this.mainStage.position.set(cameraTLX, cameraTLY);
 
 		// player position
 		entities.stageEntities[playerId].position.set(playerX, playerY);
 
 		// starscape movement
 		this.starScapeLayers.forEach((el) =>
-			el.onUpdate(delta, this.inSlipStream, cameraLTX, cameraLTY)
+			el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
 		);
 
 		// scanning
