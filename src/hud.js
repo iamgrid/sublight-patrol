@@ -6,6 +6,8 @@ import Pointer from './components/Pointer';
 const hud = {
 	handlers: { pixiHUD: null, cannonStates: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
+	pixiHUDFader: 0,
+	pixiHUDFaderInterval: null,
 	cannonCooldownStraggler: 0,
 	currentPlayerCoords: '',
 	currentLives: 0,
@@ -25,9 +27,28 @@ const hud = {
 		const hudDiv = document.getElementById('game__hud');
 		if (show) {
 			hudDiv.classList.add('game__hud--visible');
+			window.setTimeout(() => {
+				hud.fadePixiHUD(true);
+			}, 1000);
 		} else {
 			hudDiv.classList.remove('game__hud--visible');
+			hud.fadePixiHUD(false);
 		}
+	},
+
+	fadePixiHUD(show) {
+		hud.pixiHUDFaderInterval = window.setInterval(() => {
+			if (show) {
+				hud.pixiHUDFader = hud.pixiHUDFader + 0.05;
+				if (hud.pixiHUDFader > 1)
+					window.clearInterval(hud.pixiHUDFaderInterval);
+			} else {
+				hud.pixiHUDFader = hud.pixiHUDFader - 0.05;
+				if (hud.pixiHUDFader < 0)
+					window.clearInterval(hud.pixiHUDFaderInterval);
+			}
+			hud.handlers.pixiHUD.alpha = hud.pixiHUDFader;
+		}, 30);
 	},
 
 	update(targeting, lives, allEntities, positions) {

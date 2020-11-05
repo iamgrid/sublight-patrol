@@ -89,6 +89,7 @@ export default class App extends PIXI.Application {
 		this.mainStage = new PIXI.Container();
 		this.hudStage = new PIXI.Container();
 		this.pixiHUD = new HUD();
+		this.pixiHUD.alpha = 0;
 		this.hudStage.addChild(this.pixiHUD);
 
 		this.mainStage.sortableChildren = true;
