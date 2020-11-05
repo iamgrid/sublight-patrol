@@ -11,6 +11,7 @@ import {
 	spawnBuoys,
 	hello,
 } from './utils/helpers';
+import { easing } from './utils/formulas';
 import hud from './hud';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
@@ -48,6 +49,13 @@ export default class App extends PIXI.Application {
 
 		this.inSlipStream = false;
 		this.showingCoordWarning = false;
+		this.camera = {
+			currentLTX: 0,
+			isFlipping: false,
+			newFacing: 1,
+			flipTimer: 0,
+			maxFlipTimer: 60,
+		};
 
 		this.triggered1 = false;
 		this.triggered2 = false;
@@ -378,14 +386,20 @@ export default class App extends PIXI.Application {
 		if (Keyboard.isKeyPressed('KeyR')) {
 			if (currentState.entities.player.facing === 1) {
 				entities.stageEntities[playerId].targetRotation = Math.PI;
+				this.camera.newFacing = -1;
 			} else {
 				entities.stageEntities[playerId].targetRotation = 0;
+				this.camera.newFacing = 1;
 			}
+
 			this.dispatch({
 				type: c.actions.FLIP,
 				id: playerId,
 				store: 'player',
 			});
+
+			this.camera.isFlipping = true;
+			this.camera.flipTimer = this.camera.maxFlipTimer;
 		}
 
 		if (Keyboard.isKeyPressed('Escape')) {
@@ -418,9 +432,30 @@ export default class App extends PIXI.Application {
 		}
 
 		// camera position
-		let cameraLTX = 0 - playerX + 100;
-		if (currentState.entities.player.facing === -1) {
-			cameraLTX = 0 - playerX + (c.gameCanvas.width - 100);
+		let cameraLTX;
+		if (!this.camera.isFlipping) {
+			// static camera
+			cameraLTX = 0 - playerX + 100;
+			if (currentState.entities.player.facing === -1) {
+				cameraLTX = 0 - playerX + (c.gameCanvas.width - 100);
+			}
+		} else {
+			// animated camera
+			const cFMultiplier = this.camera.flipTimer / this.camera.maxFlipTimer;
+			const cFDistance = c.gameCanvas.width - 200;
+			if (this.camera.newFacing === -1) {
+				cameraLTX = 0 - playerX + 100 + (1 - cFMultiplier) * cFDistance;
+			} else {
+				cameraLTX =
+					0 -
+					playerX +
+					(c.gameCanvas.width - 100) -
+					(1 - cFMultiplier) * cFDistance;
+			}
+			this.camera.currentLTX = cameraLTX;
+
+			this.camera.flipTimer = this.camera.flipTimer - 1;
+			if (this.camera.flipTimer <= 0) this.camera.isFlipping = false;
 		}
 
 		const cameraLTY = 0 - playerY + 225;
