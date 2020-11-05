@@ -278,8 +278,7 @@ const hud = {
 			hud.largestRelevantDistance =
 				Math.abs(c.playVolume.minX) + c.playVolume.maxX;
 
-		const incomingShift = hud.handlers.camera.currentShift;
-		const cameraTLX = Math.round(playerX - Math.round(incomingShift));
+		const cameraTLX = Math.round(playerX - hud.handlers.camera.currentShift);
 
 		const cameraTLY = Math.round(playerY - 225);
 		const cameraBRX = cameraTLX + c.gameCanvas.width;

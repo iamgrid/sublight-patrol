@@ -120,7 +120,7 @@ export function showDamageTint(damagableSprites = []) {
 }
 
 export function flip() {
-	const stepValue = Math.PI / 20;
+	const stepValue = Math.PI / 40;
 	if (this.currentRotation !== this.targetRotation) {
 		if (!this.rotationTriggered) {
 			this.cRot = this.currentRotation;
@@ -138,7 +138,6 @@ export function flip() {
 		this.rotation = this.currentRotation;
 	} else {
 		this.rotationTriggered = false;
-		this.cRot = 0;
 	}
 }
 
