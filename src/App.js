@@ -418,7 +418,11 @@ export default class App extends PIXI.Application {
 		}
 
 		// camera position
-		const cameraLTX = 0 - playerX + 100;
+		let cameraLTX = 0 - playerX + 100;
+		if (currentState.entities.player.facing === -1) {
+			cameraLTX = 0 - playerX + (c.gameCanvas.width - 100);
+		}
+
 		const cameraLTY = 0 - playerY + 225;
 		this.mainStage.position.set(cameraLTX, cameraLTY);
 
