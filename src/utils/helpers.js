@@ -1,6 +1,6 @@
 import * as PIXI from '../pixi';
 import c from './constants';
-import { fadeHexColor } from './formulas';
+import { fadeHexColor, easing } from './formulas';
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`]) {
@@ -119,21 +119,26 @@ export function showDamageTint(damagableSprites = []) {
 	}
 }
 
-export function flip(delta) {
+export function flip() {
+	const stepValue = Math.PI / 20;
 	if (this.currentRotation !== this.targetRotation) {
-		const frameRotation = 0.2 * delta;
-		if (this.targetRotation > this.currentRotation) {
-			this.currentRotation = Math.min(
-				this.targetRotation,
-				this.currentRotation + frameRotation
-			);
+		if (!this.rotationTriggered) {
+			this.cRot = this.currentRotation;
+			this.rotationTriggered = true;
 		} else {
-			this.currentRotation = Math.max(
-				this.targetRotation,
-				this.currentRotation - frameRotation
-			);
+			if (this.currentRotation > this.targetRotation) {
+				this.cRot = this.cRot - stepValue;
+			} else {
+				this.cRot = this.cRot + stepValue;
+			}
+			this.currentRotation =
+				easing.easeInOutQuart(this.cRot / Math.PI) * this.cRot;
 		}
+
 		this.rotation = this.currentRotation;
+	} else {
+		this.rotationTriggered = false;
+		this.cRot = 0;
 	}
 }
 

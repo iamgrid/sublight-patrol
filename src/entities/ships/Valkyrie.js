@@ -59,6 +59,6 @@ export default class Valkyrie extends PIXI.Container {
 	onUpdate(delta) {
 		this.showDamageTint(['shipBody', 'harness']);
 		this.animateExplosion(delta);
-		this.flip(delta);
+		this.flip();
 	}
 }

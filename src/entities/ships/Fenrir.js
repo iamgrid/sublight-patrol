@@ -60,6 +60,6 @@ export default class Fenrir extends PIXI.Container {
 	onUpdate(delta) {
 		this.showDamageTint(['shipBody', 'harness']);
 		this.animateExplosion(delta);
-		this.flip(delta);
+		this.flip();
 	}
 }
