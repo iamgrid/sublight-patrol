@@ -152,8 +152,6 @@ export default function mainReducer(state, action) {
 				newPosProps[`${action.id}--longVelocity`] = newLongVel;
 			}
 
-			// console.log({ newPosProps });
-
 			return {
 				...state,
 				positions: {

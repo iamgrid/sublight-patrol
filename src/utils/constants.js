@@ -1,7 +1,7 @@
 const c = {
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
 	debug: {
-		verboseReducers: true,
+		verboseReducers: false,
 	},
 	actions: {
 		MOVE_ENTITY: 'MOVE_ENTITY',
