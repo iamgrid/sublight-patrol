@@ -106,7 +106,7 @@ function cycleTargets(current, direction, entities) {
 
 export default function mainReducer(state, action) {
 	switch (action.type) {
-		case c.actions.MOVE_ENTITY: {
+		case c.actions.CHANGE_ENTITY_VELOCITIES: {
 			const [currentLatVel, currentLongVel] = getVelocity(
 				action.id,
 				state.positions
@@ -152,13 +152,16 @@ export default function mainReducer(state, action) {
 				newPosProps[`${action.id}--longVelocity`] = newLongVel;
 			}
 
-			return {
-				...state,
-				positions: {
-					canMove: { ...state.positions.canMove, ...newPosProps },
-					cantMove: state.positions.cantMove,
+			return [
+				() => action.callbackFn(newLatVel, newLongVel),
+				{
+					...state,
+					positions: {
+						canMove: { ...state.positions.canMove, ...newPosProps },
+						cantMove: state.positions.cantMove,
+					},
 				},
-			};
+			];
 		}
 		case c.actions.UPDATE_ENTITY_COORDS: {
 			const entitiesToUpdate = [];

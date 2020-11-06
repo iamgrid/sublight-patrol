@@ -14,6 +14,7 @@ export default class GContainer extends PIXI.Container {
 		super();
 		this.hasUpdateMethod = true;
 
+		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);

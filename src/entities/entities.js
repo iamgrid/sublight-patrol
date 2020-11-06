@@ -140,12 +140,8 @@ const entities = {
 		}
 
 		if (newEntity.immutable.thrusters !== undefined) {
-			stageEntityProps.thrusters = {
-				main: false,
-				leftSide: false,
-				rightSide: false,
-				front: false,
-			};
+			stageEntityProps.latVelocity = pos.latVelocity;
+			stageEntityProps.longVelocity = pos.longVelocity;
 		}
 
 		const stageEntity = Reflect.construct(models[newEntity.immutable.model], [

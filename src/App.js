@@ -3,6 +3,7 @@ import c from './utils/constants';
 import overlays from './overlays';
 import {
 	repositionMovedEntities,
+	updateStageEntityVelocities,
 	fromSpriteSheet,
 	shields,
 	dialog,
@@ -327,11 +328,21 @@ export default class App extends PIXI.Application {
 			longDirection = 1;
 		}
 
+		function playerStageEntityVelocity(newLatVelocity, newLongVelocity) {
+			updateStageEntityVelocities(
+				playerId,
+				entities.stageEntities,
+				newLatVelocity,
+				newLongVelocity
+			);
+		}
+
 		this.dispatch({
-			type: c.actions.MOVE_ENTITY,
+			type: c.actions.CHANGE_ENTITY_VELOCITIES,
 			id: playerId,
 			latDirection: latDirection,
 			longDirection: longDirection,
+			callbackFn: playerStageEntityVelocity,
 		});
 
 		if (Keyboard.isKeyPressed('Space')) {
@@ -374,7 +385,7 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		if (Keyboard.isKeyPressed('KeyR')) {
+		if (Keyboard.isKeyPressed('KeyF')) {
 			if (!this.camera.isFlipping) {
 				if (currentState.entities.player.facing === 1) {
 					entities.stageEntities[playerId].targetRotation = Math.PI;

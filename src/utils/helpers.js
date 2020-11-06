@@ -40,45 +40,6 @@ export function repositionMovedEntities(
 		const newX = canMoveStore[`${entityId}--posX`];
 		const newY = canMoveStore[`${entityId}--posY`];
 		stageEntities[entityId].position.set(newX, newY);
-
-		const latVelocity = canMoveStore[`${entityId}--latVelocity`];
-		const longVelocity = canMoveStore[`${entityId}--longVelocity`];
-		const facing = stageEntities[entityId].facing;
-
-		let updatedThrusters = {
-			main: false,
-			leftSide: false,
-			rightSide: false,
-			front: false,
-		};
-
-		if (facing === 1) {
-			if (latVelocity < 0) {
-				updatedThrusters.leftSide = true;
-			} else if (latVelocity > 0) {
-				updatedThrusters.rightSide = true;
-			}
-			if (longVelocity < 0) {
-				updatedThrusters.front = true;
-			} else if (longVelocity > 0) {
-				updatedThrusters.main = true;
-			}
-		} else if (facing === -1) {
-			if (latVelocity < 0) {
-				updatedThrusters.rightSide = true;
-			} else if (latVelocity > 0) {
-				updatedThrusters.leftSide = true;
-			}
-			if (longVelocity < 0) {
-				updatedThrusters.main = true;
-			} else if (longVelocity > 0) {
-				updatedThrusters.front = true;
-			}
-		}
-
-		console.log(updatedThrusters, facing, latVelocity, longVelocity);
-
-		updateThrusters(updatedThrusters, entityId, stageEntities);
 	});
 }
 
@@ -202,19 +163,55 @@ export function flip() {
 	}
 }
 
-function updateThrusters(updatedThrusters, entityId, stageEntities) {
-	// console.log(updatedThrusters);
+export function updateStageEntityVelocities(
+	entityId,
+	stageEntities,
+	newLatVelocity,
+	newLongVelocity
+) {
+	stageEntities[entityId].latVelocity = newLatVelocity;
+	stageEntities[entityId].longVelocity = newLongVelocity;
 }
 
 export function fireThrusters() {
-	let changed = [];
-	for (const prop in this.thrusters) {
-		if (this.thrusters[prop] !== this.currentThrusters[prop])
-			changed.push(prop);
-	}
+	if (
+		this.currentLatVelocity !== this.latVelocity ||
+		this.currentLongVelocity !== this.longVelocity
+	) {
+		let update = {
+			main: false,
+			leftSide: false,
+			rightSide: false,
+			front: false,
+		};
+		if (this.facing === 1) {
+			if (this.latVelocity < 0) {
+				update.rightSide = true;
+			} else if (this.latVelocity > 0) {
+				update.leftSide = true;
+			}
+			if (this.longVelocity < 0) {
+				update.front = true;
+			} else if (this.longVelocity > 0) {
+				update.main = true;
+			}
+		} else if (this.facing === -1) {
+			if (this.latVelocity < 0) {
+				update.leftSide = true;
+			} else if (this.latVelocity > 0) {
+				update.rightSide = true;
+			}
+			if (this.longVelocity < 0) {
+				update.main = true;
+			} else if (this.longVelocity > 0) {
+				update.front = true;
+			}
+		}
 
-	if (changed.length > 0) {
-		console.log(changed);
+		// console.log(update);
+
+		this.currentLatVelocity = this.latVelocity;
+		this.currentLongVelocity = this.longVelocity;
 	}
 }
 
