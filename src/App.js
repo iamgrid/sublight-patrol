@@ -2,6 +2,7 @@ import * as PIXI from './pixi';
 import c from './utils/constants';
 import overlays from './overlays';
 import {
+	repositionMovedEntities,
 	fromSpriteSheet,
 	shields,
 	dialog,
@@ -159,7 +160,7 @@ export default class App extends PIXI.Application {
 				posX: 800,
 				posY: 175,
 				latVelocity: 0,
-				longVelocity: 0,
+				longVelocity: -9,
 				facing: -1,
 			},
 			{
@@ -175,7 +176,7 @@ export default class App extends PIXI.Application {
 				posX: 700,
 				posY: 225,
 				latVelocity: 0,
-				longVelocity: 0,
+				longVelocity: 6,
 			},
 			{
 				playerRelation: 'friendly',
@@ -297,7 +298,7 @@ export default class App extends PIXI.Application {
 		shots.detectCollisions();
 
 		// current state
-		const currentState = this.gameState();
+		let currentState = this.gameState();
 
 		const playerId = currentState.entities.player.id;
 
@@ -342,10 +343,10 @@ export default class App extends PIXI.Application {
 			shots.stopShooting(playerId);
 		}
 
-		const targetingCallback = (newTargetId) => {
+		function targetingCallback(newTargetId) {
 			if (newTargetId === null) return;
 			moveTargetingReticule(newTargetId, entities.stageEntities);
-		};
+		}
 
 		if (Keyboard.isKeyPressed('KeyE')) {
 			this.dispatch({
@@ -399,73 +400,83 @@ export default class App extends PIXI.Application {
 			this.togglePause();
 		}
 
-		const playerX = currentState.positions.canMove[`${playerId}--posX`];
-		const playerY = currentState.positions.canMove[`${playerId}--posY`];
-
-		// out of bounds warning
-		let showCoordWarning = false;
-
-		if (
-			playerX < c.playVolume.minX ||
-			playerX > c.playVolume.maxX ||
-			playerY < c.playVolume.minY ||
-			playerY > c.playVolume.maxY
-		) {
-			showCoordWarning = true;
-		}
-
-		if (showCoordWarning && !this.showingCoordWarning) {
-			this.showingCoordWarning = true;
-			alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
-		}
-
-		if (!showCoordWarning && this.showingCoordWarning) {
-			this.showingCoordWarning = false;
-			alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
-		}
-
-		// camera position
-		let cameraTLX;
-		if (!this.camera.isFlipping) {
-			// static camera
-			cameraTLX = 0 - playerX + 100;
-			if (currentState.entities.player.facing === -1) {
-				cameraTLX = 0 - playerX + (c.gameCanvas.width - 100);
-			}
-		} else {
-			// animated camera
-			const cFMultiplier = this.camera.flipTimer / this.camera.maxFlipTimer;
-			const cFDistance = c.gameCanvas.width - 200;
-			const cFShift = (1 - cFMultiplier) * cFDistance;
-
-			if (this.camera.newFacing === -1) {
-				this.camera.currentShift = 100 + cFShift;
-				cameraTLX = 0 - playerX + this.camera.currentShift;
-			} else {
-				this.camera.currentShift = c.gameCanvas.width - 100 - cFShift;
-				cameraTLX = 0 - playerX + this.camera.currentShift;
-			}
-
-			this.camera.flipTimer = this.camera.flipTimer - 1;
-			if (this.camera.flipTimer < 0) {
-				this.camera.isFlipping = false;
-				this.camera.flipTimer = 0;
-			}
-		}
-
-		const cameraTLY = 0 - playerY + 225;
-		this.mainStage.position.set(cameraTLX, cameraTLY);
-
 		// update entity positions based on their velocities
-		this.dispatch({ type: c.actions.UPDATE_ENTITY_COORDS });
+		const reposition = (movedEntities) => {
+			currentState = this.gameState();
 
-		// player position
-		entities.stageEntities[playerId].position.set(playerX, playerY);
+			repositionMovedEntities(
+				movedEntities,
+				entities.stageEntities,
+				currentState.positions.canMove
+			);
 
-		// starscape movement
-		this.starScapeLayers.forEach((el) =>
-			el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
-		);
+			const playerX = currentState.positions.canMove[`${playerId}--posX`];
+			const playerY = currentState.positions.canMove[`${playerId}--posY`];
+
+			// out of bounds warning
+			let showCoordWarning = false;
+
+			if (
+				playerX < c.playVolume.minX ||
+				playerX > c.playVolume.maxX ||
+				playerY < c.playVolume.minY ||
+				playerY > c.playVolume.maxY
+			) {
+				showCoordWarning = true;
+			}
+
+			if (showCoordWarning && !this.showingCoordWarning) {
+				this.showingCoordWarning = true;
+				alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+			}
+
+			if (!showCoordWarning && this.showingCoordWarning) {
+				this.showingCoordWarning = false;
+				alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
+			}
+
+			// camera position
+			let cameraTLX;
+			if (!this.camera.isFlipping) {
+				// static camera
+				cameraTLX = 0 - playerX + 100;
+				if (currentState.entities.player.facing === -1) {
+					cameraTLX = 0 - playerX + (c.gameCanvas.width - 100);
+				}
+			} else {
+				// animated camera
+				const cFMultiplier = this.camera.flipTimer / this.camera.maxFlipTimer;
+				const cFDistance = c.gameCanvas.width - 200;
+				const cFShift = (1 - cFMultiplier) * cFDistance;
+
+				if (this.camera.newFacing === -1) {
+					this.camera.currentShift = 100 + cFShift;
+					cameraTLX = 0 - playerX + this.camera.currentShift;
+				} else {
+					this.camera.currentShift = c.gameCanvas.width - 100 - cFShift;
+					cameraTLX = 0 - playerX + this.camera.currentShift;
+				}
+
+				this.camera.flipTimer = this.camera.flipTimer - 1;
+				if (this.camera.flipTimer < 0) {
+					this.camera.isFlipping = false;
+					this.camera.flipTimer = 0;
+				}
+			}
+
+			const cameraTLY = 0 - playerY + 225;
+			this.mainStage.position.set(cameraTLX, cameraTLY);
+
+			// starscape movement
+			this.starScapeLayers.forEach((el) =>
+				el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
+			);
+		};
+
+		this.dispatch({
+			type: c.actions.UPDATE_ENTITY_COORDS,
+			callbackFn: reposition,
+		});
 
 		// scanning
 		if (

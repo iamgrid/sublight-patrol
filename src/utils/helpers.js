@@ -31,6 +31,18 @@ export function getVelocity(entityId, positions) {
 	console.error(`Unable to ascertain velocity for ${entityId}`);
 }
 
+export function repositionMovedEntities(
+	movedEntities,
+	stageEntities,
+	canMoveStore
+) {
+	movedEntities.forEach((entId) => {
+		const newX = canMoveStore[`${entId}--posX`];
+		const newY = canMoveStore[`${entId}--posY`];
+		stageEntities[entId].position.set(newX, newY);
+	});
+}
+
 export function getStoreEntity(entityId, currentState) {
 	// console.log('LF ', entityId);
 	if (entityId === currentState.entities.player.id) {

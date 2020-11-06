@@ -190,13 +190,16 @@ export default function mainReducer(state, action) {
 				}
 			});
 
-			return {
-				...state,
-				positions: {
-					canMove: newCanMoveStore,
-					cantMove: state.positions.cantMove,
+			return [
+				() => action.callbackFn(entitiesToUpdate),
+				{
+					...state,
+					positions: {
+						canMove: newCanMoveStore,
+						cantMove: state.positions.cantMove,
+					},
 				},
-			};
+			];
 		}
 		case c.actions.FLIP: {
 			const entityId = action.id;
