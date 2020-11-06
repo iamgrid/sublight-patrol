@@ -57,6 +57,7 @@ export default class App extends PIXI.Application {
 			maxFlipTimer: 50,
 		};
 
+		this.triggered0 = false;
 		this.triggered1 = false;
 		this.triggered2 = false;
 		this.triggered3 = false;
@@ -160,7 +161,7 @@ export default class App extends PIXI.Application {
 				posX: 800,
 				posY: 175,
 				latVelocity: 0,
-				longVelocity: -9,
+				longVelocity: 0,
 				facing: -1,
 			},
 			{
@@ -176,7 +177,7 @@ export default class App extends PIXI.Application {
 				posX: 700,
 				posY: 225,
 				latVelocity: 0,
-				longVelocity: 6,
+				longVelocity: 0,
 			},
 			{
 				playerRelation: 'friendly',
@@ -401,14 +402,17 @@ export default class App extends PIXI.Application {
 		}
 
 		// update entity positions based on their velocities
-		const reposition = (movedEntities) => {
+		let repositionHasRun = false;
+		const reposition = (movedEntities = []) => {
 			currentState = this.gameState();
 
-			repositionMovedEntities(
-				movedEntities,
-				entities.stageEntities,
-				currentState.positions.canMove
-			);
+			if (movedEntities.length > 0) {
+				repositionMovedEntities(
+					movedEntities,
+					entities.stageEntities,
+					currentState.positions.canMove
+				);
+			}
 
 			const playerX = currentState.positions.canMove[`${playerId}--posX`];
 			const playerY = currentState.positions.canMove[`${playerId}--posY`];
@@ -471,12 +475,19 @@ export default class App extends PIXI.Application {
 			this.starScapeLayers.forEach((el) =>
 				el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
 			);
+
+			repositionHasRun = true;
 		};
 
 		this.dispatch({
 			type: c.actions.UPDATE_ENTITY_COORDS,
 			callbackFn: reposition,
 		});
+
+		if (!repositionHasRun && (!this.triggered0 || this.camera.isFlipping)) {
+			reposition();
+			this.triggered0 = true;
+		}
 
 		// scanning
 		if (

@@ -163,6 +163,18 @@ export function flip() {
 	}
 }
 
+export function fireThrusters() {
+	let changed = [];
+	for (const prop in this.thrusters) {
+		if (this.thrusters[prop] !== this.currentThrusters[prop])
+			changed.push(prop);
+	}
+
+	if (changed.length > 0) {
+		console.log(changed);
+	}
+}
+
 export function blowUp(callbackFn = null) {
 	// console.log(`blowing up`, this);
 	const timings = {

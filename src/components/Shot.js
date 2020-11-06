@@ -26,10 +26,10 @@ export default class Shot extends PIXI.Graphics {
 
 	onUpdate(delta) {
 		if (!this.hasBeenDestroyed) {
-			const travel = delta * 8;
+			const travel = delta * 12;
 			this.traveled += travel;
 
-			if (this.traveled > 800) {
+			if (this.traveled > 1000) {
 				// remove shot
 				this.callbackFn(this.id, this.sightLine);
 				return;

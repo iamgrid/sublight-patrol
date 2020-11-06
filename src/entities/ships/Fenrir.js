@@ -8,6 +8,7 @@ import {
 	flip,
 	blowUp,
 	animateExplosion,
+	fireThrusters,
 } from '../../utils/helpers';
 
 export default class Fenrir extends PIXI.Container {
@@ -16,12 +17,16 @@ export default class Fenrir extends PIXI.Container {
 		this.hasUpdateMethod = true;
 
 		this.entityStore = props.entityStore;
+		this.currentThrusters = props.thrusters;
+		this.thrusters = props.thrusters;
+
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 		this.showDamageTint = showDamageTint.bind(this);
 		this.flip = flip.bind(this);
 		this.blowUp = blowUp.bind(this);
 		this.animateExplosion = animateExplosion.bind(this);
+		this.fireThrusters = fireThrusters.bind(this);
 
 		this.sprites = {};
 
@@ -61,5 +66,6 @@ export default class Fenrir extends PIXI.Container {
 		this.showDamageTint(['shipBody', 'harness']);
 		this.animateExplosion(delta);
 		this.flip();
+		this.fireThrusters();
 	}
 }

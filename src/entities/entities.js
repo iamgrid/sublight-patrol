@@ -95,34 +95,34 @@ const entities = {
 			return null;
 		}
 
-		const newShip = { ...this.types[type].mutable, ...props };
+		const newEntity = { ...this.types[type].mutable, ...props };
 
 		let facing = 1;
 		if (pos.facing !== undefined) facing = pos.facing;
-		newShip.facing = facing;
+		newEntity.facing = facing;
 
-		newShip.__proto__ = this.types[type];
+		newEntity.__proto__ = this.types[type];
 
 		let doStoreIn = storeIn;
-		if (!newShip.immutable.isTargetable) doStoreIn = 'other';
+		if (!newEntity.immutable.isTargetable) doStoreIn = 'other';
 
-		newShip.store = doStoreIn;
+		newEntity.store = doStoreIn;
 
-		if (newShip.id !== null) {
-			newShip.displayId = this.makeName(newShip.id);
+		if (newEntity.id !== null) {
+			newEntity.displayId = this.makeName(newEntity.id);
 		} else {
-			newShip.id = idCreator.create();
-			newShip.displayId = '-';
+			newEntity.id = idCreator.create();
+			newEntity.displayId = '-';
 		}
 
-		this.checkForNullValues(`${newShip.id} (type ${type})`, newShip);
+		this.checkForNullValues(`${newEntity.id} (type ${type})`, newEntity);
 
 		let positionStore = 'canMove';
-		if (!newShip.immutable.canMove) positionStore = 'cantMove';
+		if (!newEntity.immutable.canMove) positionStore = 'cantMove';
 
 		let positionArray = [pos.posX, pos.posY, pos.latVelocity, pos.longVelocity];
 
-		if (!models[newShip.immutable.model]) {
+		if (!models[newEntity.immutable.model]) {
 			console.error(
 				`Unable to find model for [${type}]. (Have you updated /entities/models.js?)`
 			);
@@ -135,24 +135,33 @@ const entities = {
 			stageEntityProps.coordY = pos.posY;
 		}
 
-		const stageEntity = Reflect.construct(models[newShip.immutable.model], [
+		if (newEntity.immutable.thrusters !== undefined) {
+			stageEntityProps.thrusters = {
+				main: false,
+				leftSide: false,
+				rightSide: false,
+				front: false,
+			};
+		}
+
+		const stageEntity = Reflect.construct(models[newEntity.immutable.model], [
 			stageEntityProps,
 		]);
 
 		stage.addChild(stageEntity);
 
-		if (newShip.immutable.isTargetable)
-			stageEntity.reticuleRelation(newShip.playerRelation);
+		if (newEntity.immutable.isTargetable)
+			stageEntity.reticuleRelation(newEntity.playerRelation);
 
 		stageEntity.position.set(pos.posX, pos.posY);
 		stageEntity.zIndex = this.zIndexIterator;
 
-		this.stageEntities[newShip.id] = stageEntity;
+		this.stageEntities[newEntity.id] = stageEntity;
 
 		dispatch({
 			type: c.actions.ADD_ENTITY,
 			storeIn: doStoreIn,
-			newEntity: newShip,
+			newEntity: newEntity,
 			positionStore: positionStore,
 			positionArray: positionArray,
 		});
