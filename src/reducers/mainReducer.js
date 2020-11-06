@@ -1,19 +1,11 @@
 import c from '../utils/constants';
 import { calculateDistance } from '../utils/formulas';
-import { getPosition } from '../utils/helpers';
+import { getPosition, getVelocity, getStoreEntity } from '../utils/helpers';
 
 function assignWPrototype(sourceObj, modifications = {}) {
 	let re = Object.assign({}, sourceObj, modifications);
 	re.__proto__ = sourceObj.__proto__;
 	return re;
-}
-
-function move(mode = 'relative', initial, newValue) {
-	if (mode === 'relative') {
-		return initial + newValue;
-	} else {
-		return newValue;
-	}
 }
 
 function nearEnoughToScan(playerId, targetId, positions) {
@@ -114,28 +106,96 @@ function cycleTargets(current, direction, entities) {
 
 export default function mainReducer(state, action) {
 	switch (action.type) {
-		case c.actions.MOVE_PLAYER: {
-			const playerId = state.entities.player.id;
-			const [currentX, currentY] = getPosition(playerId, state.positions);
-			let newX = currentX;
-			let newY = currentY;
+		case c.actions.MOVE_ENTITY: {
+			const [currentLatVel, currentLongVel] = getVelocity(
+				action.id,
+				state.positions
+			);
 
-			if (action.axis === 'x') {
-				newX = move(action.mode, currentX, action.value);
-			} else if (action.axis === 'y') {
-				newY = move(action.mode, currentY, action.value);
+			if (
+				action.latDirection === 0 &&
+				action.longDirection === 0 &&
+				currentLatVel === 0 &&
+				currentLongVel === 0
+			) {
+				return null;
 			}
 
-			let newPosProps = {};
-			newPosProps[`${playerId}--posX`] = newX;
-			newPosProps[`${playerId}--posY`] = newY;
+			const entity = getStoreEntity(action.id, state);
 
-			// console.log({ newX, newY });
+			let newLatVel = action.latDirection * entity.immutable.thrusters.side;
+			let newLongVel;
+			const longDirection = action.longDirection;
+			if (
+				(entity.facing === 1 && longDirection === 1) ||
+				(entity.facing === -1 && longDirection === -1)
+			) {
+				newLongVel = longDirection * entity.immutable.thrusters.main;
+			} else if (
+				(entity.facing === -1 && longDirection === 1) ||
+				(entity.facing === 1 && longDirection === -1)
+			) {
+				newLongVel = longDirection * entity.immutable.thrusters.front;
+			} else {
+				newLongVel = 0;
+			}
+
+			if (newLatVel === currentLatVel && newLongVel === currentLongVel)
+				return null;
+
+			let newPosProps = {};
+			if (newLatVel !== currentLatVel) {
+				newPosProps[`${action.id}--latVelocity`] = newLatVel;
+			}
+
+			if (newLongVel !== currentLongVel) {
+				newPosProps[`${action.id}--longVelocity`] = newLongVel;
+			}
+
+			// console.log({ newPosProps });
 
 			return {
 				...state,
 				positions: {
 					canMove: { ...state.positions.canMove, ...newPosProps },
+					cantMove: state.positions.cantMove,
+				},
+			};
+		}
+		case c.actions.UPDATE_ENTITY_COORDS: {
+			const entitiesToUpdate = [];
+			const currentCanMoveStore = state.positions.canMove;
+			for (const prop in currentCanMoveStore) {
+				const [entId, property] = prop.split('--');
+				if (
+					(property == 'latVelocity' &&
+						currentCanMoveStore[`${entId}--latVelocity`] !== 0) ||
+					(property == 'longVelocity' &&
+						currentCanMoveStore[`${entId}--longVelocity`] !== 0)
+				)
+					entitiesToUpdate.push(entId);
+			}
+
+			if (entitiesToUpdate.length === 0) return null;
+
+			const newCanMoveStore = { ...currentCanMoveStore };
+			entitiesToUpdate.forEach((entityId) => {
+				if (newCanMoveStore[`${entityId}--latVelocity`] !== 0) {
+					newCanMoveStore[`${entityId}--posY`] =
+						newCanMoveStore[`${entityId}--posY`] +
+						newCanMoveStore[`${entityId}--latVelocity`];
+				}
+				if (newCanMoveStore[`${entityId}--longVelocity`] !== 0) {
+					newCanMoveStore[`${entityId}--posX`] =
+						newCanMoveStore[`${entityId}--posX`] +
+						newCanMoveStore[`${entityId}--longVelocity`];
+				}
+			});
+
+			return {
+				...state,
+				positions: {
+					canMove: newCanMoveStore,
 					cantMove: state.positions.cantMove,
 				},
 			};

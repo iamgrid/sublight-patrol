@@ -3,14 +3,14 @@ import c from './constants';
 import { fadeHexColor, easing } from './formulas';
 
 export function getPosition(entityId, positions) {
-	if (positions.canMove[`${entityId}--posX`]) {
+	if (positions.canMove[`${entityId}--posX`] !== undefined) {
 		return [
 			positions.canMove[`${entityId}--posX`],
 			positions.canMove[`${entityId}--posY`],
 		];
 	}
 
-	if (positions.cantMove[`${entityId}--posX`]) {
+	if (positions.cantMove[`${entityId}--posX`] !== undefined) {
 		return [
 			positions.cantMove[`${entityId}--posX`],
 			positions.cantMove[`${entityId}--posY`],
@@ -18,7 +18,17 @@ export function getPosition(entityId, positions) {
 	}
 
 	console.error(`Unable to ascertain position for ${entityId}`);
-	// console.log(positions);
+}
+
+export function getVelocity(entityId, positions) {
+	if (positions.canMove[`${entityId}--latVelocity`] !== undefined) {
+		return [
+			positions.canMove[`${entityId}--latVelocity`],
+			positions.canMove[`${entityId}--longVelocity`],
+		];
+	}
+
+	console.error(`Unable to ascertain velocity for ${entityId}`);
 }
 
 export function getStoreEntity(entityId, currentState) {

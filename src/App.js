@@ -11,7 +11,6 @@ import {
 	spawnBuoys,
 	hello,
 } from './utils/helpers';
-import { easing } from './utils/formulas';
 import hud from './hud';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
@@ -310,39 +309,30 @@ export default class App extends PIXI.Application {
 			currentState.positions
 		);
 
-		const speed = 5 * delta;
-
 		// Keyboard
 		// https://www.npmjs.com/package/pixi.js-keyboard
-		if (Keyboard.isKeyDown('ArrowLeft')) {
-			this.dispatch({
-				type: c.actions.MOVE_PLAYER,
-				axis: 'x',
-				value: -speed,
-			});
-		}
-		if (Keyboard.isKeyDown('ArrowRight')) {
-			this.dispatch({
-				type: c.actions.MOVE_PLAYER,
-				axis: 'x',
-				value: speed,
-			});
+		let latDirection = 0;
+		let longDirection = 0;
+		if (Keyboard.isKeyDown('ArrowUp')) {
+			latDirection = -1;
+		} else if (Keyboard.isKeyDown('ArrowDown')) {
+			latDirection = 1;
 		}
 
-		if (Keyboard.isKeyDown('ArrowUp')) {
-			this.dispatch({
-				type: c.actions.MOVE_PLAYER,
-				axis: 'y',
-				value: -speed,
-			});
+		if (Keyboard.isKeyDown('ArrowLeft')) {
+			longDirection = -1;
+		} else if (Keyboard.isKeyDown('ArrowRight')) {
+			longDirection = 1;
 		}
-		if (Keyboard.isKeyDown('ArrowDown')) {
-			this.dispatch({
-				type: c.actions.MOVE_PLAYER,
-				axis: 'y',
-				value: speed,
-			});
-		}
+
+		// console.log({ latDirection, longDirection });
+
+		this.dispatch({
+			type: c.actions.MOVE_ENTITY,
+			id: playerId,
+			latDirection: latDirection,
+			longDirection: longDirection,
+		});
 
 		if (Keyboard.isKeyPressed('Space')) {
 			shots.startShooting(playerId);
@@ -465,6 +455,9 @@ export default class App extends PIXI.Application {
 
 		const cameraTLY = 0 - playerY + 225;
 		this.mainStage.position.set(cameraTLX, cameraTLY);
+
+		// update entity positions based on their velocities
+		this.dispatch({ type: c.actions.UPDATE_ENTITY_COORDS });
 
 		// player position
 		entities.stageEntities[playerId].position.set(playerX, playerY);
