@@ -16,9 +16,11 @@ export default class Fenrir extends PIXI.Container {
 		super();
 		this.hasUpdateMethod = true;
 
+		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
 		this.currentThrusters = props.thrusters;
 		this.thrusters = props.thrusters;
+		this.facing = props.facing;
 
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
@@ -46,7 +48,6 @@ export default class Fenrir extends PIXI.Container {
 
 		this.currentTint = 0xffffff;
 		this.showingExplosion = false;
-		this.facing = 0;
 		this.currentRotation = 0;
 		this.targetRotation = 0;
 

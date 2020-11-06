@@ -5,6 +5,7 @@ export default class Buoy extends PIXI.Container {
 		super();
 		this.hasUpdateMethod = true;
 
+		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
 		this.labelText = `[ ${props.coordX} , ${props.coordY} ]`;
 		this.blinkTimer = 0;

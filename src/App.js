@@ -327,8 +327,6 @@ export default class App extends PIXI.Application {
 			longDirection = 1;
 		}
 
-		// console.log({ latDirection, longDirection });
-
 		this.dispatch({
 			type: c.actions.MOVE_ENTITY,
 			id: playerId,
@@ -380,9 +378,11 @@ export default class App extends PIXI.Application {
 			if (!this.camera.isFlipping) {
 				if (currentState.entities.player.facing === 1) {
 					entities.stageEntities[playerId].targetRotation = Math.PI;
+					entities.stageEntities[playerId].facing = -1;
 					this.camera.newFacing = -1;
 				} else {
 					entities.stageEntities[playerId].targetRotation = 0;
+					entities.stageEntities[playerId].facing = 1;
 					this.camera.newFacing = 1;
 				}
 

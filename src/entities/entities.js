@@ -129,7 +129,11 @@ const entities = {
 			return null;
 		}
 
-		let stageEntityProps = { entityStore: doStoreIn, facing: facing };
+		let stageEntityProps = {
+			entityId: newEntity.id,
+			entityStore: doStoreIn,
+			facing: facing,
+		};
 		if (type === 'buoy') {
 			stageEntityProps.coordX = pos.posX;
 			stageEntityProps.coordY = pos.posY;

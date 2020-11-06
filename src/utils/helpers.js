@@ -36,10 +36,49 @@ export function repositionMovedEntities(
 	stageEntities,
 	canMoveStore
 ) {
-	movedEntities.forEach((entId) => {
-		const newX = canMoveStore[`${entId}--posX`];
-		const newY = canMoveStore[`${entId}--posY`];
-		stageEntities[entId].position.set(newX, newY);
+	movedEntities.forEach((entityId) => {
+		const newX = canMoveStore[`${entityId}--posX`];
+		const newY = canMoveStore[`${entityId}--posY`];
+		stageEntities[entityId].position.set(newX, newY);
+
+		const latVelocity = canMoveStore[`${entityId}--latVelocity`];
+		const longVelocity = canMoveStore[`${entityId}--longVelocity`];
+		const facing = stageEntities[entityId].facing;
+
+		let updatedThrusters = {
+			main: false,
+			leftSide: false,
+			rightSide: false,
+			front: false,
+		};
+
+		if (facing === 1) {
+			if (latVelocity < 0) {
+				updatedThrusters.leftSide = true;
+			} else if (latVelocity > 0) {
+				updatedThrusters.rightSide = true;
+			}
+			if (longVelocity < 0) {
+				updatedThrusters.front = true;
+			} else if (longVelocity > 0) {
+				updatedThrusters.main = true;
+			}
+		} else if (facing === -1) {
+			if (latVelocity < 0) {
+				updatedThrusters.rightSide = true;
+			} else if (latVelocity > 0) {
+				updatedThrusters.leftSide = true;
+			}
+			if (longVelocity < 0) {
+				updatedThrusters.main = true;
+			} else if (longVelocity > 0) {
+				updatedThrusters.front = true;
+			}
+		}
+
+		console.log(updatedThrusters, facing, latVelocity, longVelocity);
+
+		updateThrusters(updatedThrusters, entityId, stageEntities);
 	});
 }
 
@@ -161,6 +200,10 @@ export function flip() {
 	} else {
 		this.rotationTriggered = false;
 	}
+}
+
+function updateThrusters(updatedThrusters, entityId, stageEntities) {
+	// console.log(updatedThrusters);
 }
 
 export function fireThrusters() {

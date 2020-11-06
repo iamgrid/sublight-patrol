@@ -16,9 +16,11 @@ export default class Valkyrie extends PIXI.Container {
 		super();
 		this.hasUpdateMethod = true;
 
+		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
 		this.currentThrusters = props.thrusters;
 		this.thrusters = props.thrusters;
+		this.facing = props.facing;
 
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
