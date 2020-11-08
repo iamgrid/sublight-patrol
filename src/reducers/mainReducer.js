@@ -181,15 +181,20 @@ export default function mainReducer(state, action) {
 
 			const newCanMoveStore = { ...currentCanMoveStore };
 			entitiesToUpdate.forEach((entityId) => {
-				if (newCanMoveStore[`${entityId}--latVelocity`] !== 0) {
+				let efficacy = 1;
+				const latVelocity = newCanMoveStore[`${entityId}--latVelocity`];
+				const longVelocity = newCanMoveStore[`${entityId}--longVelocity`];
+				if (latVelocity !== 0 && longVelocity !== 0) efficacy = 0.85;
+
+				if (latVelocity !== 0) {
 					newCanMoveStore[`${entityId}--posY`] =
 						newCanMoveStore[`${entityId}--posY`] +
-						newCanMoveStore[`${entityId}--latVelocity`];
+						Math.trunc(latVelocity * efficacy);
 				}
-				if (newCanMoveStore[`${entityId}--longVelocity`] !== 0) {
+				if (longVelocity !== 0) {
 					newCanMoveStore[`${entityId}--posX`] =
 						newCanMoveStore[`${entityId}--posX`] +
-						newCanMoveStore[`${entityId}--longVelocity`];
+						Math.trunc(longVelocity * efficacy);
 				}
 			});
 
