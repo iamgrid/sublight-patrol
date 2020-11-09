@@ -367,7 +367,7 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		if (Keyboard.isKeyPressed('KeyW')) {
+		if (Keyboard.isKeyPressed('KeyS')) {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'next',
@@ -376,7 +376,7 @@ export default class App extends PIXI.Application {
 			});
 		}
 
-		if (Keyboard.isKeyPressed('KeyQ')) {
+		if (Keyboard.isKeyPressed('KeyA')) {
 			this.dispatch({
 				type: c.actions.TARGET,
 				do: 'previous',
