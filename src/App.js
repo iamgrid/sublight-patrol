@@ -86,7 +86,7 @@ export default class App extends PIXI.Application {
 		status.init();
 		shields.init();
 
-		this.loader.add('spriteSheet', './assets/sprite_sheet_v3.png');
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v4.png');
 
 		this.loader.load(this.draw.bind(this));
 	}
