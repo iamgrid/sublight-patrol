@@ -3,6 +3,7 @@ import { getPosition, getStoreEntity } from './utils/helpers';
 import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
 import entities from './entities/entities';
+import { moveTargetingReticule } from './utils/helpers';
 
 const shots = {
 	stageShots: {},
@@ -339,7 +340,8 @@ const shots = {
 								entityId,
 								entityStore,
 								showType,
-								shots.handlers.stageEntities
+								shots.handlers.stageEntities,
+								stageShot.origin
 							),
 					});
 				});
@@ -363,7 +365,7 @@ const shots = {
 		return false;
 	},
 
-	showDamage(entityId, entityStore, type, stageEntities) {
+	showDamage(entityId, entityStore, type, stageEntities, origin) {
 		switch (type) {
 			case c.damageTypes.shieldDamage:
 				stageEntities[entityId].currentTint = 0x32ade6;
@@ -387,6 +389,25 @@ const shots = {
 				});
 				break;
 		}
+
+		if (type !== c.damageTypes.destruction) {
+			const currentState = shots.handlers.state();
+			if (currentState.game.targeting === null) {
+				if (origin === currentState.entities.player.id) {
+					shots.targetDamagedEntity(entityId);
+				}
+			}
+		}
+	},
+
+	targetDamagedEntity(entityId) {
+		shots.handlers.dispatch({
+			type: c.actions.TARGET,
+			do: 'specified',
+			targetId: entityId,
+			callbackFn: () =>
+				moveTargetingReticule(entityId, shots.handlers.stageEntities),
+		});
 	},
 };
 

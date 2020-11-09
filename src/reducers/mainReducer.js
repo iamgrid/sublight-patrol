@@ -356,6 +356,10 @@ export default function mainReducer(state, action) {
 				case 'clear':
 					newTarget = null;
 					break;
+				case 'specified': {
+					newTarget = action.targetId;
+					break;
+				}
 				case 'pointed-nearest': {
 					const playerId = state.entities.player.id;
 					const [currentX, currentY] = getPosition(playerId, state.positions);
