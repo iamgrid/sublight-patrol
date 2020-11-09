@@ -430,13 +430,15 @@ export default function mainReducer(state, action) {
 		}
 		case c.actions.SCAN: {
 			const targetId = state.game.targeting;
+			const targetIdx = state.entities.targetable.findIndex(
+				(entity) => entity.id === targetId
+			);
+
+			if (targetIdx === -1) return null;
+
 			if (
 				nearEnoughToScan(state.entities.player.id, targetId, state.positions)
 			) {
-				const targetIdx = state.entities.targetable.findIndex(
-					(entity) => entity.id === targetId
-				);
-
 				// no update needed
 				if (state.entities.targetable[targetIdx].hasBeenScanned) {
 					return {
