@@ -184,7 +184,7 @@ export default function mainReducer(state, action) {
 				let efficacy = 1;
 				const latVelocity = newCanMoveStore[`${entityId}--latVelocity`];
 				const longVelocity = newCanMoveStore[`${entityId}--longVelocity`];
-				if (latVelocity !== 0 && longVelocity !== 0) efficacy = 0.85;
+				if (latVelocity !== 0 && longVelocity !== 0) efficacy = 0.75;
 
 				if (latVelocity !== 0) {
 					newCanMoveStore[`${entityId}--posY`] =

@@ -1,6 +1,7 @@
 import * as PIXI from '../pixi';
 import c from './constants';
 import { fadeHexColor, easing } from './formulas';
+import entities from '../entities/entities';
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
@@ -40,6 +41,15 @@ export function repositionMovedEntities(
 		const newX = canMoveStore[`${entityId}--posX`];
 		const newY = canMoveStore[`${entityId}--posY`];
 		stageEntities[entityId].position.set(newX, newY);
+
+		if (
+			newX < c.playVolume.minX ||
+			newX > c.playVolume.maxX ||
+			newY < c.playVolume.minY ||
+			newY > c.playVolume.maxY
+		) {
+			entities.despawn(entityId);
+		}
 	});
 }
 
@@ -652,7 +662,7 @@ export const status = {
 	},
 };
 
-export function spawnBuoys(entities, handlers) {
+export function spawnBuoys(entities) {
 	const buoys = [
 		{ x: 0, y: 0 },
 		{ x: c.playVolume.minX, y: 0 },
@@ -667,7 +677,6 @@ export function spawnBuoys(entities, handlers) {
 
 	buoys.forEach(({ x, y }) => {
 		entities.spawn(
-			handlers,
 			'buoy',
 			{
 				posX: x,

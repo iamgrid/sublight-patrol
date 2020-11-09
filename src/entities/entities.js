@@ -4,6 +4,13 @@ import pieces from './pieces';
 import models from './models';
 
 const entities = {
+	handlers: {
+		dispatch: null,
+		state: null,
+		stage: null,
+		pixiHUD: null,
+		stagePointers: null,
+	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
 	zIndexIterator: c.zIndices.entities,
@@ -88,8 +95,7 @@ const entities = {
 			);
 	},
 
-	spawn(handlers, type, pos, props, storeIn = 'targetable') {
-		const [dispatch, stage] = handlers;
+	spawn(type, pos, props, storeIn = 'targetable') {
 		if (!this.types[type]) {
 			console.error(`Unable to find type [${type}].`);
 			return null;
@@ -148,7 +154,7 @@ const entities = {
 			stageEntityProps,
 		]);
 
-		stage.addChild(stageEntity);
+		entities.handlers.stage.addChild(stageEntity);
 
 		if (newEntity.immutable.isTargetable)
 			stageEntity.reticuleRelation(newEntity.playerRelation);
@@ -158,7 +164,7 @@ const entities = {
 
 		this.stageEntities[newEntity.id] = stageEntity;
 
-		dispatch({
+		entities.handlers.dispatch({
 			type: c.actions.ADD_ENTITY,
 			storeIn: doStoreIn,
 			newEntity: newEntity,
@@ -167,6 +173,44 @@ const entities = {
 		});
 
 		this.zIndexIterator++;
+	},
+
+	despawn(entityId, removeFromState = true) {
+		let currentState = entities.handlers.state();
+
+		let goAhead = false;
+
+		if (entityId !== currentState.entities.player.id) {
+			if (!entities.stageEntities[entityId].despawnTriggered) {
+				goAhead = true;
+				entities.stageEntities[entityId].despawnTriggered = true;
+			}
+		} else {
+			// console.log('We are not despawning the player for the time being.');
+		}
+
+		if (goAhead) {
+			console.log(`removing ${entityId} from stage`);
+			const stageEntity = entities.stageEntities[entityId];
+			const entityStore = entities.stageEntities[entityId].entityStore;
+			entities.handlers.stage.removeChild(stageEntity);
+			stageEntity.destroy();
+			delete entities.stageEntities[entityId];
+
+			const stagePointer = entities.handlers.stagePointers[entityId];
+			entities.handlers.pixiHUD.removeChild(stagePointer);
+			stagePointer.destroy();
+			delete entities.handlers.stagePointers[entityId];
+
+			if (removeFromState) {
+				console.log(`removing ${entityId} from state`);
+				entities.handlers.dispatch({
+					type: c.actions.REMOVE_ENTITY,
+					id: entityId,
+					store: entityStore,
+				});
+			}
+		}
 	},
 };
 

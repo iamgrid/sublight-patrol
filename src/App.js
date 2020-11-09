@@ -107,15 +107,19 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
 
-		this.handlers = [this.dispatch, this.mainStage];
+		entities.handlers = {
+			dispatch: this.dispatch,
+			state: this.gameState,
+			stage: this.mainStage,
+			pixiHUD: this.pixiHUD,
+			stagePointers: hud.stagePointers,
+		};
 
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.mainStage,
 			stageEntities: entities.stageEntities,
-			pixiHUD: this.pixiHUD,
-			stagePointers: hud.stagePointers,
 		};
 
 		shields.handlers = {
@@ -137,10 +141,9 @@ export default class App extends PIXI.Application {
 
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
 
-		spawnBuoys(entities, this.handlers);
+		spawnBuoys(entities);
 
 		entities.spawn(
-			this.handlers,
 			'fenrir',
 			{
 				posX: 100,
@@ -156,7 +159,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'valkyrie',
 			{
 				posX: 800,
@@ -172,7 +174,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'valkyrie',
 			{
 				posX: 700,
@@ -190,7 +191,21 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
+			'valkyrie',
+			{
+				posX: 800,
+				posY: 275,
+				latVelocity: 0,
+				longVelocity: 8,
+				facing: 1,
+			},
+			{
+				playerRelation: 'friendly',
+				id: 'alpha_3',
+			}
+		);
+
+		entities.spawn(
 			'fenrir',
 			{
 				posX: 600,
@@ -206,7 +221,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'container',
 			{
 				posX: 900,
@@ -219,7 +233,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'container',
 			{
 				posX: 1800,
@@ -232,7 +245,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'container',
 			{
 				posX: 900,
@@ -245,7 +257,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'container',
 			{
 				posX: 900,
@@ -258,7 +269,6 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			this.handlers,
 			'container',
 			{
 				posX: -600,

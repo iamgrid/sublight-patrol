@@ -2,6 +2,7 @@ import c from './utils/constants';
 import { getPosition, getStoreEntity } from './utils/helpers';
 import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
+import entities from './entities/entities';
 
 const shots = {
 	stageShots: {},
@@ -10,8 +11,6 @@ const shots = {
 		state: null,
 		stage: null,
 		stageEntities: null,
-		pixiHUD: null,
-		stagePointers: null,
 	}, // gets its values in App.js
 	cannonStates: {},
 	shootingIntervals: {},
@@ -376,19 +375,11 @@ const shots = {
 
 			case c.damageTypes.destruction:
 				stageEntities[entityId].blowUp(() => {
-					// console.log('removing from stage');
-					const stageEntity = shots.handlers.stageEntities[entityId];
-					shots.handlers.stage.removeChild(stageEntity);
-					stageEntity.hasBeenDestroyed = true;
-					stageEntity.destroy();
-					delete shots.handlers.stageEntities[entityId];
-
-					const stagePointer = shots.handlers.stagePointers[entityId];
-					shots.handlers.pixiHUD.removeChild(stagePointer);
-					stagePointer.destroy();
-					delete shots.handlers.stagePointers[entityId];
+					shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
+					entities.despawn(entityId, false);
 				});
 
+				console.log(`removing ${entityId} from state`);
 				shots.handlers.dispatch({
 					type: c.actions.REMOVE_ENTITY,
 					id: entityId,
