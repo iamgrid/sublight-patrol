@@ -3,6 +3,7 @@ import {
 	fromSpriteSheet,
 	createTargetingReticule,
 	toggleTargetingReticule,
+	addThrusters,
 	reticuleRelation,
 	showDamageTint,
 	flip,
@@ -19,9 +20,9 @@ export default class Fenrir extends PIXI.Container {
 		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
 
-		this.currentLatVelocity = props.latVelocity;
+		this.currentLatVelocity = 0;
 		this.latVelocity = props.latVelocity;
-		this.currentLongVelocity = props.longVelocity;
+		this.currentLongVelocity = 0;
 		this.longVelocity = props.longVelocity;
 		this.facing = props.facing;
 
@@ -37,10 +38,22 @@ export default class Fenrir extends PIXI.Container {
 
 		this.sprites['shipBody'] = fromSpriteSheet.create(17, 72, 40, 50);
 
-		this.sprites['harness'] = fromSpriteSheet.create(66, 66, 60, 60);
+		this.sprites['harness_inner'] = fromSpriteSheet.create(157, 21, 8, 24);
+		this.sprites['harness_inner'].x = -28;
 
-		this.sprites['harness'].x = -10;
-		this.sprites['harness'].y = -1;
+		this.sprites['harness_main'] = fromSpriteSheet.create(66, 66, 60, 60);
+		this.sprites['harness_main'].x = -10;
+		this.sprites['harness_main'].y = -1;
+
+		this.sprites['thrusters'] = addThrusters({
+			main: [{ x: -42, y: -1 }],
+			front: [
+				{ x: 18, y: 12 },
+				{ x: 18, y: -12 },
+			],
+			leftSide: [{ x: 1.5, y: -22 }],
+			rightSide: [{ x: 0.5, y: 21 }],
+		});
 
 		this.sprites['targetingReticule'] = createTargetingReticule({
 			xl: -34,
@@ -55,9 +68,14 @@ export default class Fenrir extends PIXI.Container {
 		this.targetRotation = 0;
 
 		this.addChild(this.sprites['shipBody']);
-		this.addChild(this.sprites['harness']);
-		for (const key in this.sprites['targetingReticule'])
-			this.addChild(this.sprites['targetingReticule'][key]);
+		this.addChild(this.sprites['harness_inner']);
+		this.addChild(this.sprites['harness_main']);
+		for (const thKey in this.sprites['thrusters'])
+			this.sprites['thrusters'][thKey].forEach((thruster) =>
+				this.addChild(thruster)
+			);
+		for (const tRKey in this.sprites['targetingReticule'])
+			this.addChild(this.sprites['targetingReticule'][tRKey]);
 
 		if (this.facing === -1) {
 			this.targetRotation = Math.PI;
@@ -67,7 +85,7 @@ export default class Fenrir extends PIXI.Container {
 	}
 
 	onUpdate(delta) {
-		this.showDamageTint(['shipBody', 'harness']);
+		this.showDamageTint(['shipBody', 'harness_inner', 'harness_main']);
 		this.animateExplosion(delta);
 		this.flip();
 		this.fireThrusters();

@@ -157,25 +157,55 @@ export const fromSpriteSheet = {
 };
 
 export function createTargetingReticule(params) {
-	let obj = {};
-	obj.TL = fromSpriteSheet.create(332, 12, 11, 11);
-	obj.TR = fromSpriteSheet.create(362, 12, 11, 11);
-	obj.BL = fromSpriteSheet.create(332, 42, 11, 11);
-	obj.BR = fromSpriteSheet.create(362, 42, 11, 11);
-	obj.TL.x = params.xl;
-	obj.TL.y = params.yt;
-	obj.TR.x = params.xr;
-	obj.TR.y = params.yt;
-	obj.BL.x = params.xl;
-	obj.BL.y = params.yb;
-	obj.BR.x = params.xr;
-	obj.BR.y = params.yb;
-	obj.TL.alpha = 0;
-	obj.TR.alpha = 0;
-	obj.BL.alpha = 0;
-	obj.BR.alpha = 0;
+	let re = {};
+	re.TL = fromSpriteSheet.create(332, 12, 11, 11);
+	re.TR = fromSpriteSheet.create(362, 12, 11, 11);
+	re.BL = fromSpriteSheet.create(332, 42, 11, 11);
+	re.BR = fromSpriteSheet.create(362, 42, 11, 11);
+	re.TL.x = params.xl;
+	re.TL.y = params.yt;
+	re.TR.x = params.xr;
+	re.TR.y = params.yt;
+	re.BL.x = params.xl;
+	re.BL.y = params.yb;
+	re.BR.x = params.xr;
+	re.BR.y = params.yb;
+	re.TL.alpha = 0;
+	re.TR.alpha = 0;
+	re.BL.alpha = 0;
+	re.BR.alpha = 0;
 
-	return obj;
+	return re;
+}
+
+export function addThrusters(params) {
+	let re = {};
+
+	for (const nozzleOrientation in params) {
+		re[nozzleOrientation] = params[nozzleOrientation].map((thruster) => {
+			let current;
+			if (nozzleOrientation === 'main') {
+				current = fromSpriteSheet.create(275, 90, 20, 12);
+			} else {
+				current = fromSpriteSheet.create(285, 23, 8, 16);
+				switch (nozzleOrientation) {
+					case 'front':
+						current.rotation = Math.PI / 2;
+						break;
+					case 'rightSide':
+						current.rotation = Math.PI;
+						break;
+				}
+			}
+			current.x = thruster.x;
+			current.y = thruster.y;
+			// current.alpha = 0;
+
+			return current;
+		});
+	}
+
+	return re;
 }
 
 export function toggleTargetingReticule(toggle) {
@@ -290,7 +320,7 @@ export function fireThrusters() {
 			}
 		}
 
-		// console.log(update);
+		console.log(update);
 
 		this.currentLatVelocity = this.latVelocity;
 		this.currentLongVelocity = this.longVelocity;
