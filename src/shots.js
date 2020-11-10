@@ -10,6 +10,7 @@ const shots = {
 	handlers: {
 		dispatch: null,
 		state: null,
+		paused: null,
 		stage: null,
 		stageEntities: null,
 	}, // gets its values in App.js
@@ -81,7 +82,8 @@ const shots = {
 				shots.cannonStates[entityId].remainingShots <
 				shots.cannonStates[entityId].maxShots
 			) {
-				shots.cannonStates[entityId].remainingShots++;
+				if (!shots.handlers.paused.proper)
+					shots.cannonStates[entityId].remainingShots++;
 				// console.log(`regen - ${shots.cannonStates[entityId].remainingShots}`);
 			} else {
 				window.clearInterval(shots.shotRegenIntervals[entityId]);
@@ -381,7 +383,7 @@ const shots = {
 					entities.despawn(entityId, false);
 				});
 
-				console.log(`removing ${entityId} from state`);
+				// console.log(`removing ${entityId} from state`);
 				shots.handlers.dispatch({
 					type: c.actions.REMOVE_ENTITY,
 					id: entityId,

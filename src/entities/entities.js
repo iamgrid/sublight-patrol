@@ -190,7 +190,7 @@ const entities = {
 		}
 
 		if (goAhead) {
-			console.log(`removing ${entityId} from stage`);
+			// console.log(`removing ${entityId} from stage`);
 			const stageEntity = entities.stageEntities[entityId];
 			const entityStore = entities.stageEntities[entityId].entityStore;
 			entities.handlers.stage.removeChild(stageEntity);
@@ -203,7 +203,7 @@ const entities = {
 			delete entities.handlers.stagePointers[entityId];
 
 			if (removeFromState) {
-				console.log(`removing ${entityId} from state`);
+				// console.log(`removing ${entityId} from state`);
 				entities.handlers.dispatch({
 					type: c.actions.REMOVE_ENTITY,
 					id: entityId,

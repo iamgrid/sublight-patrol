@@ -118,6 +118,7 @@ export default class App extends PIXI.Application {
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
+			paused: this.paused,
 			stage: this.mainStage,
 			stageEntities: entities.stageEntities,
 		};
