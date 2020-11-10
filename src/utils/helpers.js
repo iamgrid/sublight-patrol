@@ -199,7 +199,7 @@ export function addThrusters(params) {
 			}
 			current.x = thruster.x;
 			current.y = thruster.y;
-			// current.alpha = 0;
+			current.alpha = 0;
 
 			return current;
 		});
@@ -320,10 +320,22 @@ export function fireThrusters() {
 			}
 		}
 
-		console.log(update);
+		for (const nozzleOrientation in update) {
+			this.sprites.thrusters[nozzleOrientation].forEach((thruster) =>
+				toggleNozzle(thruster, update[nozzleOrientation])
+			);
+		}
 
 		this.currentLatVelocity = this.latVelocity;
 		this.currentLongVelocity = this.longVelocity;
+	}
+}
+
+function toggleNozzle(sprite, toggle = false) {
+	if (toggle) {
+		sprite.alpha = 1;
+	} else {
+		sprite.alpha = 0;
 	}
 }
 
