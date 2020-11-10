@@ -367,7 +367,6 @@ export default class App extends PIXI.Application {
 		}
 
 		function targetingCallback(newTargetId) {
-			if (newTargetId === null) return;
 			moveTargetingReticule(newTargetId, entities.stageEntities);
 		}
 
@@ -394,6 +393,14 @@ export default class App extends PIXI.Application {
 				type: c.actions.TARGET,
 				do: 'previous',
 				stageEntities: entities.stageEntities,
+				callbackFn: targetingCallback,
+			});
+		}
+
+		if (Keyboard.isKeyPressed('KeyC')) {
+			this.dispatch({
+				type: c.actions.TARGET,
+				do: 'clear',
 				callbackFn: targetingCallback,
 			});
 		}
