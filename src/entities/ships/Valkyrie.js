@@ -32,6 +32,7 @@ export default class Valkyrie extends PIXI.Container {
 		this.flip = flip.bind(this);
 		this.blowUp = blowUp.bind(this);
 		this.animateExplosion = animateExplosion.bind(this);
+		this.addThrusters = addThrusters.bind(this);
 		this.fireThrusters = fireThrusters.bind(this);
 
 		this.sprites = {};
@@ -44,7 +45,7 @@ export default class Valkyrie extends PIXI.Container {
 		this.sprites['harness_main'] = fromSpriteSheet.create(66, 3, 60, 60);
 		this.sprites['harness_main'].x = -12;
 
-		this.sprites['thrusters'] = addThrusters({
+		this.addThrusters({
 			main: [{ x: -44, y: -1 }],
 			front: [
 				{ x: 16, y: 12 },

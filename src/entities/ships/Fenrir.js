@@ -32,6 +32,7 @@ export default class Fenrir extends PIXI.Container {
 		this.flip = flip.bind(this);
 		this.blowUp = blowUp.bind(this);
 		this.animateExplosion = animateExplosion.bind(this);
+		this.addThrusters = addThrusters.bind(this);
 		this.fireThrusters = fireThrusters.bind(this);
 
 		this.sprites = {};
@@ -45,7 +46,7 @@ export default class Fenrir extends PIXI.Container {
 		this.sprites['harness_main'].x = -10;
 		this.sprites['harness_main'].y = -1;
 
-		this.sprites['thrusters'] = addThrusters({
+		this.addThrusters({
 			main: [{ x: -42, y: -1 }],
 			front: [
 				{ x: 18, y: 12 },

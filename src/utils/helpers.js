@@ -205,7 +205,22 @@ export function addThrusters(params) {
 		});
 	}
 
-	return re;
+	this.sprites['thrusters'] = re;
+
+	this.thrusterAlphas = {
+		current: {
+			main: 0,
+			front: 0,
+			leftSide: 0,
+			rightSide: 0,
+		},
+		required: {
+			main: 0,
+			front: 0,
+			leftSide: 0,
+			rightSide: 0,
+		},
+	};
 }
 
 export function toggleTargetingReticule(toggle) {
@@ -321,21 +336,56 @@ export function fireThrusters() {
 		}
 
 		for (const nozzleOrientation in update) {
-			this.sprites.thrusters[nozzleOrientation].forEach((thruster) =>
-				toggleNozzle(thruster, update[nozzleOrientation])
-			);
+			if (update[nozzleOrientation]) {
+				this.thrusterAlphas.required[nozzleOrientation] = 100;
+			} else {
+				this.thrusterAlphas.required[nozzleOrientation] = 0;
+			}
 		}
 
 		this.currentLatVelocity = this.latVelocity;
 		this.currentLongVelocity = this.longVelocity;
 	}
-}
 
-function toggleNozzle(sprite, toggle = false) {
-	if (toggle) {
-		sprite.alpha = 1;
-	} else {
-		sprite.alpha = 0;
+	for (const orientation in this.thrusterAlphas.required) {
+		let goAhead = false;
+		let step = 15;
+		if (orientation === 'main') step = 5;
+
+		if (
+			this.thrusterAlphas.required[orientation] >
+			this.thrusterAlphas.current[orientation]
+		) {
+			this.thrusterAlphas.current[orientation] = Math.min(
+				100,
+				this.thrusterAlphas.current[orientation] + step
+			);
+			goAhead = true;
+		} else if (
+			this.thrusterAlphas.required[orientation] <
+			this.thrusterAlphas.current[orientation]
+		) {
+			this.thrusterAlphas.current[orientation] = Math.max(
+				0,
+				this.thrusterAlphas.current[orientation] - step
+			);
+			goAhead = true;
+		}
+
+		if (goAhead) {
+			this.sprites.thrusters[orientation].forEach(
+				(thruster) =>
+					(thruster.alpha = this.thrusterAlphas.current[orientation] / 100)
+			);
+
+			if (
+				this.thrusterAlphas.required[orientation] ===
+				this.thrusterAlphas.current[orientation]
+			)
+				this.thrusterAlphas.current[orientation] = this.thrusterAlphas.required[
+					orientation
+				];
+		}
 	}
 }
 
