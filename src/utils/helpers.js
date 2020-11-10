@@ -3,6 +3,16 @@ import c from './constants';
 import { fadeHexColor, easing } from './formulas';
 import entities from '../entities/entities';
 
+export const timing = {
+	times: {
+		intro: 0,
+		play: 0,
+		pause: 0,
+	},
+	startTime: 0,
+	isPaused: false,
+};
+
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
 		return [
@@ -386,11 +396,11 @@ export function animateExplosion(delta) {
 }
 
 export const shields = {
-	handlers: { dispatch: null, state: null, paused: null, stageEntities: null }, // gets its values in App.js
+	handlers: { dispatch: null, state: null, timing: null, stageEntities: null }, // gets its values in App.js
 	shieldRegenInterval: null,
 
 	shieldRegenTick() {
-		if (shields.handlers.paused.proper) return;
+		if (shields.handlers.timing.isPaused) return;
 
 		const currentState = shields.handlers.state();
 		// console.log(shields.handlers.stageEntities);

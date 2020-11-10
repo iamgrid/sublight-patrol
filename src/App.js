@@ -2,6 +2,7 @@ import * as PIXI from './pixi';
 import c from './utils/constants';
 import overlays from './overlays';
 import {
+	timing,
 	repositionMovedEntities,
 	updateStageEntityVelocities,
 	fromSpriteSheet,
@@ -68,11 +69,9 @@ export default class App extends PIXI.Application {
 		this.gameState = state;
 		this.dispatch = dispatch;
 
-		this.paused = { proper: false };
 		this.pixiState = this.play;
 
-		this.startTime = new Date().getTime();
-		this.gameTime = 0;
+		timing.startTime = new Date().getTime();
 
 		console.log(entities.types);
 		console.log(story);
@@ -118,7 +117,7 @@ export default class App extends PIXI.Application {
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			paused: this.paused,
+			timing: timing,
 			stage: this.mainStage,
 			stageEntities: entities.stageEntities,
 		};
@@ -126,7 +125,7 @@ export default class App extends PIXI.Application {
 		shields.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			paused: this.paused,
+			timing: timing,
 			stageEntities: entities.stageEntities,
 		};
 
@@ -520,17 +519,17 @@ export default class App extends PIXI.Application {
 		}
 
 		// gametime
-		this.gameTime += this.ticker.deltaMS;
+		timing.times.play += this.ticker.deltaMS;
 
-		if (!this.triggered1 && this.gameTime > 2000) {
+		if (!this.triggered1 && timing.times.play > 2000) {
 			/*dialog(
 				'Commander Shepherd',
 				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
 			);*/
 			// alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
 			// alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('aqua', 'Aqua test. #1', this.gameTime);
-			status.add('yellow', 'Yellow test. #2', this.gameTime);
+			status.add('aqua', 'Aqua test. #1', timing.times.play);
+			status.add('yellow', 'Yellow test. #2', timing.times.play);
 			hud.toggle(true);
 			this.dispatch({
 				type: c.actions.FLIP,
@@ -551,11 +550,11 @@ export default class App extends PIXI.Application {
 			this.triggered1 = true;
 		}
 
-		if (!this.triggered2 && this.gameTime > 8000) {
+		if (!this.triggered2 && timing.times.play > 8000) {
 			// dialog('Love Eternal', 'Prepare to be assimilated.');
 			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 			// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
-			status.add('green', 'Green test. #3', this.gameTime);
+			status.add('green', 'Green test. #3', timing.times.play);
 			this.dispatch({
 				type: c.actions.FLIP,
 				id: 'alpha_1',
@@ -571,7 +570,7 @@ export default class App extends PIXI.Application {
 					status.add(
 						'red',
 						'[Beta 1] relation switched to hostile.',
-						this.gameTime
+						timing.times.play
 					);
 				},
 			});
@@ -581,19 +580,19 @@ export default class App extends PIXI.Application {
 			this.triggered2 = true;
 		}
 
-		if (!this.triggered3 && this.gameTime > 16000) {
+		if (!this.triggered3 && timing.times.play > 16000) {
 			// dialog('Death Herself', 'Resistance is futile.');
 			// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
 			// console.log(currentState);
 			this.triggered3 = true;
 		}
 
-		if (!this.triggered4 && this.gameTime > 20000) {
+		if (!this.triggered4 && timing.times.play > 20000) {
 			// dialog('', '', true);
 			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('red', 'Red test. #4', this.gameTime);
-			status.add('aqua', 'Aqua test. #5', this.gameTime);
-			status.add('yellow', 'Yellow test. #6', this.gameTime);
+			status.add('red', 'Red test. #4', timing.times.play);
+			status.add('aqua', 'Aqua test. #5', timing.times.play);
+			status.add('yellow', 'Yellow test. #6', timing.times.play);
 			// console.log(currentState);
 			// hud.toggle(false);
 			this.triggered4 = true;
@@ -609,6 +608,7 @@ export default class App extends PIXI.Application {
 			console.info(this.gameState());
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
+			console.info('timing times:', timing.times);
 			this.shownStateOnPause = true;
 		}
 		if (Keyboard.isKeyPressed('Escape')) {
@@ -629,15 +629,15 @@ export default class App extends PIXI.Application {
 
 	togglePause() {
 		const pauseDiv = document.getElementById('game__pause');
-		if (!this.paused.proper) {
+		if (!timing.isPaused) {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
-			this.paused.proper = true;
+			timing.isPaused = true;
 			this.pixiState = this.pause;
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
-			this.paused.proper = false;
+			timing.isPaused = false;
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 		}

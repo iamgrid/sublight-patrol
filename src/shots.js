@@ -10,7 +10,7 @@ const shots = {
 	handlers: {
 		dispatch: null,
 		state: null,
-		paused: null,
+		timing: null,
 		stage: null,
 		stageEntities: null,
 	}, // gets its values in App.js
@@ -82,7 +82,7 @@ const shots = {
 				shots.cannonStates[entityId].remainingShots <
 				shots.cannonStates[entityId].maxShots
 			) {
-				if (!shots.handlers.paused.proper)
+				if (!shots.handlers.timing.isPaused)
 					shots.cannonStates[entityId].remainingShots++;
 				// console.log(`regen - ${shots.cannonStates[entityId].remainingShots}`);
 			} else {
