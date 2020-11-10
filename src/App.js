@@ -69,7 +69,8 @@ export default class App extends PIXI.Application {
 		this.gameState = state;
 		this.dispatch = dispatch;
 
-		this.pixiState = this.play;
+		// timing.currentMode = timing.timingModes.play;
+		// this.pixiState = this.play;
 
 		timing.startTime = new Date().getTime();
 
@@ -282,10 +283,38 @@ export default class App extends PIXI.Application {
 
 		console.log(this.gameState());
 
+		timing.currentMode = timing.timingModes.play;
 		this.pixiState = this.play;
 
 		// Create an update loop
 		this.ticker.add(this.gameLoop.bind(this));
+
+		// setTimout tests
+		const testTimer = timing.setTimeout(
+			() => {
+				console.log('hello timer');
+			},
+			timing.timingModes.play,
+			2000
+		);
+
+		console.log(testTimer);
+		const testTimer2 = timing.setTimeout(
+			() => {
+				timing.clearTimeout(testTimer);
+			},
+			timing.timingModes.play,
+			1000
+		);
+		console.log(testTimer2);
+		const testTimer3 = timing.setTimeout(
+			() => {
+				console.log('hello from timer 3', entities.stageEntities['b2508-016']);
+			},
+			timing.timingModes.play,
+			4000
+		);
+		console.log(testTimer3);
 	}
 
 	gameLoop(delta) {
@@ -518,8 +547,8 @@ export default class App extends PIXI.Application {
 			this.dispatch({ type: c.actions.SCAN });
 		}
 
-		// gametime
-		timing.times.play += this.ticker.deltaMS;
+		// timing tick
+		timing.tick('play', this.ticker.deltaMS);
 
 		if (!this.triggered1 && timing.times.play > 2000) {
 			/*dialog(
@@ -600,6 +629,9 @@ export default class App extends PIXI.Application {
 	}
 
 	pause() {
+		// timing tick
+		timing.tick('pause', this.ticker.deltaMS);
+
 		if (!this.shownStateOnPause) {
 			console.info(
 				'%c Game paused, logging state:',
@@ -608,7 +640,7 @@ export default class App extends PIXI.Application {
 			console.info(this.gameState());
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
-			console.info('timing times:', timing.times);
+			console.info('timing:', timing.times, timing.tickers);
 			this.shownStateOnPause = true;
 		}
 		if (Keyboard.isKeyPressed('Escape')) {
@@ -633,11 +665,13 @@ export default class App extends PIXI.Application {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.isPaused = true;
+			timing.currentMode = timing.timingModes.pause;
 			this.pixiState = this.pause;
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			timing.isPaused = false;
+			timing.currentMode = timing.timingModes.play;
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 		}

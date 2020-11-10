@@ -1,16 +1,74 @@
 import * as PIXI from '../pixi';
 import c from './constants';
+import idCreator from './idCreator';
 import { fadeHexColor, easing } from './formulas';
 import entities from '../entities/entities';
 
 export const timing = {
+	timingModes: {
+		intro: 'intro',
+		play: 'play',
+		pause: 'pause',
+	},
 	times: {
 		intro: 0,
 		play: 0,
 		pause: 0,
 	},
+	tickers: {
+		intro: {},
+		play: {},
+		pause: {},
+	},
 	startTime: 0,
+	currentMode: 'play',
 	isPaused: false,
+
+	tick(mode, deltaMS) {
+		timing.times[mode] += deltaMS;
+
+		for (const tickerId in timing.tickers[mode]) {
+			timing.tickers[mode][tickerId].tick(deltaMS);
+		}
+	},
+
+	setTimeout(callbackFn, mode, milliseconds) {
+		// based on:
+		// https://github.com/brenwell/pixi-timeout/blob/master/index.js
+		let progress = 0;
+		const tickerId = idCreator.create();
+
+		const tick = (deltaMS) => {
+			progress += deltaMS;
+
+			if (progress > milliseconds) end(true);
+		};
+
+		const end = (fire) => {
+			// remove from tickers
+			delete timing.tickers[mode][tickerId];
+
+			// fire callback function
+			if (fire) callbackFn();
+		};
+
+		const clear = () => {
+			end(false);
+		};
+
+		const finish = () => {
+			end(true);
+		};
+
+		// start
+		timing.tickers[mode][tickerId] = { tick };
+
+		return { clear, finish };
+	},
+
+	clearTimeout(timerObj) {
+		timerObj.clear();
+	},
 };
 
 export function getPosition(entityId, positions) {
