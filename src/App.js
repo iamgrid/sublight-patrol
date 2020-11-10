@@ -60,16 +60,12 @@ export default class App extends PIXI.Application {
 		};
 
 		this.triggered0 = false;
-		this.triggered1 = false;
-		this.triggered2 = false;
-		this.triggered3 = false;
-		this.triggered4 = false;
 
 		const [state, dispatch] = useReducer(mainReducer, initialGameState);
 		this.gameState = state;
 		this.dispatch = dispatch;
 
-		// timing.currentMode = timing.timingModes.play;
+		// timing.currentMode = timing.modes.play;
 		// this.pixiState = this.play;
 
 		timing.startTime = new Date().getTime();
@@ -284,11 +280,97 @@ export default class App extends PIXI.Application {
 
 		console.log(this.gameState());
 
-		timing.currentMode = timing.timingModes.play;
+		timing.currentMode = timing.modes.play;
 		this.pixiState = this.play;
 
 		// Create an update loop
 		this.ticker.add(this.gameLoop.bind(this));
+
+		// triggers
+		timing.setTrigger(
+			() => {
+				// dialog(
+				// 	'Commander Shepherd',
+				// 	"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
+				// );
+				// alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
+				// alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
+				status.add('aqua', 'Aqua test. #1', timing.times.play);
+				status.add('yellow', 'Yellow test. #2', timing.times.play);
+				hud.toggle(true);
+				this.dispatch({
+					type: c.actions.FLIP,
+					id: 'alpha_1',
+					store: 'targetable',
+				});
+				entities.stageEntities['alpha_1'].targetRotation = 0;
+				shots.startShooting('alpha_1');
+				// entities.stageEntities.beta_1.blowUp();
+				// shots.showDamage(
+				// 	'beta_1',
+				// 	'targetable',
+				// 	'destruction',
+				// 	entities.stageEntities
+				// );
+			},
+			timing.modes.play,
+			2000
+		);
+
+		timing.setTrigger(
+			() => {
+				// dialog('Love Eternal', 'Prepare to be assimilated.');
+				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
+				// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
+				status.add('green', 'Green test. #3', timing.times.play);
+				this.dispatch({
+					type: c.actions.FLIP,
+					id: 'alpha_1',
+					store: 'targetable',
+				});
+				entities.stageEntities['alpha_1'].targetRotation = Math.PI;
+				this.dispatch({
+					type: c.actions.CHANGE_PLAYER_RELATION,
+					entityId: 'beta_1',
+					newRelation: 'hostile',
+					callbackFn: (newRelation) => {
+						entities.stageEntities['beta_1'].reticuleRelation(newRelation);
+						status.add(
+							'red',
+							'[Beta 1] relation switched to hostile.',
+							timing.times.play
+						);
+					},
+				});
+				// hud.toggle(false);
+				shots.stopShooting('alpha_1');
+			},
+			timing.modes.play,
+			8000
+		);
+
+		const clearTriggerTest = timing.setTrigger(
+			() => {
+				dialog('Death Herself', 'Resistance is futile.');
+				// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
+			},
+			timing.modes.play,
+			16000
+		);
+
+		timing.clearTrigger(clearTriggerTest);
+
+		timing.setTrigger(
+			() => {
+				dialog('', '', true);
+				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
+				status.add('red', 'Red test. #4', timing.times.play);
+				status.add('aqua', 'Aqua test. #5', timing.times.play);
+				status.add('yellow', 'Yellow test. #6', timing.times.play);
+			},
+			timing.modes.play,
+			20000
+		);
 	}
 
 	gameLoop(delta) {
@@ -529,90 +611,10 @@ export default class App extends PIXI.Application {
 		}
 
 		// timing tick
-		timing.tick('play', this.ticker.deltaMS);
-
-		if (!this.triggered1 && timing.times.play > 2000) {
-			/*dialog(
-				'Commander Shepherd',
-				"Since our time together is coming to a close, I'd like to tell you on behalf of the team that we really loved having you with us, getting clear-eyed feedback on the Valkyrie's control scheme and calibration from a fresh graduate's perspective turned out to be a huge help."
-			);*/
-			// alertsAndWarnings.add(c.alertsAndWarnings.warnings.collision);
-			// alertsAndWarnings.add(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('aqua', 'Aqua test. #1', timing.times.play);
-			status.add('yellow', 'Yellow test. #2', timing.times.play);
-			hud.toggle(true);
-			this.dispatch({
-				type: c.actions.FLIP,
-				id: 'alpha_1',
-				store: 'targetable',
-			});
-			entities.stageEntities['alpha_1'].targetRotation = 0;
-			// shots.startShooting('alpha_1');
-			// this.removeShot('bla');
-			// entities.stageEntities.beta_1.blowUp();
-			// shots.showDamage(
-			// 	'beta_1',
-			// 	'targetable',
-			// 	'destruction',
-			// 	entities.stageEntities
-			// );
-			// console.log(currentState);
-			this.triggered1 = true;
-		}
-
-		if (!this.triggered2 && timing.times.play > 8000) {
-			// dialog('Love Eternal', 'Prepare to be assimilated.');
-			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
-			// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
-			status.add('green', 'Green test. #3', timing.times.play);
-			this.dispatch({
-				type: c.actions.FLIP,
-				id: 'alpha_1',
-				store: 'targetable',
-			});
-			entities.stageEntities['alpha_1'].targetRotation = Math.PI;
-			this.dispatch({
-				type: c.actions.CHANGE_PLAYER_RELATION,
-				entityId: 'beta_1',
-				newRelation: 'hostile',
-				callbackFn: (newRelation) => {
-					entities.stageEntities['beta_1'].reticuleRelation(newRelation);
-					status.add(
-						'red',
-						'[Beta 1] relation switched to hostile.',
-						timing.times.play
-					);
-				},
-			});
-			// hud.toggle(false);
-			// shots.stopShooting('alpha_1');
-			// console.log(currentState);
-			this.triggered2 = true;
-		}
-
-		if (!this.triggered3 && timing.times.play > 16000) {
-			// dialog('Death Herself', 'Resistance is futile.');
-			// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
-			// console.log(currentState);
-			this.triggered3 = true;
-		}
-
-		if (!this.triggered4 && timing.times.play > 20000) {
-			// dialog('', '', true);
-			// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
-			status.add('red', 'Red test. #4', timing.times.play);
-			status.add('aqua', 'Aqua test. #5', timing.times.play);
-			status.add('yellow', 'Yellow test. #6', timing.times.play);
-			// console.log(currentState);
-			// hud.toggle(false);
-			this.triggered4 = true;
-		}
+		timing.tick(timing.modes.play, this.ticker.deltaMS);
 	}
 
 	pause() {
-		// timing tick
-		timing.tick('pause', this.ticker.deltaMS);
-
 		if (!this.shownStateOnPause) {
 			console.info(
 				'%c Game paused, logging state:',
@@ -621,7 +623,12 @@ export default class App extends PIXI.Application {
 			console.info(this.gameState());
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
-			console.info('timing:', timing.times, timing.tickers);
+			console.info(
+				'timing:',
+				timing.times,
+				timing.tickers.play,
+				timing.triggers.play
+			);
 			this.shownStateOnPause = true;
 		}
 		if (Keyboard.isKeyPressed('Escape')) {
@@ -638,6 +645,9 @@ export default class App extends PIXI.Application {
 				statusProperDiv.scrollBy(0, 4);
 			}
 		}
+
+		// timing tick
+		timing.tick(timing.modes.pause, this.ticker.deltaMS);
 	}
 
 	togglePause() {
@@ -645,12 +655,12 @@ export default class App extends PIXI.Application {
 		if (!timing.isPaused()) {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
-			timing.currentMode = timing.timingModes.pause;
+			timing.currentMode = timing.modes.pause;
 			this.pixiState = this.pause;
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
-			timing.currentMode = timing.timingModes.play;
+			timing.currentMode = timing.modes.play;
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 		}

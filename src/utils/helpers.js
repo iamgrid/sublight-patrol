@@ -5,7 +5,7 @@ import { fadeHexColor, easing } from './formulas';
 import entities from '../entities/entities';
 
 export const timing = {
-	timingModes: {
+	modes: {
 		intro: 'intro',
 		play: 'play',
 		pause: 'pause',
@@ -20,19 +20,37 @@ export const timing = {
 		play: {},
 		pause: {},
 	},
+	triggers: {
+		intro: {},
+		play: {},
+		pause: {},
+	},
 	startTime: 0,
 	currentMode: 'play',
 
 	isPaused() {
-		if (timing.currentMode === timing.timingModes.pause) return true;
+		if (timing.currentMode === timing.modes.pause) return true;
 		return false;
 	},
 
 	tick(mode, deltaMS) {
 		timing.times[mode] += deltaMS;
 
+		// timeouts
 		for (const tickerId in timing.tickers[mode]) {
 			timing.tickers[mode][tickerId].tick(deltaMS);
+		}
+
+		// triggers
+		for (const triggerTime in timing.triggers[mode]) {
+			if (triggerTime <= timing.times[mode]) {
+				// execute callbackFns for these triggerTimes
+				for (const triggerId in timing.triggers[mode][triggerTime])
+					timing.triggers[mode][triggerTime][triggerId].finish();
+
+				// remove triggerTimes that have been executed
+				delete timing.triggers[mode][triggerTime];
+			}
 		}
 	},
 
@@ -72,6 +90,36 @@ export const timing = {
 
 	clearTimeout(timerObj) {
 		if (timerObj) timerObj.clear();
+	},
+
+	setTrigger(callbackFn, mode, milliseconds) {
+		const triggerId = idCreator.create();
+		const end = (fire) => {
+			// remove from tickers
+			delete timing.triggers[mode][milliseconds][triggerId];
+
+			// fire callback function
+			if (fire) callbackFn();
+		};
+
+		const clear = () => {
+			end(false);
+		};
+
+		const finish = () => {
+			end(true);
+		};
+
+		// set
+		if (timing.triggers[mode][milliseconds] === undefined)
+			timing.triggers[mode][milliseconds] = {};
+		timing.triggers[mode][milliseconds][triggerId] = { finish };
+
+		return { clear, finish };
+	},
+
+	clearTrigger(triggerObj) {
+		if (triggerObj) triggerObj.clear();
 	},
 };
 
@@ -414,11 +462,7 @@ export function blowUp(callbackFn = null) {
 
 	// delete stage entity
 	if (typeof callbackFn === 'function') {
-		timing.setTimeout(
-			callbackFn,
-			timing.timingModes.play,
-			timings.explosionsDone
-		);
+		timing.setTimeout(callbackFn, timing.modes.play, timings.explosionsDone);
 	}
 }
 
@@ -609,7 +653,7 @@ export function dialog(speaker, say, hide = false) {
 			() => {
 				containerDiv.style.visibility = 'hidden';
 			},
-			timing.timingModes.play,
+			timing.modes.play,
 			500
 		);
 		return;
@@ -631,7 +675,7 @@ export function dialog(speaker, say, hide = false) {
 			() => {
 				dialogHelper(speaker, say);
 			},
-			timing.timingModes.play,
+			timing.modes.play,
 			400
 		);
 	}
@@ -645,20 +689,23 @@ export const alertsAndWarnings = {
 	isVisible: false,
 
 	add(value) {
-		this[`${value.type}s`].add(value.k);
-		if (!this.isFading) {
-			this.update();
+		alertsAndWarnings[`${value.type}s`].add(value.k);
+		if (!alertsAndWarnings.isFading) {
+			alertsAndWarnings.update();
 		} else {
-			timing.setTimeout(alertsAndWarnings.update, timing.timingModes.play, 500);
+			timing.setTimeout(alertsAndWarnings.update, timing.modes.play, 500);
 		}
 	},
 
 	remove(value) {
-		this[`${value.type}s`].delete(value.k);
-		if (this.warnings.size < 1 && this.alerts.size < 1) {
-			this.update(true);
+		alertsAndWarnings[`${value.type}s`].delete(value.k);
+		if (
+			alertsAndWarnings.warnings.size < 1 &&
+			alertsAndWarnings.alerts.size < 1
+		) {
+			alertsAndWarnings.update(true);
 		} else {
-			this.update();
+			alertsAndWarnings.update();
 		}
 	},
 
@@ -668,14 +715,14 @@ export const alertsAndWarnings = {
 
 		if (hide) {
 			containerDiv.style.opacity = '0';
-			this.isFading = true;
+			alertsAndWarnings.isFading = true;
 			alertsAndWarnings.hiderTimeout = timing.setTimeout(
 				() => {
 					containerDiv.classList.remove('game__warnings--shown');
 					alertsAndWarnings.isFading = false;
 					alertsAndWarnings.isVisible = false;
 				},
-				timing.timingModes.play,
+				timing.modes.play,
 				900
 			);
 			return;
@@ -701,7 +748,7 @@ export const alertsAndWarnings = {
 					alertsAndWarnings.isFading = false;
 					alertsAndWarnings.isVisible = true;
 				},
-				timing.timingModes.play,
+				timing.modes.play,
 				400
 			);
 
@@ -718,25 +765,25 @@ export const alertsAndWarnings = {
 			messageDiv.innerHTML = displayText.join('<br />');
 		}
 
-		if (!this.isVisible) {
+		if (!alertsAndWarnings.isVisible) {
 			warningHelper();
 		} else {
 			containerDiv.style.opacity = '0';
-			this.isFading = true;
+			alertsAndWarnings.isFading = true;
 			timing.setTimeout(
 				() => {
 					warningHelper();
 				},
-				timing.timingModes.play,
+				timing.modes.play,
 				400
 			);
 		}
 	},
 
 	clear() {
-		this.warnings = new Set();
-		this.alerts = new Set();
-		this.update(true);
+		alertsAndWarnings.warnings = new Set();
+		alertsAndWarnings.alerts = new Set();
+		alertsAndWarnings.update(true);
 	},
 };
 

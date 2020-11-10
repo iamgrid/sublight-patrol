@@ -31,7 +31,7 @@ const hud = {
 				() => {
 					hud.fadePixiHUD(true);
 				},
-				timing.timingModes.play,
+				timing.modes.play,
 				1000
 			);
 		} else {
