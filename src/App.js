@@ -134,6 +134,7 @@ export default class App extends PIXI.Application {
 			pixiHUD: this.pixiHUD,
 			cannonStates: shots.cannonStates,
 			camera: this.camera,
+			timing: timing,
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
@@ -288,33 +289,6 @@ export default class App extends PIXI.Application {
 
 		// Create an update loop
 		this.ticker.add(this.gameLoop.bind(this));
-
-		// setTimout tests
-		const testTimer = timing.setTimeout(
-			() => {
-				console.log('hello timer');
-			},
-			timing.timingModes.play,
-			2000
-		);
-
-		console.log(testTimer);
-		const testTimer2 = timing.setTimeout(
-			() => {
-				timing.clearTimeout(testTimer);
-			},
-			timing.timingModes.play,
-			1000
-		);
-		console.log(testTimer2);
-		const testTimer3 = timing.setTimeout(
-			() => {
-				console.log('hello from timer 3', entities.stageEntities['b2508-016']);
-			},
-			timing.timingModes.play,
-			4000
-		);
-		console.log(testTimer3);
 	}
 
 	gameLoop(delta) {
@@ -661,16 +635,14 @@ export default class App extends PIXI.Application {
 
 	togglePause() {
 		const pauseDiv = document.getElementById('game__pause');
-		if (!timing.isPaused) {
+		if (!timing.isPaused()) {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
-			timing.isPaused = true;
 			timing.currentMode = timing.timingModes.pause;
 			this.pixiState = this.pause;
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
-			timing.isPaused = false;
 			timing.currentMode = timing.timingModes.play;
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;

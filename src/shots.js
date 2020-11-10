@@ -82,7 +82,7 @@ const shots = {
 				shots.cannonStates[entityId].remainingShots <
 				shots.cannonStates[entityId].maxShots
 			) {
-				if (!shots.handlers.timing.isPaused)
+				if (!shots.handlers.timing.isPaused())
 					shots.cannonStates[entityId].remainingShots++;
 				// console.log(`regen - ${shots.cannonStates[entityId].remainingShots}`);
 			} else {
@@ -383,7 +383,7 @@ const shots = {
 					entities.despawn(entityId, false);
 				});
 
-				// console.log(`removing ${entityId} from state`);
+				console.info(`removing ${entityId} from state`);
 				shots.handlers.dispatch({
 					type: c.actions.REMOVE_ENTITY,
 					id: entityId,

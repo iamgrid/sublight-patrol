@@ -22,7 +22,11 @@ export const timing = {
 	},
 	startTime: 0,
 	currentMode: 'play',
-	isPaused: false,
+
+	isPaused() {
+		if (timing.currentMode === timing.timingModes.pause) return true;
+		return false;
+	},
 
 	tick(mode, deltaMS) {
 		timing.times[mode] += deltaMS;
@@ -67,7 +71,7 @@ export const timing = {
 	},
 
 	clearTimeout(timerObj) {
-		timerObj.clear();
+		if (timerObj) timerObj.clear();
 	},
 };
 
@@ -318,7 +322,11 @@ export function blowUp(callbackFn = null) {
 
 	// delete stage entity
 	if (typeof callbackFn === 'function') {
-		window.setTimeout(callbackFn, timings.explosionsDone);
+		timing.setTimeout(
+			callbackFn,
+			timing.timingModes.play,
+			timings.explosionsDone
+		);
 	}
 }
 
@@ -458,7 +466,7 @@ export const shields = {
 	shieldRegenInterval: null,
 
 	shieldRegenTick() {
-		if (shields.handlers.timing.isPaused) return;
+		if (shields.handlers.timing.isPaused()) return;
 
 		const currentState = shields.handlers.state();
 		// console.log(shields.handlers.stageEntities);
@@ -505,9 +513,13 @@ export function dialog(speaker, say, hide = false) {
 
 	if (hide) {
 		containerDiv.style.opacity = '0';
-		window.setTimeout(() => {
-			containerDiv.style.visibility = 'hidden';
-		}, 500);
+		timing.setTimeout(
+			() => {
+				containerDiv.style.visibility = 'hidden';
+			},
+			timing.timingModes.play,
+			500
+		);
 		return;
 	}
 
@@ -523,9 +535,13 @@ export function dialog(speaker, say, hide = false) {
 		dialogHelper(speaker, say);
 	} else {
 		containerDiv.style.opacity = '0';
-		window.setTimeout(() => {
-			dialogHelper(speaker, say);
-		}, 400);
+		timing.setTimeout(
+			() => {
+				dialogHelper(speaker, say);
+			},
+			timing.timingModes.play,
+			400
+		);
 	}
 }
 
@@ -541,7 +557,7 @@ export const alertsAndWarnings = {
 		if (!this.isFading) {
 			this.update();
 		} else {
-			window.setTimeout(alertsAndWarnings.update, 500);
+			timing.setTimeout(alertsAndWarnings.update, timing.timingModes.play, 500);
 		}
 	},
 
@@ -561,15 +577,19 @@ export const alertsAndWarnings = {
 		if (hide) {
 			containerDiv.style.opacity = '0';
 			this.isFading = true;
-			this.hiderTimeout = window.setTimeout(() => {
-				containerDiv.classList.remove('game__warnings--shown');
-				alertsAndWarnings.isFading = false;
-				alertsAndWarnings.isVisible = false;
-			}, 900);
+			alertsAndWarnings.hiderTimeout = timing.setTimeout(
+				() => {
+					containerDiv.classList.remove('game__warnings--shown');
+					alertsAndWarnings.isFading = false;
+					alertsAndWarnings.isVisible = false;
+				},
+				timing.timingModes.play,
+				900
+			);
 			return;
 		}
 
-		window.clearTimeout(this.hiderTimeout);
+		timing.clearTimeout(alertsAndWarnings.hiderTimeout);
 
 		containerDiv.classList.add('game__warnings--shown');
 
@@ -584,10 +604,14 @@ export const alertsAndWarnings = {
 
 			containerDiv.style.opacity = '0.6';
 			alertsAndWarnings.isFading = true;
-			window.setTimeout(() => {
-				alertsAndWarnings.isFading = false;
-				alertsAndWarnings.isVisible = true;
-			}, 400);
+			timing.setTimeout(
+				() => {
+					alertsAndWarnings.isFading = false;
+					alertsAndWarnings.isVisible = true;
+				},
+				timing.timingModes.play,
+				400
+			);
 
 			let displayText = [];
 
@@ -607,9 +631,13 @@ export const alertsAndWarnings = {
 		} else {
 			containerDiv.style.opacity = '0';
 			this.isFading = true;
-			window.setTimeout(() => {
-				warningHelper();
-			}, 400);
+			timing.setTimeout(
+				() => {
+					warningHelper();
+				},
+				timing.timingModes.play,
+				400
+			);
 		}
 	},
 

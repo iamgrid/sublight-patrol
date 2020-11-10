@@ -1,10 +1,10 @@
 import c from './utils/constants';
-import { getPosition } from './utils/helpers';
+import { getPosition, timing } from './utils/helpers';
 import { calculateAngle, calculateDistance } from './utils/formulas';
 import Pointer from './components/Pointer';
 
 const hud = {
-	handlers: { pixiHUD: null, cannonStates: null, camera: null }, // gets its values in App.js
+	handlers: { pixiHUD: null, cannonStates: null, camera: null, timing: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,
@@ -27,9 +27,13 @@ const hud = {
 		const hudDiv = document.getElementById('game__hud');
 		if (show) {
 			hudDiv.classList.add('game__hud--visible');
-			window.setTimeout(() => {
-				hud.fadePixiHUD(true);
-			}, 1000);
+			timing.setTimeout(
+				() => {
+					hud.fadePixiHUD(true);
+				},
+				timing.timingModes.play,
+				1000
+			);
 		} else {
 			hudDiv.classList.remove('game__hud--visible');
 			hud.fadePixiHUD(false);
