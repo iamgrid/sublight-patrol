@@ -1,8 +1,8 @@
 import * as PIXI from './pixi';
 import c from './utils/constants';
 import overlays from './overlays';
+import timing from './utils/timing';
 import {
-	timing,
 	repositionMovedEntities,
 	updateStageEntityVelocities,
 	fromSpriteSheet,
@@ -65,9 +65,6 @@ export default class App extends PIXI.Application {
 		this.gameState = state;
 		this.dispatch = dispatch;
 
-		// timing.currentMode = timing.modes.play;
-		// this.pixiState = this.play;
-
 		timing.startTime = new Date().getTime();
 
 		console.log(entities.types);
@@ -114,7 +111,6 @@ export default class App extends PIXI.Application {
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			timing: timing,
 			stage: this.mainStage,
 			stageEntities: entities.stageEntities,
 		};
@@ -122,7 +118,6 @@ export default class App extends PIXI.Application {
 		shields.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			timing: timing,
 			stageEntities: entities.stageEntities,
 		};
 
@@ -130,7 +125,6 @@ export default class App extends PIXI.Application {
 			pixiHUD: this.pixiHUD,
 			cannonStates: shots.cannonStates,
 			camera: this.camera,
-			timing: timing,
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
@@ -616,11 +610,15 @@ export default class App extends PIXI.Application {
 
 	pause() {
 		if (!this.shownStateOnPause) {
+			const currentState = this.gameState();
+			const playerId = currentState.entities.player.id;
+			shots.stopShooting(playerId);
+
 			console.info(
 				'%c Game paused, logging state:',
 				'padding-top: 10px; color: yellow'
 			);
-			console.info(this.gameState());
+			console.info(currentState);
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
 			console.info(

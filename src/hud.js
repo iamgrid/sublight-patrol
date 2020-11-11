@@ -1,10 +1,11 @@
 import c from './utils/constants';
-import { getPosition, timing } from './utils/helpers';
+import timing from './utils/timing';
+import { getPosition } from './utils/helpers';
 import { calculateAngle, calculateDistance } from './utils/formulas';
 import Pointer from './components/Pointer';
 
 const hud = {
-	handlers: { pixiHUD: null, cannonStates: null, camera: null, timing: null }, // gets its values in App.js
+	handlers: { pixiHUD: null, cannonStates: null, camera: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,

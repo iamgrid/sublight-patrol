@@ -1,4 +1,5 @@
 import c from './utils/constants';
+import timing from './utils/timing';
 import { getPosition, getStoreEntity } from './utils/helpers';
 import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
@@ -10,7 +11,6 @@ const shots = {
 	handlers: {
 		dispatch: null,
 		state: null,
-		timing: null,
 		stage: null,
 		stageEntities: null,
 	}, // gets its values in App.js
@@ -82,8 +82,7 @@ const shots = {
 				shots.cannonStates[entityId].remainingShots <
 				shots.cannonStates[entityId].maxShots
 			) {
-				if (!shots.handlers.timing.isPaused())
-					shots.cannonStates[entityId].remainingShots++;
+				if (!timing.isPaused()) shots.cannonStates[entityId].remainingShots++;
 				// console.log(`regen - ${shots.cannonStates[entityId].remainingShots}`);
 			} else {
 				window.clearInterval(shots.shotRegenIntervals[entityId]);
