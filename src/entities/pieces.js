@@ -28,6 +28,7 @@ const pieces = {
 			maxSystemStrength: null,
 			canMove: true,
 			isTargetable: true,
+			hasBehavior: true,
 		},
 		mutable: {
 			isDisabled: false,
@@ -95,6 +96,7 @@ const pieces = {
 			eMPIsCharging: false,
 		},
 	},
+
 	hasCannons: {
 		immutable: {
 			cannonColor: null,
@@ -105,6 +107,17 @@ const pieces = {
 			cannonCooldown: null,
 		},
 		mutable: {},
+	},
+
+	hasBehavior: {
+		immutable: {},
+		mutable: {
+			behaviorCurrentGoal: null,
+			behaviorGuarding: '',
+			behaviorAttacking: '',
+			behaviorAllowedToAvoidShots: true,
+			behaviorAllowedToFlee: true,
+		},
 	},
 
 	fenrir: {

@@ -22,6 +22,7 @@ import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
 import shots from './shots';
+import behavior from './behavior/behavior';
 import story from './story/story';
 import HUD from './components/HUD';
 
@@ -108,6 +109,11 @@ export default class App extends PIXI.Application {
 			stagePointers: hud.stagePointers,
 		};
 
+		behavior.handlers = {
+			dispatch: this.dispatch,
+			state: this.gameState,
+		};
+
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
@@ -145,6 +151,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'self',
+				behaviorCurrentGoal: behavior.possibleGoals.playerDetermined,
 				id: 'beta_2',
 			},
 			'player'
@@ -161,6 +168,8 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'friendly',
+				behaviorCurrentGoal: behavior.possibleGoals.guardEntity,
+				behaviorGuarding: 'b2508-012',
 				id: 'alpha_1',
 			}
 		);
@@ -175,6 +184,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'friendly',
+				behaviorCurrentGoal: behavior.possibleGoals.holdStation,
 				id: 'alpha_2',
 				shieldStrength: 75,
 				systemStrength: 0,
@@ -193,6 +203,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'friendly',
+				behaviorCurrentGoal: behavior.possibleGoals.maintainVelocity,
 				id: 'alpha_3',
 			}
 		);
@@ -207,6 +218,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'neutral',
+				behaviorCurrentGoal: behavior.possibleGoals.holdStation,
 				id: 'beta_1',
 				hasBeenScanned: true,
 			}
@@ -373,6 +385,9 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
+		// behavior tick
+		behavior.tick();
+
 		// stage entity updates
 		for (const sEK in entities.stageEntities) {
 			if (entities.stageEntities[sEK].hasUpdateMethod)
