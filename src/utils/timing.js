@@ -16,7 +16,8 @@ const timing = {
 		play: {},
 		pause: {},
 	},
-	triggers: {
+	triggers: {},
+	triggerTimes: {
 		intro: {},
 		play: {},
 		pause: {},
@@ -38,19 +39,21 @@ const timing = {
 		}
 
 		// triggers
-		for (const triggerTime in timing.triggers[mode]) {
+		for (const triggerTime in timing.triggerTimes[mode]) {
 			if (triggerTime <= timing.times[mode]) {
 				// execute callbackFns for these triggerTimes
-				for (const triggerId in timing.triggers[mode][triggerTime])
-					timing.triggers[mode][triggerTime][triggerId].finish();
+				timing.triggerTimes[mode][triggerTime].forEach((triggerId) => {
+					if (timing.triggers[triggerId] !== undefined)
+						timing.triggers[triggerId].run();
+				});
 
 				// remove triggerTimes that have been executed
-				delete timing.triggers[mode][triggerTime];
+				delete timing.triggerTimes[mode][triggerTime];
 			}
 		}
 	},
 
-	setTimeout(callbackFn, mode, milliseconds) {
+	setTimeout(callbackFn, mode, delayMS) {
 		// based on:
 		// https://github.com/brenwell/pixi-timeout/blob/master/index.js
 		let progress = 0;
@@ -59,7 +62,7 @@ const timing = {
 		const tick = (deltaMS) => {
 			progress += deltaMS;
 
-			if (progress > milliseconds) end(true);
+			if (progress > delayMS) end(true);
 		};
 
 		const end = (fire) => {
@@ -88,30 +91,47 @@ const timing = {
 		if (timerObj) timerObj.clear();
 	},
 
-	setTrigger(callbackFn, mode, milliseconds) {
+	setTrigger(
+		callbackFn,
+		mode,
+		delayMS,
+		relative = false,
+		repetitions = 0,
+		repetitionIntervalMS = 30
+	) {
 		const triggerId = idCreator.create();
-		const end = (fire) => {
-			// remove from tickers
-			delete timing.triggers[mode][milliseconds][triggerId];
-
-			// fire callback function
-			if (fire) callbackFn();
-		};
+		let delay = Math.max(30, delayMS);
+		if (relative) delay = delayMS + Math.trunc(timing.times[mode]);
+		const repetitionInterval = Math.max(30, repetitionIntervalMS);
 
 		const clear = () => {
-			end(false);
+			// remove from tickers
+			delete timing.triggers[triggerId];
 		};
 
-		const finish = () => {
-			end(true);
+		const run = () => {
+			if (repetitions === 0) clear();
+
+			callbackFn();
 		};
 
 		// set
-		if (timing.triggers[mode][milliseconds] === undefined)
-			timing.triggers[mode][milliseconds] = {};
-		timing.triggers[mode][milliseconds][triggerId] = { finish };
+		timing.triggers[triggerId] = { run };
 
-		return { clear, finish };
+		let reps = repetitions + 1;
+		while (reps > 0) {
+			let currentDelay =
+				delay + (repetitions - (reps - 1)) * repetitionInterval;
+			if (timing.triggerTimes[mode][currentDelay] === undefined) {
+				timing.triggerTimes[mode][currentDelay] = [triggerId];
+			} else {
+				timing.triggerTimes[mode][currentDelay].push(triggerId);
+			}
+
+			reps--;
+		}
+
+		return { clear, run };
 	},
 
 	clearTrigger(triggerObj) {

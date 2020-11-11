@@ -517,7 +517,8 @@ export default class App extends PIXI.Application {
 				repositionMovedEntities(
 					movedEntities,
 					entities.stageEntities,
-					currentState.positions.canMove
+					currentState.positions.canMove,
+					playerId
 				);
 			}
 
@@ -612,7 +613,7 @@ export default class App extends PIXI.Application {
 		if (!this.shownStateOnPause) {
 			const currentState = this.gameState();
 			const playerId = currentState.entities.player.id;
-			shots.stopShooting(playerId);
+			window.clearInterval(shots.shootingIntervals[playerId]);
 
 			console.info(
 				'%c Game paused, logging state:',
@@ -621,12 +622,7 @@ export default class App extends PIXI.Application {
 			console.info(currentState);
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
-			console.info(
-				'timing:',
-				timing.times,
-				timing.tickers.play,
-				timing.triggers.play
-			);
+			console.info('timing:', timing);
 			this.shownStateOnPause = true;
 		}
 		if (Keyboard.isKeyPressed('Escape')) {

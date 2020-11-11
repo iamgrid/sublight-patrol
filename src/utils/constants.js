@@ -43,7 +43,7 @@ const c = {
 	],
 	alertsAndWarnings: {
 		warnings: {
-			leavingVolume: { m: 'You are close to the edge of the playable volume!' },
+			leavingVolume: { m: 'You are beyond the edge of the playable volume!' },
 			collision: { m: 'Collision imminent!' },
 			otherWarning: {
 				m: 'Other warning text!',

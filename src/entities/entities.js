@@ -178,38 +178,34 @@ const entities = {
 	despawn(entityId, removeFromState = true) {
 		let currentState = entities.handlers.state();
 
-		let goAhead = false;
-
 		if (entityId !== currentState.entities.player.id) {
 			if (!entities.stageEntities[entityId].despawnTriggered) {
-				goAhead = true;
 				entities.stageEntities[entityId].despawnTriggered = true;
 			}
 		} else {
 			// console.log('We are not despawning the player for the time being.');
+			return;
 		}
 
-		if (goAhead) {
-			console.info(`removing ${entityId} from stage`);
-			const stageEntity = entities.stageEntities[entityId];
-			const entityStore = entities.stageEntities[entityId].entityStore;
-			entities.handlers.stage.removeChild(stageEntity);
-			stageEntity.destroy();
-			delete entities.stageEntities[entityId];
+		console.info(`removing ${entityId} from stage`);
+		const stageEntity = entities.stageEntities[entityId];
+		const entityStore = entities.stageEntities[entityId].entityStore;
+		entities.handlers.stage.removeChild(stageEntity);
+		stageEntity.destroy();
+		delete entities.stageEntities[entityId];
 
-			const stagePointer = entities.handlers.stagePointers[entityId];
-			entities.handlers.pixiHUD.removeChild(stagePointer);
-			stagePointer.destroy();
-			delete entities.handlers.stagePointers[entityId];
+		const stagePointer = entities.handlers.stagePointers[entityId];
+		entities.handlers.pixiHUD.removeChild(stagePointer);
+		stagePointer.destroy();
+		delete entities.handlers.stagePointers[entityId];
 
-			if (removeFromState) {
-				console.info(`removing ${entityId} from state`);
-				entities.handlers.dispatch({
-					type: c.actions.REMOVE_ENTITY,
-					id: entityId,
-					store: entityStore,
-				});
-			}
+		if (removeFromState) {
+			console.info(`removing ${entityId} from state`);
+			entities.handlers.dispatch({
+				type: c.actions.REMOVE_ENTITY,
+				id: entityId,
+				store: entityStore,
+			});
 		}
 	},
 };
