@@ -523,12 +523,10 @@ export default function mainReducer(state, action) {
 			];
 		}
 		case c.actions.DAMAGE: {
-			const entityStore = action.entityStore;
 			const entityId = action.entityId;
+			const entityStore = action.entityStore;
 			const shotDamage = action.shotDamage;
-			const oldEntity = state.entities[entityStore].find(
-				(entity) => entity.id === entityId
-			);
+			const oldEntity = getStoreEntity(entityId, state);
 
 			if (oldEntity === undefined) {
 				return null;
@@ -554,20 +552,25 @@ export default function mainReducer(state, action) {
 					hullStrength: newHullStrength,
 				});
 
+				let newEntities = {};
+				if (entityId === state.entities.player.id) {
+					newEntities = {
+						...state.entities,
+						player: modifiedEntity,
+					};
+				} else {
+					newEntities = {
+						...state.entities,
+						[entityStore]: [
+							...state.entities[entityStore].filter((en) => en.id !== entityId),
+							modifiedEntity,
+						],
+					};
+				}
+
 				return [
 					() => action.callbackFn(show),
-					{
-						...state,
-						entities: {
-							...state.entities,
-							[entityStore]: [
-								...state.entities[entityStore].filter(
-									(en) => en.id !== entityId
-								),
-								modifiedEntity,
-							],
-						},
-					},
+					{ ...state, entities: newEntities },
 				];
 			} else {
 				// REMOVE_ENTITY will be called in the callback function
@@ -578,10 +581,7 @@ export default function mainReducer(state, action) {
 			const entityId = action.id;
 			const entityStore = action.store;
 			const amount = action.amount;
-			// console.log({ entityId, amount });
-			const oldEntity = state.entities[entityStore].find(
-				(entity) => entity.id === entityId
-			);
+			const oldEntity = getStoreEntity(entityId, state);
 
 			if (oldEntity === undefined) {
 				return null;
@@ -596,15 +596,25 @@ export default function mainReducer(state, action) {
 				shieldStrength: newShieldStrength,
 			});
 
-			return {
-				...state,
-				entities: {
+			let newEntities = {};
+			if (entityId === state.entities.player.id) {
+				newEntities = {
+					...state.entities,
+					player: modifiedEntity,
+				};
+			} else {
+				newEntities = {
 					...state.entities,
 					[entityStore]: [
 						...state.entities[entityStore].filter((en) => en.id !== entityId),
 						modifiedEntity,
 					],
-				},
+				};
+			}
+
+			return {
+				...state,
+				entities: newEntities,
 			};
 		}
 		default:
