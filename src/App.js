@@ -294,6 +294,7 @@ export default class App extends PIXI.Application {
 
 		// triggers
 		timing.setTrigger(
+			'appjs-1st-trigger',
 			() => {
 				// dialog(
 				// 	'Commander Shepherd',
@@ -324,6 +325,7 @@ export default class App extends PIXI.Application {
 		);
 
 		timing.setTrigger(
+			'appjs-2nd-trigger',
 			() => {
 				// dialog('Love Eternal', 'Prepare to be assimilated.');
 				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
@@ -356,6 +358,7 @@ export default class App extends PIXI.Application {
 		);
 
 		const clearTriggerTest = timing.setTrigger(
+			'appjs-3rd-trigger',
 			() => {
 				dialog('Death Herself', 'Resistance is futile.');
 				// alertsAndWarnings.remove(c.alertsAndWarnings.alerts.systemsOffline);
@@ -367,6 +370,7 @@ export default class App extends PIXI.Application {
 		timing.clearTrigger(clearTriggerTest);
 
 		timing.setTrigger(
+			'appjs-4th-trigger',
 			() => {
 				dialog('', '', true);
 				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);

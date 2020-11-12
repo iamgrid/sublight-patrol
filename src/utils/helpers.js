@@ -52,33 +52,32 @@ export function repositionMovedEntities(
 		) {
 			if (entityId === playerId) return;
 
-			entities.stageEntities[entityId].triggeredFading = false;
-			timing.setTrigger(
-				() => {
-					if (
-						entities.stageEntities[entityId] === undefined ||
-						entities.stageEntities[entityId].triggeredFading
-					)
-						return;
+			if (entities.stageEntities[entityId].triggeredFading === undefined)
+				entities.stageEntities[entityId].triggeredFading = false;
 
-					if (!entities.stageEntities[entityId].triggeredFading)
-						entities.stageEntities[entityId].triggeredFading = true;
+			if (entities.stageEntities[entityId].triggeredFading === false) {
+				timing.setTrigger(
+					`${entityId}_exited-volume-fader`,
+					() => {
+						if (entities.stageEntities[entityId] === undefined) return;
 
-					if (entities.stageEntities[entityId].alpha > 0) {
-						entities.stageEntities[entityId].alpha = Math.max(
-							0,
-							entities.stageEntities[entityId].alpha - 0.02
-						);
-					} else {
-						entities.despawn(entityId);
-					}
-				},
-				timing.modes.play,
-				30,
-				true,
-				55,
-				30
-			);
+						if (entities.stageEntities[entityId].alpha > 0) {
+							entities.stageEntities[entityId].alpha = Math.max(
+								0,
+								entities.stageEntities[entityId].alpha - 0.02
+							);
+						} else {
+							entities.despawn(entityId);
+						}
+					},
+					timing.modes.play,
+					30,
+					true,
+					55,
+					30
+				);
+				entities.stageEntities[entityId].triggeredFading = true;
+			}
 		}
 	});
 }

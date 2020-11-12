@@ -92,6 +92,7 @@ const timing = {
 	},
 
 	setTrigger(
+		desc = '',
 		callbackFn,
 		mode,
 		delayMS,
@@ -99,7 +100,7 @@ const timing = {
 		repetitions = 0,
 		repetitionIntervalMS = 30
 	) {
-		const triggerId = idCreator.create();
+		const triggerId = desc + '_' + idCreator.create();
 		let delay = Math.max(30, delayMS);
 		if (relative) delay = delayMS + Math.trunc(timing.times[mode]);
 		const repetitionInterval = Math.max(30, repetitionIntervalMS);
