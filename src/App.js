@@ -5,6 +5,7 @@ import timing from './utils/timing';
 import {
 	repositionMovedEntities,
 	updateStageEntityVelocities,
+	flipStageEntity,
 	fromSpriteSheet,
 	shields,
 	dialog,
@@ -112,6 +113,7 @@ export default class App extends PIXI.Application {
 		behavior.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
+			stageEntities: entities.stageEntities,
 		};
 
 		shots.handlers = {
@@ -305,13 +307,15 @@ export default class App extends PIXI.Application {
 				status.add('aqua', 'Aqua test. #1', timing.times.play);
 				status.add('yellow', 'Yellow test. #2', timing.times.play);
 				hud.toggle(true);
-				this.dispatch({
-					type: c.actions.FLIP,
-					id: 'alpha_1',
-					store: 'targetable',
-				});
-				entities.stageEntities['alpha_1'].targetRotation = 0;
-				shots.startShooting('alpha_1');
+
+				// this.dispatch({
+				// 	type: c.actions.FLIP,
+				// 	id: 'alpha_1',
+				// 	store: 'targetable',
+				// });
+				// flipStageEntity('alpha_1', entities.stageEntities, 1);
+				// shots.startShooting('alpha_1');
+
 				// entities.stageEntities.beta_1.blowUp();
 				// shots.showDamage(
 				// 	'beta_1',
@@ -331,12 +335,14 @@ export default class App extends PIXI.Application {
 				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 				// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 				status.add('green', 'Green test. #3', timing.times.play);
-				this.dispatch({
-					type: c.actions.FLIP,
-					id: 'alpha_1',
-					store: 'targetable',
-				});
-				entities.stageEntities['alpha_1'].targetRotation = Math.PI;
+
+				// this.dispatch({
+				// 	type: c.actions.FLIP,
+				// 	id: 'alpha_1',
+				// 	store: 'targetable',
+				// });
+				// flipStageEntity('alpha_1', entities.stageEntities, -1);
+
 				this.dispatch({
 					type: c.actions.CHANGE_PLAYER_RELATION,
 					entityId: 'beta_1',
@@ -648,7 +654,7 @@ export default class App extends PIXI.Application {
 		if (!this.shownStateOnPause) {
 			const currentState = this.gameState();
 			const playerId = currentState.entities.player.id;
-			window.clearInterval(shots.shootingIntervals[playerId]);
+			shots.stopShooting(playerId);
 
 			console.info(
 				'%c Game paused, logging state:',

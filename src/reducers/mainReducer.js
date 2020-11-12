@@ -208,7 +208,11 @@ export default function mainReducer(state, action) {
 			];
 		}
 		case c.actions.BEHAVIOR_RELATED_UPDATES: {
-			console.log(action.entityStoreUpdates, action.velocityUpdates);
+			console.log(
+				'behavior change triggered:',
+				action.entityStoreUpdates,
+				action.velocityUpdates
+			);
 			const newTargetableStore = [...state.entities.targetable];
 
 			for (const entityId in action.entityStoreUpdates) {
@@ -224,14 +228,17 @@ export default function mainReducer(state, action) {
 			}
 
 			const newVelocities = { ...state.velocities, ...action.velocityUpdates };
-			return {
-				...state,
-				entities: {
-					...state.entities,
-					targetable: newTargetableStore,
+			return [
+				() => action.callbackFn(),
+				{
+					...state,
+					entities: {
+						...state.entities,
+						targetable: newTargetableStore,
+					},
+					velocities: newVelocities,
 				},
-				velocities: newVelocities,
-			};
+			];
 		}
 		case c.actions.FLIP: {
 			const entityId = action.id;

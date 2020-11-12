@@ -257,6 +257,15 @@ export function updateStageEntityVelocities(
 	stageEntities[entityId].longVelocity = newLongVelocity;
 }
 
+export function flipStageEntity(entityId, stageEntities, newFacing) {
+	stageEntities[entityId].facing = newFacing;
+	if (newFacing === 1) {
+		stageEntities[entityId].targetRotation = 0;
+	} else {
+		stageEntities[entityId].targetRotation = Math.PI;
+	}
+}
+
 export function fireThrusters() {
 	if (
 		this.currentLatVelocity !== this.latVelocity ||
@@ -305,6 +314,9 @@ export function fireThrusters() {
 	}
 
 	for (const orientation in this.thrusterAlphas.required) {
+		// do not mess with the thrusters if the entity is executing a flip
+		if (this.currentRotation !== this.targetRotation) continue;
+
 		let goAhead = false;
 		let step = 15;
 		if (orientation === 'main') step = 5;

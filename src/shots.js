@@ -65,6 +65,9 @@ const shots = {
 			`${entityId} stopped shooting, remaining shots: ${shots.cannonStates[entityId].remainingShots}`
 		);*/
 		window.clearInterval(shots.shootingIntervals[entityId]);
+
+		if (shots.cannonStates[entityId] === undefined) return;
+
 		if (!shots.cannonStates[entityId].onCooldown) {
 			shots.triggerShotRegen(entityId);
 		}
