@@ -207,6 +207,32 @@ export default function mainReducer(state, action) {
 				},
 			];
 		}
+		case c.actions.BEHAVIOR_RELATED_UPDATES: {
+			console.log(action.entityStoreUpdates, action.velocityUpdates);
+			const newTargetableStore = [...state.entities.targetable];
+
+			for (const entityId in action.entityStoreUpdates) {
+				const entityIndex = newTargetableStore.findIndex(
+					(ent) => ent.id === entityId
+				);
+
+				if (entityIndex !== -1)
+					newTargetableStore[entityIndex] = assignWPrototype(
+						newTargetableStore[entityIndex],
+						action.entityStoreUpdates[entityId]
+					);
+			}
+
+			const newVelocities = { ...state.velocities, ...action.velocityUpdates };
+			return {
+				...state,
+				entities: {
+					...state.entities,
+					targetable: newTargetableStore,
+				},
+				velocities: newVelocities,
+			};
+		}
 		case c.actions.FLIP: {
 			const entityId = action.id;
 			let storeEntity;
@@ -538,6 +564,7 @@ export default function mainReducer(state, action) {
 			const entityId = action.entityId;
 			const entityStore = action.entityStore;
 			const shotDamage = action.shotDamage;
+			const shotOrigin = action.origin;
 			const oldEntity = getStoreEntity(entityId, state);
 
 			if (oldEntity === undefined) {
@@ -563,6 +590,11 @@ export default function mainReducer(state, action) {
 					shieldStrength: newShieldStrength,
 					hullStrength: newHullStrength,
 				});
+
+				if (modifiedEntity.immutable.hasBehavior) {
+					modifiedEntity.behaviorHitsSuffered++;
+					modifiedEntity.behaviorLastHitOrigin = shotOrigin;
+				}
 
 				let newEntities = {};
 				if (entityId === state.entities.player.id) {

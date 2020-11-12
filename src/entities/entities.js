@@ -102,19 +102,24 @@ const entities = {
 			return null;
 		}
 
+		// entity object creation
 		const newEntity = { ...this.types[type].mutable, ...props };
 
+		// facing
 		let facing = 1;
 		if (pos.facing !== undefined) facing = pos.facing;
 		newEntity.facing = facing;
 
+		// adding prototype
 		newEntity.__proto__ = this.types[type];
 
+		// assigning entity store
 		let doStoreIn = storeIn;
 		if (!newEntity.immutable.isTargetable) doStoreIn = 'other';
 
 		newEntity.store = doStoreIn;
 
+		// assigning entity id, creating display name
 		if (newEntity.id !== null) {
 			newEntity.displayId = this.makeName(newEntity.id);
 		} else {
@@ -122,6 +127,7 @@ const entities = {
 			newEntity.displayId = '-';
 		}
 
+		// behavior logic
 		if (newEntity.immutable.hasBehavior) {
 			newEntity.behaviorCurrentGoal = newEntity.behaviorAssignedGoal;
 			if (
@@ -131,15 +137,20 @@ const entities = {
 				newEntity.behaviorAssignedDirection = facing;
 				newEntity.behaviorAssignedLongVelocity = pos.longVelocity;
 			}
+			newEntity.behaviorHitsSuffered = 0;
+			newEntity.behaviorLastHitOrigin = '';
 		}
 
+		// null value warnings
 		this.checkForNullValues(`${newEntity.id} (type ${type})`, newEntity);
 
+		// position store
 		let positionStore = 'canMove';
 		if (!newEntity.immutable.canMove) positionStore = 'cantMove';
 
 		let positionArray = [pos.posX, pos.posY, pos.latVelocity, pos.longVelocity];
 
+		// model availability
 		if (!models[newEntity.immutable.model]) {
 			console.error(
 				`Unable to find model for [${type}]. (Have you updated /entities/models.js?)`
@@ -147,6 +158,7 @@ const entities = {
 			return null;
 		}
 
+		// initial props for the stage entity
 		let stageEntityProps = {
 			entityId: newEntity.id,
 			entityStore: doStoreIn,
@@ -162,6 +174,7 @@ const entities = {
 			stageEntityProps.longVelocity = pos.longVelocity;
 		}
 
+		// adding entity to stage
 		const stageEntity = Reflect.construct(models[newEntity.immutable.model], [
 			stageEntityProps,
 		]);
@@ -176,6 +189,7 @@ const entities = {
 
 		this.stageEntities[newEntity.id] = stageEntity;
 
+		// adding entity to state
 		entities.handlers.dispatch({
 			type: c.actions.ADD_ENTITY,
 			storeIn: doStoreIn,

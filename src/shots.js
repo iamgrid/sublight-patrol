@@ -336,6 +336,7 @@ const shots = {
 						entityStore: entityStore,
 						entityId: entityId,
 						shotDamage: shotDamage,
+						origin: stageShot.origin,
 						callbackFn: (showType) =>
 							shots.showDamage(
 								entityId,
