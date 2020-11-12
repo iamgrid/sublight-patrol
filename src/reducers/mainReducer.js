@@ -109,7 +109,7 @@ export default function mainReducer(state, action) {
 		case c.actions.CHANGE_ENTITY_VELOCITIES: {
 			const [currentLatVel, currentLongVel] = getVelocity(
 				action.id,
-				state.positions
+				state.velocities
 			);
 
 			if (
@@ -143,36 +143,34 @@ export default function mainReducer(state, action) {
 			if (newLatVel === currentLatVel && newLongVel === currentLongVel)
 				return null;
 
-			let newPosProps = {};
+			let newVelocities = {};
 			if (newLatVel !== currentLatVel) {
-				newPosProps[`${action.id}--latVelocity`] = newLatVel;
+				newVelocities[`${action.id}--latVelocity`] = newLatVel;
 			}
 
 			if (newLongVel !== currentLongVel) {
-				newPosProps[`${action.id}--longVelocity`] = newLongVel;
+				newVelocities[`${action.id}--longVelocity`] = newLongVel;
 			}
 
 			return [
 				() => action.callbackFn(newLatVel, newLongVel),
 				{
 					...state,
-					positions: {
-						canMove: { ...state.positions.canMove, ...newPosProps },
-						cantMove: state.positions.cantMove,
-					},
+					velocities: { ...state.velocities, ...newVelocities },
 				},
 			];
 		}
 		case c.actions.UPDATE_ENTITY_COORDS: {
 			const entitiesToUpdate = [];
 			const currentCanMoveStore = state.positions.canMove;
-			for (const prop in currentCanMoveStore) {
+			const currentVelocities = state.velocities;
+			for (const prop in currentVelocities) {
 				const [entId, property] = prop.split('--');
 				if (
 					(property == 'latVelocity' &&
-						currentCanMoveStore[`${entId}--latVelocity`] !== 0) ||
+						currentVelocities[`${entId}--latVelocity`] !== 0) ||
 					(property == 'longVelocity' &&
-						currentCanMoveStore[`${entId}--longVelocity`] !== 0)
+						currentVelocities[`${entId}--longVelocity`] !== 0)
 				)
 					entitiesToUpdate.push(entId);
 			}
@@ -182,8 +180,8 @@ export default function mainReducer(state, action) {
 			const newCanMoveStore = { ...currentCanMoveStore };
 			entitiesToUpdate.forEach((entityId) => {
 				let efficacy = 1;
-				const latVelocity = newCanMoveStore[`${entityId}--latVelocity`];
-				const longVelocity = newCanMoveStore[`${entityId}--longVelocity`];
+				const latVelocity = currentVelocities[`${entityId}--latVelocity`];
+				const longVelocity = currentVelocities[`${entityId}--longVelocity`];
 				if (latVelocity !== 0 && longVelocity !== 0) efficacy = 0.75;
 
 				if (latVelocity !== 0) {
@@ -257,10 +255,7 @@ export default function mainReducer(state, action) {
 			const newPosProps = {};
 			newPosProps[`${entityId}--posX`] = posX;
 			newPosProps[`${entityId}--posY`] = posY;
-			if (latVelocity !== undefined) {
-				newPosProps[`${entityId}--latVelocity`] = latVelocity;
-				newPosProps[`${entityId}--longVelocity`] = longVelocity;
-			}
+
 			let newPositionStore = {};
 			if (positionStoreName === 'canMove') {
 				newPositionStore = {
@@ -276,6 +271,14 @@ export default function mainReducer(state, action) {
 				newPositionStore = state.positions;
 			}
 
+			let newVelocities = state.velocities;
+			if (positionStoreName === 'canMove') {
+				const newVelocityProps = {};
+				newVelocityProps[`${entityId}--latVelocity`] = latVelocity;
+				newVelocityProps[`${entityId}--longVelocity`] = longVelocity;
+				newVelocities = { ...state.velocities, ...newVelocityProps };
+			}
+
 			// other props
 
 			switch (storeIn) {
@@ -286,6 +289,7 @@ export default function mainReducer(state, action) {
 							...state.entities,
 							player: action.newEntity,
 						},
+						velocities: newVelocities,
 						positions: newPositionStore,
 					};
 				case 'targetable':
@@ -295,6 +299,7 @@ export default function mainReducer(state, action) {
 							...state.entities,
 							targetable: [...state.entities.targetable, action.newEntity],
 						},
+						velocities: newVelocities,
 						positions: newPositionStore,
 					};
 				case 'other':
@@ -304,6 +309,7 @@ export default function mainReducer(state, action) {
 							...state.entities,
 							other: [...state.entities.other, action.newEntity],
 						},
+						velocities: newVelocities,
 						positions: newPositionStore,
 					};
 			}
@@ -332,8 +338,13 @@ export default function mainReducer(state, action) {
 
 			delete newPositions[posStore][`${entityId}--posX`];
 			delete newPositions[posStore][`${entityId}--posY`];
-			delete newPositions[posStore][`${entityId}--latVelocity`];
-			delete newPositions[posStore][`${entityId}--longVelocity`];
+
+			let newVelocities = state.velocities;
+			if (posStore === 'canMove') {
+				newVelocities = { ...state.velocities };
+				delete newVelocities[`${entityId}--latVelocity`];
+				delete newVelocities[`${entityId}--longVelocity`];
+			}
 
 			return {
 				...state,
@@ -347,6 +358,7 @@ export default function mainReducer(state, action) {
 						...state.entities[entityStore].filter((en) => en.id !== entityId),
 					],
 				},
+				velocities: newVelocities,
 				positions: newPositions,
 			};
 		}

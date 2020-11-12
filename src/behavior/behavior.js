@@ -12,6 +12,7 @@ const behavior = {
 		defendEntity: 'defendEntity',
 	},
 	availableActions: {
+		complain: 'complain',
 		lookOutForHostiles: 'lookOutForHostiles',
 		avoidShots: 'avoidShots',
 		shieldDefendedEntityFromShots: 'shieldDefendedEntityFromShots',
@@ -25,6 +26,10 @@ const behavior = {
 
 			// this entity is allowed to make a decision right now
 		});
+	},
+
+	flee(entityId, currentStoreEntity, currentState) {
+		return { storeEntityUpdates: null, velocityUpdates: null };
 	},
 };
 

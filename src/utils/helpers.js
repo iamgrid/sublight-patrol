@@ -22,11 +22,11 @@ export function getPosition(entityId, positions) {
 	console.error(`Unable to ascertain position for ${entityId}`);
 }
 
-export function getVelocity(entityId, positions) {
-	if (positions.canMove[`${entityId}--latVelocity`] !== undefined) {
+export function getVelocity(entityId, velocities) {
+	if (velocities[`${entityId}--latVelocity`] !== undefined) {
 		return [
-			positions.canMove[`${entityId}--latVelocity`],
-			positions.canMove[`${entityId}--longVelocity`],
+			velocities[`${entityId}--latVelocity`],
+			velocities[`${entityId}--longVelocity`],
 		];
 	}
 

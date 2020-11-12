@@ -151,7 +151,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'self',
-				behaviorCurrentGoal: behavior.possibleGoals.playerDetermined,
+				behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
 				id: 'beta_2',
 			},
 			'player'
@@ -168,7 +168,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'friendly',
-				behaviorCurrentGoal: behavior.possibleGoals.guardEntity,
+				behaviorAssignedGoal: behavior.possibleGoals.guardEntity,
 				behaviorGuarding: 'b2508-012',
 				id: 'alpha_1',
 			}
@@ -184,7 +184,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'friendly',
-				behaviorCurrentGoal: behavior.possibleGoals.holdStation,
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
 				id: 'alpha_2',
 				shieldStrength: 75,
 				systemStrength: 0,
@@ -203,7 +203,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'friendly',
-				behaviorCurrentGoal: behavior.possibleGoals.maintainVelocity,
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
 				id: 'alpha_3',
 			}
 		);
@@ -218,7 +218,7 @@ export default class App extends PIXI.Application {
 			},
 			{
 				playerRelation: 'neutral',
-				behaviorCurrentGoal: behavior.possibleGoals.holdStation,
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
 				id: 'beta_1',
 				hasBeenScanned: true,
 			}
@@ -494,6 +494,22 @@ export default class App extends PIXI.Application {
 				do: 'clear',
 				callbackFn: targetingCallback,
 			});
+		}
+
+		if (Keyboard.isKeyPressed('KeyL')) {
+			const currentTarget = currentState.game.targeting;
+			console.log(
+				`%c target id: ${currentTarget}`,
+				'padding-top: 10px; color: aqua'
+			);
+			if (currentTarget !== null) {
+				console.info(
+					currentState.entities.targetable.find(
+						(ent) => ent.id === currentTarget
+					)
+				);
+				console.info(entities.stageEntities[currentTarget]);
+			}
 		}
 
 		if (Keyboard.isKeyPressed('KeyF')) {

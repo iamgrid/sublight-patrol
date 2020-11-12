@@ -15,6 +15,7 @@ const initialGameState = {
 		ids: [],
 		sightLines: {},
 	},
+	velocities: {},
 	positions: {
 		canMove: {},
 		cantMove: {},

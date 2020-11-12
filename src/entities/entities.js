@@ -2,6 +2,7 @@ import c from '../utils/constants';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
+import behavior from '../behavior/behavior';
 
 const entities = {
 	handlers: {
@@ -119,6 +120,17 @@ const entities = {
 		} else {
 			newEntity.id = idCreator.create();
 			newEntity.displayId = '-';
+		}
+
+		if (newEntity.immutable.hasBehavior) {
+			newEntity.behaviorCurrentGoal = newEntity.behaviorAssignedGoal;
+			if (
+				newEntity.behaviorAssignedGoal ===
+				behavior.possibleGoals.maintainVelocity
+			) {
+				newEntity.behaviorAssignedDirection = facing;
+				newEntity.behaviorAssignedLongVelocity = pos.longVelocity;
+			}
 		}
 
 		this.checkForNullValues(`${newEntity.id} (type ${type})`, newEntity);
