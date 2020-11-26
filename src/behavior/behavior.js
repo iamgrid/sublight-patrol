@@ -45,6 +45,7 @@ const behavior = {
 				case 'friendly': {
 					if (
 						entity.behaviorLastHitOrigin === playerId &&
+						entity.behaviorHitsSuffered > 4 &&
 						entity.behaviorCurrentGoal !== behavior.possibleGoals.flee &&
 						entity.behaviorAllowedToFlee
 					) {
