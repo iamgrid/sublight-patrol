@@ -149,7 +149,7 @@ const shots = {
 			}
 
 			// play sound effect
-			soundEffects.playOnce('laser_type1_1');
+			soundEffects.playOnce(storeEntity.immutable.cannonSoundEffect);
 		} else {
 			// console.log(`${entityId}'s cannon is on cooldown!`);
 		}
