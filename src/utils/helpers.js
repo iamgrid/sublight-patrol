@@ -525,6 +525,8 @@ export const shields = {
 	shieldRegenTick() {
 		if (timing.isPaused()) return;
 
+		if (typeof shields.handlers.state !== 'function') return;
+
 		const currentState = shields.handlers.state();
 		// console.log(shields.handlers.stageEntities);
 		for (const sEKey in shields.handlers.stageEntities) {

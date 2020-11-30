@@ -5,6 +5,7 @@ import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
 import entities from './entities/entities';
 import { moveTargetingReticule } from './utils/helpers';
+import soundEffects from './soundEffects';
 
 const shots = {
 	stageShots: {},
@@ -146,6 +147,9 @@ const shots = {
 					storeEntity.immutable.cannonShots
 				);
 			}
+
+			// play sound effect
+			soundEffects.playOnce('laser_type1_1');
 		} else {
 			// console.log(`${entityId}'s cannon is on cooldown!`);
 		}

@@ -1,4 +1,5 @@
 import * as PIXI from './pixi';
+import soundEffects from './soundEffects';
 import c from './utils/constants';
 import overlays from './overlays';
 import timing from './utils/timing';
@@ -83,6 +84,10 @@ export default class App extends PIXI.Application {
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v5.png');
 
+		for (let soundName in soundEffects.manifest) {
+			this.loader.add(soundName, soundEffects.manifest[soundName]);
+		}
+
 		this.loader.load(this.draw.bind(this));
 	}
 
@@ -101,6 +106,10 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
+
+		soundEffects.handlers = {
+			resources: this.loader.resources,
+		};
 
 		entities.handlers = {
 			dispatch: this.dispatch,
@@ -144,7 +153,7 @@ export default class App extends PIXI.Application {
 		spawnBuoys(entities);
 
 		entities.spawn(
-			'valkyrie',
+			'fenrir',
 			{
 				posX: 100,
 				posY: 225,
