@@ -85,7 +85,10 @@ export default class App extends PIXI.Application {
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v5.png');
 
 		for (let soundName in soundEffects.manifest) {
-			this.loader.add(soundName, soundEffects.manifest[soundName]);
+			this.loader.add(
+				soundName,
+				'./assets/sound_effects/' + soundEffects.manifest[soundName]
+			);
 		}
 
 		this.loader.load(this.draw.bind(this));
@@ -107,6 +110,8 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
 
+		// console.log(PIXI);
+		// PIXI.sound.volumeAll = 0.3;
 		soundEffects.handlers = {
 			resources: this.loader.resources,
 		};
