@@ -31,4 +31,5 @@ Application.registerPlugin(AppLoaderPlugin);
 import { TickerPlugin } from '@pixi/ticker';
 Application.registerPlugin(TickerPlugin);
 
-import 'pixi-sound';
+import sound from 'pixi-sound';
+export { sound };

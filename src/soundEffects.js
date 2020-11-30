@@ -20,6 +20,19 @@ const soundEffects = {
 		'hull_damage_high_health_2': 'hull_damage_high_health_2.mp3',
 		'hull_damage_high_health_3': 'hull_damage_high_health_3.mp3',
 		'hull_damage_high_health_4': 'hull_damage_high_health_4.mp3',
+		'hull_damage_low_health_1': 'hull_damage_low_health_1.mp3',
+		'hull_damage_low_health_2': 'hull_damage_low_health_2.mp3',
+		'hull_damage_low_health_3': 'hull_damage_low_health_3.mp3',
+		'hull_damage_sys_dropout_1': 'hull_damage_sys_dropout_1.mp3',
+		'hull_damage_sys_dropout_2': 'hull_damage_sys_dropout_2.mp3',
+		'ship_explosion_1': 'ship_explosion_1.mp3',
+		'ship_explosion_2': 'ship_explosion_2.mp3',
+		'ship_explosion_3': 'ship_explosion_3.mp3',
+		'ship_explosion_4': 'ship_explosion_4.mp3',
+		'ship_explosion_5': 'ship_explosion_5.mp3',
+		'misc_explosion_1': 'misc_explosion_1.mp3',
+		'misc_explosion_2': 'misc_explosion_2.mp3',
+		'misc_explosion_3': 'misc_explosion_3.mp3',
 	},
 	// prettier-ignore
 	library: {
@@ -29,6 +42,8 @@ const soundEffects = {
 		hull_damage_high_health: { id: 'hull_damage_high_health', variants: 4 },
 		hull_damage_low_health: { id: 'hull_damage_low_health', variants: 3 },
 		hull_damage_sys_dropout: { id: 'hull_damage_sys_dropout', variants: 2 },
+		ship_explosion: { id: 'ship_explosion', variants: 5 },
+		misc_explosion: { id: 'misc_explosion', variants: 3 },
 	},
 
 	playOnce(libraryItemId, variant = -1) {

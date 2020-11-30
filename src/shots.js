@@ -20,6 +20,7 @@ const shots = {
 	cannonCooldowns: {},
 	shotRegenIntervals: {},
 	candidates: {},
+	hullDamageSoundEffects: {},
 
 	zIndexIterator: c.zIndices.shots,
 
@@ -344,13 +345,15 @@ const shots = {
 						entityId: entityId,
 						shotDamage: shotDamage,
 						origin: stageShot.origin,
-						callbackFn: (showType) =>
+						callbackFn: (showType, hullHealthPrc, fancyEffects) =>
 							shots.showDamage(
 								entityId,
 								entityStore,
 								showType,
 								shots.handlers.stageEntities,
-								stageShot.origin
+								stageShot.origin,
+								hullHealthPrc,
+								fancyEffects
 							),
 					});
 				});
@@ -374,17 +377,55 @@ const shots = {
 		return false;
 	},
 
-	showDamage(entityId, entityStore, type, stageEntities, origin) {
+	showDamage(
+		entityId,
+		entityStore,
+		type,
+		stageEntities,
+		origin,
+		hullHealthPrc,
+		fancyEffects
+	) {
 		switch (type) {
 			case c.damageTypes.shieldDamage:
 				stageEntities[entityId].currentTint = 0x32ade6;
+				soundEffects.playOnce(soundEffects.library.shield_damage.id);
 				break;
 
-			case c.damageTypes.hullDamage:
+			case c.damageTypes.hullDamage: {
 				stageEntities[entityId].currentTint = 0xff9090;
-				break;
+				let effect = soundEffects.library.hull_damage_high_health.id;
+				let variant = -1;
+				if (hullHealthPrc < 50) {
+					if (!fancyEffects) {
+						effect = soundEffects.library.hull_damage_low_health.id;
+					} else {
+						if (shots.hullDamageSoundEffects[entityId] === undefined) {
+							shots.hullDamageSoundEffects[entityId] = 0;
+						}
 
-			case c.damageTypes.destruction:
+						if (
+							shots.hullDamageSoundEffects[entityId] <
+							soundEffects.library.hull_damage_sys_dropout.variants
+						) {
+							shots.hullDamageSoundEffects[entityId]++;
+							effect = soundEffects.library.hull_damage_sys_dropout.id;
+							variant = shots.hullDamageSoundEffects[entityId];
+						} else {
+							effect = soundEffects.library.hull_damage_low_health.id;
+						}
+					}
+				}
+				soundEffects.playOnce(effect, variant);
+				break;
+			}
+			case c.damageTypes.destruction: {
+				let effect = soundEffects.library.misc_explosion.id;
+				if (fancyEffects) {
+					effect = soundEffects.library.ship_explosion.id;
+				}
+				soundEffects.playOnce(effect);
+
 				stageEntities[entityId].blowUp(() => {
 					shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
 					entities.despawn(entityId, false);
@@ -397,6 +438,7 @@ const shots = {
 					store: entityStore,
 				});
 				break;
+			}
 		}
 
 		if (type !== c.damageTypes.destruction) {

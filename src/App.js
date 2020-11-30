@@ -110,8 +110,7 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
 
-		// console.log(PIXI);
-		// PIXI.sound.volumeAll = 0.3;
+		PIXI.sound.volumeAll = 0.4;
 		soundEffects.handlers = {
 			resources: this.loader.resources,
 		};
