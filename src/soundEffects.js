@@ -59,6 +59,8 @@ const soundEffects = {
 		side_thruster: { id: 'side_thruster', variants: 1 },
 	},
 
+	activeLoops: {},
+
 	playOnce(libraryItemId, variant = -1) {
 		if (soundEffects.handlers.resources === null) return;
 
@@ -72,9 +74,51 @@ const soundEffects = {
 
 			effectId = `${libraryItem.id}_${effectVariant}`;
 		}
-		console.log(effectId);
+		// console.log(effectId);
 		soundEffects.handlers.resources[effectId].sound.play({
 			loop: false,
+			singleInstance: false,
+		});
+	},
+
+	startLoop(entityId, libraryItemId, emitterId = 0) {
+		if (soundEffects.activeLoops[entityId] === undefined) {
+			soundEffects.activeLoops[entityId] = {};
+		}
+		if (soundEffects.activeLoops[entityId][libraryItemId] === undefined) {
+			soundEffects.activeLoops[entityId][libraryItemId] = {};
+		}
+
+		if (
+			soundEffects.activeLoops[entityId][libraryItemId][emitterId] === undefined
+		) {
+			soundEffects.activeLoops[entityId][libraryItemId][emitterId] = true;
+		}
+
+		if (soundEffects.activeLoops[entityId][libraryItemId][emitterId] === true) {
+			return; // this emitter on our entity is already playing this sound
+		}
+
+		console.log('starting loop', entityId, libraryItemId, emitterId);
+		// console.log(soundEffects.activeLoops[entityId]);
+
+		soundEffects.handlers.resources[libraryItemId].sound.play({
+			loop: true,
+			singleInstance: false,
+		});
+	},
+
+	stopLoop(entityId, libraryItemId, emitterId = 0) {
+		if (soundEffects.activeLoops[entityId] === undefined) return;
+		if (soundEffects.activeLoops[entityId][libraryItemId] === undefined) return;
+
+		soundEffects.activeLoops[entityId][libraryItemId][emitterId] = false;
+
+		// console.log('stopping loop', entityId, libraryItemId, emitterId);
+		// console.log(soundEffects.activeLoops[entityId]);
+
+		soundEffects.handlers.resources[libraryItemId].sound.stop({
+			loop: true,
 			singleInstance: false,
 		});
 	},

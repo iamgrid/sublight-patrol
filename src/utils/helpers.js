@@ -3,6 +3,7 @@ import c from './constants';
 import { fadeHexColor, easing } from './formulas';
 import timing from './timing';
 import entities from '../entities/entities';
+import soundEffects from '../soundEffects';
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
@@ -267,6 +268,7 @@ export function flipStageEntity(entityId, stageEntities, newFacing) {
 }
 
 export function fireThrusters() {
+	// which thrusters need to be updated?
 	if (
 		this.currentLatVelocity !== this.latVelocity ||
 		this.currentLongVelocity !== this.longVelocity
@@ -304,8 +306,36 @@ export function fireThrusters() {
 		for (const nozzleOrientation in update) {
 			if (update[nozzleOrientation]) {
 				this.thrusterAlphas.required[nozzleOrientation] = 100;
+
+				// start audio loop on this emitter
+				if (nozzleOrientation === 'main') {
+					soundEffects.startLoop(
+						this.entityId,
+						soundEffects.library.main_thruster.id
+					);
+				} else {
+					soundEffects.startLoop(
+						this.entityId,
+						soundEffects.library.side_thruster.id,
+						nozzleOrientation
+					);
+				}
 			} else {
 				this.thrusterAlphas.required[nozzleOrientation] = 0;
+
+				// stop audio loop on this emitter
+				if (nozzleOrientation === 'main') {
+					soundEffects.stopLoop(
+						this.entityId,
+						soundEffects.library.main_thruster.id
+					);
+				} else {
+					soundEffects.stopLoop(
+						this.entityId,
+						soundEffects.library.side_thruster.id,
+						nozzleOrientation
+					);
+				}
 			}
 		}
 
@@ -317,6 +347,7 @@ export function fireThrusters() {
 		// do not mess with the thrusters if the entity is executing a flip
 		if (this.currentRotation !== this.targetRotation) continue;
 
+		// visual updates (with fading)
 		let goAhead = false;
 		let step = 15;
 		if (orientation === 'main') step = 5;
