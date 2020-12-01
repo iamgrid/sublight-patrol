@@ -394,12 +394,12 @@ const shots = {
 
 			case c.damageTypes.hullDamage: {
 				stageEntities[entityId].currentTint = 0xff9090;
-				let effect = soundEffects.library.hull_damage_high_health.id;
 				let variant = -1;
-				if (hullHealthPrc < 50) {
-					if (!fancyEffects) {
+				let effect = soundEffects.library.misc_damage.id;
+				if (fancyEffects) {
+					effect = soundEffects.library.hull_damage_high_health.id;
+					if (hullHealthPrc < 33) {
 						effect = soundEffects.library.hull_damage_low_health.id;
-					} else {
 						if (shots.hullDamageSoundEffects[entityId] === undefined) {
 							shots.hullDamageSoundEffects[entityId] = 0;
 						}
