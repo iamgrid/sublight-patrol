@@ -3,6 +3,7 @@ import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
 import behavior from '../behavior/behavior';
+import soundEffects from '../soundEffects';
 
 const entities = {
 	handlers: {
@@ -224,6 +225,8 @@ const entities = {
 		entities.handlers.pixiHUD.removeChild(stagePointer);
 		stagePointer.destroy();
 		delete entities.handlers.stagePointers[entityId];
+
+		soundEffects.removeAllSoundInstancesFromEntity(entityId);
 
 		if (removeFromState) {
 			console.info(`removing ${entityId} from state`);

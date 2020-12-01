@@ -92,35 +92,56 @@ const soundEffects = {
 		if (
 			soundEffects.activeLoops[entityId][libraryItemId][emitterId] === undefined
 		) {
-			soundEffects.activeLoops[entityId][libraryItemId][emitterId] = true;
+			soundEffects.activeLoops[entityId][libraryItemId][
+				emitterId
+			] = soundEffects.handlers.resources[libraryItemId].sound.play({
+				loop: true,
+				singleInstance: false,
+			});
+
+			console.log(
+				'sound instance created for',
+				entityId,
+				libraryItemId,
+				emitterId
+			);
 		}
 
-		if (soundEffects.activeLoops[entityId][libraryItemId][emitterId] === true) {
-			return; // this emitter on our entity is already playing this sound
+		if (soundEffects.activeLoops[entityId][libraryItemId][emitterId].paused) {
+			soundEffects.activeLoops[entityId][libraryItemId][emitterId].set(
+				'paused',
+				false
+			);
 		}
-
-		console.log('starting loop', entityId, libraryItemId, emitterId);
-		// console.log(soundEffects.activeLoops[entityId]);
-
-		soundEffects.handlers.resources[libraryItemId].sound.play({
-			loop: true,
-			singleInstance: false,
-		});
 	},
 
 	stopLoop(entityId, libraryItemId, emitterId = 0) {
 		if (soundEffects.activeLoops[entityId] === undefined) return;
 		if (soundEffects.activeLoops[entityId][libraryItemId] === undefined) return;
+		if (
+			soundEffects.activeLoops[entityId][libraryItemId][emitterId] === undefined
+		)
+			return;
 
-		soundEffects.activeLoops[entityId][libraryItemId][emitterId] = false;
+		soundEffects.activeLoops[entityId][libraryItemId][emitterId].set(
+			'paused',
+			true
+		);
+	},
 
-		// console.log('stopping loop', entityId, libraryItemId, emitterId);
-		// console.log(soundEffects.activeLoops[entityId]);
+	removeAllSoundInstancesFromEntity(entityId) {
+		// removes all loops (e.g. thruster sounds, emp tone) related to the entity
+		if (soundEffects.activeLoops[entityId] === undefined) return;
 
-		soundEffects.handlers.resources[libraryItemId].sound.stop({
-			loop: true,
-			singleInstance: false,
-		});
+		for (const libraryItemId in soundEffects.activeLoops[entityId]) {
+			for (const emitterId in soundEffects.activeLoops[entityId][
+				libraryItemId
+			]) {
+				soundEffects.activeLoops[entityId][libraryItemId][emitterId].stop();
+			}
+		}
+
+		delete soundEffects.activeLoops[entityId];
 	},
 };
 
