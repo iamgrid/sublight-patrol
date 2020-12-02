@@ -11,6 +11,7 @@ const audio = {
 	mutedEmoji: '&#x1F508;',
 
 	init() {
+		audio.domNodes.slider.oninput = audio.setVolume;
 		audio.domNodes.slider.onchange = audio.setVolume;
 		audio.domNodes.muter.onclick = audio.setVolume;
 
