@@ -114,7 +114,9 @@ export default class App extends PIXI.Application {
 		soundEffects.handlers = {
 			state: this.gameState,
 			resources: this.loader.resources,
+			PIXI_sound: PIXI.sound,
 		};
+		soundEffects.init();
 
 		entities.handlers = {
 			dispatch: this.dispatch,

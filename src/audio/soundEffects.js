@@ -3,12 +3,21 @@ import { randomNumber, calculateDistance } from '../utils/formulas';
 import { getPosition } from '../utils/helpers';
 
 const soundEffects = {
-	handlers: { state: null, resources: null }, // gets its values in App.js
+	handlers: { state: null, resources: null, PIXI_sound: null }, // gets its values in App.js
 	manifest: audioLibrary.manifest,
 	library: audioLibrary.library,
 	COS_FLIP: (4 * Math.PI) / 7,
 
 	loops: {},
+
+	init() {
+		for (const manifestItemId in soundEffects.manifest) {
+			soundEffects.handlers.resources[manifestItemId].sound.filters = [
+				new soundEffects.handlers.PIXI_sound.filters.StereoFilter(0),
+			];
+		}
+		// console.log(soundEffects.handlers.resources);
+	},
 
 	playOnce(entityId, libraryItemId, variant = -1) {
 		if (soundEffects.handlers.resources === null) return;
@@ -27,13 +36,14 @@ const soundEffects = {
 
 		const currentState = soundEffects.handlers.state();
 		const playerId = currentState.entities.player.id;
-		const newVolume = soundEffects.volumeBasedOnEntityDistance(
+		const [newVolume, newPan] = soundEffects.volumeBasedOnEntityDistance(
 			entityId,
 			playerId,
 			currentState.positions
 		);
 		// console.log(libraryItemId, newVolume);
 
+		soundEffects.handlers.resources[effectId].sound.filters[0].pan = newPan;
 		soundEffects.handlers.resources[effectId].sound.play({
 			loop: false,
 			singleInstance: false,
@@ -75,7 +85,7 @@ const soundEffects = {
 
 		const currentState = soundEffects.handlers.state();
 		const playerId = currentState.entities.player.id;
-		const newVolume = soundEffects.volumeBasedOnEntityDistance(
+		const [newVolume] = soundEffects.volumeBasedOnEntityDistance(
 			entityId,
 			playerId,
 			currentState.positions
@@ -97,7 +107,7 @@ const soundEffects = {
 
 	adjustLoopVolumes(playerId, positions) {
 		for (const entityId in soundEffects.loops) {
-			const newVolume = soundEffects.volumeBasedOnEntityDistance(
+			const [newVolume] = soundEffects.volumeBasedOnEntityDistance(
 				entityId,
 				playerId,
 				positions
@@ -115,20 +125,29 @@ const soundEffects = {
 	},
 
 	volumeBasedOnEntityDistance(entityId, playerId, positions) {
-		if (entityId === playerId) return 1;
+		if (entityId === playerId) return [1, 0];
 
 		const [playerX, playerY] = getPosition(playerId, positions);
 		const [entityX, entityY] = getPosition(entityId, positions);
-		let distance = calculateDistance(playerX, playerY, entityX, entityY);
+		const distance = Math.trunc(
+			calculateDistance(playerX, playerY, entityX, entityY)
+		);
 
-		// return Number(Math.max(1 - distance / 2500, 0).toFixed(2));
+		let volume = 0;
+
+		// volume = Number(Math.max(1 - distance / 2500, 0).toFixed(2));
 
 		// https://www.desmos.com/calculator/njp5madui1
-		if (distance / 1000 >= soundEffects.COS_FLIP) {
-			return 0;
-		} else {
-			return Number((Math.cos((distance / 1000) * 1.75) / 2 + 0.5).toFixed(2));
+		if (distance / 1000 < soundEffects.COS_FLIP) {
+			volume = Number(
+				(Math.cos((distance / 1000) * 1.75) / 2 + 0.5).toFixed(2)
+			);
 		}
+
+		let pan = Number(Math.min(1, (1 - volume) * 2).toFixed(2)); // pan right
+		if (entityX < playerX) pan = Number((0 - pan).toFixed(2)); // pan left
+
+		return [volume, pan];
 	},
 
 	removeAllSoundInstancesFromEntity(entityId) {
