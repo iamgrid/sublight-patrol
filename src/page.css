@@ -53,6 +53,98 @@ body {
 	background-color: #303030;
 }
 
+input[type='range'] {
+	-webkit-appearance: none;
+	margin: 6px 0;
+	width: 100%;
+	background: transparent;
+}
+
+input[type='range']:focus {
+	outline: none;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 8px;
+	border-radius: 4px;
+	cursor: pointer;
+	background: #262626;
+}
+
+input[type='range']::-webkit-slider-thumb {
+	height: 12px;
+	width: 12px;
+	border-radius: 6px;
+	background: #606060;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -2px;
+}
+
+input[type='range']:hover::-webkit-slider-runnable-track {
+	background: #292929;
+}
+
+input[type='range']:hover::-webkit-slider-thumb {
+	background: #707070;
+}
+
+input[type='range']::-moz-range-track {
+	width: 100%;
+	height: 8px;
+	border-radius: 4px;
+	cursor: pointer;
+	background: #262626;
+}
+
+input[type='range']::-moz-range-thumb {
+	height: 12px;
+	width: 12px;
+	border: 0;
+	border-radius: 6px;
+	background: #606060;
+	cursor: pointer;
+	margin-top: -2px;
+}
+
+input[type='range']:hover::-moz-range-track {
+	background: #292929;
+	cursor: pointer;
+}
+
+input[type='range']:hover::-moz-range-thumb {
+	background: #707070;
+	cursor: pointer;
+}
+
+input[type='range']::-ms-track {
+	width: 100%;
+	height: 8px;
+	cursor: pointer;
+	background: transparent;
+	border-color: transparent;
+	border-width: 16px 0;
+	color: transparent;
+}
+
+input[type='range']::-ms-fill-lower {
+	background: #292929;
+}
+
+input[type='range']::-ms-fill-upper {
+	background: #262626;
+}
+
+input[type='range']::-ms-thumb {
+	height: 12px;
+	width: 12px;
+	border: 0;
+	border-radius: 6px;
+	background: #606060;
+	cursor: pointer;
+}
+
 .container {
 	width: 1200px;
 	margin: 0 auto;
@@ -71,7 +163,18 @@ body {
 	}
 }
 
-h1 {
+.header {
+	position: relative;
+	height: 2.45em;
+}
+
+.header__title {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
 	font-size: 1em;
 	letter-spacing: 1em;
 	margin: 0;
@@ -80,6 +183,36 @@ h1 {
 	color: #ffffff50;
 	text-transform: uppercase;
 	transform: translateX(0.5em);
+}
+
+.header__volume_control {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 2;
+	margin-right: 10px;
+	display: flex;
+	align-items: center;
+}
+
+.header__volume_control_button {
+	background: transparent;
+	border: 0;
+	font-size: 22px;
+	cursor: pointer;
+	margin-right: 0.2em;
+	transform: translateY(-1px);
+	width: 32px;
+	text-align: left;
+	padding-left: 0;
+}
+
+.header__volume_control_button--muted {
+	padding-left: 1px;
+}
+
+.header__volume_control_button:focus {
+	outline: transparent;
 }
 
 .controls {

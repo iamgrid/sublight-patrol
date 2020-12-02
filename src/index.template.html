@@ -11,7 +11,26 @@
 	</head>
 	<body class="body--transitions-enabled customScroll">
 		<div class="container">
-			<header><h1>sublight patrol</h1></header>
+			<header class="header">
+				<h1 class="header__title">sublight patrol</h1>
+				<div class="header__volume_control">
+					<button
+						id="header__volume_control_button"
+						class="header__volume_control_button"
+					>
+						🔊
+					</button>
+					<input
+						id="header__volume_control_input"
+						class="volume_control_input"
+						type="range"
+						step="0.01"
+						value="0.4"
+						min="0"
+						max="1"
+					/>
+				</div>
+			</header>
 			<main class="game" id="game"></main>
 			<footer id="footer">
 				<div class="controls">

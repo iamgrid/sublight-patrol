@@ -1,4 +1,5 @@
 import * as PIXI from './pixi';
+import audio from './audio/audio';
 import soundEffects from './audio/soundEffects';
 import c from './utils/constants';
 import overlays from './overlays';
@@ -110,7 +111,11 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
 
-		PIXI.sound.volumeAll = 0.4;
+		audio.handlers = {
+			PIXI_sound: PIXI.sound,
+		};
+		audio.init();
+
 		soundEffects.handlers = {
 			state: this.gameState,
 			resources: this.loader.resources,
