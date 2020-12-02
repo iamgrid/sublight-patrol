@@ -5,7 +5,7 @@ import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
 import entities from './entities/entities';
 import { moveTargetingReticule } from './utils/helpers';
-import soundEffects from './soundEffects';
+import soundEffects from './audio/soundEffects';
 
 const shots = {
 	stageShots: {},
@@ -150,7 +150,7 @@ const shots = {
 			}
 
 			// play sound effect
-			soundEffects.playOnce(storeEntity.immutable.cannonSoundEffect);
+			soundEffects.playOnce(entityId, storeEntity.immutable.cannonSoundEffect);
 		} else {
 			// console.log(`${entityId}'s cannon is on cooldown!`);
 		}
@@ -389,7 +389,7 @@ const shots = {
 		switch (type) {
 			case c.damageTypes.shieldDamage:
 				stageEntities[entityId].currentTint = 0x32ade6;
-				soundEffects.playOnce(soundEffects.library.shield_damage.id);
+				soundEffects.playOnce(entityId, soundEffects.library.shield_damage.id);
 				break;
 
 			case c.damageTypes.hullDamage: {
@@ -416,7 +416,7 @@ const shots = {
 						}
 					}
 				}
-				soundEffects.playOnce(effect, variant);
+				soundEffects.playOnce(entityId, effect, variant);
 				break;
 			}
 			case c.damageTypes.destruction: {
@@ -424,7 +424,7 @@ const shots = {
 				if (fancyEffects) {
 					effect = soundEffects.library.ship_explosion.id;
 				}
-				soundEffects.playOnce(effect);
+				soundEffects.playOnce(entityId, effect);
 
 				stageEntities[entityId].blowUp(() => {
 					shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;

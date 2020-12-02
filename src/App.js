@@ -1,5 +1,5 @@
 import * as PIXI from './pixi';
-import soundEffects from './soundEffects';
+import soundEffects from './audio/soundEffects';
 import c from './utils/constants';
 import overlays from './overlays';
 import timing from './utils/timing';
@@ -112,6 +112,7 @@ export default class App extends PIXI.Application {
 
 		PIXI.sound.volumeAll = 0.4;
 		soundEffects.handlers = {
+			state: this.gameState,
 			resources: this.loader.resources,
 		};
 
@@ -438,6 +439,9 @@ export default class App extends PIXI.Application {
 			currentState.entities,
 			currentState.positions
 		);
+
+		// loop volumes
+		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
 
 		// Keyboard
 		// https://www.npmjs.com/package/pixi.js-keyboard

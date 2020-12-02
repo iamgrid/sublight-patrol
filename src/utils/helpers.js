@@ -3,7 +3,7 @@ import c from './constants';
 import { fadeHexColor, easing } from './formulas';
 import timing from './timing';
 import entities from '../entities/entities';
-import soundEffects from '../soundEffects';
+import soundEffects from '../audio/soundEffects';
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {

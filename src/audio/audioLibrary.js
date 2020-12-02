@@ -1,7 +1,4 @@
-import { randomNumber } from './utils/formulas';
-
-const soundEffects = {
-	handlers: { resources: null }, // gets its values in App.js
+const audioLibrary = {
 	// prettier-ignore
 	manifest: {
 		'laser_type1_1': 'laser_type1_1.mp3',
@@ -58,91 +55,6 @@ const soundEffects = {
 		main_thruster: { id: 'main_thruster', variants: 1 },
 		side_thruster: { id: 'side_thruster', variants: 1 },
 	},
-
-	activeLoops: {},
-
-	playOnce(libraryItemId, variant = -1) {
-		if (soundEffects.handlers.resources === null) return;
-
-		const libraryItem = soundEffects.library[libraryItemId];
-
-		let effectId = `${libraryItem.id}`;
-		if (libraryItem.variants > 1) {
-			let effectVariant = variant;
-			if (effectVariant === -1)
-				effectVariant = randomNumber(1, libraryItem.variants);
-
-			effectId = `${libraryItem.id}_${effectVariant}`;
-		}
-		// console.log(effectId);
-		soundEffects.handlers.resources[effectId].sound.play({
-			loop: false,
-			singleInstance: false,
-		});
-	},
-
-	startLoop(entityId, libraryItemId, emitterId = 0) {
-		if (soundEffects.activeLoops[entityId] === undefined) {
-			soundEffects.activeLoops[entityId] = {};
-		}
-		if (soundEffects.activeLoops[entityId][libraryItemId] === undefined) {
-			soundEffects.activeLoops[entityId][libraryItemId] = {};
-		}
-
-		if (
-			soundEffects.activeLoops[entityId][libraryItemId][emitterId] === undefined
-		) {
-			soundEffects.activeLoops[entityId][libraryItemId][
-				emitterId
-			] = soundEffects.handlers.resources[libraryItemId].sound.play({
-				loop: true,
-				singleInstance: false,
-			});
-
-			console.log(
-				'sound instance created for',
-				entityId,
-				libraryItemId,
-				emitterId
-			);
-		}
-
-		if (soundEffects.activeLoops[entityId][libraryItemId][emitterId].paused) {
-			soundEffects.activeLoops[entityId][libraryItemId][emitterId].set(
-				'paused',
-				false
-			);
-		}
-	},
-
-	stopLoop(entityId, libraryItemId, emitterId = 0) {
-		if (soundEffects.activeLoops[entityId] === undefined) return;
-		if (soundEffects.activeLoops[entityId][libraryItemId] === undefined) return;
-		if (
-			soundEffects.activeLoops[entityId][libraryItemId][emitterId] === undefined
-		)
-			return;
-
-		soundEffects.activeLoops[entityId][libraryItemId][emitterId].set(
-			'paused',
-			true
-		);
-	},
-
-	removeAllSoundInstancesFromEntity(entityId) {
-		// removes all loops (e.g. thruster sounds, emp tone) related to the entity
-		if (soundEffects.activeLoops[entityId] === undefined) return;
-
-		for (const libraryItemId in soundEffects.activeLoops[entityId]) {
-			for (const emitterId in soundEffects.activeLoops[entityId][
-				libraryItemId
-			]) {
-				soundEffects.activeLoops[entityId][libraryItemId][emitterId].stop();
-			}
-		}
-
-		delete soundEffects.activeLoops[entityId];
-	},
 };
 
-export default soundEffects;
+export default audioLibrary;

@@ -3,7 +3,7 @@ import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
 import behavior from '../behavior/behavior';
-import soundEffects from '../soundEffects';
+import soundEffects from '../audio/soundEffects';
 
 const entities = {
 	handlers: {

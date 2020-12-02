@@ -1,5 +1,5 @@
 import c from '../utils/constants';
-import soundEffects from '../soundEffects';
+import audioLibrary from '../audio/audioLibrary';
 
 const pieces = {
 	entity: {
@@ -147,7 +147,7 @@ const pieces = {
 			cannonFiringSpeed: 0.2,
 			cannonShots: 20,
 			cannonCooldown: 0.8,
-			cannonSoundEffect: soundEffects.library.laser_type1.id,
+			cannonSoundEffect: audioLibrary.library.laser_type1.id,
 			cannonPositions: [
 				{ lengthWise: 15, widthWise: 4 },
 				{ lengthWise: 15, widthWise: -4 },
@@ -199,7 +199,7 @@ const pieces = {
 			cannonFiringSpeed: 0.16,
 			cannonShots: 32,
 			cannonCooldown: 1,
-			cannonSoundEffect: soundEffects.library.laser_type1.id,
+			cannonSoundEffect: audioLibrary.library.laser_type1.id,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
