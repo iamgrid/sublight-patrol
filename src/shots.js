@@ -337,6 +337,9 @@ const shots = {
 			const hittingShots = entitiesSufferingHits[heKey];
 			hittingShots.forEach((hittingShotId) => {
 				const stageShot = stageShots[hittingShotId];
+
+				if (stageShot === undefined) return;
+
 				const sightLine = stageShot.sightLine;
 
 				const shotDamage = stageShot.power;

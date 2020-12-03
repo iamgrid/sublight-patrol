@@ -576,9 +576,9 @@ export default function mainReducer(state, action) {
 
 			// temporarily disabling player damage to test
 			// behavior
-			if (entityId === state.entities.player.id) {
-				return null;
-			}
+			// if (entityId === state.entities.player.id) {
+			// 	return null;
+			// }
 
 			if (oldEntity === undefined) {
 				return null;
