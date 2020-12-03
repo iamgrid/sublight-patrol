@@ -272,6 +272,15 @@ export function flipStageEntity(entityId, stageEntities, newFacing) {
 }
 
 export function fireThrusters() {
+	if (this.showingExplosion) {
+		for (const orientation in this.thrusterAlphas.current) {
+			this.sprites.thrusters[orientation].forEach((thruster) => {
+				thruster.alpha = 0;
+			});
+		}
+		return;
+	}
+
 	// which thrusters need to be updated?
 	if (
 		this.currentLatVelocity !== this.latVelocity ||

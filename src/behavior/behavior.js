@@ -1,6 +1,6 @@
 import c from '../utils/constants';
 import shots from '../shots';
-import { randomNumber, calculateDistance } from '../utils/formulas';
+import { calculateDistance } from '../utils/formulas';
 import {
 	getPosition,
 	getVelocity,
@@ -20,13 +20,6 @@ const behavior = {
 		defendEntity: 'defendEntity',
 	},
 	maxShotTravelDistance: 1000,
-	/*availableActions: {
-		complain: 'complain',
-		lookOutForHostiles: 'lookOutForHostiles',
-		avoidShots: 'avoidShots',
-		shieldDefendedEntityFromShots: 'shieldDefendedEntityFromShots',
-		getIntoSightlineWEnemy: 'getIntoSightlineWEnemy',
-	},*/
 
 	tick() {
 		const currentState = this.handlers.state();

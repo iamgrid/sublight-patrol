@@ -443,7 +443,7 @@ const shots = {
 				soundEffects.playOnce(entityId, effect);
 
 				stageEntities[entityId].blowUp(() => {
-					shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
+					// shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
 					entities.despawn(entityId, false);
 				});
 
