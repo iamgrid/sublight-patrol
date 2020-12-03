@@ -214,6 +214,8 @@ const entities = {
 			return;
 		}
 
+		soundEffects.removeAllSoundInstancesFromEntity(entityId);
+
 		console.info(`removing ${entityId} from stage`);
 		const stageEntity = entities.stageEntities[entityId];
 		const entityStore = entities.stageEntities[entityId].entityStore;
@@ -225,8 +227,6 @@ const entities = {
 		entities.handlers.pixiHUD.removeChild(stagePointer);
 		stagePointer.destroy();
 		delete entities.handlers.stagePointers[entityId];
-
-		soundEffects.removeAllSoundInstancesFromEntity(entityId);
 
 		if (removeFromState) {
 			console.info(`removing ${entityId} from state`);

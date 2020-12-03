@@ -208,11 +208,11 @@ export default function mainReducer(state, action) {
 			];
 		}
 		case c.actions.BEHAVIOR_RELATED_UPDATES: {
-			console.log(
-				'behavior change triggered:',
-				action.entityStoreUpdates,
-				action.velocityUpdates
-			);
+			// console.log(
+			// 	'behavior update:',
+			// 	action.entityStoreUpdates,
+			// 	action.velocityUpdates
+			// );
 			const newTargetableStore = [...state.entities.targetable];
 
 			for (const entityId in action.entityStoreUpdates) {
@@ -573,6 +573,12 @@ export default function mainReducer(state, action) {
 			const shotDamage = action.shotDamage;
 			const shotOrigin = action.origin;
 			const oldEntity = getStoreEntity(entityId, state);
+
+			// temporarily disabling player damage to test
+			// behavior
+			if (entityId === state.entities.player.id) {
+				return null;
+			}
 
 			if (oldEntity === undefined) {
 				return null;

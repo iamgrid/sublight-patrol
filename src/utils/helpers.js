@@ -21,6 +21,7 @@ export function getPosition(entityId, positions) {
 	}
 
 	console.error(`Unable to ascertain position for ${entityId}`);
+	return [false, false];
 }
 
 export function getVelocity(entityId, velocities) {
@@ -91,8 +92,11 @@ export function getStoreEntity(entityId, currentState) {
 		const storeEntity = currentState.entities.targetable.find(
 			(entity) => entity.id === entityId
 		);
-		if (!storeEntity)
+		if (!storeEntity) {
 			console.info(`Couldn't find ${entityId}, it probably blew up.`);
+			// console.error(`Couldn't find ${entityId}, it probably blew up.`);
+			return false;
+		}
 		return storeEntity;
 	}
 }

@@ -1,5 +1,6 @@
 import c from '../utils/constants';
 import shots from '../shots';
+import { calculateDistance } from '../utils/formulas';
 import {
 	getPosition,
 	flipStageEntity,
@@ -17,13 +18,14 @@ const behavior = {
 		destroyEntity: 'destroyEntity',
 		defendEntity: 'defendEntity',
 	},
-	availableActions: {
+	maxShotTravelDistance: 1000,
+	/*availableActions: {
 		complain: 'complain',
 		lookOutForHostiles: 'lookOutForHostiles',
 		avoidShots: 'avoidShots',
 		shieldDefendedEntityFromShots: 'shieldDefendedEntityFromShots',
 		getIntoSightlineWEnemy: 'getIntoSightlineWEnemy',
-	},
+	},*/
 
 	tick() {
 		const currentState = this.handlers.state();
@@ -50,6 +52,49 @@ const behavior = {
 						entity.behaviorAllowedToFlee
 					) {
 						updatesToEntity = behavior.flee(entity, currentState);
+					}
+					break;
+				}
+				default: {
+					let itsGoTimeBuddy = false;
+
+					const [playerX, playerY] = getPosition(
+						playerId,
+						currentState.positions
+					);
+					const [entityX, entityY] = getPosition(
+						entity.id,
+						currentState.positions
+					);
+					const distance = Math.trunc(
+						calculateDistance(playerX, playerY, entityX, entityY)
+					);
+
+					if (
+						entity.behaviorHitsSuffered > 0 &&
+						entity.behaviorLastHitOrigin === playerId
+					) {
+						itsGoTimeBuddy = true;
+					}
+
+					if (
+						entity.playerRelation === 'hostile' &&
+						distance < behavior.maxShotTravelDistance - 200
+					) {
+						itsGoTimeBuddy = true;
+					}
+
+					if (itsGoTimeBuddy) {
+						updatesToEntity = behavior.destroyEntity(
+							entity,
+							playerId,
+							currentState,
+							playerX,
+							playerY,
+							entityX,
+							entityY,
+							distance
+						);
 					}
 					break;
 				}
@@ -81,34 +126,19 @@ const behavior = {
 		}
 	},
 
+	// BEHAVIORS //
+
 	flee(entity, currentState) {
 		const entityId = entity.id;
 		shots.stopShooting(entityId);
 		const entityStoreUpdates = {};
 
-		const currentFacing = entity.facing;
-		let newFacing = currentFacing;
-		let needsToFlip = false;
-
-		const [entityX] = getPosition(entityId, currentState.positions);
-		const [attackerX] = getPosition(
+		const [needsToFlip, newFacing] = behavior._turn(
+			'away-from',
+			entity,
 			entity.behaviorLastHitOrigin,
 			currentState.positions
 		);
-
-		if (attackerX < entityX) {
-			// the attacker is on the left
-			if (currentFacing === -1) {
-				newFacing = 1;
-				needsToFlip = true;
-			}
-		} else {
-			// the attacker is on the right, or right above/beneath
-			if (currentFacing === 1) {
-				newFacing = -1;
-				needsToFlip = true;
-			}
-		}
 
 		if (needsToFlip) {
 			entityStoreUpdates.facing = newFacing;
@@ -124,6 +154,112 @@ const behavior = {
 
 		return [entityStoreUpdates, velocityUpdates];
 	},
+
+	destroyEntity(
+		entity,
+		enemyId,
+		currentState,
+		enemyX,
+		enemyY,
+		entityX,
+		entityY,
+		distance
+	) {
+		const entityId = entity.id;
+		const entityStoreUpdates = {};
+
+		const [needsToFlip, newFacing] = behavior._turn(
+			'toward',
+			entity,
+			enemyId,
+			currentState.positions,
+			{ entityX, enemyX }
+		);
+
+		if (needsToFlip) {
+			entityStoreUpdates.facing = newFacing;
+			flipStageEntity(entityId, behavior.handlers.stageEntities, newFacing);
+		}
+
+		let newLatVelocity = 0;
+		let newLongVelocity = 0;
+
+		const longDistance = Math.abs(enemyX - entityX);
+		if (longDistance > 500) {
+			// try to move into range with the enemy horizontally
+			newLongVelocity = newFacing * entity.immutable.thrusters.main;
+		}
+
+		const latDifference = enemyY - entityY;
+		if (Math.abs(latDifference) > 20) {
+			// try to move into sightline with the enemy
+			shots.stopShooting(entityId);
+			newLatVelocity = entity.immutable.thrusters.side;
+			if (latDifference < 0) {
+				newLatVelocity = 0 - newLatVelocity;
+			}
+		} else {
+			if (longDistance < behavior.maxShotTravelDistance) {
+				shots.startShooting(entityId);
+			}
+		}
+
+		const velocityUpdates = {
+			latVelocity: newLatVelocity,
+			longVelocity: newLongVelocity,
+		};
+
+		if (entity.behaviorAttacking !== enemyId) {
+			entityStoreUpdates.playerRelation = 'hostile';
+			entityStoreUpdates.behaviorAttacking = enemyId;
+			entityStoreUpdates.behaviorCurrentGoal =
+				behavior.possibleGoals.destroyEntity;
+		}
+
+		return [entityStoreUpdates, velocityUpdates];
+	},
+
+	// HELPER METHODS //
+
+	_turn(dir = 'toward', entity, enemyId, positions, havePositions = null) {
+		const currentFacing = entity.facing;
+		let newFacing = currentFacing;
+		let needsToFlip = false;
+
+		let entityX = null;
+		let enemyX = null;
+		if (havePositions) {
+			entityX = havePositions.entityX;
+			enemyX = havePositions.enemyX;
+		} else {
+			[entityX] = getPosition(entity.id, positions);
+			[enemyX] = getPosition(enemyId, positions);
+		}
+
+		if (enemyX < entityX) {
+			// the enemy is on the left
+			if (currentFacing === -1 && dir === 'away-from') {
+				newFacing = 1;
+				needsToFlip = true;
+			} else if (currentFacing === 1 && dir === 'toward') {
+				newFacing = -1;
+				needsToFlip = true;
+			}
+		} else if (enemyX > entityX) {
+			// the enemy is on the right
+			if (currentFacing === 1 && dir === 'away-from') {
+				newFacing = -1;
+				needsToFlip = true;
+			} else if (currentFacing === -1 && dir === 'toward') {
+				newFacing = 1;
+				needsToFlip = true;
+			}
+		}
+
+		return [needsToFlip, newFacing];
+	},
+
+	// STATE UPDATES //
 
 	updateChangedStageEntityVelocities(updates) {
 		for (const entityId in updates) {

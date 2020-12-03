@@ -31,6 +31,10 @@ const shots = {
 			return;
 		}
 
+		if (shots.cannonStates[entityId] !== undefined) {
+			if (shots.cannonStates[entityId].isShooting) return; // already started shooting
+		}
+
 		if (!shots.cannonStates[entityId]) {
 			shots.cannonStates[entityId] = {};
 			shots.cannonStates[entityId].maxShots = storeEntity.immutable.cannonShots;
@@ -48,10 +52,12 @@ const shots = {
 			shots.cannonStates[entityId].onCooldown = false;
 		}
 
+		shots.cannonStates[entityId].isShooting = true;
+
 		// immediate first shot
 		shots.shoot(entityId);
 
-		// keep shooting
+		// create an interval that keeps shooting
 		const shotFrequency =
 			(storeEntity.immutable.cannonFiringSpeed /
 				storeEntity.immutable.cannonPositions.length) *
@@ -69,6 +75,10 @@ const shots = {
 		window.clearInterval(shots.shootingIntervals[entityId]);
 
 		if (shots.cannonStates[entityId] === undefined) return;
+
+		if (!shots.cannonStates[entityId].isShooting) return; // already stopped shooting
+
+		shots.cannonStates[entityId].isShooting = false;
 
 		if (!shots.cannonStates[entityId].onCooldown) {
 			shots.triggerShotRegen(entityId);
@@ -99,6 +109,9 @@ const shots = {
 		const currentState = shots.handlers.state();
 		let storeEntity = getStoreEntity(entityId, currentState);
 		if (!storeEntity) {
+			// entity no longer present, time to stop it from shooting
+			window.clearInterval(shots.shootingIntervals[entityId]);
+			window.clearInterval(shots.shotRegenIntervals[entityId]);
 			return;
 		}
 
@@ -424,6 +437,7 @@ const shots = {
 				if (fancyEffects) {
 					effect = soundEffects.library.ship_explosion.id;
 				}
+				soundEffects.removeAllSoundInstancesFromEntity(entityId);
 				soundEffects.playOnce(entityId, effect);
 
 				stageEntities[entityId].blowUp(() => {

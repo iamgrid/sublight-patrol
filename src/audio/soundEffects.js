@@ -127,21 +127,23 @@ const soundEffects = {
 	volumeBasedOnEntityDistance(entityId, playerId, positions) {
 		if (entityId === playerId) return [1, 0];
 
-		const [playerX, playerY] = getPosition(playerId, positions);
-		const [entityX, entityY] = getPosition(entityId, positions);
-		const distance = Math.trunc(
-			calculateDistance(playerX, playerY, entityX, entityY)
-		);
-
 		let volume = 0;
 
-		// volume = Number(Math.max(1 - distance / 2500, 0).toFixed(2));
-
-		// https://www.desmos.com/calculator/njp5madui1
-		if (distance / 1000 < soundEffects.COS_FLIP) {
-			volume = Number(
-				(Math.cos((distance / 1000) * 1.75) / 2 + 0.5).toFixed(2)
+		const [playerX, playerY] = getPosition(playerId, positions);
+		const [entityX, entityY] = getPosition(entityId, positions);
+		if (playerX !== false && entityX !== false) {
+			const distance = Math.trunc(
+				calculateDistance(playerX, playerY, entityX, entityY)
 			);
+
+			// volume = Number(Math.max(1 - distance / 2500, 0).toFixed(2));
+
+			// https://www.desmos.com/calculator/njp5madui1
+			if (distance / 1000 < soundEffects.COS_FLIP) {
+				volume = Number(
+					(Math.cos((distance / 1000) * 1.75) / 2 + 0.5).toFixed(2)
+				);
+			}
 		}
 
 		let pan = Number(Math.min(1, (1 - volume) * 2).toFixed(2)); // pan right
@@ -152,6 +154,9 @@ const soundEffects = {
 
 	removeAllSoundInstancesFromEntity(entityId) {
 		// removes all loops (e.g. thruster sounds, emp tone) related to the entity
+
+		// console.log('removeAllSoundInstancesFromEntity called for', entityId);
+
 		if (soundEffects.loops[entityId] === undefined) return;
 
 		for (const libraryItemId in soundEffects.loops[entityId]) {
