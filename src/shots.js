@@ -115,58 +115,57 @@ const shots = {
 			return;
 		}
 
-		if (!shots.cannonStates[entityId].onCooldown) {
-			shots.cannonStates[entityId].onCooldown = false;
-			const activeCannon = shots.cannonStates[entityId].activeCannon;
-			const [eX, eY] = getPosition(entityId, currentState.positions);
-			const cannonX = Math.round(
-				eX +
-					storeEntity.facing *
-						storeEntity.immutable.cannonPositions[activeCannon].lengthWise
-			);
+		if (timing.isPaused()) return;
+		if (shots.cannonStates[entityId].onCooldown) return;
 
-			let correction = 0;
-			if (storeEntity.immutable.cannonPositions[activeCannon].widthWise < 0)
-				correction = -2;
-			const cannonY = Math.round(
-				eY +
-					storeEntity.facing *
-						storeEntity.immutable.cannonPositions[activeCannon].widthWise +
-					correction
-			);
+		shots.cannonStates[entityId].onCooldown = false;
+		const activeCannon = shots.cannonStates[entityId].activeCannon;
+		const [eX, eY] = getPosition(entityId, currentState.positions);
+		const cannonX = Math.round(
+			eX +
+				storeEntity.facing *
+					storeEntity.immutable.cannonPositions[activeCannon].lengthWise
+		);
 
-			shots.addShot(
-				cannonX,
-				cannonY,
-				storeEntity.immutable.cannonColor,
-				storeEntity.immutable.cannonPower,
-				storeEntity.facing,
-				storeEntity.id
-			);
+		let correction = 0;
+		if (storeEntity.immutable.cannonPositions[activeCannon].widthWise < 0)
+			correction = -2;
+		const cannonY = Math.round(
+			eY +
+				storeEntity.facing *
+					storeEntity.immutable.cannonPositions[activeCannon].widthWise +
+				correction
+		);
 
-			// cycle cannons on the ship
-			const noOfCannons = storeEntity.immutable.cannonPositions.length;
-			if (noOfCannons > 1) {
-				shots.cannonStates[entityId].activeCannon++;
-				if (shots.cannonStates[entityId].activeCannon >= noOfCannons)
-					shots.cannonStates[entityId].activeCannon = 0;
-			}
+		shots.addShot(
+			cannonX,
+			cannonY,
+			storeEntity.immutable.cannonColor,
+			storeEntity.immutable.cannonPower,
+			storeEntity.facing,
+			storeEntity.id
+		);
 
-			// decrease remaining shots or trigger cooldown
-			shots.cannonStates[entityId].remainingShots--;
-			if (shots.cannonStates[entityId].remainingShots === 0) {
-				shots.triggerCooldown(
-					entityId,
-					storeEntity.immutable.cannonCooldown,
-					storeEntity.immutable.cannonShots
-				);
-			}
-
-			// play sound effect
-			soundEffects.playOnce(entityId, storeEntity.immutable.cannonSoundEffect);
-		} else {
-			// console.log(`${entityId}'s cannon is on cooldown!`);
+		// cycle cannons on the ship
+		const noOfCannons = storeEntity.immutable.cannonPositions.length;
+		if (noOfCannons > 1) {
+			shots.cannonStates[entityId].activeCannon++;
+			if (shots.cannonStates[entityId].activeCannon >= noOfCannons)
+				shots.cannonStates[entityId].activeCannon = 0;
 		}
+
+		// decrease remaining shots or trigger cooldown
+		shots.cannonStates[entityId].remainingShots--;
+		if (shots.cannonStates[entityId].remainingShots === 0) {
+			shots.triggerCooldown(
+				entityId,
+				storeEntity.immutable.cannonCooldown,
+				storeEntity.immutable.cannonShots
+			);
+		}
+
+		// play sound effect
+		soundEffects.playOnce(entityId, storeEntity.immutable.cannonSoundEffect);
 	},
 
 	triggerCooldown(entityId, cannonCooldown, maxShots) {

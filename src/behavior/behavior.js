@@ -162,8 +162,7 @@ const behavior = {
 		enemyX,
 		enemyY,
 		entityX,
-		entityY,
-		distance
+		entityY
 	) {
 		const entityId = entity.id;
 		const entityStoreUpdates = {};
@@ -211,6 +210,7 @@ const behavior = {
 
 		if (entity.behaviorAttacking !== enemyId) {
 			entityStoreUpdates.playerRelation = 'hostile';
+			behavior.handlers.stageEntities[entityId].reticuleRelation('hostile');
 			entityStoreUpdates.behaviorAttacking = enemyId;
 			entityStoreUpdates.behaviorCurrentGoal =
 				behavior.possibleGoals.destroyEntity;

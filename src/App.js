@@ -7,7 +7,6 @@ import timing from './utils/timing';
 import {
 	repositionMovedEntities,
 	updateStageEntityVelocities,
-	flipStageEntity,
 	fromSpriteSheet,
 	shields,
 	dialog,
@@ -165,7 +164,7 @@ export default class App extends PIXI.Application {
 		spawnBuoys(entities);
 
 		entities.spawn(
-			'fenrir',
+			'valkyrie',
 			{
 				posX: 100,
 				posY: 225,
@@ -198,7 +197,7 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			'valkyrie',
+			'fenrir',
 			{
 				posX: 700,
 				posY: 225,
@@ -206,12 +205,9 @@ export default class App extends PIXI.Application {
 				longVelocity: 0,
 			},
 			{
-				playerRelation: 'friendly',
+				playerRelation: 'neutral',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
 				id: 'alpha_2',
-				shieldStrength: 75,
-				systemStrength: 0,
-				isDisabled: true,
 			}
 		);
 
