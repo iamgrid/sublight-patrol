@@ -1,8 +1,9 @@
 import c from '../utils/constants';
 import shots from '../shots';
-import { calculateDistance } from '../utils/formulas';
+import { randomNumber, calculateDistance } from '../utils/formulas';
 import {
 	getPosition,
+	getVelocity,
 	flipStageEntity,
 	updateStageEntityVelocities,
 } from '../utils/helpers';
@@ -184,9 +185,16 @@ const behavior = {
 		let newLongVelocity = 0;
 
 		const longDistance = Math.abs(enemyX - entityX);
-		if (longDistance > 500) {
+		// const randDistanceInRange = randomNumber(500, 900);
+
+		if (longDistance > 700) {
 			// try to move into range with the enemy horizontally
-			newLongVelocity = newFacing * entity.immutable.thrusters.main;
+			// attempt to match velocity with the enemy if its also moving
+			const enemyLongVel = Math.abs(
+				getVelocity(enemyId, currentState.velocities)[1]
+			);
+			const maxLongVelocity = entity.immutable.thrusters.main;
+			newLongVelocity = newFacing * Math.min(enemyLongVel, maxLongVelocity);
 		}
 
 		const latDifference = enemyY - entityY;

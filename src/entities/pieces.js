@@ -119,6 +119,7 @@ const pieces = {
 			behaviorCurrentGoal: null,
 			behaviorGuarding: '',
 			behaviorAttacking: '',
+			behaviorPreferredAttackDistance: null,
 			behaviorAllowedToAvoidShots: true,
 			behaviorAllowedToFlee: true,
 		},

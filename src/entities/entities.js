@@ -1,4 +1,5 @@
 import c from '../utils/constants';
+import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
@@ -140,6 +141,7 @@ const entities = {
 			}
 			newEntity.behaviorHitsSuffered = 0;
 			newEntity.behaviorLastHitOrigin = '';
+			newEntity.behaviorPreferredAttackDistance = randomNumber(400, 900);
 		}
 
 		// null value warnings
