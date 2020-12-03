@@ -6,7 +6,7 @@ export default class HUD extends PIXI.Container {
 		super();
 		this.maxShots = 0;
 		this.shotsPerLine = 8;
-		this.hShotSpacing = 16;
+		this.hShotSpacing = 18;
 		this.vShotSpacing = 6;
 		this.currentLine = 1;
 		this.needsLastLineShift = false;
@@ -19,7 +19,7 @@ export default class HUD extends PIXI.Container {
 		this.cooldownTriggered = false;
 
 		this.sprites = {};
-		this.startX = 1015;
+		this.startX = 1008;
 		this.startY = 12;
 		this.currentX = 0;
 		this.currentY = 0;
