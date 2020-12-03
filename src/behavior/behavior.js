@@ -185,9 +185,7 @@ const behavior = {
 		let newLongVelocity = 0;
 
 		const longDistance = Math.abs(enemyX - entityX);
-		// const randDistanceInRange = randomNumber(500, 900);
-
-		if (longDistance > 700) {
+		if (longDistance > entity.behaviorPreferredAttackDistance) {
 			// try to move into range with the enemy horizontally
 			// attempt to match velocity with the enemy if its also moving
 			const enemyLongVel = Math.abs(

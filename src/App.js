@@ -174,7 +174,7 @@ export default class App extends PIXI.Application {
 			{
 				playerRelation: 'self',
 				behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
-				id: 'beta_2',
+				id: 'red_1',
 			},
 			'player'
 		);
@@ -239,6 +239,40 @@ export default class App extends PIXI.Application {
 				playerRelation: 'neutral',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
 				id: 'beta_1',
+				hasBeenScanned: true,
+			}
+		);
+
+		entities.spawn(
+			'fenrir',
+			{
+				posX: 2000,
+				posY: 120,
+				latVelocity: 0,
+				longVelocity: -8,
+				facing: -1,
+			},
+			{
+				playerRelation: 'hostile',
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+				id: 'delta_1',
+				hasBeenScanned: true,
+			}
+		);
+
+		entities.spawn(
+			'fenrir',
+			{
+				posX: 1970,
+				posY: 120,
+				latVelocity: 0,
+				longVelocity: -8,
+				facing: -1,
+			},
+			{
+				playerRelation: 'hostile',
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+				id: 'delta_2',
 				hasBeenScanned: true,
 			}
 		);
