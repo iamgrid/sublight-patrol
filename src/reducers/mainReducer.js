@@ -1,6 +1,11 @@
 import c from '../utils/constants';
 import { calculateDistance } from '../utils/formulas';
-import { getPosition, getVelocity, getStoreEntity } from '../utils/helpers';
+import {
+	isEmptyObject,
+	getPosition,
+	getVelocity,
+	getStoreEntity,
+} from '../utils/helpers';
 
 function assignWPrototype(sourceObj, modifications = {}) {
 	let re = Object.assign({}, sourceObj, modifications);
@@ -208,26 +213,30 @@ export default function mainReducer(state, action) {
 			];
 		}
 		case c.actions.BEHAVIOR_RELATED_UPDATES: {
-			// console.log(
-			// 	'behavior update:',
-			// 	action.entityStoreUpdates,
-			// 	action.velocityUpdates
-			// );
-			const newTargetableStore = [...state.entities.targetable];
+			let newTargetableStore = state.entities.targetable;
+			if (!isEmptyObject(action.entityStoreUpdates)) {
+				newTargetableStore = [...state.entities.targetable];
 
-			for (const entityId in action.entityStoreUpdates) {
-				const entityIndex = newTargetableStore.findIndex(
-					(ent) => ent.id === entityId
-				);
+				console.log('behavior update:', action.entityStoreUpdates);
 
-				if (entityIndex !== -1)
-					newTargetableStore[entityIndex] = assignWPrototype(
-						newTargetableStore[entityIndex],
-						action.entityStoreUpdates[entityId]
+				for (const entityId in action.entityStoreUpdates) {
+					const entityIndex = newTargetableStore.findIndex(
+						(ent) => ent.id === entityId
 					);
+
+					if (entityIndex !== -1)
+						newTargetableStore[entityIndex] = assignWPrototype(
+							newTargetableStore[entityIndex],
+							action.entityStoreUpdates[entityId]
+						);
+				}
 			}
 
-			const newVelocities = { ...state.velocities, ...action.velocityUpdates };
+			let newVelocities = state.velocities;
+			if (!isEmptyObject(action.velocityUpdates)) {
+				newVelocities = { ...state.velocities, ...action.velocityUpdates };
+			}
+
 			return [
 				() => action.callbackFn(),
 				{

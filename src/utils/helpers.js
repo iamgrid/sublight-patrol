@@ -5,6 +5,10 @@ import timing from './timing';
 import entities from '../entities/entities';
 import soundEffects from '../audio/soundEffects';
 
+export function isEmptyObject(obj) {
+	return Object.keys(obj).length < 1;
+}
+
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
 		return [

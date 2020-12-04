@@ -2,6 +2,7 @@ import c from '../utils/constants';
 import shots from '../shots';
 import { calculateDistance } from '../utils/formulas';
 import {
+	isEmptyObject,
 	getPosition,
 	getVelocity,
 	flipStageEntity,
@@ -95,14 +96,18 @@ const behavior = {
 			}
 
 			if (updatesToEntity.length > 0) {
-				updatedSomething = true;
-				entityStoreUpdates[entity.id] = updatesToEntity[0];
-				stageVelocityUpdates[entity.id] = updatesToEntity[1];
-
-				stateVelocityUpdates[`${entity.id}--latVelocity`] =
-					updatesToEntity[1].latVelocity;
-				stateVelocityUpdates[`${entity.id}--longVelocity`] =
-					updatesToEntity[1].longVelocity;
+				if (!isEmptyObject(updatesToEntity[0])) {
+					updatedSomething = true;
+					entityStoreUpdates[entity.id] = updatesToEntity[0];
+				}
+				if (!isEmptyObject(updatesToEntity[1])) {
+					updatedSomething = true;
+					stageVelocityUpdates[entity.id] = updatesToEntity[1];
+					stateVelocityUpdates[`${entity.id}--latVelocity`] =
+						updatesToEntity[1].latVelocity;
+					stateVelocityUpdates[`${entity.id}--longVelocity`] =
+						updatesToEntity[1].longVelocity;
+				}
 			}
 		});
 
