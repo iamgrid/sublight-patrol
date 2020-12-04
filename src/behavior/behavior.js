@@ -21,6 +21,7 @@ const behavior = {
 		defendEntity: 'defendEntity',
 	},
 	maxShotTravelDistance: 1000,
+	hullHealthPrcToFleeAt: 30,
 
 	tick() {
 		const currentState = this.handlers.state();
@@ -51,46 +52,60 @@ const behavior = {
 					break;
 				}
 				default: {
-					let itsGoTimeBuddy = false;
-
-					const [playerX, playerY] = getPosition(
-						playerId,
-						currentState.positions
-					);
-					const [entityX, entityY] = getPosition(
-						entity.id,
-						currentState.positions
-					);
-					const distance = Math.trunc(
-						calculateDistance(playerX, playerY, entityX, entityY)
+					const hullHealthPrc = Math.trunc(
+						(entity.hullStrength / entity.immutable.maxHullStrength) * 100
 					);
 
 					if (
-						entity.behaviorHitsSuffered > 0 &&
-						entity.behaviorLastHitOrigin === playerId
+						(entity.behaviorAllowedToFlee ||
+							entity.assignedPlayerRelation !== 'hostile') &&
+						(hullHealthPrc < behavior.hullHealthPrcToFleeAt ||
+							!entity.immutable.hasCannons)
 					) {
-						itsGoTimeBuddy = true;
-					}
+						updatesToEntity = behavior.flee(entity, currentState);
+					} else {
+						let itsGoTimeBuddy = false;
 
-					if (
-						entity.playerRelation === 'hostile' &&
-						distance < behavior.maxShotTravelDistance - 200
-					) {
-						itsGoTimeBuddy = true;
-					}
-
-					if (itsGoTimeBuddy) {
-						updatesToEntity = behavior.destroyEntity(
-							entity,
+						const [playerX, playerY] = getPosition(
 							playerId,
-							currentState,
-							playerX,
-							playerY,
-							entityX,
-							entityY,
-							distance
+							currentState.positions
 						);
+						const [entityX, entityY] = getPosition(
+							entity.id,
+							currentState.positions
+						);
+						const distance = Math.trunc(
+							calculateDistance(playerX, playerY, entityX, entityY)
+						);
+
+						if (
+							entity.behaviorHitsSuffered > 0 &&
+							entity.behaviorLastHitOrigin === playerId
+						) {
+							itsGoTimeBuddy = true;
+						}
+
+						if (
+							entity.playerRelation === 'hostile' &&
+							distance < behavior.maxShotTravelDistance - 200
+						) {
+							itsGoTimeBuddy = true;
+						}
+
+						if (itsGoTimeBuddy) {
+							updatesToEntity = behavior.destroyEntity(
+								entity,
+								playerId,
+								currentState,
+								playerX,
+								playerY,
+								entityX,
+								entityY,
+								distance
+							);
+						}
 					}
+
 					break;
 				}
 			}
@@ -144,12 +159,18 @@ const behavior = {
 			flipStageEntity(entityId, behavior.handlers.stageEntities, newFacing);
 		}
 
-		const velocityUpdates = {
-			latVelocity: 0,
-			longVelocity: newFacing * entity.immutable.thrusters.main,
-		};
+		const velocityUpdates = {};
+		if (
+			getVelocity(entityId, currentState.velocities) !==
+			newFacing * entity.immutable.thrusters.main
+		) {
+			velocityUpdates.latVelocity = 0;
+			velocityUpdates.longVelocity =
+				newFacing * entity.immutable.thrusters.main;
+		}
 
-		entityStoreUpdates.behaviorCurrentGoal = behavior.possibleGoals.flee;
+		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.flee)
+			entityStoreUpdates.behaviorCurrentGoal = behavior.possibleGoals.flee;
 
 		return [entityStoreUpdates, velocityUpdates];
 	},
@@ -237,6 +258,7 @@ const behavior = {
 			enemyX = havePositions.enemyX;
 		} else {
 			[entityX] = getPosition(entity.id, positions);
+			if (!entityX) return [false, 1];
 			[enemyX] = getPosition(enemyId, positions);
 		}
 

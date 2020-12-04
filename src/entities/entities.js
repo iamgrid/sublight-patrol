@@ -130,6 +130,7 @@ const entities = {
 		}
 
 		// behavior logic
+		newEntity.assignedPlayerRelation = props.playerRelation;
 		if (newEntity.immutable.hasBehavior) {
 			newEntity.behaviorCurrentGoal = newEntity.behaviorAssignedGoal;
 			if (
@@ -205,6 +206,7 @@ const entities = {
 	},
 
 	despawn(entityId, removeFromState = true) {
+		if (entities.stageEntities[entityId] === undefined) return;
 		let currentState = entities.handlers.state();
 
 		if (entityId !== currentState.entities.player.id) {

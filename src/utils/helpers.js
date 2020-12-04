@@ -24,7 +24,7 @@ export function getPosition(entityId, positions) {
 		];
 	}
 
-	console.error(`Unable to ascertain position for ${entityId}`);
+	console.error(`Unable to ascertain position for ${entityId}`, positions);
 	return [false, false];
 }
 

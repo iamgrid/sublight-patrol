@@ -36,7 +36,8 @@ const pieces = {
 		mutable: {
 			isDisabled: false,
 			systemStrength: null,
-			playerRelation: 'neutral',
+			assignedPlayerRelation: null,
+			playerRelation: null,
 			contents: 'No cargo',
 			facing: 1,
 		},
