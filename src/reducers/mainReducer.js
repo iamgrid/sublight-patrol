@@ -126,21 +126,26 @@ export default function mainReducer(state, action) {
 				return null;
 			}
 
-			const entity = getStoreEntity(action.id, state);
+			const storeEntity = getStoreEntity(action.id, state);
 
-			let newLatVel = action.latDirection * entity.immutable.thrusters.side;
+			if (!storeEntity) {
+				return null;
+			}
+
+			let newLatVel =
+				action.latDirection * storeEntity.immutable.thrusters.side;
 			let newLongVel;
 			const longDirection = action.longDirection;
 			if (
-				(entity.facing === 1 && longDirection === 1) ||
-				(entity.facing === -1 && longDirection === -1)
+				(storeEntity.facing === 1 && longDirection === 1) ||
+				(storeEntity.facing === -1 && longDirection === -1)
 			) {
-				newLongVel = longDirection * entity.immutable.thrusters.main;
+				newLongVel = longDirection * storeEntity.immutable.thrusters.main;
 			} else if (
-				(entity.facing === -1 && longDirection === 1) ||
-				(entity.facing === 1 && longDirection === -1)
+				(storeEntity.facing === -1 && longDirection === 1) ||
+				(storeEntity.facing === 1 && longDirection === -1)
 			) {
-				newLongVel = longDirection * entity.immutable.thrusters.front;
+				newLongVel = longDirection * storeEntity.immutable.thrusters.front;
 			} else {
 				newLongVel = 0;
 			}
@@ -589,7 +594,7 @@ export default function mainReducer(state, action) {
 			// 	return null;
 			// }
 
-			if (oldEntity === undefined) {
+			if (!oldEntity) {
 				return null;
 			}
 
@@ -602,7 +607,7 @@ export default function mainReducer(state, action) {
 			let newHullStrength = oldEntity.hullStrength;
 
 			// hunting a bug here:
-			if (oldEntity.immutable === undefined) console.log(action, oldEntity);
+			if (oldEntity.immutable === undefined) console.log(oldEntity);
 
 			if (newShieldStrength < 0) {
 				newHullStrength += newShieldStrength;
@@ -663,7 +668,7 @@ export default function mainReducer(state, action) {
 			const amount = action.amount;
 			const oldEntity = getStoreEntity(entityId, state);
 
-			if (oldEntity === undefined) {
+			if (!oldEntity) {
 				return null;
 			}
 
