@@ -5,6 +5,7 @@ import {
 	isEmptyObject,
 	getPosition,
 	getVelocity,
+	getStoreEntity,
 	flipStageEntity,
 	updateStageEntityVelocities,
 } from '../utils/helpers';
@@ -22,6 +23,7 @@ const behavior = {
 	},
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
+	widthOfWidestEntityInTheGame: 49,
 
 	tick() {
 		const currentState = this.handlers.state();
@@ -224,7 +226,20 @@ const behavior = {
 			}
 		} else {
 			if (longDistance < behavior.maxShotTravelDistance) {
-				shots.startShooting(entityId);
+				const entitiesInShotRange = behavior._returnEntitiesInShotRange(
+					entityId,
+					entityX,
+					entityY,
+					newFacing,
+					currentState
+				);
+
+				if (
+					entitiesInShotRange.length === 1 &&
+					entitiesInShotRange[0] === enemyId
+				) {
+					shots.startShooting(entityId);
+				}
 			}
 		}
 
@@ -283,6 +298,64 @@ const behavior = {
 		}
 
 		return [needsToFlip, newFacing];
+	},
+
+	_returnEntitiesInShotRange(entityId, entityX, entityY, facing, currentState) {
+		let xRangeMin = entityX - behavior.maxShotTravelDistance;
+		let xRangeMax = entityX;
+		if (facing === 1) {
+			xRangeMin = entityX;
+			xRangeMax = entityX + behavior.maxShotTravelDistance;
+		}
+
+		let yTolerance = Math.ceil(behavior.widthOfWidestEntityInTheGame / 2);
+		let yRangeMin = entityY - yTolerance;
+		let yRangeMax = entityY + yTolerance;
+
+		let candidates = {};
+		for (const store in currentState.positions) {
+			for (const entityPos in currentState.positions[store]) {
+				const [currentEntityId, whichPos] = entityPos.split('--');
+				if (whichPos === 'posX') {
+					if (
+						currentState.positions[store][entityPos] > xRangeMin &&
+						currentState.positions[store][entityPos] < xRangeMax
+					) {
+						// this entity is in the right range in terms of longitude
+						const currentEntityPosY =
+							currentState.positions[store][`${currentEntityId}--posY`];
+						if (
+							currentEntityPosY > yRangeMin &&
+							currentEntityPosY < yRangeMax
+						) {
+							// potentially in the right range in terms of latitude
+							if (currentEntityId !== entityId)
+								candidates[currentEntityId] = currentEntityPosY;
+						}
+					}
+				}
+			}
+		}
+
+		const re = [];
+
+		// check the actual width (wingspan) of the candidates
+		for (const candidateId in candidates) {
+			const storeEntity = getStoreEntity(candidateId, currentState);
+
+			if (!storeEntity) continue;
+
+			const candidateY = candidates[candidateId];
+			const halvedwidth = Math.ceil(storeEntity.immutable.width / 2);
+			if (
+				entityY >= candidateY - halvedwidth &&
+				entityY <= candidateY + halvedwidth
+			) {
+				re.push(candidateId);
+			}
+		}
+
+		return re;
 	},
 
 	// STATE UPDATES //
