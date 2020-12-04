@@ -237,6 +237,7 @@ export function showDamageTint(damagableSprites = []) {
 export function flip() {
 	const stepValue = Math.PI / 40;
 	if (this.currentRotation !== this.targetRotation) {
+		this.isFlipping = true;
 		if (!this.rotationTriggered) {
 			this.cRot = this.currentRotation;
 			this.rotationTriggered = true;
@@ -252,6 +253,7 @@ export function flip() {
 
 		this.rotation = this.currentRotation;
 	} else {
+		if (this.isFlipping) this.isFlipping = false;
 		this.rotationTriggered = false;
 	}
 }

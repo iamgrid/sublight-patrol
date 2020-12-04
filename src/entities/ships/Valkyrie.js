@@ -24,7 +24,6 @@ export default class Valkyrie extends PIXI.Container {
 		this.latVelocity = props.latVelocity;
 		this.currentLongVelocity = 0;
 		this.longVelocity = props.longVelocity;
-		this.facing = props.facing;
 
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
@@ -65,6 +64,7 @@ export default class Valkyrie extends PIXI.Container {
 		this.currentTint = 0xffffff;
 		this.showingExplosion = false;
 		this.facing = props.facing;
+		this.isFlipping = false;
 		this.currentRotation = 0;
 		this.targetRotation = 0;
 

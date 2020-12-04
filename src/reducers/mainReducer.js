@@ -600,6 +600,10 @@ export default function mainReducer(state, action) {
 			if (currentShieldStrength === undefined) currentShieldStrength = 0;
 			let newShieldStrength = currentShieldStrength - shotDamage;
 			let newHullStrength = oldEntity.hullStrength;
+
+			// hunting a bug here:
+			if (oldEntity.immutable === undefined) console.log(action, oldEntity);
+
 			if (newShieldStrength < 0) {
 				newHullStrength += newShieldStrength;
 				newShieldStrength = 0;

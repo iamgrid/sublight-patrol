@@ -247,7 +247,7 @@ export default class App extends PIXI.Application {
 			'fenrir',
 			{
 				posX: 2000,
-				posY: 120,
+				posY: 1200,
 				latVelocity: 0,
 				longVelocity: -8,
 				facing: -1,
@@ -264,7 +264,7 @@ export default class App extends PIXI.Application {
 			'fenrir',
 			{
 				posX: 1970,
-				posY: 120,
+				posY: 1200,
 				latVelocity: 0,
 				longVelocity: -8,
 				facing: -1,

@@ -117,6 +117,7 @@ const shots = {
 
 		if (timing.isPaused()) return;
 		if (shots.cannonStates[entityId].onCooldown) return;
+		if (shots.handlers.stageEntities[entityId].isFlipping) return;
 
 		shots.cannonStates[entityId].onCooldown = false;
 		const activeCannon = shots.cannonStates[entityId].activeCannon;
