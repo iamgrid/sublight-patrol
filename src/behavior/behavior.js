@@ -21,6 +21,11 @@ const behavior = {
 		destroyEntity: 'destroyEntity',
 		defendEntity: 'defendEntity',
 	},
+	obstructionTypes: {
+		entityAttackingThePlayer: 'entityAttackingThePlayer',
+		enemy: 'enemy',
+		otherEntity: 'otherEntity',
+	},
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
 	widthOfWidestEntityInTheGame: 49,
@@ -217,7 +222,10 @@ const behavior = {
 		}
 
 		const latDifference = enemyY - entityY;
-		if (Math.abs(latDifference) > 20) {
+		const halfOfEnemysWidth = Math.floor(
+			currentState.entities.player.immutable.width / 2
+		);
+		if (Math.abs(latDifference) > halfOfEnemysWidth) {
 			// try to move into sightline with the enemy
 			shots.stopShooting(entityId);
 			newLatVelocity = entity.immutable.thrusters.side;
@@ -231,14 +239,63 @@ const behavior = {
 					entityX,
 					entityY,
 					newFacing,
+					enemyId,
+					enemyX,
 					currentState
 				);
 
-				if (
-					entitiesInShotRange.length === 1 &&
-					entitiesInShotRange[0] === enemyId
-				) {
-					shots.startShooting(entityId);
+				if (entitiesInShotRange.length === 1) {
+					// clear shot to hit the enemy
+					if (entitiesInShotRange[0].id === enemyId)
+						shots.startShooting(entityId);
+				} else if (entitiesInShotRange.length > 1) {
+					// the shot range has obstructions
+					entitiesInShotRange.sort(
+						(a, b) => a.distanceFromEnemy - b.distanceFromEnemy
+					);
+
+					// console.log(entityId, entitiesInShotRange);
+
+					let cumulativeObstructionType = behavior.obstructionTypes.otherEntity;
+					let moveIntoFormationWith = null;
+					let closestObstruction = null;
+					for (let currentEntity of entitiesInShotRange) {
+						if (currentEntity.id !== enemyId) {
+							if (
+								currentEntity.obstructionType ===
+								behavior.obstructionTypes.entityAttackingThePlayer
+							) {
+								cumulativeObstructionType =
+									behavior.obstructionTypes.entityAttackingThePlayer;
+								moveIntoFormationWith = currentEntity.id;
+								break;
+							} else {
+								if (closestObstruction === null)
+									closestObstruction = currentEntity.id;
+							}
+						}
+					}
+
+					if (
+						cumulativeObstructionType === behavior.obstructionTypes.otherEntity
+					) {
+						// move closer to the enemy
+
+						// console.log(
+						// 	entityId,
+						// 	'decided to move in front of',
+						// 	closestObstruction
+						// );
+
+						newLongVelocity = newFacing * entity.immutable.thrusters.main;
+					} else {
+						// get into formation with another attacking entity
+						// console.log(
+						// 	entityId,
+						// 	'decided to move into formation with',
+						// 	moveIntoFormationWith
+						// );
+					}
 				}
 			}
 		}
@@ -300,7 +357,15 @@ const behavior = {
 		return [needsToFlip, newFacing];
 	},
 
-	_returnEntitiesInShotRange(entityId, entityX, entityY, facing, currentState) {
+	_returnEntitiesInShotRange(
+		entityId,
+		entityX,
+		entityY,
+		facing,
+		enemyId,
+		enemyX,
+		currentState
+	) {
 		let xRangeMin = entityX - behavior.maxShotTravelDistance;
 		let xRangeMax = entityX;
 		if (facing === 1) {
@@ -329,8 +394,14 @@ const behavior = {
 							currentEntityPosY < yRangeMax
 						) {
 							// potentially in the right range in terms of latitude
-							if (currentEntityId !== entityId)
-								candidates[currentEntityId] = currentEntityPosY;
+							if (currentEntityId !== entityId) {
+								const currentEntityPosX =
+									currentState.positions[store][`${currentEntityId}--posX`];
+								candidates[currentEntityId] = [
+									currentEntityPosX,
+									currentEntityPosY,
+								];
+							}
 						}
 					}
 				}
@@ -345,13 +416,25 @@ const behavior = {
 
 			if (!storeEntity) continue;
 
-			const candidateY = candidates[candidateId];
+			const [candidateX, candidateY] = candidates[candidateId];
 			const halvedwidth = Math.ceil(storeEntity.immutable.width / 2);
 			if (
 				entityY >= candidateY - halvedwidth &&
 				entityY <= candidateY + halvedwidth
 			) {
-				re.push(candidateId);
+				let obstructionType = behavior.obstructionTypes.otherEntity;
+				let distanceFromEnemy = Math.abs(enemyX - candidateX);
+				if (
+					storeEntity.immutable.hasCannons &&
+					storeEntity.behaviorAttacking === enemyId
+				) {
+					obstructionType = behavior.obstructionTypes.entityAttackingThePlayer;
+				}
+				if (storeEntity.id === enemyId) {
+					obstructionType = behavior.obstructionTypes.enemy;
+				}
+
+				re.push({ id: candidateId, obstructionType, distanceFromEnemy });
 			}
 		}
 
