@@ -9,6 +9,7 @@ import {
 	flipStageEntity,
 	updateStageEntityVelocities,
 } from '../utils/helpers';
+import formations from './formations';
 
 const behavior = {
 	handlers: { dispatch: null, state: null, stageEntities: null }, // gets its values in App.js
@@ -26,6 +27,7 @@ const behavior = {
 		enemy: 'enemy',
 		otherEntity: 'otherEntity',
 	},
+	currentFormations: formations.currentFormations,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
 	widthOfWidestEntityInTheGame: 49,
@@ -162,7 +164,13 @@ const behavior = {
 
 	flee(entity, currentState) {
 		const entityId = entity.id;
+
 		shots.stopShooting(entityId);
+		const formationId = formations.isInFormation(entityId);
+		if (formationId) {
+			formations.removeEntityFromFormation(formationId, entityId);
+		}
+
 		const entityStoreUpdates = {};
 
 		const [needsToFlip, newFacing] = behavior._turn(

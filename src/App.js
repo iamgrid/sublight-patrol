@@ -715,6 +715,7 @@ export default class App extends PIXI.Application {
 				'padding-top: 10px; color: yellow'
 			);
 			console.info(currentState);
+			console.info('currentFormations:', behavior.currentFormations);
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
 			console.info('timing:', timing);
