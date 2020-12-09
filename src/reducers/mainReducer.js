@@ -192,18 +192,26 @@ export default function mainReducer(state, action) {
 				let efficacy = 1;
 				const latVelocity = currentVelocities[`${entityId}--latVelocity`];
 				const longVelocity = currentVelocities[`${entityId}--longVelocity`];
-				if (latVelocity !== 0 && longVelocity !== 0) efficacy = 0.75;
+				if (latVelocity !== 0 && longVelocity !== 0) efficacy = 0.5;
+				let xChange = 0;
+				let yChange = 0;
 
 				if (latVelocity !== 0) {
-					newCanMoveStore[`${entityId}--posY`] =
-						newCanMoveStore[`${entityId}--posY`] +
-						Math.trunc(latVelocity * efficacy);
+					yChange = Math.round(latVelocity * efficacy);
+					newCanMoveStore[`${entityId}--posY`] += yChange;
 				}
 				if (longVelocity !== 0) {
-					newCanMoveStore[`${entityId}--posX`] =
-						newCanMoveStore[`${entityId}--posX`] +
-						Math.trunc(longVelocity * efficacy);
+					xChange = Math.round(longVelocity * efficacy);
+					newCanMoveStore[`${entityId}--posX`] += xChange;
 				}
+
+				// console.log(
+				// 	`${entityId}: ${latVelocity} -> ${yChange}(${
+				// 		newCanMoveStore[entityId + '--posY']
+				// 	}); ${longVelocity} -> ${xChange}(${
+				// 		newCanMoveStore[entityId + '--posX']
+				// 	})`
+				// );
 			});
 
 			return [

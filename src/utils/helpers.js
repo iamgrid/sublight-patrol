@@ -61,6 +61,8 @@ export function repositionMovedEntities(
 			if (entities.stageEntities[entityId].triggeredFading === undefined)
 				entities.stageEntities[entityId].triggeredFading = false;
 
+			// entities that arent the player will fade out and despawn
+			// when they move outside the playarea
 			if (entities.stageEntities[entityId].triggeredFading === false) {
 				timing.setTrigger(
 					`${entityId}_exited-volume-fader`,
