@@ -44,6 +44,9 @@ const behavior = {
 
 		let updatedSomething = false;
 
+		// behavior for entities that lead a formation,
+		// aren't in a formation at all,
+		// or fell below the hullHealth threshold for fleeing
 		currentState.entities.targetable.forEach((entity) => {
 			if (!entity.immutable.hasBehavior || entity.isDisabled) return;
 
@@ -105,7 +108,11 @@ const behavior = {
 							itsGoTimeBuddy = true;
 						}
 
-						if (itsGoTimeBuddy) {
+						if (
+							itsGoTimeBuddy &&
+							(!formations.isInFormation(entity.id) ||
+								formations.isLeadInAFormation(entity.id))
+						) {
 							updatesToEntity = behavior.destroyEntity(
 								entity,
 								playerId,
@@ -142,6 +149,64 @@ const behavior = {
 				}
 			}
 		});
+
+		// behavior for entities that remained followers in a formation
+		for (const formationId in formations.currentFormations.proper) {
+			const formationConfig = formations.returnFormationFacingAndCoords(
+				formationId,
+				currentState
+			);
+
+			for (
+				let i = 0;
+				i < formations.currentFormations.proper[formationId];
+				i++
+			) {
+				if (i === 0) continue; // the lead entity is controlled above
+
+				let updatesToEntity2 = [];
+
+				const entityId = formations.currentFormations.proper[formationId][i].id;
+				const entity = getStoreEntity(entityId, currentState);
+
+				if (!entity) continue;
+
+				console.log(entityId, 'is controlled in the formation section');
+
+				const latOffset =
+					formations.currentFormations.proper[formationId][i].latOffset;
+				const longOffset =
+					formations.currentFormations.proper[formationId][i].longOffset;
+
+				updatesToEntity2 = behavior.attackInFormation(
+					entity,
+					currentState,
+					formationId,
+					formationConfig,
+					latOffset,
+					longOffset
+				);
+
+				if (updatesToEntity2.length > 0) {
+					if (!isEmptyObject(updatesToEntity2[0])) {
+						updatedSomething = true;
+						entityStoreUpdates[entityId] = updatesToEntity2[0];
+					}
+					if (!isEmptyObject(updatesToEntity2[1])) {
+						updatedSomething = true;
+						stageVelocityUpdates[entityId] = updatesToEntity2[1];
+						stateVelocityUpdates[`${entityId}--latVelocity`] =
+							updatesToEntity2[1].latVelocity;
+						stateVelocityUpdates[`${entityId}--longVelocity`] =
+							updatesToEntity2[1].longVelocity;
+					}
+					if (updatesToEntity2[2] !== null) {
+						updatedSomething = true;
+						stageFacingUpdates[entityId] = updatesToEntity2[2];
+					}
+				}
+			}
+		}
 
 		function updateSEV() {
 			behavior.updateChangedStageEntityVelocities(
@@ -319,6 +384,22 @@ const behavior = {
 						// 	'decided to move into formation with',
 						// 	moveIntoFormationWith
 						// );
+						const existingFormation = formations.isInFormation(
+							moveIntoFormationWith
+						);
+						if (existingFormation) {
+							formations.addEntityToFormation(
+								existingFormation,
+								entityId,
+								currentState
+							);
+						} else {
+							formations.createFormation(
+								moveIntoFormationWith,
+								entityId,
+								currentState
+							);
+						}
 					}
 				}
 			}
@@ -335,6 +416,104 @@ const behavior = {
 			entityStoreUpdates.behaviorAttacking = enemyId;
 			entityStoreUpdates.behaviorCurrentGoal =
 				behavior.possibleGoals.destroyEntity;
+		}
+
+		return [entityStoreUpdates, velocityUpdates, facingUpdate];
+	},
+
+	attackInFormation(
+		entity,
+		currentState,
+		formationId,
+		formationConfig,
+		latOffset,
+		longOffset
+	) {
+		const entityId = entity.id;
+
+		const currentFacing = entity.facing;
+
+		const entityStoreUpdates = {};
+
+		let newFacing = null;
+		let facingUpdate = null;
+
+		if (formationConfig.facing !== currentFacing) {
+			newFacing = formationConfig.facing;
+			facingUpdate = newFacing;
+			entityStoreUpdates.facing = newFacing;
+		}
+
+		let newLatVelocity = 0;
+		let newLongVelocity = 0;
+
+		const correctY = formationConfig.leadY + formationConfig.facing * latOffset;
+		const correctX =
+			formationConfig.leadX + formationConfig.facing * longOffset;
+
+		const [entityX, entityY] = getPosition(entityId, currentState.positions);
+
+		const latDifference = entityY - correctY;
+		const longDifference = entityX - correctX;
+
+		if (Math.abs(latDifference) > 1) {
+			let dir = 1;
+			if (latDifference < 0) dir = -1;
+
+			let maxLatVelocity = entity.immutable.thrusters.side;
+
+			newLatVelocity = dir * maxLatVelocity;
+			if (Math.abs(latDifference) < maxLatVelocity) {
+				newLatVelocity = latDifference;
+			}
+		}
+
+		if (Math.abs(longDifference) > 1) {
+			let dir = 1;
+			if (longDifference < 0) dir = -1;
+
+			let maxLongVelocity = entity.immutable.thrusters.front;
+			if (newFacing === dir) maxLongVelocity = entity.immutable.thrusters.main;
+
+			newLatVelocity = dir * maxLongVelocity;
+			if (Math.abs(longDifference) < maxLongVelocity) {
+				newLatVelocity = longDifference;
+			}
+		}
+
+		const velocityUpdates = {
+			latVelocity: newLatVelocity,
+			longVelocity: newLongVelocity,
+		};
+
+		const enemyId = currentState.entities.player.id;
+		const [enemyX] = getPosition(enemyId, currentState.positions);
+
+		const longDistance = Math.abs(enemyX - entityX);
+
+		let doShoot = false;
+
+		if (longDistance < behavior.maxShotTravelDistance) {
+			const entitiesInShotRange = behavior._returnEntitiesInShotRange(
+				entityId,
+				entityX,
+				entityY,
+				newFacing,
+				enemyId,
+				enemyX,
+				currentState
+			);
+
+			if (entitiesInShotRange.length === 1) {
+				// clear shot to hit the enemy
+				if (entitiesInShotRange[0].id === enemyId) doShoot = true;
+			}
+		}
+
+		if (doShoot) {
+			shots.startShooting(entityId);
+		} else {
+			shots.stopShooting(entityId);
 		}
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];

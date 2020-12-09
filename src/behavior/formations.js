@@ -197,7 +197,15 @@ const formations = {
 		return false;
 	},
 
-	returnFormationFacingAndCorrectCoords(formationId, currentState) {
+	isLeadInAFormation(entityId) {
+		if (formations.currentFormations.leadEntities[entityId] !== undefined) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+
+	returnFormationFacingAndCoords(formationId, currentState) {
 		const currentFormation = formations.currentFormations.proper[formationId];
 		const leadEntityId = currentFormation[0].id;
 		const leadStoreEntity = getStoreEntity(leadEntityId, currentState);
@@ -207,7 +215,7 @@ const formations = {
 		const facing = leadStoreEntity.facing;
 		const [leadX, leadY] = getPosition(leadEntityId, currentState.positions);
 
-		return { facing, leadX, leadY, currentFormation };
+		return { facing, leadX, leadY, formation: currentFormation };
 	},
 };
 
