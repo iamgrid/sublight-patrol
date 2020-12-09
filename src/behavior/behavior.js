@@ -159,7 +159,7 @@ const behavior = {
 
 			for (
 				let i = 0;
-				i < formations.currentFormations.proper[formationId];
+				i < formations.currentFormations.proper[formationId].length;
 				i++
 			) {
 				if (i === 0) continue; // the lead entity is controlled above
@@ -170,8 +170,7 @@ const behavior = {
 				const entity = getStoreEntity(entityId, currentState);
 
 				if (!entity) continue;
-
-				console.log(entityId, 'is controlled in the formation section');
+				// console.log(entityId, 'is controlled in the formation section');
 
 				const latOffset =
 					formations.currentFormations.proper[formationId][i].latOffset;
@@ -456,9 +455,11 @@ const behavior = {
 		const latDifference = entityY - correctY;
 		const longDifference = entityX - correctX;
 
+		console.log('attackInFormation', { latDifference, longDifference });
+
 		if (Math.abs(latDifference) > 1) {
-			let dir = 1;
-			if (latDifference < 0) dir = -1;
+			let dir = -1;
+			if (latDifference < 0) dir = 1;
 
 			let maxLatVelocity = entity.immutable.thrusters.side;
 
@@ -468,18 +469,18 @@ const behavior = {
 			}
 		}
 
-		if (Math.abs(longDifference) > 1) {
-			let dir = 1;
-			if (longDifference < 0) dir = -1;
+		// if (Math.abs(longDifference) > 1) {
+		// 	let dir = -1;
+		// 	if (longDifference < 0) dir = 1;
 
-			let maxLongVelocity = entity.immutable.thrusters.front;
-			if (newFacing === dir) maxLongVelocity = entity.immutable.thrusters.main;
+		// 	let maxLongVelocity = entity.immutable.thrusters.front;
+		// 	if (newFacing === dir) maxLongVelocity = entity.immutable.thrusters.main;
 
-			newLatVelocity = dir * maxLongVelocity;
-			if (Math.abs(longDifference) < maxLongVelocity) {
-				newLatVelocity = longDifference;
-			}
-		}
+		// 	newLongVelocity = dir * maxLongVelocity;
+		// 	if (Math.abs(longDifference) < maxLongVelocity) {
+		// 		newLongVelocity = longDifference;
+		// 	}
+		// }
 
 		const velocityUpdates = {
 			latVelocity: newLatVelocity,
@@ -515,6 +516,8 @@ const behavior = {
 		} else {
 			shots.stopShooting(entityId);
 		}
+
+		console.log('attackInFormation velocityUpdates:', velocityUpdates);
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
