@@ -36,8 +36,9 @@ const behavior = {
 		const playerId = currentState.entities.player.id;
 
 		const entityStoreUpdates = {};
-		const stageVelocityUpdates = {};
 		const stateVelocityUpdates = {};
+		const stageVelocityUpdates = {};
+		const stageFacingUpdates = {};
 
 		let updatedSomething = false;
 
@@ -130,11 +131,18 @@ const behavior = {
 					stateVelocityUpdates[`${entity.id}--longVelocity`] =
 						updatesToEntity[1].longVelocity;
 				}
+				if (updatesToEntity[2] !== null) {
+					updatedSomething = true;
+					stageFacingUpdates[entity.id] = updatesToEntity[2];
+				}
 			}
 		});
 
 		function updateSEV() {
-			behavior.updateChangedStageEntityVelocities(stageVelocityUpdates);
+			behavior.updateChangedStageEntityVelocities(
+				stageVelocityUpdates,
+				stageFacingUpdates
+			);
 		}
 
 		if (updatedSomething) {
@@ -161,12 +169,15 @@ const behavior = {
 			currentState.positions
 		);
 
+		let facingUpdate = null;
+
 		if (needsToFlip) {
 			entityStoreUpdates.facing = newFacing;
-			flipStageEntity(entityId, behavior.handlers.stageEntities, newFacing);
+			facingUpdate = newFacing;
 		}
 
 		const velocityUpdates = {};
+
 		if (
 			getVelocity(entityId, currentState.velocities) !==
 			newFacing * entity.immutable.thrusters.main
@@ -179,7 +190,7 @@ const behavior = {
 		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.flee)
 			entityStoreUpdates.behaviorCurrentGoal = behavior.possibleGoals.flee;
 
-		return [entityStoreUpdates, velocityUpdates];
+		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
 
 	destroyEntity(
@@ -202,9 +213,11 @@ const behavior = {
 			{ entityX, enemyX }
 		);
 
+		let facingUpdate = null;
+
 		if (needsToFlip) {
 			entityStoreUpdates.facing = newFacing;
-			flipStageEntity(entityId, behavior.handlers.stageEntities, newFacing);
+			facingUpdate = newFacing;
 		}
 
 		let newLatVelocity = 0;
@@ -313,7 +326,7 @@ const behavior = {
 				behavior.possibleGoals.destroyEntity;
 		}
 
-		return [entityStoreUpdates, velocityUpdates];
+		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
 
 	// HELPER METHODS //
@@ -443,13 +456,21 @@ const behavior = {
 
 	// STATE UPDATES //
 
-	updateChangedStageEntityVelocities(updates) {
-		for (const entityId in updates) {
+	updateChangedStageEntityVelocities(velocityUpdates, facingUpdates) {
+		for (const entityId2 in facingUpdates) {
+			flipStageEntity(
+				entityId2,
+				behavior.handlers.stageEntities,
+				facingUpdates[entityId2]
+			);
+		}
+
+		for (const entityId in velocityUpdates) {
 			updateStageEntityVelocities(
 				entityId,
 				behavior.handlers.stageEntities,
-				updates[entityId].latVelocity,
-				updates[entityId].longVelocity
+				velocityUpdates[entityId].latVelocity,
+				velocityUpdates[entityId].longVelocity
 			);
 		}
 	},
