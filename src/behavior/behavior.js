@@ -87,8 +87,11 @@ const behavior = {
 						);
 
 						if (
-							entity.behaviorHitsSuffered > 0 &&
-							entity.behaviorLastHitOrigin === playerId
+							(entity.behaviorHitsSuffered > 0 &&
+								entity.behaviorLastHitOrigin === playerId) ||
+							(entity.behaviorCurrentGoal ===
+								behavior.possibleGoals.destroyEntity &&
+								entity.behaviorAttacking === playerId)
 						) {
 							itsGoTimeBuddy = true;
 						}
