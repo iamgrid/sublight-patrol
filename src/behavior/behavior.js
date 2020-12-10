@@ -163,15 +163,13 @@ const behavior = {
 			let longMultiplier = -1;
 
 			if (facing === 1) {
-				// flankOne (entities with an odd index) is above,
-				// flankTwo (entities with an even index) is below
-				// both flanks are to the left of the lead entity
+				// both flanks should be to the left of the lead entity
 			} else if (facing === -1) {
-				// flankOne (entities with an odd index) is below,
-				// flankTwo (entities with an even index) is above
-				// both flanks are to the right of the lead entity
-				flankOneLatMultiplier = 1;
-				flankTwoLatMultiplier = -1;
+				// both flanks should be to the right of the lead entity
+
+				// flankOne (entities with an odd index) and flankTwo
+				// (entities with an even index) flip when the facing is -1
+				// so their lat multipliers have to actually stay the same
 				longMultiplier = 1;
 			}
 
@@ -480,10 +478,8 @@ const behavior = {
 			entityStoreUpdates.facing = newFacing;
 		}
 
-		// let isInFlankOne = true;
 		let isInFlankTwo = false;
 		if (formationIndex % 2 === 0) {
-			// isInFlankOne = false;
 			isInFlankTwo = true;
 		}
 

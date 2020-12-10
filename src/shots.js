@@ -208,7 +208,7 @@ const shots = {
 	},
 
 	removeShot(id, sightLine, callbackFn = null) {
-		if (!id || !sightLine) {
+		if (!id || !Number.isFinite(sightLine)) {
 			console.error(`removeShot called with id ${id}, sightLine ${sightLine}`);
 			return;
 		}
