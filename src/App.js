@@ -4,6 +4,7 @@ import soundEffects from './audio/soundEffects';
 import c from './utils/constants';
 import overlays from './overlays';
 import timing from './utils/timing';
+import { decreaseNumberBy } from './utils/formulas';
 import {
 	repositionMovedEntities,
 	updateStageEntityVelocities,
@@ -54,6 +55,7 @@ export default class App extends PIXI.Application {
 
 		this.inSlipStream = false;
 		this.showingCoordWarning = false;
+		this.showingCoordAlert = false;
 		this.camera = {
 			currentShift: 100,
 			isFlipping: false,
@@ -81,6 +83,7 @@ export default class App extends PIXI.Application {
 		c.init();
 		status.init();
 		shields.init();
+		behavior.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v5.png');
 
@@ -88,6 +91,16 @@ export default class App extends PIXI.Application {
 			this.loader.add(
 				soundName,
 				'./assets/sound_effects/' + soundEffects.manifest[soundName]
+			);
+		}
+
+		this.softBoundaries = {};
+
+		for (const side in c.playVolume) {
+			if (side === 'softBoundary') continue;
+			this.softBoundaries[side] = decreaseNumberBy(
+				c.playVolume[side],
+				c.playVolume.softBoundary
 			);
 		}
 
@@ -688,26 +701,45 @@ export default class App extends PIXI.Application {
 			const playerX = currentState.positions.canMove[`${playerId}--posX`];
 			const playerY = currentState.positions.canMove[`${playerId}--posY`];
 
-			// out of bounds warning
+			// out of bounds warning/alert
 			let showCoordWarning = false;
+			let showCoordAlert = false;
 
 			if (
-				playerX < c.playVolume.minX ||
-				playerX > c.playVolume.maxX ||
-				playerY < c.playVolume.minY ||
-				playerY > c.playVolume.maxY
+				!this.showingCoordWarning &&
+				(playerX < this.softBoundaries.minX ||
+					playerX > this.softBoundaries.maxX ||
+					playerY < this.softBoundaries.minY ||
+					playerY > this.softBoundaries.maxY)
 			) {
 				showCoordWarning = true;
 			}
 
-			if (showCoordWarning && !this.showingCoordWarning) {
-				this.showingCoordWarning = true;
-				alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+			if (
+				!this.showingCoordAlert &&
+				(playerX < c.playVolume.minX ||
+					playerX > c.playVolume.maxX ||
+					playerY < c.playVolume.minY ||
+					playerY > c.playVolume.maxY)
+			) {
+				showCoordWarning = false;
+				showCoordAlert = true;
 			}
 
-			if (!showCoordWarning && this.showingCoordWarning) {
+			if (showCoordWarning) {
+				this.showingCoordWarning = true;
+				alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+			} else {
 				this.showingCoordWarning = false;
 				alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
+			}
+
+			if (showCoordAlert) {
+				this.showingCoordAlert = true;
+				alertsAndWarnings.add(c.alertsAndWarnings.alerts.leftVolume);
+			} else {
+				this.showingCoordAlert = false;
+				alertsAndWarnings.remove(c.alertsAndWarnings.alerts.leftVolume);
 			}
 
 			// camera position

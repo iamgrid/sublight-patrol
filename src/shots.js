@@ -210,7 +210,9 @@ const shots = {
 
 	removeShot(id, sightLine, callbackFn = null) {
 		if (!id || !Number.isFinite(sightLine)) {
-			console.error(`removeShot called with id ${id}, sightLine ${sightLine}`);
+			console.log(
+				`removeShot called with id ${id}, sightLine ${sightLine}, canceling`
+			);
 			return;
 		}
 		const stageShot = shots.stageShots[id];
@@ -294,10 +296,6 @@ const shots = {
 
 					const shotX = stageShot.position.x;
 					const shotY = sightLine;
-
-					if (!shotX || !shotY) {
-						console.error({ shotX, shotY });
-					}
 
 					const shotOrigin = stageShot.origin;
 

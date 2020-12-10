@@ -2,6 +2,18 @@ export function randomNumber(min, max, decimals = 0) {
 	return Number((Math.random() * (max - min) + min).toFixed(decimals));
 }
 
+export function decreaseNumberBy(num, by) {
+	let isNegative = false;
+	if (num < 0) isNegative = true;
+	let re = Math.abs(num) - by;
+	if (re < 0) re = 0;
+	if (isNegative) re = -1 * re;
+
+	// console.log('decreaseNumberBy', { num, by, re });
+
+	return re;
+}
+
 export function calculateDistance(x1, y1, x2, y2) {
 	return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }

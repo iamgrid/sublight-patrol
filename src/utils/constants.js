@@ -28,6 +28,7 @@ const c = {
 		maxX: 3000,
 		minY: -2500,
 		maxY: 3000,
+		softBoundary: 300,
 	},
 	zIndices: {
 		environmental: 0,
@@ -44,13 +45,16 @@ const c = {
 	],
 	alertsAndWarnings: {
 		warnings: {
-			leavingVolume: { m: 'You are beyond the edge of the playable volume!' },
+			leavingVolume: {
+				m: 'You are approaching the edge of the playable volume!',
+			},
 			collision: { m: 'Collision imminent!' },
 			otherWarning: {
 				m: 'Other warning text!',
 			},
 		},
 		alerts: {
+			leftVolume: { m: 'You are beyond the edge of the playable volume!' },
 			systemsOffline: {
 				m: 'Systems offline.',
 			},

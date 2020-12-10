@@ -61,7 +61,7 @@ export function repositionMovedEntities(
 			if (entities.stageEntities[entityId].triggeredFading === undefined)
 				entities.stageEntities[entityId].triggeredFading = false;
 
-			// entities that arent the player will fade out and despawn
+			// entities that aren't the player will fade out and despawn
 			// when they move outside the playarea
 			if (entities.stageEntities[entityId].triggeredFading === false) {
 				timing.setTrigger(
@@ -665,6 +665,8 @@ export const alertsAndWarnings = {
 
 	add(value) {
 		alertsAndWarnings[`${value.type}s`].add(value.k);
+		console.log(alertsAndWarnings[`${value.type}s`]);
+
 		if (!alertsAndWarnings.isFading) {
 			alertsAndWarnings.update();
 		} else {
@@ -674,6 +676,8 @@ export const alertsAndWarnings = {
 
 	remove(value) {
 		alertsAndWarnings[`${value.type}s`].delete(value.k);
+		console.log(alertsAndWarnings[`${value.type}s`]);
+
 		if (
 			alertsAndWarnings.warnings.size < 1 &&
 			alertsAndWarnings.alerts.size < 1

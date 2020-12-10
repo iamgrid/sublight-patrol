@@ -1,4 +1,5 @@
 import c from '../utils/constants';
+import { decreaseNumberBy } from '../utils/formulas';
 import shots from '../shots';
 import { calculateDistance } from '../utils/formulas';
 import {
@@ -17,13 +18,14 @@ const behavior = {
 		playerDetermined: 'playerDetermined',
 		holdStation: 'holdStation',
 		maintainVelocity: 'maintainVelocity',
-		guardEntity: 'guardEntity',
+		/*guardEntity: 'guardEntity',*/
 		flee: 'flee',
 		destroyEntity: 'destroyEntity',
-		defendEntity: 'defendEntity',
+		/*defendEntity: 'defendEntity',*/
 	},
 	obstructionTypes: {
 		entityAttackingThePlayer: 'entityAttackingThePlayer',
+		partnerInTheSameFormation: 'partnerInTheSameFormation',
 		enemy: 'enemy',
 		otherEntity: 'otherEntity',
 	},
@@ -31,6 +33,7 @@ const behavior = {
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
 	widthOfWidestEntityInTheGame: 49,
+	playVolumeBoundaries: {},
 
 	tick() {
 		const currentState = this.handlers.state();
@@ -321,13 +324,21 @@ const behavior = {
 
 		const longDistance = Math.abs(enemyX - entityX);
 		if (longDistance > entity.behaviorPreferredAttackDistance) {
-			// try to move into range with the enemy horizontally
-			// attempt to match velocity with the enemy if its also moving
+			// Try to move into range with the enemy horizontally.
+			// Attempt to match velocity with the enemy if its also moving.
 			const enemyLongVel = Math.abs(
 				getVelocity(enemyId, currentState.velocities)[1]
 			);
 			const maxLongVelocity = entity.immutable.thrusters.main;
 			newLongVelocity = newFacing * Math.min(enemyLongVel, maxLongVelocity);
+
+			// don't move beyond the behavior boundaries
+			if (
+				entityX + newLongVelocity < behavior.playVolumeBoundaries.minX ||
+				entityX + newLongVelocity > behavior.playVolumeBoundaries.maxX
+			) {
+				newLongVelocity = 0;
+			}
 		}
 
 		const latDifference = enemyY - entityY;
@@ -340,6 +351,14 @@ const behavior = {
 			newLatVelocity = entity.immutable.thrusters.side;
 			if (latDifference < 0) {
 				newLatVelocity = 0 - newLatVelocity;
+			}
+
+			// don't move beyond the behavior boundaries
+			if (
+				entityY + newLatVelocity < behavior.playVolumeBoundaries.minY ||
+				entityY + newLatVelocity > behavior.playVolumeBoundaries.maxY
+			) {
+				newLatVelocity = 0;
 			}
 		} else {
 			if (longDistance < behavior.maxShotTravelDistance) {
@@ -354,9 +373,10 @@ const behavior = {
 				);
 
 				if (entitiesInShotRange.length === 1) {
-					// clear shot to hit the enemy
-					if (entitiesInShotRange[0].id === enemyId)
+					if (entitiesInShotRange[0].id === enemyId) {
+						// clear shot to hit the enemy
 						shots.startShooting(entityId);
+					}
 				} else if (entitiesInShotRange.length > 1) {
 					// the shot range has obstructions
 					entitiesInShotRange.sort(
@@ -711,6 +731,18 @@ const behavior = {
 				behavior.handlers.stageEntities,
 				velocityUpdates[entityId].latVelocity,
 				velocityUpdates[entityId].longVelocity
+			);
+		}
+	},
+
+	// init //
+	init() {
+		const softBoundary = c.playVolume.softBoundary;
+		for (const side in c.playVolume) {
+			if (side === 'softBoundary') continue;
+			behavior.playVolumeBoundaries[side] = decreaseNumberBy(
+				c.playVolume[side],
+				softBoundary
 			);
 		}
 	},
