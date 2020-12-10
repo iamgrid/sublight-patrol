@@ -357,8 +357,8 @@ const behavior = {
 
 				if (entitiesInShotRange.length === 1) {
 					// clear shot to hit the enemy
-					// if (entitiesInShotRange[0].id === enemyId)
-					// shots.startShooting(entityId);
+					if (entitiesInShotRange[0].id === enemyId)
+						shots.startShooting(entityId);
 				} else if (entitiesInShotRange.length > 1) {
 					// the shot range has obstructions
 					entitiesInShotRange.sort(
@@ -545,7 +545,7 @@ const behavior = {
 
 		let doShoot = false;
 
-		if (longDistance < behavior.maxShotTravelDistance) {
+		if (longDistance < behavior.maxShotTravelDistance && newLatVelocity === 0) {
 			const entitiesInShotRange = behavior._returnEntitiesInShotRange(
 				entityId,
 				entityX,
@@ -563,7 +563,7 @@ const behavior = {
 		}
 
 		if (doShoot) {
-			// shots.startShooting(entityId);
+			shots.startShooting(entityId);
 		} else {
 			shots.stopShooting(entityId);
 		}

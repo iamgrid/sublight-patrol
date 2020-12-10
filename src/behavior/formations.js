@@ -14,8 +14,8 @@ const formations = {
 		latOffset: 0,
 		longOffset: 0,
 	},
-	latOffsetGap: 5,
-	longOffsetGap: 10,
+	latOffsetGap: 10,
+	longOffsetGap: 15,
 
 	createFormation(leadEntityId, flankingEntityId, currentState) {
 		console.log(
@@ -194,33 +194,31 @@ const formations = {
 			}
 
 			if (inFlankOne) {
+				if (i > 0) {
+					flankOneLongOffset +=
+						currentFormation[i - 1].halfLength +
+						currentFormation[i].halfLength +
+						formations.longOffsetGap;
+					currentFormation[i].latOffset = flankOneLatOffset;
+					currentFormation[i].longOffset = flankOneLongOffset;
+				}
+
 				flankOneLatOffset +=
 					currentFormation[i].halfWidth + formations.latOffsetGap;
-				flankOneLongOffset +=
-					currentFormation[i].halfLength + formations.longOffsetGap;
-
-				if (i > 0) {
-					currentFormation[i].latOffset = flankOneLatOffset;
-					currentFormation[i].longOffset =
-						flankOneLongOffset +
-						formations.longOffsetGap +
-						currentFormation[i].halfLength;
-				}
 			}
 
 			if (inFlankTwo) {
+				if (i > 0) {
+					flankTwoLongOffset +=
+						currentFormation[i - 1].halfLength +
+						currentFormation[i].halfLength +
+						formations.longOffsetGap;
+					currentFormation[i].latOffset = flankTwoLatOffset;
+					currentFormation[i].longOffset = flankTwoLongOffset;
+				}
+
 				flankTwoLatOffset +=
 					currentFormation[i].halfWidth + formations.latOffsetGap;
-				flankTwoLongOffset +=
-					currentFormation[i].halfLength + formations.longOffsetGap;
-
-				if (i > 0) {
-					currentFormation[i].latOffset = flankTwoLatOffset;
-					currentFormation[i].longOffset =
-						flankTwoLongOffset +
-						formations.longOffsetGap +
-						currentFormation[i].halfLength;
-				}
 			}
 		}
 
@@ -266,7 +264,7 @@ const formations = {
 		const facing = leadStoreEntity.facing;
 		const [leadX, leadY] = getPosition(leadEntityId, currentState.positions);
 
-		return { facing, leadX, leadY, formation: currentFormation };
+		return { facing, leadX, leadY };
 	},
 };
 
