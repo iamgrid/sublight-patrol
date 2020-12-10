@@ -86,27 +86,56 @@ function targetPointedOrNearest(from, entities, positions) {
 	return current;
 }
 
-function cycleTargets(current, direction, entities) {
-	if (current === null) {
-		if (entities[0]) {
-			return entities[0].id;
-		} else {
-			return null;
+function cycleTargets(current, direction, targetableStore) {
+	if (!targetableStore[0]) {
+		return null;
+	}
+
+	const relationPriorities = ['hostile', 'neutral', 'friendly'];
+
+	let temp = targetableStore.map((el) => {
+		const re = { id: el.id };
+		re.rel = relationPriorities.findIndex(
+			(rPItem) => rPItem === el.playerRelation
+		);
+		return re;
+	});
+	temp.sort((a, b) => {
+		if (a.rel < b.rel) {
+			return -1;
+		} else if (a.rel > b.rel) {
+			return 1;
+		}
+
+		if (a.id < b.id) {
+			return -1;
+		} else if (a.id > b.id) {
+			return 1;
+		}
+		return 0;
+	});
+
+	// console.log(temp);
+
+	let currentIdx = 0;
+	let newIdx;
+	if (current !== null) {
+		currentIdx = temp.findIndex((el) => el.id === current);
+		if (direction === 'next') {
+			newIdx = currentIdx + 1;
+			if (newIdx > temp.length - 1) newIdx = 0;
+		} else if (direction === 'previous') {
+			newIdx = currentIdx - 1;
+			if (newIdx < 0) newIdx = temp.length - 1;
+		}
+	} else {
+		if (direction === 'next') {
+			newIdx = 0;
+		} else if (direction === 'previous') {
+			newIdx = temp.length - 1;
 		}
 	}
-
-	const currentIdx = entities.findIndex((entity) => entity.id === current);
-
-	let newIdx;
-	if (direction === 'next') {
-		newIdx = currentIdx + 1;
-		if (newIdx > entities.length - 1) newIdx = 0;
-	} else if (direction === 'previous') {
-		newIdx = currentIdx - 1;
-		if (newIdx < 0) newIdx = entities.length - 1;
-	}
-
-	return entities[newIdx].id;
+	return temp[newIdx].id;
 }
 
 export default function mainReducer(state, action) {

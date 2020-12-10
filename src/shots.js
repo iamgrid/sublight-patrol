@@ -475,13 +475,14 @@ const shots = {
 
 				if (
 					currentState.game.targeting === null ||
-					lastTwo.every((el) => el === entityId)
+					(lastTwo.every((el) => el === entityId) &&
+						entityId !== currentState.game.targeting)
 				) {
 					shots.targetDamagedEntity(entityId);
 				}
 
 				shots.lastEntitiesHitByPlayer.push(entityId);
-				if (shots.lastEntitiesHitByPlayer.length > 30)
+				if (shots.lastEntitiesHitByPlayer.length > 10)
 					shots.lastEntitiesHitByPlayer = lastTwo;
 			}
 		}
