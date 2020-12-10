@@ -27,18 +27,18 @@ const formations = {
 		);
 		if (formations.isInFormation(leadEntityId)) {
 			console.log(
-				'attempt to add ',
+				'attempt to add',
 				leadEntityId,
-				'to a new formation prevented, its already part of another one'
+				'as lead to a new formation prevented, its already part of another one'
 			);
 			return false;
 		}
 
 		if (formations.isInFormation(flankingEntityId)) {
 			console.log(
-				'attempt to add ',
+				'attempt to add',
 				flankingEntityId,
-				'to a new formation prevented, its already part of another one'
+				'as follower to a new formation prevented, its already part of another one'
 			);
 			return false;
 		}
@@ -63,76 +63,61 @@ const formations = {
 			flankingStoreEntity.immutable.length / 2
 		);
 		flankingObj.halfWidth = Math.ceil(flankingStoreEntity.immutable.width / 2);
-		// the flanking entity will be in flankOne (odd indices)
-		flankingObj.latOffset = leadObj.halfWidth + formations.latOffsetGap;
-		flankingObj.longOffset =
-			leadObj.halfLength + formations.longOffsetGap + flankingObj.halfLength;
 
-		formations.currentFormations.proper[formationId] = [leadObj, flankingObj];
+		let currentFormation = [leadObj, flankingObj];
+
+		currentFormation = formations.assignOffsets(currentFormation);
+
+		formations.currentFormations.proper[formationId] = currentFormation;
 
 		return true;
 	},
 
 	addEntityToFormation(formationId, idOfEntityToAdd, currentState) {
-		const existingFormation = formations.isInFormation(idOfEntityToAdd);
-		if (existingFormation) {
+		let currentFormation = formations.currentFormations.proper[formationId];
+		const existingFormationId = formations.isInFormation(idOfEntityToAdd);
+
+		if (existingFormationId === formationId) {
 			console.log(
-				'attempt to add ',
 				idOfEntityToAdd,
-				'to an existing formation, its already part of another one'
+				'is already in the formation that its now trying to join -> canceling operation.'
 			);
-			if (formations.isLeadInAFormation(idOfEntityToAdd)) {
-				console.log(
-					idOfEntityToAdd,
-					'is the lead of another formation, we ought to join those two'
-				);
-				// TODO !!!!!!!!!!!!!!!!
-				return false;
-			}
 			return false;
 		}
 
-		const currentFormation = formations.currentFormations.proper[formationId];
-		const currentFormationLength = currentFormation.length;
-
-		let arrayIndexWillBeEven = true; // new entity will be in flankTwo (even indices)
-		if (currentFormationLength % 2 == 0) {
-			arrayIndexWillBeEven = false; // new entity will be in flankOne (odd indices)
+		let solvedByMergingFormations = false;
+		if (existingFormationId) {
+			const existingFormation =
+				formations.currentFormations.proper[existingFormationId];
+			currentFormation = currentFormation.concat(existingFormation);
+			console.log(
+				idOfEntityToAdd,
+				'is already in another formation, merging it with this one'
+			);
+			console.log(currentFormation);
+			formations.dissolveFormation(existingFormationId);
+			solvedByMergingFormations = true;
 		}
 
-		const newEntityObj = { ...formations.entityTemplate, id: idOfEntityToAdd };
+		if (!solvedByMergingFormations) {
+			const newEntityObj = {
+				...formations.entityTemplate,
+				id: idOfEntityToAdd,
+			};
 
-		const storeEntity = getStoreEntity(idOfEntityToAdd, currentState);
+			const storeEntity = getStoreEntity(idOfEntityToAdd, currentState);
 
-		if (!storeEntity) return false;
+			if (!storeEntity) return false;
 
-		newEntityObj.halfLength = Math.ceil(storeEntity.immutable.length / 2);
-		newEntityObj.halfWidth = Math.ceil(storeEntity.immutable.width / 2);
+			newEntityObj.halfLength = Math.ceil(storeEntity.immutable.length / 2);
+			newEntityObj.halfWidth = Math.ceil(storeEntity.immutable.width / 2);
 
-		let currentLatOffset = 0;
-		let currentLongOffset = 0;
-
-		for (let i = 0; i < currentFormationLength; i++) {
-			if (
-				i > 0 &&
-				((arrayIndexWillBeEven && i % 2 !== 0) ||
-					(!arrayIndexWillBeEven && i % 2 === 0))
-			) {
-				// ignore entities that aren't on the same flank
-				continue;
-			}
-
-			currentLatOffset +=
-				currentFormation[i].halfWidth + formations.latOffsetGap;
-			currentLongOffset +=
-				currentFormation[i].halfLength + formations.longOffsetGap;
+			currentFormation.push(newEntityObj);
 		}
 
-		newEntityObj.latOffset = currentLatOffset;
-		newEntityObj.longOffset =
-			currentLongOffset + newEntityObj.halfLength + formations.longOffsetGap;
+		currentFormation = formations.assignOffsets(currentFormation);
 
-		formations.currentFormations.proper[formationId].push(newEntityObj);
+		formations.currentFormations.proper[formationId] = currentFormation;
 
 		formations.currentFormations.flankingEntities[
 			idOfEntityToAdd
@@ -142,6 +127,7 @@ const formations = {
 	},
 
 	removeEntityFromFormation(formationId, idOfEntityToRemove) {
+		console.log('removing', idOfEntityToRemove, 'from formation');
 		let currentFormation = formations.currentFormations.proper[formationId];
 		let wasTheLeadEntity = false;
 
@@ -151,17 +137,43 @@ const formations = {
 
 		if (arrayIndex === 0) wasTheLeadEntity = true;
 
-		if (wasTheLeadEntity && currentFormation.length > 1) {
-			// new lead entity
-			currentFormation[1].latOffset = 0;
-			currentFormation[1].longOffset = 0;
-			let newLeadId = currentFormation[1].id;
-			formations.currentFormations.leadEntities[newLeadId] = formationId;
-		}
-
 		currentFormation = currentFormation.filter(
 			(el) => el.id !== idOfEntityToRemove
 		);
+
+		if (currentFormation.length < 2) {
+			formations.dissolveFormation(formationId);
+			return;
+		}
+
+		if (wasTheLeadEntity) {
+			// new lead entity
+			let newLeadId = currentFormation[0].id;
+			formations.currentFormations.leadEntities[newLeadId] = formationId;
+		}
+
+		if (
+			formations.currentFormations.leadEntities[idOfEntityToRemove] !==
+			undefined
+		)
+			delete formations.currentFormations.leadEntities[idOfEntityToRemove];
+		if (
+			formations.currentFormations.flankingEntities[idOfEntityToRemove] !==
+			undefined
+		)
+			delete formations.currentFormations.flankingEntities[idOfEntityToRemove];
+
+		currentFormation = formations.assignOffsets(currentFormation);
+
+		formations.currentFormations.proper[formationId] = currentFormation;
+
+		return true;
+	},
+
+	assignOffsets(currentFormation) {
+		// lead entity
+		currentFormation[0].latOffset = 0;
+		currentFormation[0].longOffset = 0;
 
 		let flankOneLatOffset = 0; // entities w odd indices
 		let flankOneLongOffset = 0;
@@ -212,23 +224,18 @@ const formations = {
 			}
 		}
 
-		formations.currentFormations.proper[formationId] = currentFormation;
-
-		if (
-			formations.currentFormations.leadEntities[idOfEntityToRemove] !==
-			undefined
-		)
-			delete formations.currentFormations.leadEntities[idOfEntityToRemove];
-		if (
-			formations.currentFormations.flankingEntities[idOfEntityToRemove] !==
-			undefined
-		)
-			delete formations.currentFormations.flankingEntities[idOfEntityToRemove];
-
-		return true;
+		return currentFormation;
 	},
 
 	dissolveFormation(formationId) {
+		console.log('dissolving formation', formationId);
+		formations.currentFormations.proper[formationId].forEach((el) => {
+			if (formations.currentFormations.leadEntities[el.id] !== undefined)
+				delete formations.currentFormations.leadEntities[el.id];
+			if (formations.currentFormations.flankingEntities[el.id] !== undefined)
+				delete formations.currentFormations.flankingEntities[el.id];
+		});
+
 		delete formations.currentFormations.proper[formationId];
 	},
 

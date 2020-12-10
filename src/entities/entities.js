@@ -5,6 +5,7 @@ import pieces from './pieces';
 import models from './models';
 import behavior from '../behavior/behavior';
 import soundEffects from '../audio/soundEffects';
+import formations from '../behavior/formations';
 
 const entities = {
 	handlers: {
@@ -218,6 +219,10 @@ const entities = {
 			return;
 		}
 
+		const partOfFormationId = formations.isInFormation(entityId);
+		if (partOfFormationId) {
+			formations.removeEntityFromFormation(partOfFormationId, entityId);
+		}
 		soundEffects.removeAllSoundInstancesFromEntity(entityId);
 
 		console.info(`removing ${entityId} from stage`);

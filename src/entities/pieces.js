@@ -122,7 +122,7 @@ const pieces = {
 			behaviorAttacking: '',
 			behaviorPreferredAttackDistance: null,
 			behaviorAllowedToAvoidShots: true,
-			behaviorAllowedToFlee: true,
+			behaviorAllowedToFlee: false,
 		},
 	},
 

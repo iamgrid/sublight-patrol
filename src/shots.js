@@ -6,6 +6,7 @@ import Shot from './components/Shot';
 import entities from './entities/entities';
 import { moveTargetingReticule } from './utils/helpers';
 import soundEffects from './audio/soundEffects';
+import formations from './behavior/formations';
 
 const shots = {
 	stageShots: {},
@@ -440,7 +441,15 @@ const shots = {
 				if (fancyEffects) {
 					effect = soundEffects.library.ship_explosion.id;
 				}
+
+				// despawn only runs after the blowUp animation finished,
+				// so we have to unregister the entity from some modules right now
+				const partOfFormationId = formations.isInFormation(entityId);
+				if (partOfFormationId) {
+					formations.removeEntityFromFormation(partOfFormationId, entityId);
+				}
 				soundEffects.removeAllSoundInstancesFromEntity(entityId);
+
 				soundEffects.playOnce(entityId, effect);
 
 				stageEntities[entityId].blowUp(() => {

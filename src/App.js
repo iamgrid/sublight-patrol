@@ -312,6 +312,40 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
+			'fenrir',
+			{
+				posX: 2030,
+				posY: 1200,
+				latVelocity: 0,
+				longVelocity: -8,
+				facing: -1,
+			},
+			{
+				playerRelation: 'hostile',
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+				id: 'delta_5',
+				hasBeenScanned: true,
+			}
+		);
+
+		entities.spawn(
+			'fenrir',
+			{
+				posX: 2060,
+				posY: 1200,
+				latVelocity: 0,
+				longVelocity: -8,
+				facing: -1,
+			},
+			{
+				playerRelation: 'hostile',
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+				id: 'delta_6',
+				hasBeenScanned: true,
+			}
+		);
+
+		entities.spawn(
 			'container',
 			{
 				posX: 900,

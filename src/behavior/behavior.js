@@ -368,7 +368,7 @@ const behavior = {
 					// console.log(entityId, entitiesInShotRange);
 
 					let cumulativeObstructionType = behavior.obstructionTypes.otherEntity;
-					let moveIntoFormationWith = null;
+					let partnerId = null;
 					let closestObstruction = null;
 					for (let currentEntity of entitiesInShotRange) {
 						if (currentEntity.id !== enemyId) {
@@ -378,7 +378,7 @@ const behavior = {
 							) {
 								cumulativeObstructionType =
 									behavior.obstructionTypes.entityAttackingThePlayer;
-								moveIntoFormationWith = currentEntity.id;
+								partnerId = currentEntity.id;
 								break;
 							} else {
 								if (closestObstruction === null)
@@ -404,23 +404,32 @@ const behavior = {
 						// console.log(
 						// 	entityId,
 						// 	'decided to move into formation with',
-						// 	moveIntoFormationWith
+						// 	partnerId
 						// );
-						const existingFormation = formations.isInFormation(
-							moveIntoFormationWith
+						const partnerAlreadyInFormationWId = formations.isInFormation(
+							partnerId
 						);
-						if (existingFormation) {
+						if (partnerAlreadyInFormationWId) {
 							formations.addEntityToFormation(
-								existingFormation,
+								partnerAlreadyInFormationWId,
 								entityId,
 								currentState
 							);
 						} else {
-							formations.createFormation(
-								moveIntoFormationWith,
-								entityId,
-								currentState
+							const entityAlreadyInFormationWId = formations.isInFormation(
+								entityId
 							);
+							if (entityAlreadyInFormationWId) {
+								// our partner isn't in a formation, but we are,
+								// so we'll tell them to join ours
+								formations.addEntityToFormation(
+									entityAlreadyInFormationWId,
+									partnerId,
+									currentState
+								);
+							} else {
+								formations.createFormation(partnerId, entityId, currentState);
+							}
 						}
 					}
 				}
