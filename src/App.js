@@ -702,44 +702,44 @@ export default class App extends PIXI.Application {
 			const playerY = currentState.positions.canMove[`${playerId}--posY`];
 
 			// out of bounds warning/alert
-			let showCoordWarning = false;
-			let showCoordAlert = false;
+			if (
+				playerX < this.softBoundaries.minX ||
+				playerX > this.softBoundaries.maxX ||
+				playerY < this.softBoundaries.minY ||
+				playerY > this.softBoundaries.maxY
+			) {
+				if (!this.showingCoordWarning) {
+					alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+					this.showingCoordWarning = true;
+				}
+			} else {
+				if (this.showingCoordWarning) {
+					alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
+					this.showingCoordWarning = false;
+				}
+			}
 
 			if (
-				!this.showingCoordWarning &&
-				(playerX < this.softBoundaries.minX ||
-					playerX > this.softBoundaries.maxX ||
-					playerY < this.softBoundaries.minY ||
-					playerY > this.softBoundaries.maxY)
+				playerX < c.playVolume.minX ||
+				playerX > c.playVolume.maxX ||
+				playerY < c.playVolume.minY ||
+				playerY > c.playVolume.maxY
 			) {
-				showCoordWarning = true;
-			}
-
-			if (
-				!this.showingCoordAlert &&
-				(playerX < c.playVolume.minX ||
-					playerX > c.playVolume.maxX ||
-					playerY < c.playVolume.minY ||
-					playerY > c.playVolume.maxY)
-			) {
-				showCoordWarning = false;
-				showCoordAlert = true;
-			}
-
-			if (showCoordWarning) {
-				this.showingCoordWarning = true;
-				alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+				if (!this.showingCoordAlert) {
+					if (this.showingCoordWarning) {
+						alertsAndWarnings.remove(
+							c.alertsAndWarnings.warnings.leavingVolume
+						);
+						this.showingCoordWarning = false;
+					}
+					alertsAndWarnings.add(c.alertsAndWarnings.alerts.leftVolume);
+					this.showingCoordAlert = true;
+				}
 			} else {
-				this.showingCoordWarning = false;
-				alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
-			}
-
-			if (showCoordAlert) {
-				this.showingCoordAlert = true;
-				alertsAndWarnings.add(c.alertsAndWarnings.alerts.leftVolume);
-			} else {
-				this.showingCoordAlert = false;
-				alertsAndWarnings.remove(c.alertsAndWarnings.alerts.leftVolume);
+				if (this.showingCoordAlert) {
+					alertsAndWarnings.remove(c.alertsAndWarnings.alerts.leftVolume);
+					this.showingCoordAlert = false;
+				}
 			}
 
 			// camera position
