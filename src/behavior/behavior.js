@@ -167,8 +167,8 @@ const behavior = {
 			} else if (facing === -1) {
 				// both flanks should be to the right of the lead entity
 
-				// flankOne (entities with an odd index) and flankTwo
-				// (entities with an even index) flip when the facing is -1
+				// for nicer movement flankOne (entities with an odd index) and
+				// flankTwo (entities with an even index) flip when the facing is -1
 				// so their lat multipliers have to actually stay the same
 				longMultiplier = 1;
 			}

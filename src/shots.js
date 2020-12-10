@@ -22,6 +22,7 @@ const shots = {
 	shotRegenIntervals: {},
 	candidates: {},
 	hullDamageSoundEffects: {},
+	lastEntitiesHitByPlayer: [],
 
 	zIndexIterator: c.zIndices.shots,
 
@@ -469,10 +470,19 @@ const shots = {
 
 		if (type !== c.damageTypes.destruction) {
 			const currentState = shots.handlers.state();
-			if (currentState.game.targeting === null) {
-				if (origin === currentState.entities.player.id) {
+			if (origin === currentState.entities.player.id) {
+				const lastTwo = shots.lastEntitiesHitByPlayer.slice(-2);
+
+				if (
+					currentState.game.targeting === null ||
+					lastTwo.every((el) => el === entityId)
+				) {
 					shots.targetDamagedEntity(entityId);
 				}
+
+				shots.lastEntitiesHitByPlayer.push(entityId);
+				if (shots.lastEntitiesHitByPlayer.length > 30)
+					shots.lastEntitiesHitByPlayer = lastTwo;
 			}
 		}
 	},
