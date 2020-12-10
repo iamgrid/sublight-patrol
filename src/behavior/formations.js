@@ -15,9 +15,34 @@ const formations = {
 		longOffset: 0,
 	},
 	latOffsetGap: 5,
-	longOffsetGap: 5,
+	longOffsetGap: 10,
 
 	createFormation(leadEntityId, flankingEntityId, currentState) {
+		console.log(
+			'creating new formation with',
+			leadEntityId,
+			'as lead and',
+			flankingEntityId,
+			'on flankOne'
+		);
+		if (formations.isInFormation(leadEntityId)) {
+			console.log(
+				'attempt to add ',
+				leadEntityId,
+				'to a new formation prevented, its already part of another one'
+			);
+			return false;
+		}
+
+		if (formations.isInFormation(flankingEntityId)) {
+			console.log(
+				'attempt to add ',
+				flankingEntityId,
+				'to a new formation prevented, its already part of another one'
+			);
+			return false;
+		}
+
 		const formationId = idCreator.create();
 		formations.currentFormations.leadEntities[leadEntityId] = formationId;
 		formations.currentFormations.flankingEntities[
@@ -38,6 +63,7 @@ const formations = {
 			flankingStoreEntity.immutable.length / 2
 		);
 		flankingObj.halfWidth = Math.ceil(flankingStoreEntity.immutable.width / 2);
+		// the flanking entity will be in flankOne (odd indices)
 		flankingObj.latOffset = leadObj.halfWidth + formations.latOffsetGap;
 		flankingObj.longOffset =
 			leadObj.halfLength + formations.longOffsetGap + flankingObj.halfLength;
@@ -48,12 +74,30 @@ const formations = {
 	},
 
 	addEntityToFormation(formationId, idOfEntityToAdd, currentState) {
+		const existingFormation = formations.isInFormation(idOfEntityToAdd);
+		if (existingFormation) {
+			console.log(
+				'attempt to add ',
+				idOfEntityToAdd,
+				'to an existing formation, its already part of another one'
+			);
+			if (formations.isLeadInAFormation(idOfEntityToAdd)) {
+				console.log(
+					idOfEntityToAdd,
+					'is the lead of another formation, we ought to join those two'
+				);
+				// TODO !!!!!!!!!!!!!!!!
+				return false;
+			}
+			return false;
+		}
+
 		const currentFormation = formations.currentFormations.proper[formationId];
 		const currentFormationLength = currentFormation.length;
 
-		let arrayIndexWillBeEven = true;
+		let arrayIndexWillBeEven = true; // new entity will be in flankTwo (even indices)
 		if (currentFormationLength % 2 == 0) {
-			arrayIndexWillBeEven = false;
+			arrayIndexWillBeEven = false; // new entity will be in flankOne (odd indices)
 		}
 
 		const newEntityObj = { ...formations.entityTemplate, id: idOfEntityToAdd };
@@ -119,49 +163,49 @@ const formations = {
 			(el) => el.id !== idOfEntityToRemove
 		);
 
-		let firstFlankLatOffset = 0;
-		let firstFlankLongOffset = 0;
-		let secondFlankLatOffset = 0;
-		let secondFlankLongOffset = 0;
+		let flankOneLatOffset = 0; // entities w odd indices
+		let flankOneLongOffset = 0;
+		let flankTwoLatOffset = 0; // entities w even indices
+		let flankTwoLongOffset = 0;
 
 		for (let i = 0; i < currentFormation.length; i++) {
-			let inFirstFlank = false;
-			let inSecondFlank = false;
+			let inFlankOne = false;
+			let inFlankTwo = false;
 
 			if (i === 0) {
-				inFirstFlank = true;
-				inSecondFlank = true;
-			} else if (i % 2 === 0) {
-				inFirstFlank = true;
+				inFlankOne = true;
+				inFlankTwo = true;
 			} else if (i % 2 !== 0) {
-				inSecondFlank = true;
+				inFlankOne = true;
+			} else if (i % 2 === 0) {
+				inFlankTwo = true;
 			}
 
-			if (inFirstFlank) {
-				firstFlankLatOffset +=
+			if (inFlankOne) {
+				flankOneLatOffset +=
 					currentFormation[i].halfWidth + formations.latOffsetGap;
-				firstFlankLongOffset +=
+				flankOneLongOffset +=
 					currentFormation[i].halfLength + formations.longOffsetGap;
 
 				if (i > 0) {
-					currentFormation[i].latOffset = firstFlankLatOffset;
+					currentFormation[i].latOffset = flankOneLatOffset;
 					currentFormation[i].longOffset =
-						firstFlankLongOffset +
+						flankOneLongOffset +
 						formations.longOffsetGap +
 						currentFormation[i].halfLength;
 				}
 			}
 
-			if (inSecondFlank) {
-				secondFlankLatOffset +=
+			if (inFlankTwo) {
+				flankTwoLatOffset +=
 					currentFormation[i].halfWidth + formations.latOffsetGap;
-				secondFlankLongOffset +=
+				flankTwoLongOffset +=
 					currentFormation[i].halfLength + formations.longOffsetGap;
 
 				if (i > 0) {
-					currentFormation[i].latOffset = secondFlankLatOffset;
+					currentFormation[i].latOffset = flankTwoLatOffset;
 					currentFormation[i].longOffset =
-						secondFlankLongOffset +
+						flankTwoLongOffset +
 						formations.longOffsetGap +
 						currentFormation[i].halfLength;
 				}

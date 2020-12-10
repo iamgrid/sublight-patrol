@@ -157,6 +157,24 @@ const behavior = {
 				currentState
 			);
 
+			const facing = formationConfig.facing;
+			let flankOneLatMultiplier = -1;
+			let flankTwoLatMultiplier = 1;
+			let longMultiplier = -1;
+
+			if (facing === 1) {
+				// flankOne (entities with an odd index) is above,
+				// flankTwo (entities with an even index) is below
+				// both flanks are to the left of the lead entity
+			} else if (facing === -1) {
+				// flankOne (entities with an odd index) is below,
+				// flankTwo (entities with an even index) is above
+				// both flanks are to the right of the lead entity
+				flankOneLatMultiplier = 1;
+				flankTwoLatMultiplier = -1;
+				longMultiplier = 1;
+			}
+
 			for (
 				let i = 0;
 				i < formations.currentFormations.proper[formationId].length;
@@ -182,8 +200,13 @@ const behavior = {
 					currentState,
 					formationId,
 					formationConfig,
+					facing,
 					latOffset,
-					longOffset
+					longOffset,
+					i,
+					flankOneLatMultiplier,
+					flankTwoLatMultiplier,
+					longMultiplier
 				);
 
 				if (updatesToEntity2.length > 0) {
@@ -334,8 +357,8 @@ const behavior = {
 
 				if (entitiesInShotRange.length === 1) {
 					// clear shot to hit the enemy
-					if (entitiesInShotRange[0].id === enemyId)
-						shots.startShooting(entityId);
+					// if (entitiesInShotRange[0].id === enemyId)
+					// shots.startShooting(entityId);
 				} else if (entitiesInShotRange.length > 1) {
 					// the shot range has obstructions
 					entitiesInShotRange.sort(
@@ -425,8 +448,13 @@ const behavior = {
 		currentState,
 		formationId,
 		formationConfig,
+		facing,
 		latOffset,
-		longOffset
+		longOffset,
+		formationIndex,
+		flankOneLatMultiplier,
+		flankTwoLatMultiplier,
+		longMultiplier
 	) {
 		const entityId = entity.id;
 
@@ -437,50 +465,64 @@ const behavior = {
 		let newFacing = null;
 		let facingUpdate = null;
 
-		if (formationConfig.facing !== currentFacing) {
-			newFacing = formationConfig.facing;
+		if (facing !== currentFacing) {
+			newFacing = facing;
 			facingUpdate = newFacing;
 			entityStoreUpdates.facing = newFacing;
+		}
+
+		// let isInFlankOne = true;
+		let isInFlankTwo = false;
+		if (formationIndex % 2 === 0) {
+			// isInFlankOne = false;
+			isInFlankTwo = true;
 		}
 
 		let newLatVelocity = 0;
 		let newLongVelocity = 0;
 
-		const correctY = formationConfig.leadY + formationConfig.facing * latOffset;
-		const correctX =
-			formationConfig.leadX + formationConfig.facing * longOffset;
+		let correctY = formationConfig.leadY + flankOneLatMultiplier * latOffset;
+		let correctX = formationConfig.leadX + longMultiplier * longOffset;
+
+		if (isInFlankTwo) {
+			correctY = formationConfig.leadY + flankTwoLatMultiplier * latOffset;
+		}
 
 		const [entityX, entityY] = getPosition(entityId, currentState.positions);
 
 		const latDifference = entityY - correctY;
 		const longDifference = entityX - correctX;
 
-		console.log('attackInFormation', { latDifference, longDifference });
+		// console.log('attackInFormation', {
+		// 	entityId,
+		// 	latDifference,
+		// 	longDifference,
+		// });
 
 		if (Math.abs(latDifference) > 1) {
-			let dir = -1;
-			if (latDifference < 0) dir = 1;
+			let dir = -1; // entity is below the assigned position, move up
+			if (latDifference < 0) dir = 1; // entity is above the assigned position, move down
 
 			let maxLatVelocity = entity.immutable.thrusters.side;
 
 			newLatVelocity = dir * maxLatVelocity;
 			if (Math.abs(latDifference) < maxLatVelocity) {
-				newLatVelocity = latDifference;
+				newLatVelocity = -1 * latDifference;
 			}
 		}
 
-		// if (Math.abs(longDifference) > 1) {
-		// 	let dir = -1;
-		// 	if (longDifference < 0) dir = 1;
+		if (Math.abs(longDifference) > 1) {
+			let dir = -1; // entity is to the right of the assigned position, move left
+			if (longDifference < 0) dir = 1; // entity is to the left of the assigned position, move right
 
-		// 	let maxLongVelocity = entity.immutable.thrusters.front;
-		// 	if (newFacing === dir) maxLongVelocity = entity.immutable.thrusters.main;
+			let maxLongVelocity = entity.immutable.thrusters.front;
+			if (facing === dir) maxLongVelocity = entity.immutable.thrusters.main;
 
-		// 	newLongVelocity = dir * maxLongVelocity;
-		// 	if (Math.abs(longDifference) < maxLongVelocity) {
-		// 		newLongVelocity = longDifference;
-		// 	}
-		// }
+			newLongVelocity = dir * maxLongVelocity;
+			if (Math.abs(longDifference) < maxLongVelocity) {
+				newLongVelocity = -1 * longDifference;
+			}
+		}
 
 		const velocityUpdates = {
 			latVelocity: newLatVelocity,
@@ -512,12 +554,12 @@ const behavior = {
 		}
 
 		if (doShoot) {
-			shots.startShooting(entityId);
+			// shots.startShooting(entityId);
 		} else {
 			shots.stopShooting(entityId);
 		}
 
-		console.log('attackInFormation velocityUpdates:', velocityUpdates);
+		// console.log('attackInFormation velocityUpdates:', velocityUpdates);
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
