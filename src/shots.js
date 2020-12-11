@@ -4,7 +4,7 @@ import { getPosition, getStoreEntity } from './utils/helpers';
 import idCreator from './utils/idCreator';
 import Shot from './components/Shot';
 import entities from './entities/entities';
-import { moveTargetingReticule } from './utils/helpers';
+import { moveTargetingReticule, shields } from './utils/helpers';
 import soundEffects from './audio/soundEffects';
 import formations from './behavior/formations';
 
@@ -443,6 +443,7 @@ const shots = {
 
 				// despawn only runs after the blowUp animation finished,
 				// so we have to unregister the entity from some modules right now
+				shields.removeEntity(entityId);
 				const partOfFormationId = formations.isInFormation(entityId);
 				if (partOfFormationId) {
 					formations.removeEntityFromFormation(partOfFormationId, entityId);

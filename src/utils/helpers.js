@@ -571,7 +571,8 @@ export function animateExplosion(delta) {
 }
 
 export const shields = {
-	handlers: { dispatch: null, state: null, stageEntities: null }, // gets its values in App.js
+	handlers: { dispatch: null, state: null }, // gets its values in App.js
+	entitiesWithShields: [],
 	shieldRegenInterval: null,
 
 	shieldRegenTick() {
@@ -580,33 +581,50 @@ export const shields = {
 		if (typeof shields.handlers.state !== 'function') return;
 
 		const currentState = shields.handlers.state();
-		// console.log(shields.handlers.stageEntities);
-		for (const sEKey in shields.handlers.stageEntities) {
-			if (shields.handlers.stageEntities[sEKey].entityStore === 'other')
-				continue;
 
-			let storeEntity = getStoreEntity(sEKey, currentState);
+		shields.entitiesWithShields.forEach((shieldObj) => {
+			let storeEntity = getStoreEntity(shieldObj.id, currentState);
+			if (!storeEntity) return;
 
-			if (!storeEntity) continue;
-			if (!storeEntity.immutable.hasShields) continue;
-			if (storeEntity.isDisabled) continue;
+			if (storeEntity.isDisabled) {
+				shields.removeEntity(shieldObj.id);
+				return;
+			}
 
-			// console.log(sEKey, storeEntity);
-
-			const maxShieldStrength = storeEntity.immutable.maxShieldStrength;
+			const maxShieldStrength = shieldObj.maxShieldStrength;
 			const shieldStrength = storeEntity.shieldStrength;
 
 			if (shieldStrength < maxShieldStrength) {
-				const shieldRechargeRate = storeEntity.immutable.shieldRechargeRate;
+				const shieldRechargeRate = shieldObj.shieldRechargeRate;
 
 				shields.handlers.dispatch({
 					type: c.actions.SHIELD_REGEN,
-					id: sEKey,
+					id: shieldObj.id,
 					store: storeEntity.store,
 					amount: shieldRechargeRate,
 				});
 			}
-		}
+		});
+	},
+
+	addEntity(entityId) {
+		const currentState = shields.handlers.state();
+
+		let storeEntity = getStoreEntity(entityId, currentState);
+		if (!storeEntity) return;
+
+		const shieldObj = {
+			id: entityId,
+			maxShieldStrength: storeEntity.immutable.maxShieldStrength,
+			shieldRechargeRate: storeEntity.immutable.shieldRechargeRate,
+		};
+		shields.entitiesWithShields.push(shieldObj);
+	},
+
+	removeEntity(entityId) {
+		shields.entitiesWithShields = shields.entitiesWithShields.filter(
+			(el) => el.id !== entityId
+		);
 	},
 
 	init() {

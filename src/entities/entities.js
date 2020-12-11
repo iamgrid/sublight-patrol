@@ -3,6 +3,7 @@ import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
+import { shields } from '../utils/helpers';
 import behavior from '../behavior/behavior';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
@@ -201,9 +202,18 @@ const entities = {
 			newEntity: newEntity,
 			positionStore: positionStore,
 			positionArray: positionArray,
+			callbackFn: () => {
+				entities.shieldCallback(newEntity.immutable.hasShields, newEntity.id);
+			},
 		});
 
 		this.zIndexIterator++;
+	},
+
+	shieldCallback(hasShields, entityId) {
+		if (hasShields) {
+			shields.addEntity(entityId);
+		}
 	},
 
 	despawn(entityId, removeFromState = true) {
@@ -219,6 +229,7 @@ const entities = {
 			return;
 		}
 
+		shields.removeEntity(entityId);
 		const partOfFormationId = formations.isInFormation(entityId);
 		if (partOfFormationId) {
 			formations.removeEntityFromFormation(partOfFormationId, entityId);

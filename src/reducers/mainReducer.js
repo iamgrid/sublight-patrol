@@ -367,35 +367,44 @@ export default function mainReducer(state, action) {
 
 			switch (storeIn) {
 				case 'player':
-					return {
-						...state,
-						entities: {
-							...state.entities,
-							player: action.newEntity,
+					return [
+						() => action.callbackFn(),
+						{
+							...state,
+							entities: {
+								...state.entities,
+								player: action.newEntity,
+							},
+							velocities: newVelocities,
+							positions: newPositionStore,
 						},
-						velocities: newVelocities,
-						positions: newPositionStore,
-					};
+					];
 				case 'targetable':
-					return {
-						...state,
-						entities: {
-							...state.entities,
-							targetable: [...state.entities.targetable, action.newEntity],
+					return [
+						() => action.callbackFn(),
+						{
+							...state,
+							entities: {
+								...state.entities,
+								targetable: [...state.entities.targetable, action.newEntity],
+							},
+							velocities: newVelocities,
+							positions: newPositionStore,
 						},
-						velocities: newVelocities,
-						positions: newPositionStore,
-					};
+					];
 				case 'other':
-					return {
-						...state,
-						entities: {
-							...state.entities,
-							other: [...state.entities.other, action.newEntity],
+					return [
+						() => action.callbackFn(),
+						{
+							...state,
+							entities: {
+								...state.entities,
+								other: [...state.entities.other, action.newEntity],
+							},
+							velocities: newVelocities,
+							positions: newPositionStore,
 						},
-						velocities: newVelocities,
-						positions: newPositionStore,
-					};
+					];
 			}
 			break;
 		}

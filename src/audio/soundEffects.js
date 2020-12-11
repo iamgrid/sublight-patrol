@@ -187,8 +187,6 @@ const soundEffects = {
 		for (const entityId in soundEffects.loops) {
 			for (const libraryItemId in soundEffects.loops[entityId]) {
 				for (const emitterId in soundEffects.loops[entityId][libraryItemId]) {
-					// console.log(entityId, libraryItemId, emitterId);
-					// console.log(soundEffects.loops[entityId][libraryItemId][emitterId]);
 					try {
 						if (
 							soundEffects.loops[entityId][libraryItemId][emitterId].shouldPlay
@@ -198,6 +196,7 @@ const soundEffects = {
 							].pSInstance.set('paused', doMute);
 						}
 					} catch (err) {
+						console.log('soundEffects muting error follows: ');
 						console.log(entityId, libraryItemId, emitterId);
 						console.log(soundEffects.loops[entityId][libraryItemId][emitterId]);
 						console.error(err);

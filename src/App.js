@@ -159,7 +159,6 @@ export default class App extends PIXI.Application {
 		shields.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			stageEntities: entities.stageEntities,
 		};
 
 		hud.handlers = {
