@@ -58,26 +58,28 @@
 	cursor: default;
 }
 
-.game__warnings {
+.game__alertsAndWarnings {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	opacity: 0;
 	z-index: 2;
-	visibility: hidden;
-	transition: opacity 0.8s;
 	display: flex;
+	flex-direction: column;
+	gap: 1em;
 	justify-content: center;
 	align-items: center;
+	opacity: 0;
+	transition: opacity ease-in-out 1s;
 }
 
-.game__warnings--shown {
-	visibility: visible;
+.game__alertsAndWarnings--shown {
+	opacity: 1;
 }
 
-.game__warnings-proper {
+.game__alertsAndWarnings-warnings,
+.game__alertsAndWarnings-alerts {
 	padding: 0.6em 0.8em;
 	text-transform: uppercase;
 	font-weight: 700;
@@ -87,11 +89,22 @@
 	box-shadow: 0 0 5px var(--msg-color), inset 0 0 7px var(--msg-color);
 	text-shadow: 0 0 5px var(--msg-color);
 	animation: none;
+	display: none;
 }
 
-.game__warnings--shown .game__warnings-proper {
+.game__alertsAndWarnings-warnings {
+	--msg-color: #e6b632;
+}
+
+.game__alertsAndWarnings-alerts {
+	--msg-color: #e63232;
+}
+
+.game__alertsAndWarnings-warnings--shown,
+.game__alertsAndWarnings-alerts--shown {
 	animation: 0.5s ease-in-out infinite alternate doPulse;
 	animation-fill-mode: forwards;
+	display: block;
 }
 
 @keyframes doPulse {
@@ -103,14 +116,6 @@
 		transform: scale(1, 1);
 		opacity: 1;
 	}
-}
-
-.game__warnings-proper--warnings {
-	--msg-color: #e6b632;
-}
-
-.game__warnings-proper--alerts {
-	--msg-color: #e63232;
 }
 
 .game__pause {

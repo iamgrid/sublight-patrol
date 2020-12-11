@@ -4,8 +4,15 @@ export default function overlays() {
 			<div class="game__dialog-speaker" id="game__dialog-speaker"></div>
 			<div class="game__dialog-message" id="game__dialog-message"></div>
 		</div>
-		<div class="game__warnings" id="game__warnings">
-			<div class="game__warnings-proper" id="game__warnings-proper"></div>
+		<div class="game__alertsAndWarnings" id="game__alertsAndWarnings">
+			<div 
+				class="game__alertsAndWarnings-alerts" 
+				id="game__alertsAndWarnings-alerts"
+			></div>
+			<div 
+				class="game__alertsAndWarnings-warnings" 
+				id="game__alertsAndWarnings-warnings"
+			></div>
 		</div>
 		<div id="game__hud" class="game__hud">
 			<div class="game__hud-proper">

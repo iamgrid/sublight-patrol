@@ -463,7 +463,6 @@ export default class App extends PIXI.Application {
 			'appjs-2nd-trigger',
 			() => {
 				// dialog('Love Eternal', 'Prepare to be assimilated.');
-				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 				// alertsAndWarnings.add(c.alertsAndWarnings.alerts.systemsOffline);
 				status.add('green', 'Green test. #3', timing.times.play);
 
@@ -510,6 +509,7 @@ export default class App extends PIXI.Application {
 			'appjs-4th-trigger',
 			() => {
 				dialog('', '', true);
+				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.collision);
 				// alertsAndWarnings.remove(c.alertsAndWarnings.warnings.otherWarning);
 				status.add('red', 'Red test. #4', timing.times.play);
 				status.add('aqua', 'Aqua test. #5', timing.times.play);
@@ -707,7 +707,7 @@ export default class App extends PIXI.Application {
 				playerY < this.softBoundaries.minY ||
 				playerY > this.softBoundaries.maxY
 			) {
-				if (!this.showingCoordWarning) {
+				if (!this.showingCoordWarning && !this.showingCoordAlert) {
 					alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
 					this.showingCoordWarning = true;
 				}

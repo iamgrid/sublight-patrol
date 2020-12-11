@@ -675,112 +675,110 @@ export function dialog(speaker, say, hide = false) {
 }
 
 export const alertsAndWarnings = {
-	hiderTimeout: null,
-	warnings: new Set(),
-	alerts: new Set(),
-	isFading: false,
-	isVisible: false,
+	prevMessageSum: 0,
+	messageTypes: {
+		warnings: {
+			isVisible: false,
+			proper: new Set(),
+		},
+		alerts: {
+			isVisible: false,
+			proper: new Set(),
+		},
+	},
 
 	add(value) {
-		alertsAndWarnings[`${value.type}s`].add(value.k);
-		console.log(alertsAndWarnings[`${value.type}s`]);
-
-		if (!alertsAndWarnings.isFading) {
-			alertsAndWarnings.update();
-		} else {
-			timing.setTimeout(alertsAndWarnings.update, timing.modes.play, 500);
-		}
+		alertsAndWarnings.messageTypes[`${value.type}s`].proper.add(value.k);
+		// console.log(
+		// 	'added',
+		// 	value.type,
+		// 	alertsAndWarnings.messageTypes[`${value.type}s`].proper
+		// );
+		alertsAndWarnings.updateDisplay();
 	},
 
 	remove(value) {
-		alertsAndWarnings[`${value.type}s`].delete(value.k);
-		console.log(alertsAndWarnings[`${value.type}s`]);
-
-		if (
-			alertsAndWarnings.warnings.size < 1 &&
-			alertsAndWarnings.alerts.size < 1
-		) {
-			alertsAndWarnings.update(true);
-		} else {
-			alertsAndWarnings.update();
-		}
+		alertsAndWarnings.messageTypes[`${value.type}s`].proper.delete(value.k);
+		// console.log(
+		// 	'removed',
+		// 	value.type,
+		// 	alertsAndWarnings.messageTypes[`${value.type}s`].proper
+		// );
+		alertsAndWarnings.updateDisplay();
 	},
 
-	update(hide = false) {
-		const containerDiv = document.getElementById('game__warnings');
-		const messageDiv = document.getElementById('game__warnings-proper');
-
-		if (hide) {
-			containerDiv.style.opacity = '0';
-			alertsAndWarnings.isFading = true;
-			alertsAndWarnings.hiderTimeout = timing.setTimeout(
-				() => {
-					containerDiv.classList.remove('game__warnings--shown');
-					alertsAndWarnings.isFading = false;
-					alertsAndWarnings.isVisible = false;
-				},
-				timing.modes.play,
-				900
-			);
-			return;
+	updateDisplay() {
+		let messageSum =
+			alertsAndWarnings.messageTypes.warnings.proper.size +
+			alertsAndWarnings.messageTypes.alerts.proper.size;
+		// console.log(
+		// 	'alertsAndWarnings.prevMessageSum:',
+		// 	alertsAndWarnings.prevMessageSum,
+		// 	'messageSum:',
+		// 	messageSum
+		// );
+		let waitForFade = false;
+		if (alertsAndWarnings.prevMessageSum > 0 && messageSum === 0) {
+			waitForFade = true;
 		}
 
-		timing.clearTimeout(alertsAndWarnings.hiderTimeout);
-
-		containerDiv.classList.add('game__warnings--shown');
-
-		function warningHelper() {
-			const types = ['warnings', 'alerts'];
-			const classNamePrefix = 'game__warnings-proper--';
-			let showing = 'warnings';
-
-			if (alertsAndWarnings.alerts.size > 0) showing = 'alerts';
-			types.forEach((t) => messageDiv.classList.remove(classNamePrefix + t));
-			messageDiv.classList.add(classNamePrefix + showing);
-
-			containerDiv.style.opacity = '0.6';
-			alertsAndWarnings.isFading = true;
+		if (waitForFade) {
 			timing.setTimeout(
 				() => {
-					alertsAndWarnings.isFading = false;
-					alertsAndWarnings.isVisible = true;
+					alertsAndWarnings.updateDisplayProper();
 				},
 				timing.modes.play,
-				400
+				1000
 			);
-
-			let displayText = [];
-
-			alertsAndWarnings[showing].forEach((el) =>
-				displayText.push(
-					`${showing.substr(0, showing.length - 1)}: ${
-						c.alertsAndWarnings[showing][el].m
-					}`
-				)
-			);
-
-			messageDiv.innerHTML = displayText.join('<br />');
-		}
-
-		if (!alertsAndWarnings.isVisible) {
-			warningHelper();
 		} else {
-			containerDiv.style.opacity = '0';
-			alertsAndWarnings.isFading = true;
-			timing.setTimeout(
-				() => {
-					warningHelper();
-				},
-				timing.modes.play,
-				400
-			);
+			alertsAndWarnings.updateDisplayProper();
+		}
+
+		if (messageSum === 0) {
+			document
+				.getElementById('game__alertsAndWarnings')
+				.classList.remove('game__alertsAndWarnings--shown');
+		} else {
+			document
+				.getElementById('game__alertsAndWarnings')
+				.classList.add('game__alertsAndWarnings--shown');
+		}
+
+		alertsAndWarnings.prevMessageSum = messageSum;
+	},
+
+	updateDisplayProper() {
+		for (const messageType in alertsAndWarnings.messageTypes) {
+			const thisType = alertsAndWarnings.messageTypes[messageType];
+
+			let newText = [];
+
+			for (let el of thisType.proper) {
+				newText.push(c.alertsAndWarnings[messageType][el].m);
+			}
+
+			document.getElementById(
+				`game__alertsAndWarnings-${messageType}`
+			).innerHTML = newText.reverse().join('<br />');
+
+			if (thisType.proper.size > 0 && !thisType.isVisible) {
+				document
+					.getElementById(`game__alertsAndWarnings-${messageType}`)
+					.classList.add(`game__alertsAndWarnings-${messageType}--shown`);
+				alertsAndWarnings.messageTypes[messageType].isVisible = true;
+			} else if (thisType.proper.size === 0 && thisType.isVisible) {
+				document
+					.getElementById(`game__alertsAndWarnings-${messageType}`)
+					.classList.remove(`game__alertsAndWarnings-${messageType}--shown`);
+				alertsAndWarnings.messageTypes[messageType].isVisible = false;
+			}
 		}
 	},
 
 	clear() {
 		alertsAndWarnings.warnings = new Set();
 		alertsAndWarnings.alerts = new Set();
-		alertsAndWarnings.update(true);
+		alertsAndWarnings.update();
 	},
 };
 
