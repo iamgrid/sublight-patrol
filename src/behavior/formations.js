@@ -2,11 +2,7 @@ import idCreator from '../utils/idCreator';
 import { getStoreEntity, getPosition } from '../utils/helpers';
 
 const formations = {
-	currentFormations: {
-		leadEntities: {},
-		flankingEntities: {},
-		proper: {},
-	},
+	currentFormations: {},
 	entityTemplate: {
 		id: null,
 		halfLength: null,
@@ -44,10 +40,6 @@ const formations = {
 		}
 
 		const formationId = idCreator.create();
-		formations.currentFormations.leadEntities[leadEntityId] = formationId;
-		formations.currentFormations.flankingEntities[
-			flankingEntityId
-		] = formationId;
 
 		const leadObj = { ...formations.entityTemplate, id: leadEntityId };
 		const flankingObj = { ...formations.entityTemplate, id: flankingEntityId };
@@ -68,13 +60,18 @@ const formations = {
 
 		currentFormation = formations.assignOffsets(currentFormation);
 
-		formations.currentFormations.proper[formationId] = currentFormation;
+		formations.currentFormations[formationId] = currentFormation;
 
 		return true;
 	},
 
-	addEntityToFormation(formationId, idOfEntityToAdd, currentState) {
-		let currentFormation = formations.currentFormations.proper[formationId];
+	addEntityToFormation(
+		formationId,
+		idOfEntityToAdd,
+		currentState,
+		promoteToNewLeader = false
+	) {
+		let currentFormation = formations.currentFormations[formationId];
 		const existingFormationId = formations.isInFormation(idOfEntityToAdd);
 
 		if (existingFormationId === formationId) {
@@ -88,7 +85,7 @@ const formations = {
 		let solvedByMergingFormations = false;
 		if (existingFormationId) {
 			const existingFormation =
-				formations.currentFormations.proper[existingFormationId];
+				formations.currentFormations[existingFormationId];
 			currentFormation = currentFormation.concat(existingFormation);
 			console.log(
 				idOfEntityToAdd,
@@ -112,30 +109,30 @@ const formations = {
 			newEntityObj.halfLength = Math.ceil(storeEntity.immutable.length / 2);
 			newEntityObj.halfWidth = Math.ceil(storeEntity.immutable.width / 2);
 
-			currentFormation.push(newEntityObj);
+			if (promoteToNewLeader) {
+				currentFormation.unshift(newEntityObj);
+			} else {
+				currentFormation.push(newEntityObj);
+			}
 		}
 
+		// remove duplicate objects
+		currentFormation = currentFormation.filter(
+			(el, ix, arr) => ix === arr.findIndex((el2) => el2.id === el.id)
+		);
+
+		// recalculate offsets
 		currentFormation = formations.assignOffsets(currentFormation);
 
-		formations.currentFormations.proper[formationId] = currentFormation;
-
-		formations.currentFormations.flankingEntities[
-			idOfEntityToAdd
-		] = formationId;
+		// add updated formation to currentFormations
+		formations.currentFormations[formationId] = currentFormation;
 
 		return true;
 	},
 
 	removeEntityFromFormation(formationId, idOfEntityToRemove) {
 		console.log('removing', idOfEntityToRemove, 'from formation');
-		let currentFormation = formations.currentFormations.proper[formationId];
-		let wasTheLeadEntity = false;
-
-		const arrayIndex = currentFormation.findIndex(
-			(el) => el.id === idOfEntityToRemove
-		);
-
-		if (arrayIndex === 0) wasTheLeadEntity = true;
+		let currentFormation = formations.currentFormations[formationId];
 
 		currentFormation = currentFormation.filter(
 			(el) => el.id !== idOfEntityToRemove
@@ -146,26 +143,9 @@ const formations = {
 			return;
 		}
 
-		if (wasTheLeadEntity) {
-			// new lead entity
-			let newLeadId = currentFormation[0].id;
-			formations.currentFormations.leadEntities[newLeadId] = formationId;
-		}
-
-		if (
-			formations.currentFormations.leadEntities[idOfEntityToRemove] !==
-			undefined
-		)
-			delete formations.currentFormations.leadEntities[idOfEntityToRemove];
-		if (
-			formations.currentFormations.flankingEntities[idOfEntityToRemove] !==
-			undefined
-		)
-			delete formations.currentFormations.flankingEntities[idOfEntityToRemove];
-
 		currentFormation = formations.assignOffsets(currentFormation);
 
-		formations.currentFormations.proper[formationId] = currentFormation;
+		formations.currentFormations[formationId] = currentFormation;
 
 		return true;
 	},
@@ -227,35 +207,34 @@ const formations = {
 
 	dissolveFormation(formationId) {
 		console.log('dissolving formation', formationId);
-		formations.currentFormations.proper[formationId].forEach((el) => {
-			if (formations.currentFormations.leadEntities[el.id] !== undefined)
-				delete formations.currentFormations.leadEntities[el.id];
-			if (formations.currentFormations.flankingEntities[el.id] !== undefined)
-				delete formations.currentFormations.flankingEntities[el.id];
-		});
 
-		delete formations.currentFormations.proper[formationId];
+		delete formations.currentFormations[formationId];
 	},
 
 	isInFormation(entityId) {
-		if (formations.currentFormations.leadEntities[entityId] !== undefined)
-			return formations.currentFormations.leadEntities[entityId];
-		if (formations.currentFormations.flankingEntities[entityId] !== undefined)
-			return formations.currentFormations.flankingEntities[entityId];
-
+		for (const formationId in formations.currentFormations) {
+			if (
+				formations.currentFormations[formationId].find(
+					(el) => el.id === entityId
+				)
+			) {
+				return formationId;
+			}
+		}
 		return false;
 	},
 
 	isLeadInAFormation(entityId) {
-		if (formations.currentFormations.leadEntities[entityId] !== undefined) {
-			return true;
-		} else {
-			return false;
+		for (const formationId in formations.currentFormations) {
+			if (formations.currentFormations[formationId][0].id === entityId) {
+				return true;
+			}
 		}
+		return false;
 	},
 
 	returnFormationFacingAndCoords(formationId, currentState) {
-		const currentFormation = formations.currentFormations.proper[formationId];
+		const currentFormation = formations.currentFormations[formationId];
 		const leadEntityId = currentFormation[0].id;
 		const leadStoreEntity = getStoreEntity(leadEntityId, currentState);
 

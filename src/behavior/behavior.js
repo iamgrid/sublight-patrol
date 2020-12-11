@@ -154,7 +154,7 @@ const behavior = {
 		});
 
 		// behavior for entities that remained followers in a formation
-		for (const formationId in formations.currentFormations.proper) {
+		for (const formationId in formations.currentFormations) {
 			const formationConfig = formations.returnFormationFacingAndCoords(
 				formationId,
 				currentState
@@ -178,23 +178,23 @@ const behavior = {
 
 			for (
 				let i = 0;
-				i < formations.currentFormations.proper[formationId].length;
+				i < formations.currentFormations[formationId].length;
 				i++
 			) {
 				if (i === 0) continue; // the lead entity is controlled above
 
 				let updatesToEntity2 = [];
 
-				const entityId = formations.currentFormations.proper[formationId][i].id;
+				const entityId = formations.currentFormations[formationId][i].id;
 				const entity = getStoreEntity(entityId, currentState);
 
 				if (!entity) continue;
 				// console.log(entityId, 'is controlled in the formation section');
 
 				const latOffset =
-					formations.currentFormations.proper[formationId][i].latOffset;
+					formations.currentFormations[formationId][i].latOffset;
 				const longOffset =
-					formations.currentFormations.proper[formationId][i].longOffset;
+					formations.currentFormations[formationId][i].longOffset;
 
 				updatesToEntity2 = behavior.attackInFormation(
 					entity,
@@ -419,11 +419,13 @@ const behavior = {
 						newLongVelocity = newFacing * entity.immutable.thrusters.main;
 					} else {
 						// get into formation with another attacking entity
+
 						// console.log(
 						// 	entityId,
 						// 	'decided to move into formation with',
 						// 	partnerId
 						// );
+
 						const partnerAlreadyInFormationWId = formations.isInFormation(
 							partnerId
 						);
@@ -439,11 +441,12 @@ const behavior = {
 							);
 							if (entityAlreadyInFormationWId) {
 								// our partner isn't in a formation, but we are,
-								// so we'll tell them to join ours
+								// so we'll tell them to become our new leader
 								formations.addEntityToFormation(
 									entityAlreadyInFormationWId,
 									partnerId,
-									currentState
+									currentState,
+									true
 								);
 							} else {
 								formations.createFormation(partnerId, entityId, currentState);
@@ -702,6 +705,17 @@ const behavior = {
 					storeEntity.behaviorAttacking === enemyId
 				) {
 					obstructionType = behavior.obstructionTypes.entityAttackingThePlayer;
+					const currentEntityFormationId = formations.isInFormation(entityId);
+					if (currentEntityFormationId) {
+						if (
+							currentEntityFormationId === formations.isInFormation(candidateId)
+						) {
+							// our current entity and the candidate are
+							// part of the same formation
+							obstructionType =
+								behavior.obstructionTypes.partnerInTheSameFormation;
+						}
+					}
 				}
 				if (storeEntity.id === enemyId) {
 					obstructionType = behavior.obstructionTypes.enemy;

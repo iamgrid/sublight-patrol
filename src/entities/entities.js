@@ -143,7 +143,7 @@ const entities = {
 			}
 			newEntity.behaviorHitsSuffered = 0;
 			newEntity.behaviorLastHitOrigin = '';
-			newEntity.behaviorPreferredAttackDistance = randomNumber(400, 900);
+			newEntity.behaviorPreferredAttackDistance = randomNumber(300, 600);
 		}
 
 		// null value warnings
