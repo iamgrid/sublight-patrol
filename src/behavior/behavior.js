@@ -113,8 +113,8 @@ const behavior = {
 
 						if (
 							itsGoTimeBuddy &&
-							(!formations.isInFormation(entity.id) ||
-								formations.isLeadInAFormation(entity.id))
+							(formations.isLeadInAFormation(entity.id) ||
+								!formations.isInFormation(entity.id))
 						) {
 							updatesToEntity = behavior.destroyEntity(
 								entity,

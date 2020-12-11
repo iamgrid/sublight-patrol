@@ -60,9 +60,14 @@ const soundEffects = {
 		}
 
 		if (soundEffects.loops[entityId][libraryItemId][emitterId] === undefined) {
+			soundEffects.loops[entityId][libraryItemId][emitterId] = {
+				shouldPlay: true,
+				pSInstance: null,
+			};
+
 			soundEffects.loops[entityId][libraryItemId][
 				emitterId
-			] = soundEffects.handlers.resources[libraryItemId].sound.play({
+			].pSInstance = soundEffects.handlers.resources[libraryItemId].sound.play({
 				loop: true,
 				singleInstance: false,
 			});
@@ -76,8 +81,12 @@ const soundEffects = {
 			// );
 		}
 
-		if (soundEffects.loops[entityId][libraryItemId][emitterId].paused) {
-			soundEffects.loops[entityId][libraryItemId][emitterId].set(
+		if (
+			soundEffects.loops[entityId][libraryItemId][emitterId].shouldPlay ===
+			false
+		) {
+			soundEffects.loops[entityId][libraryItemId][emitterId].shouldPlay = true;
+			soundEffects.loops[entityId][libraryItemId][emitterId].pSInstance.set(
 				'paused',
 				false
 			);
@@ -90,7 +99,7 @@ const soundEffects = {
 			playerId,
 			currentState.positions
 		);
-		soundEffects.loops[entityId][libraryItemId][emitterId].set(
+		soundEffects.loops[entityId][libraryItemId][emitterId].pSInstance.set(
 			'volume',
 			newVolume
 		);
@@ -102,7 +111,11 @@ const soundEffects = {
 		if (soundEffects.loops[entityId][libraryItemId][emitterId] === undefined)
 			return;
 
-		soundEffects.loops[entityId][libraryItemId][emitterId].set('paused', true);
+		soundEffects.loops[entityId][libraryItemId][emitterId].shouldPlay = false;
+		soundEffects.loops[entityId][libraryItemId][emitterId].pSInstance.set(
+			'paused',
+			true
+		);
 	},
 
 	adjustLoopVolumes(playerId, positions) {
@@ -115,7 +128,7 @@ const soundEffects = {
 
 			for (const libraryItemId in soundEffects.loops[entityId]) {
 				for (const emitterId in soundEffects.loops[entityId][libraryItemId]) {
-					soundEffects.loops[entityId][libraryItemId][emitterId].set(
+					soundEffects.loops[entityId][libraryItemId][emitterId].pSInstance.set(
 						'volume',
 						newVolume
 					);
@@ -152,20 +165,46 @@ const soundEffects = {
 		return [volume, pan];
 	},
 
-	removeAllSoundInstancesFromEntity(entityId) {
+	removeAllSoundInstancesForEntity(entityId) {
 		// removes all loops (e.g. thruster sounds, emp tone) related to the entity
 
-		// console.log('removeAllSoundInstancesFromEntity called for', entityId);
+		// console.log('removeAllSoundInstancesForEntity called for', entityId);
 
 		if (soundEffects.loops[entityId] === undefined) return;
 
 		for (const libraryItemId in soundEffects.loops[entityId]) {
 			for (const emitterId in soundEffects.loops[entityId][libraryItemId]) {
-				soundEffects.loops[entityId][libraryItemId][emitterId].stop();
+				soundEffects.loops[entityId][libraryItemId][
+					emitterId
+				].pSInstance.stop();
 			}
 		}
 
 		delete soundEffects.loops[entityId];
+	},
+
+	muteUnmuteAllLoops(doMute) {
+		for (const entityId in soundEffects.loops) {
+			for (const libraryItemId in soundEffects.loops[entityId]) {
+				for (const emitterId in soundEffects.loops[entityId][libraryItemId]) {
+					// console.log(entityId, libraryItemId, emitterId);
+					// console.log(soundEffects.loops[entityId][libraryItemId][emitterId]);
+					try {
+						if (
+							soundEffects.loops[entityId][libraryItemId][emitterId].shouldPlay
+						) {
+							soundEffects.loops[entityId][libraryItemId][
+								emitterId
+							].pSInstance.set('paused', doMute);
+						}
+					} catch (err) {
+						console.log(entityId, libraryItemId, emitterId);
+						console.log(soundEffects.loops[entityId][libraryItemId][emitterId]);
+						console.error(err);
+					}
+				}
+			}
+		}
 	},
 };
 

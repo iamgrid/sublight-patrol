@@ -447,7 +447,7 @@ const shots = {
 				if (partOfFormationId) {
 					formations.removeEntityFromFormation(partOfFormationId, entityId);
 				}
-				soundEffects.removeAllSoundInstancesFromEntity(entityId);
+				soundEffects.removeAllSoundInstancesForEntity(entityId);
 
 				soundEffects.playOnce(entityId, effect);
 

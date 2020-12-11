@@ -91,7 +91,7 @@ const formations = {
 				idOfEntityToAdd,
 				'is already in another formation, merging it with this one'
 			);
-			console.log(currentFormation);
+			// console.log(currentFormation);
 			formations.dissolveFormation(existingFormationId);
 			solvedByMergingFormations = true;
 		}
@@ -131,8 +131,12 @@ const formations = {
 	},
 
 	removeEntityFromFormation(formationId, idOfEntityToRemove) {
-		console.log('removing', idOfEntityToRemove, 'from formation');
 		let currentFormation = formations.currentFormations[formationId];
+
+		if (!currentFormation.some((el) => el.id === idOfEntityToRemove))
+			return false;
+
+		console.log('removing', idOfEntityToRemove, 'from formation');
 
 		currentFormation = currentFormation.filter(
 			(el) => el.id !== idOfEntityToRemove
@@ -140,7 +144,7 @@ const formations = {
 
 		if (currentFormation.length < 2) {
 			formations.dissolveFormation(formationId);
-			return;
+			return true;
 		}
 
 		currentFormation = formations.assignOffsets(currentFormation);
@@ -214,7 +218,7 @@ const formations = {
 	isInFormation(entityId) {
 		for (const formationId in formations.currentFormations) {
 			if (
-				formations.currentFormations[formationId].find(
+				formations.currentFormations[formationId].some(
 					(el) => el.id === entityId
 				)
 			) {

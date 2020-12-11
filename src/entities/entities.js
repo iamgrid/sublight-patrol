@@ -223,7 +223,7 @@ const entities = {
 		if (partOfFormationId) {
 			formations.removeEntityFromFormation(partOfFormationId, entityId);
 		}
-		soundEffects.removeAllSoundInstancesFromEntity(entityId);
+		soundEffects.removeAllSoundInstancesForEntity(entityId);
 
 		console.info(`removing ${entityId} from stage`);
 		const stageEntity = entities.stageEntities[entityId];

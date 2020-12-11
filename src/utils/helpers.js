@@ -99,8 +99,8 @@ export function getStoreEntity(entityId, currentState) {
 			(entity) => entity.id === entityId
 		);
 		if (!storeEntity) {
-			console.info(`Couldn't find ${entityId}, it probably blew up.`);
-			// console.error(`Couldn't find ${entityId}, it probably blew up.`);
+			// console.info(`Couldn't find ${entityId}, it probably blew up.`);
+			console.error(`Couldn't find ${entityId}, it probably blew up.`);
 			return false;
 		}
 		return storeEntity;

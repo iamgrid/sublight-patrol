@@ -846,11 +846,13 @@ export default class App extends PIXI.Application {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
+			soundEffects.muteUnmuteAllLoops(true);
 			this.pixiState = this.pause;
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			timing.currentMode = timing.modes.play;
+			soundEffects.muteUnmuteAllLoops(false);
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 		}
