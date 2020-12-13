@@ -3,6 +3,7 @@ import {
 	fromSpriteSheet,
 	createTargetingReticule,
 	toggleTargetingReticule,
+	addTargetingReticuleSprites,
 	reticuleRelation,
 	showDamageTint,
 	blowUp,
@@ -16,6 +17,7 @@ export default class GContainer extends PIXI.Container {
 
 		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
+		this.addTargetingReticuleSprites = addTargetingReticuleSprites.bind(this);
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 		this.showDamageTint = showDamageTint.bind(this);
@@ -25,8 +27,6 @@ export default class GContainer extends PIXI.Container {
 		this.sprites = {};
 
 		this.sprites['containerBody'] = fromSpriteSheet.create(395, 16, 44, 34);
-
-		// this.sprites['containerBody'].alpha = 0.5;
 
 		this.sprites['targetingReticule'] = createTargetingReticule({
 			xl: -26,
@@ -39,8 +39,8 @@ export default class GContainer extends PIXI.Container {
 		this.showingExplosion = false;
 
 		this.addChild(this.sprites['containerBody']);
-		for (const key in this.sprites['targetingReticule'])
-			this.addChild(this.sprites['targetingReticule'][key]);
+
+		this.addTargetingReticuleSprites();
 	}
 
 	onUpdate(delta) {

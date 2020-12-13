@@ -18,7 +18,7 @@ export default class Valkyrie extends Ship {
 			'harness_main',
 		];
 
-		this.addThrusters({
+		this.createThrusters({
 			main: [{ x: -44, y: -1 }],
 			front: [
 				{ x: 16, y: 12 },
@@ -38,11 +38,13 @@ export default class Valkyrie extends Ship {
 		this.addChild(this.sprites['shipBody']);
 		this.addChild(this.sprites['harness_inner']);
 		this.addChild(this.sprites['harness_main']);
-		for (const thKey in this.sprites['thrusters'])
-			this.sprites['thrusters'][thKey].forEach((thruster) =>
-				this.addChild(thruster)
-			);
-		for (const tRKey in this.sprites['targetingReticule'])
-			this.addChild(this.sprites['targetingReticule'][tRKey]);
+		this.createThrustersprites();
+		this.addTargetingReticuleSprites();
+		// for (const thKey in this.sprites['thrusters'])
+		// 	this.sprites['thrusters'][thKey].forEach((thruster) =>
+		// 		this.addChild(thruster)
+		// 	);
+		// for (const tRKey in this.sprites['targetingReticule'])
+		// 	this.addChild(this.sprites['targetingReticule'][tRKey]);
 	}
 }

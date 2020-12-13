@@ -3,7 +3,9 @@ import {
 	fromSpriteSheet,
 	createTargetingReticule,
 	toggleTargetingReticule,
-	addThrusters,
+	createThrusters,
+	addTargetingReticuleSprites,
+	createThrustersprites,
 	reticuleRelation,
 	showDamageTint,
 	flip,
@@ -27,13 +29,15 @@ export default class Ship extends PIXI.Container {
 
 		this.fromSpriteSheet = fromSpriteSheet;
 		this.createTargetingReticule = createTargetingReticule.bind(this);
+		this.addTargetingReticuleSprites = addTargetingReticuleSprites.bind(this);
 		this.toggleTargetingReticule = toggleTargetingReticule.bind(this);
 		this.reticuleRelation = reticuleRelation.bind(this);
 		this.showDamageTint = showDamageTint.bind(this);
 		this.flip = flip.bind(this);
 		this.blowUp = blowUp.bind(this);
 		this.animateExplosion = animateExplosion.bind(this);
-		this.addThrusters = addThrusters.bind(this);
+		this.createThrusters = createThrusters.bind(this);
+		this.createThrustersprites = createThrustersprites.bind(this);
 		this.fireThrusters = fireThrusters.bind(this);
 
 		this.sprites = {};

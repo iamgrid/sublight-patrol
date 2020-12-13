@@ -146,7 +146,7 @@ export function createTargetingReticule(params) {
 	return re;
 }
 
-export function addThrusters(params) {
+export function createThrusters(params) {
 	let re = {};
 
 	for (const nozzleOrientation in params) {
@@ -189,6 +189,18 @@ export function addThrusters(params) {
 			rightSide: 0,
 		},
 	};
+}
+
+export function createThrustersprites() {
+	for (const thKey in this.sprites['thrusters'])
+		this.sprites['thrusters'][thKey].forEach((thruster) =>
+			this.addChild(thruster)
+		);
+}
+
+export function addTargetingReticuleSprites() {
+	for (const tRKey in this.sprites['targetingReticule'])
+		this.addChild(this.sprites['targetingReticule'][tRKey]);
 }
 
 export function toggleTargetingReticule(toggle) {
