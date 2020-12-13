@@ -29,22 +29,17 @@ export default class Valkyrie extends Ship {
 		});
 
 		this.sprites['targetingReticule'] = this.createTargetingReticule({
-			xl: -36,
-			xr: 22,
-			yt: -28,
-			yb: 28,
+			xl: -38,
+			xr: 24,
+			yt: -32,
+			yb: 32,
 		});
 
 		this.addChild(this.sprites['shipBody']);
 		this.addChild(this.sprites['harness_inner']);
 		this.addChild(this.sprites['harness_main']);
+
 		this.createThrustersprites();
 		this.addTargetingReticuleSprites();
-		// for (const thKey in this.sprites['thrusters'])
-		// 	this.sprites['thrusters'][thKey].forEach((thruster) =>
-		// 		this.addChild(thruster)
-		// 	);
-		// for (const tRKey in this.sprites['targetingReticule'])
-		// 	this.addChild(this.sprites['targetingReticule'][tRKey]);
 	}
 }

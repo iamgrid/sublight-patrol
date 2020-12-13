@@ -85,7 +85,7 @@ export default class App extends PIXI.Application {
 		shields.init();
 		behavior.init();
 
-		this.loader.add('spriteSheet', './assets/sprite_sheet_v5.png');
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v6.png');
 
 		for (let soundName in soundEffects.manifest) {
 			this.loader.add(
@@ -176,7 +176,7 @@ export default class App extends PIXI.Application {
 		spawnBuoys(entities);
 
 		entities.spawn(
-			'valkyrie',
+			'fenrir',
 			{
 				posX: 100,
 				posY: 225,
@@ -209,7 +209,7 @@ export default class App extends PIXI.Application {
 		);
 
 		entities.spawn(
-			'fenrir',
+			'zangari_fighter_type_1',
 			{
 				posX: 700,
 				posY: 225,
@@ -219,143 +219,188 @@ export default class App extends PIXI.Application {
 			{
 				playerRelation: 'neutral',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-				id: 'alpha_2',
+				id: 'z_1',
 			}
 		);
 
 		entities.spawn(
-			'valkyrie',
+			'zangari_fighter_type_2',
 			{
-				posX: 800,
-				posY: 275,
-				latVelocity: 0,
-				longVelocity: 8,
-				facing: 1,
-			},
-			{
-				playerRelation: 'friendly',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'alpha_3',
-			}
-		);
-
-		entities.spawn(
-			'fenrir',
-			{
-				posX: 600,
-				posY: 240,
+				posX: 650,
+				posY: 150,
 				latVelocity: 0,
 				longVelocity: 0,
 			},
 			{
 				playerRelation: 'neutral',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-				id: 'beta_1',
-				hasBeenScanned: true,
+				id: 'z_2',
 			}
 		);
 
 		entities.spawn(
-			'fenrir',
+			'zangari_fighter_type_3',
 			{
-				posX: 2000,
-				posY: 1200,
+				posX: 440,
+				posY: 225,
 				latVelocity: 0,
-				longVelocity: -8,
-				facing: -1,
+				longVelocity: 0,
 			},
 			{
-				playerRelation: 'hostile',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'delta_1',
-				hasBeenScanned: true,
+				playerRelation: 'neutral',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'z_3',
 			}
 		);
 
 		entities.spawn(
-			'fenrir',
+			'zangari_fighter_type_4',
 			{
-				posX: 1970,
-				posY: 1200,
+				posX: 440,
+				posY: 300,
 				latVelocity: 0,
-				longVelocity: -8,
-				facing: -1,
+				longVelocity: 0,
 			},
 			{
-				playerRelation: 'hostile',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'delta_2',
-				hasBeenScanned: true,
+				playerRelation: 'neutral',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'z_4',
 			}
 		);
 
-		entities.spawn(
-			'fenrir',
-			{
-				posX: 1940,
-				posY: 1200,
-				latVelocity: 0,
-				longVelocity: -8,
-				facing: -1,
-			},
-			{
-				playerRelation: 'hostile',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'delta_3',
-				hasBeenScanned: true,
-			}
-		);
+		// entities.spawn(
+		// 	'valkyrie',
+		// 	{
+		// 		posX: 800,
+		// 		posY: 275,
+		// 		latVelocity: 0,
+		// 		longVelocity: 8,
+		// 		facing: 1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'friendly',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'alpha_3',
+		// 	}
+		// );
 
-		entities.spawn(
-			'fenrir',
-			{
-				posX: 1910,
-				posY: 1200,
-				latVelocity: 0,
-				longVelocity: -8,
-				facing: -1,
-			},
-			{
-				playerRelation: 'hostile',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'delta_4',
-				hasBeenScanned: true,
-			}
-		);
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 600,
+		// 		posY: 240,
+		// 		latVelocity: 0,
+		// 		longVelocity: 0,
+		// 	},
+		// 	{
+		// 		playerRelation: 'neutral',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+		// 		id: 'beta_1',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
 
-		entities.spawn(
-			'fenrir',
-			{
-				posX: 2030,
-				posY: 1200,
-				latVelocity: 0,
-				longVelocity: -8,
-				facing: -1,
-			},
-			{
-				playerRelation: 'hostile',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'delta_5',
-				hasBeenScanned: true,
-			}
-		);
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 2000,
+		// 		posY: 1200,
+		// 		latVelocity: 0,
+		// 		longVelocity: -8,
+		// 		facing: -1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'hostile',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'delta_1',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
 
-		entities.spawn(
-			'fenrir',
-			{
-				posX: 2060,
-				posY: 1200,
-				latVelocity: 0,
-				longVelocity: -8,
-				facing: -1,
-			},
-			{
-				playerRelation: 'hostile',
-				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-				id: 'delta_6',
-				hasBeenScanned: true,
-			}
-		);
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 1970,
+		// 		posY: 1200,
+		// 		latVelocity: 0,
+		// 		longVelocity: -8,
+		// 		facing: -1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'hostile',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'delta_2',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
+
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 1940,
+		// 		posY: 1200,
+		// 		latVelocity: 0,
+		// 		longVelocity: -8,
+		// 		facing: -1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'hostile',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'delta_3',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
+
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 1910,
+		// 		posY: 1200,
+		// 		latVelocity: 0,
+		// 		longVelocity: -8,
+		// 		facing: -1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'hostile',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'delta_4',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
+
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 2030,
+		// 		posY: 1200,
+		// 		latVelocity: 0,
+		// 		longVelocity: -8,
+		// 		facing: -1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'hostile',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'delta_5',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
+
+		// entities.spawn(
+		// 	'fenrir',
+		// 	{
+		// 		posX: 2060,
+		// 		posY: 1200,
+		// 		latVelocity: 0,
+		// 		longVelocity: -8,
+		// 		facing: -1,
+		// 	},
+		// 	{
+		// 		playerRelation: 'hostile',
+		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+		// 		id: 'delta_6',
+		// 		hasBeenScanned: true,
+		// 	}
+		// );
 
 		entities.spawn(
 			'container',
@@ -473,19 +518,19 @@ export default class App extends PIXI.Application {
 				// });
 				// flipStageEntity('alpha_1', entities.stageEntities, -1);
 
-				this.dispatch({
-					type: c.actions.CHANGE_PLAYER_RELATION,
-					entityId: 'beta_1',
-					newRelation: 'hostile',
-					callbackFn: (newRelation) => {
-						entities.stageEntities['beta_1'].reticuleRelation(newRelation);
-						status.add(
-							'red',
-							'[Beta 1] relation switched to hostile.',
-							timing.times.play
-						);
-					},
-				});
+				// this.dispatch({
+				// 	type: c.actions.CHANGE_PLAYER_RELATION,
+				// 	entityId: 'beta_1',
+				// 	newRelation: 'hostile',
+				// 	callbackFn: (newRelation) => {
+				// 		entities.stageEntities['beta_1'].reticuleRelation(newRelation);
+				// 		status.add(
+				// 			'red',
+				// 			'[Beta 1] relation switched to hostile.',
+				// 			timing.times.play
+				// 		);
+				// 	},
+				// });
 				// hud.toggle(false);
 				shots.stopShooting('alpha_1');
 			},

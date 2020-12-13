@@ -26,11 +26,11 @@ export default class GContainer extends PIXI.Container {
 
 		this.sprites = {};
 
-		this.sprites['containerBody'] = fromSpriteSheet.create(395, 16, 44, 34);
+		this.sprites['containerBody'] = fromSpriteSheet.create(458, 80, 44, 34);
 
 		this.sprites['targetingReticule'] = createTargetingReticule({
 			xl: -26,
-			xr: 25,
+			xr: 27,
 			yt: -23,
 			yb: 22,
 		});

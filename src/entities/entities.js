@@ -27,6 +27,9 @@ const entities = {
 		this.assembleType(['fenrir_dominator', 'fenrir', 'ship']);
 		this.assembleType(['valkyrie', 'ship']);
 		this.assembleType(['zangari_fighter_type_1', 'ship']);
+		this.assembleType(['zangari_fighter_type_2', 'ship']);
+		this.assembleType(['zangari_fighter_type_3', 'ship']);
+		this.assembleType(['zangari_fighter_type_4', 'ship']);
 	},
 
 	assembleType(fromPiecesReversed) {
