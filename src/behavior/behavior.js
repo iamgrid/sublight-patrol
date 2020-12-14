@@ -606,8 +606,23 @@ const behavior = {
 			enemyX = havePositions.enemyX;
 		} else {
 			[entityX] = getPosition(entity.id, positions);
-			if (!entityX) return [false, 1];
+			if (entityX === false) {
+				console.error(
+					'_turn fn:',
+					entity.id,
+					'(current entity) getPosition returned false'
+				);
+				return [false, 1];
+			}
 			[enemyX] = getPosition(enemyId, positions);
+			if (enemyX === false) {
+				console.error(
+					'_turn fn:',
+					enemyId,
+					'(enemy entity) getPosition returned false'
+				);
+				return [false, 1];
+			}
 		}
 
 		if (enemyX < entityX) {
