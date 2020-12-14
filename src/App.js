@@ -85,7 +85,7 @@ export default class App extends PIXI.Application {
 		shields.init();
 		behavior.init();
 
-		this.loader.add('spriteSheet', './assets/sprite_sheet_v6.png');
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v7.png');
 
 		for (let soundName in soundEffects.manifest) {
 			this.loader.add(
