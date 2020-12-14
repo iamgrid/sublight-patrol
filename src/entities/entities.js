@@ -73,6 +73,8 @@ const entities = {
 				re.mutable[actualName] = re.immutable[el];
 		});
 
+		re.immutable.colors = c.groups[re.immutable.colors];
+
 		// emitting warning about immutables with a null value
 		this.checkForNullValues(`Entity types - ${entityType}`, re.immutable);
 

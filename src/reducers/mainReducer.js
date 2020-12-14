@@ -655,10 +655,13 @@ export default function mainReducer(state, action) {
 			// hunting a bug here:
 			if (oldEntity.immutable === undefined) console.log(oldEntity);
 
+			let damageColor = oldEntity.immutable.colors.shieldDamageColor;
+
 			if (newShieldStrength < 0) {
 				newHullStrength += newShieldStrength;
 				newShieldStrength = 0;
 				show = c.damageTypes.hullDamage;
+				damageColor = oldEntity.immutable.colors.hullDamageColor;
 				hullHealthPrc = Math.trunc(
 					(newHullStrength / oldEntity.immutable.maxHullStrength) * 100
 				);
@@ -666,6 +669,7 @@ export default function mainReducer(state, action) {
 			}
 			if (newHullStrength < 0) {
 				show = c.damageTypes.destruction;
+				damageColor = null;
 				fancyEffects = oldEntity.immutable.fancyEffects;
 			}
 
@@ -697,13 +701,15 @@ export default function mainReducer(state, action) {
 				}
 
 				return [
-					() => action.callbackFn(show, hullHealthPrc, fancyEffects),
+					() =>
+						action.callbackFn(show, hullHealthPrc, damageColor, fancyEffects),
 					{ ...state, entities: newEntities },
 				];
 			} else {
 				// REMOVE_ENTITY will be called in the callback function
 				return [
-					() => action.callbackFn(show, hullHealthPrc, fancyEffects),
+					() =>
+						action.callbackFn(show, hullHealthPrc, damageColor, fancyEffects),
 					null,
 				];
 			}

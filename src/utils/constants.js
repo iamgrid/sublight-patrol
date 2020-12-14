@@ -61,12 +61,24 @@ const c = {
 			otherAlert: { m: 'Other alert text!' },
 		},
 	},
-	races: {
-		humans: {
+	groups: {
+		general: {
+			groupId: 'general',
 			laserColor: 0xff4040,
+			shieldDamageColor: 0x32ade6,
+			hullDamageColor: 0xff9090,
+		},
+		humans: {
+			groupId: 'humans',
+			laserColor: 0xff4040,
+			shieldDamageColor: 0x32ade6,
+			hullDamageColor: 0xff9090,
 		},
 		zangari: {
+			groupId: 'zangari',
 			laserColor: 0xffff40,
+			shieldDamageColor: 0x008080,
+			hullDamageColor: 0xff5000,
 		},
 	},
 	damageTypes: {

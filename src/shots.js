@@ -143,7 +143,7 @@ const shots = {
 		shots.addShot(
 			cannonX,
 			cannonY,
-			storeEntity.immutable.cannonColor,
+			storeEntity.immutable.colors.laserColor,
 			storeEntity.immutable.cannonPower,
 			storeEntity.facing,
 			storeEntity.id
@@ -361,7 +361,7 @@ const shots = {
 						entityId: entityId,
 						shotDamage: shotDamage,
 						origin: stageShot.origin,
-						callbackFn: (showType, hullHealthPrc, fancyEffects) =>
+						callbackFn: (showType, hullHealthPrc, damageColor, fancyEffects) =>
 							shots.showDamage(
 								entityId,
 								entityStore,
@@ -369,6 +369,7 @@ const shots = {
 								shots.handlers.stageEntities,
 								stageShot.origin,
 								hullHealthPrc,
+								damageColor,
 								fancyEffects
 							),
 					});
@@ -400,16 +401,17 @@ const shots = {
 		stageEntities,
 		origin,
 		hullHealthPrc,
+		damageColor,
 		fancyEffects
 	) {
 		switch (type) {
 			case c.damageTypes.shieldDamage:
-				stageEntities[entityId].currentTint = 0x32ade6;
+				stageEntities[entityId].currentTint = damageColor;
 				soundEffects.playOnce(entityId, soundEffects.library.shield_damage.id);
 				break;
 
 			case c.damageTypes.hullDamage: {
-				stageEntities[entityId].currentTint = 0xff9090;
+				stageEntities[entityId].currentTint = damageColor;
 				let variant = -1;
 				let effect = soundEffects.library.misc_damage.id;
 				if (fancyEffects) {
