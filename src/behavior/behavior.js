@@ -1,5 +1,5 @@
 import c from '../utils/constants';
-import { decreaseNumberBy } from '../utils/formulas';
+import { decreaseNumberBy, randomNumber } from '../utils/formulas';
 import shots from '../shots';
 import { calculateDistance } from '../utils/formulas';
 import {
@@ -34,6 +34,7 @@ const behavior = {
 	hullHealthPrcToFleeAt: 30,
 	widthOfWidestEntityInTheGame: 49,
 	playVolumeBoundaries: {},
+	overcorrectingEntities: {},
 
 	tick() {
 		const currentState = this.handlers.state();
@@ -323,16 +324,19 @@ const behavior = {
 		let newLongVelocity = 0;
 
 		const longDistance = Math.abs(enemyX - entityX);
+		const [enemyLatVel, enemyLongVel] = getVelocity(
+			enemyId,
+			currentState.velocities
+		);
 		if (longDistance > entity.behaviorPreferredAttackDistance) {
 			// Try to move into range with the enemy horizontally.
 			// Attempt to match velocity with the enemy if its also moving.
-			const enemyLongVel = Math.abs(
-				getVelocity(enemyId, currentState.velocities)[1]
-			);
-			const maxLongVelocity = entity.immutable.thrusters.main;
-			newLongVelocity = newFacing * Math.min(enemyLongVel, maxLongVelocity);
 
-			// don't move beyond the behavior boundaries
+			const maxLongVelocity = entity.immutable.thrusters.main;
+			newLongVelocity =
+				newFacing * Math.min(Math.abs(enemyLongVel), maxLongVelocity);
+
+			// Don't move beyond the behavior boundaries
 			if (
 				entityX + newLongVelocity < behavior.playVolumeBoundaries.minX ||
 				entityX + newLongVelocity > behavior.playVolumeBoundaries.maxX
@@ -345,22 +349,75 @@ const behavior = {
 		const halfOfEnemysWidth = Math.floor(
 			currentState.entities.player.immutable.width / 2
 		);
+		const maxLatVelocity = entity.immutable.thrusters.side;
 		if (Math.abs(latDifference) > halfOfEnemysWidth) {
-			// try to move into sightline with the enemy
+			// Try to move into sightline with the enemy
 			shots.stopShooting(entityId);
-			newLatVelocity = entity.immutable.thrusters.side;
+			newLatVelocity = Math.min(Math.abs(latDifference), maxLatVelocity);
 			if (latDifference < 0) {
 				newLatVelocity = 0 - newLatVelocity;
 			}
-
-			// don't move beyond the behavior boundaries
-			if (
-				entityY + newLatVelocity < behavior.playVolumeBoundaries.minY ||
-				entityY + newLatVelocity > behavior.playVolumeBoundaries.maxY
-			) {
-				newLatVelocity = 0;
-			}
+			behavior.overcorrectingEntities[entityId] = 0;
+			// console.log(
+			// 	'sightline-based newLatVelocity: ',
+			// 	newLatVelocity,
+			// 	maxLatVelocity,
+			// 	halfOfEnemysWidth
+			// );
 		} else {
+			const absEnemyLatVel = Math.abs(enemyLatVel);
+			if (absEnemyLatVel > 0) {
+				// We are within sightline right now, but the enemy is
+				// moving laterally, let's match velocity with it if we can
+				if (absEnemyLatVel >= maxLatVelocity) {
+					// This entity has weaker/equal lateral thrusters than the enemy
+					newLatVelocity = Math.min(absEnemyLatVel, maxLatVelocity);
+				} else {
+					// This entity is nimbler than the enemy, so it will
+					// overcorrect sometimes
+					if (behavior.overcorrectingEntities[entityId] === undefined) {
+						behavior.overcorrectingEntities[entityId] = 0;
+					}
+					const rand = Math.random();
+					if (behavior.overcorrectingEntities[entityId] === 0 && rand > 0.98) {
+						newLatVelocity = maxLatVelocity;
+						behavior.overcorrectingEntities[entityId] = randomNumber(3, 6);
+						// console.log(
+						// 	'overcorrection',
+						// 	newLatVelocity,
+						// 	rand,
+						// 	behavior.overcorrectingEntities[entityId]
+						// );
+					} else {
+						if (behavior.overcorrectingEntities[entityId] > 0) {
+							newLatVelocity = maxLatVelocity;
+							behavior.overcorrectingEntities[entityId]--;
+							// console.log(
+							// 	'keep overcorrecting',
+							// 	newLatVelocity,
+							// 	rand,
+							// 	behavior.overcorrectingEntities[entityId]
+							// );
+						} else {
+							behavior.overcorrectingEntities[entityId] = 0;
+							newLatVelocity = absEnemyLatVel;
+							// console.log('no overcorrection', newLatVelocity);
+						}
+					}
+				}
+				if (latDifference < 0) {
+					newLatVelocity = 0 - newLatVelocity;
+				}
+				// console.log(
+				// 	'match-based newLatVelocity: ',
+				// 	newLatVelocity,
+				// 	maxLatVelocity,
+				// 	halfOfEnemysWidth
+				// );
+			} else {
+				behavior.overcorrectingEntities[entityId] = 0;
+			}
+
 			if (longDistance < behavior.maxShotTravelDistance) {
 				const entitiesInShotRange = behavior._returnEntitiesInShotRange(
 					entityId,
@@ -455,6 +512,14 @@ const behavior = {
 					}
 				}
 			}
+		}
+
+		// Don't move beyond the behavior boundaries
+		if (
+			entityY + newLatVelocity < behavior.playVolumeBoundaries.minY ||
+			entityY + newLatVelocity > behavior.playVolumeBoundaries.maxY
+		) {
+			newLatVelocity = 0;
 		}
 
 		const velocityUpdates = {
