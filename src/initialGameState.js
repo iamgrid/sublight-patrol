@@ -2,7 +2,10 @@ const initialGameState = {
 	game: {
 		targeting: null,
 		targetHasBeenScanned: false,
-		lives: 5,
+		playerShips: {
+			unlocked: 1,
+			spent: 0,
+		},
 		cameraLTX: null,
 		cameraLTY: null,
 	},

@@ -597,7 +597,7 @@ export default class App extends PIXI.Application {
 		// hud updates
 		hud.update(
 			currentState.game.targeting,
-			currentState.game.lives,
+			currentState.game.playerShips,
 			currentState.entities,
 			currentState.positions
 		);

@@ -11,7 +11,8 @@ const hud = {
 	pixiHUDFaderInterval: null,
 	cannonCooldownStraggler: 0,
 	currentPlayerCoords: '',
-	currentLives: 0,
+	currentUnlockedPlayerShips: -1,
+	currentSpentPlayerShips: -1,
 	currentShots: 0,
 	currentDisplay: {},
 	maximums: {},
@@ -56,14 +57,18 @@ const hud = {
 		}, 30);
 	},
 
-	update(targeting, lives, allEntities, positions) {
-		// player lives
+	update(targeting, playerShips, allEntities, positions) {
+		// player ships
 		const heartEmoji = '&#10084;';
-		if (lives !== hud.currentLives) {
+		if (
+			playerShips.unlocked !== hud.currentUnlockedPlayerShips ||
+			playerShips.spent !== hud.currentSpentPlayerShips
+		) {
+			const remaining = playerShips.unlocked - playerShips.spent;
 			let newStr = [];
-			for (let i = 0; i < c.maxLives; i++) {
+			for (let i = 0; i < playerShips.unlocked; i++) {
 				let add = `<span class='game__hud-lives-life--spent'>${heartEmoji}</span>`;
-				if (lives > i) {
+				if (remaining > i) {
 					add = `<span class='game__hud-lives-life--available'>${heartEmoji}</span>`;
 				}
 				newStr.push(add);
@@ -71,7 +76,12 @@ const hud = {
 
 			document.getElementById('game__hud-lives').innerHTML = newStr.join('');
 
-			hud.currentLives = lives;
+			hud.currentUnlockedPlayerShips = playerShips.unlocked;
+			hud.currentSpentPlayerShips = playerShips.spent;
+
+			if (remaining < 1) {
+				// GAME OVER
+			}
 		}
 
 		// off-screen entity pointers

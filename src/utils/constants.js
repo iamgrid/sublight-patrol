@@ -18,7 +18,6 @@ const c = {
 		SHIELD_REGEN: 'SHIELD_REGEN',
 		FLIP: 'FLIP',
 	},
-	maxLives: 5,
 	gameCanvas: {
 		width: 1200,
 		height: 450,
