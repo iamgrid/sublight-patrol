@@ -26,7 +26,7 @@ import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
 import shots from './shots';
 import behavior from './behavior/behavior';
-import story from './story/story';
+// import story from './story/story';
 import HUD from './components/HUD';
 
 export default class App extends PIXI.Application {
@@ -73,7 +73,7 @@ export default class App extends PIXI.Application {
 		timing.startTime = new Date().getTime();
 
 		console.log(entities.types);
-		console.log(story);
+		// console.log(story);
 
 		this.shownStateOnPause = false;
 	}
@@ -176,7 +176,7 @@ export default class App extends PIXI.Application {
 		spawnBuoys(entities);
 
 		entities.spawn(
-			'fenrir',
+			'fenrir_dominator',
 			{
 				posX: 100,
 				posY: 225,
@@ -205,6 +205,85 @@ export default class App extends PIXI.Application {
 				behaviorAssignedGoal: behavior.possibleGoals.guardEntity,
 				behaviorGuarding: 'b2508-012',
 				id: 'alpha_1',
+			}
+		);
+
+		entities.spawn(
+			'shuttle',
+			{
+				posX: 800,
+				posY: 250,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: '1730_to_harpax',
+			}
+		);
+
+		entities.spawn(
+			'zangari_shuttle',
+			{
+				posX: 800,
+				posY: 400,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'c_15_a10',
+				contents: 'Zangari leaders',
+			}
+		);
+
+		entities.spawn(
+			'freighter_l1',
+			{
+				posX: 830,
+				posY: 500,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'b6748_2',
+				contents: 'Food',
+			}
+		);
+
+		entities.spawn(
+			'freighter_l2',
+			{
+				posX: 830,
+				posY: 600,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'b6748_1',
+				contents: 'Food',
+			}
+		);
+
+		entities.spawn(
+			'freighter_l3',
+			{
+				posX: 830,
+				posY: 700,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'b6748_3',
+				contents: 'Food',
 			}
 		);
 

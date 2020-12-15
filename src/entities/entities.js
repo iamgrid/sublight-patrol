@@ -23,6 +23,11 @@ const entities = {
 	init() {
 		this.assembleType(['container']);
 		this.assembleType(['buoy']);
+		this.assembleType(['shuttle', 'ship']);
+		this.assembleType(['freighter_l1', 'ship']);
+		this.assembleType(['freighter_l2', 'freighter_l1', 'ship']);
+		this.assembleType(['freighter_l3', 'freighter_l1', 'ship']);
+		this.assembleType(['zangari_shuttle', 'shuttle', 'ship']);
 		this.assembleType(['fenrir', 'ship']);
 		this.assembleType(['fenrir_dominator', 'fenrir', 'ship']);
 		this.assembleType(['valkyrie', 'ship']);

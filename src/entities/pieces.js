@@ -127,6 +127,90 @@ const pieces = {
 		},
 	},
 
+	shuttle: {
+		immutable: {
+			typeShorthand: 'SH',
+			model: '/ships/Shuttle',
+			maxHullStrength: 100,
+			hasShields: true,
+			maxShieldStrength: 50,
+			shieldRechargeRate: 4,
+			maxSystemStrength: 20,
+			thrusters: {
+				main: 8,
+				side: 4,
+				front: 4,
+			},
+			hasEMP: false,
+			hasCannons: false,
+			colors: c.groups.humans.groupId,
+			width: 36,
+			length: 86,
+		},
+		mutable: {
+			contents: 'Commuters',
+		},
+	},
+	zangari_shuttle: {
+		immutable: {
+			typeShorthand: 'ZS',
+			model: '/ships/ZangariShuttle',
+			colors: c.groups.zangari.groupId,
+		},
+		mutable: {
+			contents: null,
+		},
+	},
+
+	freighter_l1: {
+		immutable: {
+			typeShorthand: 'FR',
+			model: '/ships/FreighterL1',
+			maxHullStrength: 100,
+			hasShields: false,
+			maxSystemStrength: 20,
+			thrusters: {
+				main: 4,
+				side: 3,
+				front: 3,
+			},
+			hasEMP: false,
+			hasCannons: false,
+			colors: c.groups.humans.groupId,
+			width: 34,
+			length: 88,
+		},
+		mutable: {
+			contents: null,
+		},
+	},
+	freighter_l2: {
+		immutable: {
+			model: '/ships/FreighterL2',
+			thrusters: {
+				main: 3,
+				side: 2,
+				front: 2,
+			},
+			width: 34,
+			length: 130,
+		},
+		mutable: {},
+	},
+	freighter_l3: {
+		immutable: {
+			model: '/ships/FreighterL3',
+			thrusters: {
+				main: 2,
+				side: 1,
+				front: 1,
+			},
+			width: 34,
+			length: 172,
+		},
+		mutable: {},
+	},
+
 	fenrir: {
 		immutable: {
 			typeShorthand: 'F/R',
@@ -164,7 +248,7 @@ const pieces = {
 	fenrir_dominator: {
 		immutable: {
 			typeShorthand: 'F/D',
-			model: '/ships/Fenrir',
+			model: '/ships/FenrirDominator',
 			maxHullStrength: 150,
 			maxSystemStrength: 150,
 			thrusters: {
@@ -175,6 +259,8 @@ const pieces = {
 			eMPStrength: 2,
 			cannonPower: 5,
 			cannonFiringSpeed: 0.18,
+			cannonShots: 24,
+			cannonCooldown: 0.7,
 		},
 		mutable: {},
 	},
@@ -230,8 +316,8 @@ const pieces = {
 			hasCannons: true,
 			colors: c.groups.zangari.groupId,
 			cannonPower: 4,
-			cannonFiringSpeed: 0.4,
-			cannonShots: 12,
+			cannonFiringSpeed: 0.36,
+			cannonShots: 16,
 			cannonCooldown: 1,
 			cannonSoundEffect: audioLibrary.library.laser_type2.id,
 			cannonPositions: [
@@ -261,7 +347,7 @@ const pieces = {
 			hasCannons: true,
 			colors: c.groups.zangari.groupId,
 			cannonPower: 4,
-			cannonFiringSpeed: 0.3,
+			cannonFiringSpeed: 0.28,
 			cannonShots: 16,
 			cannonCooldown: 1,
 			cannonSoundEffect: audioLibrary.library.laser_type2.id,
