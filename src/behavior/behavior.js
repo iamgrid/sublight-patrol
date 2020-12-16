@@ -869,9 +869,10 @@ const behavior = {
 		positions,
 		havePositions = null
 	) {
-		if (playerId === 'destroyed_player') return [false, 1];
-
 		const currentFacing = entity.facing;
+
+		if (playerId === 'destroyed_player') return [false, currentFacing];
+
 		let newFacing = currentFacing;
 		let needsToFlip = false;
 
@@ -888,7 +889,7 @@ const behavior = {
 					entity.id,
 					'(current entity) getPosition returned false'
 				);
-				return [false, 1];
+				return [false, currentFacing];
 			}
 			[enemyX] = getPosition(enemyId, positions);
 			if (enemyX === false) {
@@ -898,7 +899,7 @@ const behavior = {
 					'(enemy entity) getPosition returned false, entity.id:',
 					entity.id
 				);
-				return [false, 1];
+				return [false, currentFacing];
 			}
 		}
 
