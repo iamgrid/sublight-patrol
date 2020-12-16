@@ -294,29 +294,23 @@ const behavior = {
 			}
 		}
 
-		const velocityUpdates = {};
+		let newLatVel = 0;
+		let newLongVel = 0;
 
 		const currentLongVel = getVelocity(entity.id, currentState.velocities)[1];
 
 		if (Number.isFinite(entity.behaviorAssignedLongVelocity)) {
-			if (currentLongVel !== entity.behaviorAssignedLongVelocity) {
-				velocityUpdates.longVelocity = entity.behaviorAssignedLongVelocity;
-			}
+			newLongVel = entity.behaviorAssignedLongVelocity;
 		}
 
 		let needsToFlip = false;
 		let newFacing = 0;
-		if (
-			entity.facing === 1 &&
-			(velocityUpdates.longVelocity < 0 || currentLongVel < 0)
-		) {
+
+		if (entity.facing === 1 && (newLongVel < 0 || currentLongVel < 0)) {
 			needsToFlip = true;
 			newFacing = -1;
 		}
-		if (
-			entity.facing === -1 &&
-			(velocityUpdates.longVelocity > 0 || currentLongVel > 0)
-		) {
+		if (entity.facing === -1 && (newLongVel > 0 || currentLongVel > 0)) {
 			needsToFlip = true;
 			newFacing = 1;
 		}
@@ -326,6 +320,13 @@ const behavior = {
 			entityStoreUpdates.facing = newFacing;
 			facingUpdate = newFacing;
 		}
+
+		const velocityUpdates = {
+			latVelocity: newLatVel,
+			longVelocity: newLongVel,
+		};
+
+		// console.log(entity.id, entityStoreUpdates, velocityUpdates, facingUpdate);
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
@@ -476,7 +477,7 @@ const behavior = {
 		const velocityUpdates = {};
 
 		if (
-			getVelocity(entityId, currentState.velocities) !==
+			getVelocity(entityId, currentState.velocities)[1] !==
 			newFacing * entity.immutable.thrusters.main
 		) {
 			velocityUpdates.latVelocity = 0;
