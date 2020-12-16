@@ -186,7 +186,7 @@ export default class App extends PIXI.Application {
 			{
 				playerRelation: 'self',
 				behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
-				id: 'red_1',
+				id: 'red_1a',
 			},
 			'player'
 		);
@@ -194,16 +194,17 @@ export default class App extends PIXI.Application {
 		entities.spawn(
 			'valkyrie',
 			{
-				posX: 800,
-				posY: 175,
+				posX: 100,
+				posY: 350,
 				latVelocity: 0,
 				longVelocity: 0,
 				facing: -1,
 			},
 			{
 				playerRelation: 'friendly',
-				behaviorAssignedGoal: behavior.possibleGoals.guardEntity,
-				behaviorGuarding: 'b2508-012',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				behaviorAssignedStationX: 800,
+				behaviorAssignedStationY: 175,
 				id: 'alpha_1',
 			}
 		);
@@ -226,14 +227,17 @@ export default class App extends PIXI.Application {
 		entities.spawn(
 			'zangari_shuttle',
 			{
-				posX: 800,
-				posY: 400,
+				posX: 100,
+				posY: 0,
 				latVelocity: 0,
 				longVelocity: 0,
+				facing: -1,
 			},
 			{
-				playerRelation: 'friendly',
+				playerRelation: 'neutral',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				behaviorAssignedStationX: 800,
+				behaviorAssignedStationY: 400,
 				id: 'c_15_a10',
 				contents: 'Zangari leaders',
 			}
@@ -296,7 +300,7 @@ export default class App extends PIXI.Application {
 				longVelocity: 0,
 			},
 			{
-				playerRelation: 'neutral',
+				playerRelation: 'friendly',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
 				id: 'z_1',
 			}
@@ -308,11 +312,12 @@ export default class App extends PIXI.Application {
 				posX: 650,
 				posY: 150,
 				latVelocity: 0,
-				longVelocity: 0,
+				longVelocity: -6,
+				facing: -1,
 			},
 			{
-				playerRelation: 'neutral',
-				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
 				id: 'z_2',
 			}
 		);

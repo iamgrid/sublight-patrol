@@ -667,7 +667,7 @@ export default function mainReducer(state, action) {
 				);
 				fancyEffects = oldEntity.immutable.fancyEffects;
 			}
-			if (newHullStrength < 0) {
+			if (newHullStrength <= 0) {
 				show = c.damageTypes.destruction;
 				damageColor = null;
 				fancyEffects = oldEntity.immutable.fancyEffects;

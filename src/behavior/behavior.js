@@ -61,10 +61,15 @@ const behavior = {
 					if (
 						entity.behaviorLastHitOrigin === playerId &&
 						entity.behaviorHitsSuffered > 4 &&
-						entity.behaviorCurrentGoal !== behavior.possibleGoals.flee &&
 						entity.behaviorAllowedToFlee
 					) {
 						updatesToEntity = behavior.flee(entity, currentState);
+					} else {
+						if (
+							entity.behaviorCurrentGoal === behavior.possibleGoals.holdStation
+						) {
+							updatesToEntity = behavior.holdStation(entity, currentState);
+						}
 					}
 					break;
 				}
@@ -74,10 +79,12 @@ const behavior = {
 					);
 
 					if (
-						(entity.behaviorAllowedToFlee ||
+						((entity.behaviorAllowedToFlee ||
 							entity.assignedPlayerRelation !== 'hostile') &&
-						(hullHealthPrc < behavior.hullHealthPrcToFleeAt ||
-							!entity.immutable.hasCannons)
+							hullHealthPrc < behavior.hullHealthPrcToFleeAt) ||
+						(!entity.immutable.hasCannons &&
+							entity.behaviorAllowedToFlee &&
+							entity.behaviorLastHitOrigin === playerId)
 					) {
 						updatesToEntity = behavior.flee(entity, currentState);
 					} else {
@@ -112,21 +119,35 @@ const behavior = {
 							itsGoTimeBuddy = true;
 						}
 
-						if (
-							itsGoTimeBuddy &&
-							(formations.isLeadInAFormation(entity.id) ||
-								!formations.isInFormation(entity.id))
-						) {
-							updatesToEntity = behavior.destroyEntity(
-								entity,
-								playerId,
-								currentState,
-								playerX,
-								playerY,
-								entityX,
-								entityY,
-								distance
-							);
+						if (itsGoTimeBuddy) {
+							if (
+								formations.isLeadInAFormation(entity.id) ||
+								!formations.isInFormation(entity.id)
+							) {
+								updatesToEntity = behavior.destroyEntity(
+									entity,
+									playerId,
+									currentState,
+									playerX,
+									playerY,
+									entityX,
+									entityY,
+									distance
+								);
+							}
+						} else {
+							// return to the originally assigned behavior
+							switch (entity.behaviorAssignedGoal) {
+								case behavior.possibleGoals.maintainVelocity:
+									updatesToEntity = behavior.maintainVelocity(
+										entity,
+										currentState
+									);
+									break;
+								case behavior.possibleGoals.holdStation:
+									updatesToEntity = behavior.holdStation(entity, currentState);
+									break;
+							}
 						}
 					}
 
@@ -250,6 +271,142 @@ const behavior = {
 	},
 
 	// BEHAVIORS //
+
+	maintainVelocity(entity, currentState) {
+		const entityStoreUpdates = {};
+		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.maintainVelocity)
+			entityStoreUpdates.behaviorCurrentGoal =
+				behavior.possibleGoals.maintainVelocity;
+
+		const velocityUpdates = {};
+
+		const currentLongVel = getVelocity(entity.id, currentState.velocities)[1];
+
+		if (Number.isFinite(entity.behaviorAssignedLongVelocity)) {
+			if (currentLongVel !== entity.behaviorAssignedLongVelocity) {
+				velocityUpdates.longVelocity = entity.behaviorAssignedLongVelocity;
+			}
+		}
+
+		let needsToFlip = false;
+		let newFacing = 0;
+		if (
+			entity.facing === 1 &&
+			(velocityUpdates.longVelocity < 0 || currentLongVel < 0)
+		) {
+			needsToFlip = true;
+			newFacing = -1;
+		}
+		if (
+			entity.facing === -1 &&
+			(velocityUpdates.longVelocity > 0 || currentLongVel > 0)
+		) {
+			needsToFlip = true;
+			newFacing = 1;
+		}
+
+		let facingUpdate = null;
+		if (needsToFlip) {
+			entityStoreUpdates.facing = newFacing;
+			facingUpdate = newFacing;
+		}
+
+		return [entityStoreUpdates, velocityUpdates, facingUpdate];
+	},
+
+	holdStation(entity, currentState) {
+		const entityStoreUpdates = {};
+		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.holdStation)
+			entityStoreUpdates.behaviorCurrentGoal =
+				behavior.possibleGoals.holdStation;
+
+		const [entityX, entityY] = getPosition(entity.id, currentState.positions);
+
+		const velocityUpdates = {};
+
+		let needsToFlip = false;
+		let newFacing = 0;
+		let longDifference = 0;
+		let latDifference = 0;
+
+		if (entity.behaviorAssignedStationX !== undefined) {
+			longDifference = entity.behaviorAssignedStationX - entityX;
+			if (Math.abs(longDifference) === 0) {
+				velocityUpdates.longVelocity = 0;
+			} else {
+				// we need to move sideways
+				const maxLongVelocity = entity.immutable.thrusters.main;
+				if (longDifference > 0) {
+					// required X is to the right
+					if (longDifference <= entity.immutable.thrusters.front) {
+						// its close, we can get there with as little
+						// as the thrust from our frontal thrusters
+						velocityUpdates.longVelocity = entity.immutable.thrusters.front;
+					} else {
+						// its further, we definitely need to flip to the correct facing
+						if (entity.facing !== 1) {
+							needsToFlip = true;
+							newFacing = 1;
+						}
+
+						if (longDifference < maxLongVelocity) {
+							velocityUpdates.longVelocity = longDifference;
+						} else {
+							velocityUpdates.longVelocity = maxLongVelocity;
+						}
+					}
+				} else {
+					// required X is to the left
+					if (longDifference > 0 - entity.immutable.thrusters.front) {
+						velocityUpdates.longVelocity = 0 - entity.immutable.thrusters.front;
+					} else {
+						if (entity.facing !== -1) {
+							needsToFlip = true;
+							newFacing = -1;
+						}
+
+						if (longDifference > 0 - maxLongVelocity) {
+							velocityUpdates.longVelocity = longDifference;
+						} else {
+							velocityUpdates.longVelocity = 0 - maxLongVelocity;
+						}
+					}
+				}
+			}
+		}
+
+		if (entity.behaviorAssignedStationY !== undefined) {
+			latDifference = entity.behaviorAssignedStationY - entityY;
+			if (Math.abs(latDifference) === 0) {
+				velocityUpdates.latVelocity = 0;
+			} else {
+				// we need to move laterally
+				if (latDifference > 0) {
+					// required Y is above
+					if (latDifference < entity.immutable.thrusters.side) {
+						velocityUpdates.latVelocity = latDifference;
+					} else {
+						velocityUpdates.latVelocity = entity.immutable.thrusters.side;
+					}
+				} else {
+					// required Y is below
+					if (latDifference > 0 - entity.immutable.thrusters.side) {
+						velocityUpdates.latVelocity = latDifference;
+					} else {
+						velocityUpdates.latVelocity = 0 - entity.immutable.thrusters.side;
+					}
+				}
+			}
+		}
+
+		let facingUpdate = null;
+		if (needsToFlip) {
+			entityStoreUpdates.facing = newFacing;
+			facingUpdate = newFacing;
+		}
+
+		return [entityStoreUpdates, velocityUpdates, facingUpdate];
+	},
 
 	flee(entity, currentState) {
 		const entityId = entity.id;

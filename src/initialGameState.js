@@ -5,6 +5,12 @@ const initialGameState = {
 		playerShips: {
 			unlocked: 1,
 			spent: 0,
+			order: [
+				'fenrir',
+				'fenrir_dominator',
+				'valkyrie',
+				'zangari_fighter_type_4',
+			],
 		},
 		cameraLTX: null,
 		cameraLTY: null,

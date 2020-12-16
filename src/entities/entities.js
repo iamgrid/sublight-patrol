@@ -152,6 +152,13 @@ const entities = {
 				newEntity.behaviorAssignedDirection = facing;
 				newEntity.behaviorAssignedLongVelocity = pos.longVelocity;
 			}
+			if (
+				newEntity.behaviorAssignedGoal === behavior.possibleGoals.holdStation &&
+				props.behaviorAssignedStationX === undefined
+			) {
+				newEntity.behaviorAssignedStationX = pos.posX;
+				newEntity.behaviorAssignedStationY = pos.posY;
+			}
 			newEntity.behaviorHitsSuffered = 0;
 			newEntity.behaviorLastHitOrigin = '';
 			newEntity.behaviorPreferredAttackDistance = randomNumber(300, 600);
