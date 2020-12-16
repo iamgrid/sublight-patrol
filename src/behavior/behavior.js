@@ -107,14 +107,16 @@ const behavior = {
 								entity.behaviorLastHitOrigin === playerId) ||
 							(entity.behaviorCurrentGoal ===
 								behavior.possibleGoals.destroyEntity &&
-								entity.behaviorAttacking === playerId)
+								entity.behaviorAttacking === playerId &&
+								playerId !== 'destroyed_player')
 						) {
 							itsGoTimeBuddy = true;
 						}
 
 						if (
 							entity.playerRelation === 'hostile' &&
-							distance < behavior.maxShotTravelDistance - 200
+							distance < behavior.maxShotTravelDistance - 200 &&
+							playerId !== 'destroyed_player'
 						) {
 							itsGoTimeBuddy = true;
 						}
@@ -274,9 +276,23 @@ const behavior = {
 
 	maintainVelocity(entity, currentState) {
 		const entityStoreUpdates = {};
-		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.maintainVelocity)
+
+		shots.stopShooting(entity.id);
+
+		if (
+			entity.behaviorCurrentGoal !== behavior.possibleGoals.maintainVelocity
+		) {
 			entityStoreUpdates.behaviorCurrentGoal =
 				behavior.possibleGoals.maintainVelocity;
+			entityStoreUpdates.behaviorAttacking = '';
+
+			if (entity.playerRelation !== entity.assignedPlayerRelation) {
+				entityStoreUpdates.playerRelation = entity.assignedPlayerRelation;
+				behavior.handlers.stageEntities[entity.id].reticuleRelation(
+					entity.assignedPlayerRelation
+				);
+			}
+		}
 
 		const velocityUpdates = {};
 
@@ -316,9 +332,21 @@ const behavior = {
 
 	holdStation(entity, currentState) {
 		const entityStoreUpdates = {};
-		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.holdStation)
+
+		shots.stopShooting(entity.id);
+
+		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.holdStation) {
 			entityStoreUpdates.behaviorCurrentGoal =
 				behavior.possibleGoals.holdStation;
+			entityStoreUpdates.behaviorAttacking = '';
+
+			if (entity.playerRelation !== entity.assignedPlayerRelation) {
+				entityStoreUpdates.playerRelation = entity.assignedPlayerRelation;
+				behavior.handlers.stageEntities[entity.id].reticuleRelation(
+					entity.assignedPlayerRelation
+				);
+			}
+		}
 
 		const [entityX, entityY] = getPosition(entity.id, currentState.positions);
 
@@ -331,7 +359,7 @@ const behavior = {
 
 		if (entity.behaviorAssignedStationX !== undefined) {
 			longDifference = entity.behaviorAssignedStationX - entityX;
-			if (Math.abs(longDifference) === 0) {
+			if (Math.abs(longDifference) < 2) {
 				velocityUpdates.longVelocity = 0;
 			} else {
 				// we need to move sideways
@@ -341,7 +369,7 @@ const behavior = {
 					if (longDifference <= entity.immutable.thrusters.front) {
 						// its close, we can get there with as little
 						// as the thrust from our frontal thrusters
-						velocityUpdates.longVelocity = entity.immutable.thrusters.front;
+						velocityUpdates.longVelocity = longDifference;
 					} else {
 						// its further, we definitely need to flip to the correct facing
 						if (entity.facing !== 1) {
@@ -358,7 +386,7 @@ const behavior = {
 				} else {
 					// required X is to the left
 					if (longDifference > 0 - entity.immutable.thrusters.front) {
-						velocityUpdates.longVelocity = 0 - entity.immutable.thrusters.front;
+						velocityUpdates.longVelocity = longDifference;
 					} else {
 						if (entity.facing !== -1) {
 							needsToFlip = true;
@@ -377,7 +405,7 @@ const behavior = {
 
 		if (entity.behaviorAssignedStationY !== undefined) {
 			latDifference = entity.behaviorAssignedStationY - entityY;
-			if (Math.abs(latDifference) === 0) {
+			if (Math.abs(latDifference) < 2) {
 				velocityUpdates.latVelocity = 0;
 			} else {
 				// we need to move laterally
@@ -405,6 +433,17 @@ const behavior = {
 			facingUpdate = newFacing;
 		}
 
+		// if (entity.id === 'alpha_1') {
+		// 	console.log(
+		// 		'alpha_1',
+		// 		entityStoreUpdates,
+		// 		velocityUpdates,
+		// 		facingUpdate,
+		// 		longDifference,
+		// 		entityX
+		// 	);
+		// }
+
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
 
@@ -423,6 +462,7 @@ const behavior = {
 			'away-from',
 			entity,
 			entity.behaviorLastHitOrigin,
+			currentState.entities.player.id,
 			currentState.positions
 		);
 
@@ -466,6 +506,7 @@ const behavior = {
 			'toward',
 			entity,
 			enemyId,
+			currentState.entities.player.id,
 			currentState.positions,
 			{ entityX, enemyX }
 		);
@@ -684,7 +725,10 @@ const behavior = {
 			longVelocity: newLongVelocity,
 		};
 
-		if (entity.behaviorAttacking !== enemyId) {
+		if (
+			entity.behaviorAttacking !== enemyId &&
+			enemyId !== 'destroyed_player'
+		) {
 			entityStoreUpdates.playerRelation = 'hostile';
 			behavior.handlers.stageEntities[entityId].reticuleRelation('hostile');
 			entityStoreUpdates.behaviorAttacking = enemyId;
@@ -816,7 +860,16 @@ const behavior = {
 
 	// HELPER METHODS //
 
-	_turn(dir = 'toward', entity, enemyId, positions, havePositions = null) {
+	_turn(
+		dir = 'toward',
+		entity,
+		enemyId,
+		playerId,
+		positions,
+		havePositions = null
+	) {
+		if (playerId === 'destroyed_player') return [false, 1];
+
 		const currentFacing = entity.facing;
 		let newFacing = currentFacing;
 		let needsToFlip = false;
@@ -841,7 +894,8 @@ const behavior = {
 				console.error(
 					'_turn fn:',
 					enemyId,
-					'(enemy entity) getPosition returned false'
+					'(enemy entity) getPosition returned false, entity.id:',
+					entity.id
 				);
 				return [false, 1];
 			}

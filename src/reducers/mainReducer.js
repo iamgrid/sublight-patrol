@@ -414,9 +414,15 @@ export default function mainReducer(state, action) {
 			let newTargeting = state.game.targeting;
 			if (state.game.targeting === entityId) newTargeting = null;
 
-			const entity = state.entities[entityStore].find(
-				(en) => en.id === entityId
-			);
+			let entity, newId;
+
+			if (entityStore === 'player') {
+				entity = state.entities.player;
+				newId = 'destroyed_player';
+			} else {
+				entity = state.entities[entityStore].find((en) => en.id === entityId);
+			}
+
 			if (entity === undefined) {
 				return null;
 			}
@@ -429,31 +435,64 @@ export default function mainReducer(state, action) {
 			let posStore = 'canMove';
 			if (!entity.immutable.canMove) posStore = 'cantMove';
 
+			if (entityStore === 'player') {
+				newPositions.cantMove[`${newId}--posX`] =
+					newPositions[posStore][`${entityId}--posX`];
+				newPositions.cantMove[`${newId}--posY`] =
+					newPositions[posStore][`${entityId}--posY`];
+			}
+
 			delete newPositions[posStore][`${entityId}--posX`];
 			delete newPositions[posStore][`${entityId}--posY`];
 
 			let newVelocities = state.velocities;
 			if (posStore === 'canMove') {
 				newVelocities = { ...state.velocities };
+				if (entityStore === 'player') {
+					newVelocities[`${newId}--latVelocity`] = 0;
+					newVelocities[`${newId}--longVelocity`] = 0;
+				}
 				delete newVelocities[`${entityId}--latVelocity`];
 				delete newVelocities[`${entityId}--longVelocity`];
 			}
 
-			return {
-				...state,
-				game: {
-					...state.game,
-					targeting: newTargeting,
-				},
-				entities: {
-					...state.entities,
-					[entityStore]: [
-						...state.entities[entityStore].filter((en) => en.id !== entityId),
-					],
-				},
-				velocities: newVelocities,
-				positions: newPositions,
-			};
+			if (entityStore === 'player') {
+				return {
+					...state,
+					game: {
+						...state.game,
+						targeting: null,
+					},
+					entities: {
+						...state.entities,
+						player: {
+							id: newId,
+							displayId: '---',
+							contents: '---',
+							facing: entity.facing,
+							immutable: { typeShorthand: '--' },
+						},
+					},
+					velocities: newVelocities,
+					positions: newPositions,
+				};
+			} else {
+				return {
+					...state,
+					game: {
+						...state.game,
+						targeting: newTargeting,
+					},
+					entities: {
+						...state.entities,
+						[entityStore]: [
+							...state.entities[entityStore].filter((en) => en.id !== entityId),
+						],
+					},
+					velocities: newVelocities,
+					positions: newPositions,
+				};
+			}
 		}
 		case c.actions.TARGET: {
 			let newTarget;

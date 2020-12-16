@@ -261,9 +261,11 @@ const entities = {
 		delete entities.stageEntities[entityId];
 
 		const stagePointer = entities.handlers.stagePointers[entityId];
-		entities.handlers.pixiHUD.removeChild(stagePointer);
-		stagePointer.destroy();
-		delete entities.handlers.stagePointers[entityId];
+		if (stagePointer) {
+			entities.handlers.pixiHUD.removeChild(stagePointer);
+			stagePointer.destroy();
+			delete entities.handlers.stagePointers[entityId];
+		}
 
 		if (removeFromState) {
 			console.info(`removing ${entityId} from state`);

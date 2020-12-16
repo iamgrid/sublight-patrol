@@ -456,8 +456,13 @@ const shots = {
 
 				stageEntities[entityId].blowUp(() => {
 					// shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
-					entities.despawn(entityId, false);
+					if (entityId !== 'destroyed_player')
+						entities.despawn(entityId, false);
 				});
+
+				if (entityStore === 'player') {
+					moveTargetingReticule(null, shots.handlers.stageEntities);
+				}
 
 				console.info(`removing ${entityId} from state`);
 				shots.handlers.dispatch({
