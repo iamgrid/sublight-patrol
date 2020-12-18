@@ -457,7 +457,7 @@ const shots = {
 				stageEntities[entityId].blowUp(() => {
 					// shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
 					if (entityId !== 'destroyed_player')
-						entities.despawn(entityId, false);
+						entities.despawn(entityId, entityStore, false);
 				});
 
 				if (entityStore === 'player') {
@@ -469,6 +469,7 @@ const shots = {
 					type: c.actions.REMOVE_ENTITY,
 					id: entityId,
 					store: entityStore,
+					callbackFn: entities.playerShipDestruction,
 				});
 				break;
 			}

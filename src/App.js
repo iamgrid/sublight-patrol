@@ -177,7 +177,7 @@ export default class App extends PIXI.Application {
 		spawnBuoys(entities);
 
 		entities.spawn(
-			'fenrir_dominator',
+			'fenrir',
 			{
 				posX: 100,
 				posY: 225,

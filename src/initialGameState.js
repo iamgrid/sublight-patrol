@@ -3,7 +3,7 @@ const initialGameState = {
 		targeting: null,
 		targetHasBeenScanned: false,
 		playerShips: {
-			unlocked: 1,
+			unlocked: 4,
 			spent: 0,
 			order: [
 				'fenrir',

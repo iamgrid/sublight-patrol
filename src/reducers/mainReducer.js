@@ -456,26 +456,35 @@ export default function mainReducer(state, action) {
 				delete newVelocities[`${entityId}--longVelocity`];
 			}
 
+			console.log(action);
+
 			if (entityStore === 'player') {
-				return {
-					...state,
-					game: {
-						...state.game,
-						targeting: null,
-					},
-					entities: {
-						...state.entities,
-						player: {
-							id: newId,
-							displayId: '---',
-							contents: '---',
-							facing: entity.facing,
-							immutable: { typeShorthand: '--' },
+				return [
+					() => action.callbackFn(),
+					{
+						...state,
+						game: {
+							...state.game,
+							targeting: null,
+							playerShips: {
+								...state.game.playerShips,
+								spent: state.game.playerShips.spent + 1,
+							},
 						},
+						entities: {
+							...state.entities,
+							player: {
+								id: newId,
+								displayId: '---',
+								contents: '---',
+								facing: entity.facing,
+								immutable: { typeShorthand: '---' },
+							},
+						},
+						velocities: newVelocities,
+						positions: newPositions,
 					},
-					velocities: newVelocities,
-					positions: newPositions,
-				};
+				];
 			} else {
 				return {
 					...state,

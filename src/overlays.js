@@ -112,6 +112,14 @@ export default function overlays() {
 				<div class="game__hud-right-edge"></div>
 			</div>
 		</div>
+		<div class="game__plates" id="game__plates">
+			<div class="game__plates_matte" id="game__plates_matte"></div>
+			<div class="game__plates_plate" id="game__plates_plate">
+				<div class="game__plates_plate_atl" id="game__plates_plate_atl">tis but a scratch</div>
+				<div class="game__plates_plate_line" id="game__plates_plate_line"></div>
+				<div class="game__plates_plate_btl" id="game__plates_plate_btl">game over</div>
+			</div>
+		</div>
 		<div class="game__pause" id="game__pause">
 			<div class="game__pause-text">[Paused]</div>
 		</div>

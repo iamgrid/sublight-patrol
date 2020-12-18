@@ -118,6 +118,77 @@
 	}
 }
 
+.game__plates {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 8;
+}
+
+.game__plates_plate {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	opacity: 0;
+}
+
+.game__plates_plate_atl,
+.game__plates_plate_btl {
+	color: #ffffffd0;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 1em;
+	transform: translateX(0.5em);
+}
+
+.game__plates_plate_atl {
+	font-size: 12px;
+}
+
+.game__plates_plate_line {
+	margin: 15px auto 0;
+	border-bottom: 1px solid #ffffffa0;
+	width: 1000px;
+	animation: none;
+}
+
+.game__plates_plate_line--shown {
+	animation: 15s linear stretchLine;
+}
+
+@keyframes stretchLine {
+	0% {
+		width: 300px;
+	}
+	100% {
+		width: 1000px;
+	}
+}
+
+.game__plates_plate_btl {
+	margin-top: 40px;
+	margin-bottom: 20px;
+	font-size: 24px;
+	line-height: 1.5em;
+}
+
+.game__plates_matte {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: #000000;
+	opacity: 0;
+}
+
 .game__pause {
 	position: absolute;
 	bottom: 0;

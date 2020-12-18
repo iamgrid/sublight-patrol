@@ -884,7 +884,7 @@ const behavior = {
 		} else {
 			[entityX] = getPosition(entity.id, positions);
 			if (entityX === false) {
-				console.error(
+				console.log(
 					'_turn fn:',
 					entity.id,
 					'(current entity) getPosition returned false'
@@ -893,7 +893,7 @@ const behavior = {
 			}
 			[enemyX] = getPosition(enemyId, positions);
 			if (enemyX === false) {
-				console.error(
+				console.log(
 					'_turn fn:',
 					enemyId,
 					'(enemy entity) getPosition returned false, entity.id:',

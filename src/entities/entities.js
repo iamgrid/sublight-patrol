@@ -3,10 +3,12 @@ import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
-import { shields } from '../utils/helpers';
+import { getPosition, shields } from '../utils/helpers';
 import behavior from '../behavior/behavior';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
+import timing from '../utils/timing';
+import plates from '../plates';
 
 const entities = {
 	handlers: {
@@ -233,7 +235,7 @@ const entities = {
 		}
 	},
 
-	despawn(entityId, removeFromState = true) {
+	despawn(entityId, entityStore = null, removeFromState = true) {
 		if (entities.stageEntities[entityId] === undefined) return;
 		let currentState = entities.handlers.state();
 
@@ -255,7 +257,9 @@ const entities = {
 
 		console.info(`removing ${entityId} from stage`);
 		const stageEntity = entities.stageEntities[entityId];
-		const entityStore = entities.stageEntities[entityId].entityStore;
+		if (entityStore === null) {
+			entityStore = entities.stageEntities[entityId].entityStore;
+		}
 		entities.handlers.stage.removeChild(stageEntity);
 		stageEntity.destroy();
 		delete entities.stageEntities[entityId];
@@ -273,7 +277,66 @@ const entities = {
 				type: c.actions.REMOVE_ENTITY,
 				id: entityId,
 				store: entityStore,
+				callbackFn: entities.playerShipDestruction,
 			});
+		}
+	},
+
+	playerShipDestruction() {
+		let currentState = entities.handlers.state();
+		console.log('respawn/player death');
+		const idSuffixes = ['a', 'b', 'c', 'd'];
+		const unlockedShips = currentState.game.playerShips.unlocked;
+		const spentShips = currentState.game.playerShips.spent;
+
+		if (spentShips >= unlockedShips) {
+			console.log('GAME OVER');
+
+			plates.fadeInMatte(25, 0);
+			plates.loadPlate('game_over');
+			plates.fadeInPlate(25, 2000);
+		} else {
+			console.log('RESPAWN PLAYER WITH THEIR NEXT SHIP');
+
+			const newPlayerId = 'red_1' + idSuffixes[spentShips];
+			const newPlayerShipType = currentState.game.playerShips.order[spentShips];
+
+			let [newPlayerShipX, newPlayerShipY] = getPosition(
+				'destroyed_player',
+				currentState.positions
+			);
+
+			plates.fadeInMatte(25, 0);
+			plates.loadPlate('respawning');
+			plates.fadeInPlate(25, 1500);
+			timing.setTrigger(
+				'spawn in player with a new ship',
+				() => {
+					console.log('spawn in player with a new ship from their inventory');
+					entities.spawn(
+						newPlayerShipType,
+						{
+							posX: newPlayerShipX,
+							posY: newPlayerShipY,
+							latVelocity: 0,
+							longVelocity: 0,
+						},
+						{
+							playerRelation: 'self',
+							behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
+							id: newPlayerId,
+						},
+						'player'
+					);
+				},
+				timing.modes.play,
+				1100,
+				true
+			);
+			plates.fadeOutMatte(25, 5000);
+			plates.fadeOutPlate(25, 7000);
+
+			// we also need to remove destroyed_player from positions
 		}
 	},
 };
