@@ -15,6 +15,7 @@ const c = {
 		CHANGE_PLAYER_RELATION: 'CHANGE_PLAYER_RELATION',
 		SCAN: 'SCAN',
 		DAMAGE: 'DAMAGE',
+		EMP_DAMAGE: 'EMP_DAMAGE',
 		SHIELD_REGEN: 'SHIELD_REGEN',
 		FLIP: 'FLIP',
 	},
@@ -85,6 +86,7 @@ const c = {
 		hullDamage: 'hullDamage',
 		destruction: 'destruction',
 	},
+	empReach: 120,
 
 	init() {
 		for (let key in this.alertsAndWarnings.warnings) {

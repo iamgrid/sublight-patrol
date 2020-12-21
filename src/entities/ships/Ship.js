@@ -5,7 +5,10 @@ import {
 	toggleTargetingReticule,
 	createThrusters,
 	addTargetingReticuleSprites,
-	createThrustersprites,
+	createThrusterSprites,
+	addEMPSprite,
+	toggleEMP,
+	updateEMP,
 	reticuleRelation,
 	showDamageTint,
 	flip,
@@ -37,7 +40,10 @@ export default class Ship extends PIXI.Container {
 		this.blowUp = blowUp.bind(this);
 		this.animateExplosion = animateExplosion.bind(this);
 		this.createThrusters = createThrusters.bind(this);
-		this.createThrustersprites = createThrustersprites.bind(this);
+		this.createThrusterSprites = createThrusterSprites.bind(this);
+		this.addEMPSprite = addEMPSprite.bind(this);
+		this.toggleEMP = toggleEMP.bind(this);
+		this.updateEMP = updateEMP.bind(this);
 		this.fireThrusters = fireThrusters.bind(this);
 
 		this.sprites = {};
@@ -49,11 +55,21 @@ export default class Ship extends PIXI.Container {
 		this.isFlipping = false;
 		this.currentRotation = 0;
 		this.targetRotation = 0;
+		this.isDisabled = props.isDisabled;
+		this.hasEMP = props.hasEMP;
+
+		if (this.hasEMP) {
+			this.addEMPSprite();
+			this.empIsToggled = false;
+		}
 
 		if (this.facing === -1) {
 			this.targetRotation = Math.PI;
 			this.currentRotation = Math.PI;
 		}
+		// if (this.isDisabled) {
+		// 	this.targetRotation = Math.PI / 10;
+		// }
 		this.rotation = this.currentRotation;
 	}
 
@@ -62,5 +78,6 @@ export default class Ship extends PIXI.Container {
 		this.animateExplosion(delta);
 		this.flip();
 		this.fireThrusters();
+		this.updateEMP();
 	}
 }

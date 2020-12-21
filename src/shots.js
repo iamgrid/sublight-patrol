@@ -7,6 +7,7 @@ import entities from './entities/entities';
 import { moveTargetingReticule, shields } from './utils/helpers';
 import soundEffects from './audio/soundEffects';
 import formations from './behavior/formations';
+import emp from './emp';
 
 const shots = {
 	stageShots: {},
@@ -476,6 +477,7 @@ const shots = {
 				if (entityStore === 'player') {
 					moveTargetingReticule(null, shots.handlers.stageEntities);
 					formations.clearAll();
+					emp.playerEMPIsOn = false;
 				}
 
 				console.info(`removing ${entityId} from state`);

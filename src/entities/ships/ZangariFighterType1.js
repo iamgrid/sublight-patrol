@@ -24,7 +24,7 @@ export default class ZangariFighterType1 extends Ship {
 
 		this.addChild(this.sprites['shipBody']);
 
-		this.createThrustersprites();
+		this.createThrusterSprites();
 		this.addTargetingReticuleSprites();
 	}
 }

@@ -191,7 +191,7 @@ export function createThrusters(params) {
 	};
 }
 
-export function createThrustersprites() {
+export function createThrusterSprites() {
 	for (const thKey in this.sprites['thrusters'])
 		this.sprites['thrusters'][thKey].forEach((thruster) =>
 			this.addChild(thruster)
@@ -237,6 +237,53 @@ export function moveTargetingReticule(newTarget, stageEntities) {
 	if (newTarget) stageEntities[newTarget].toggleTargetingReticule(true);
 }
 
+export function addEMPSprite() {
+	// console.log('addEMPSprite', this.entityId, this.hasEMP);
+	const spriteId = 'emp_bubble';
+	this.sprites[spriteId] = new PIXI.Graphics();
+
+	this.sprites[spriteId].lineStyle();
+	this.sprites[spriteId].beginFill(0xff9000);
+	this.sprites[spriteId].drawCircle(0, 0, c.empReach);
+	this.sprites[spriteId].endFill();
+	this.sprites[spriteId].alpha = 0;
+	this.addChild(this.sprites[spriteId]);
+}
+
+export function toggleEMP(toggle = true) {
+	// console.log('toggleEMP', this.entityId, toggle);
+	if (!this.hasEMP) return;
+
+	this.empIsToggled = toggle;
+}
+
+export function updateEMP() {
+	if (!this.hasEMP) return;
+
+	const currentAlpha = this.sprites['emp_bubble'].alpha * 1000;
+
+	let newAlpha = currentAlpha;
+	if (this.empIsToggled) {
+		if (this.empUpswing === undefined) this.empUpswing = true;
+
+		if (currentAlpha < 20) {
+			this.empUpswing = true;
+		} else if (currentAlpha > 50) {
+			this.empUpswing = false;
+		}
+
+		if (this.empUpswing) {
+			newAlpha = currentAlpha + 10;
+		} else {
+			newAlpha = currentAlpha - 10;
+		}
+	} else if (!this.empIsToggled) {
+		if (currentAlpha > 0) newAlpha = currentAlpha - 10;
+	}
+
+	this.sprites['emp_bubble'].alpha = newAlpha / 1000;
+}
+
 export function showDamageTint(damagableSprites = []) {
 	if (this.currentTint !== 0xffffff) {
 		if (damagableSprites.length < 0) return;
@@ -250,7 +297,23 @@ export function showDamageTint(damagableSprites = []) {
 
 export function flip() {
 	const stepValue = Math.PI / 40;
+
+	if (this.isDisabled) {
+		if (
+			(this.facing === 1 && this.currentRotation < (-1 * Math.PI) / 10) ||
+			(this.facing === -1 && this.currentRotation < (9 * Math.PI) / 10)
+		) {
+			return;
+		}
+
+		this.currentRotation = this.currentRotation - Math.PI / 3141;
+		this.rotation = this.currentRotation;
+		// console.log(this.entityId, this.facing, this.currentRotation);
+		return;
+	}
+
 	if (this.currentRotation !== this.targetRotation) {
+		// console.log('2', this.entityId, this.currentRotation, this.targetRotation);
 		this.isFlipping = true;
 		if (!this.rotationTriggered) {
 			this.cRot = this.currentRotation;

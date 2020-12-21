@@ -33,7 +33,7 @@ export default class ZangariShuttle extends Ship {
 
 		this.addChild(this.sprites['shipBody']);
 
-		this.createThrustersprites();
+		this.createThrusterSprites();
 		this.addTargetingReticuleSprites();
 	}
 }

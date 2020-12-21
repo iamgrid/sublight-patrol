@@ -239,6 +239,7 @@ const hud = {
 					`game__hud-meter-${entity}-system-text`
 				);
 				if (newValue) {
+					hud.updateMeter(entity, 'System', 0);
 					meterDiv.classList.add('meter-text--disabled');
 				} else {
 					meterDiv.classList.remove('meter-text--disabled');

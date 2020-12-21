@@ -26,6 +26,7 @@ import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
 import shots from './shots';
+import emp from './emp';
 import behavior from './behavior/behavior';
 // import story from './story/story';
 import HUD from './components/HUD';
@@ -157,6 +158,12 @@ export default class App extends PIXI.Application {
 			stageEntities: entities.stageEntities,
 		};
 
+		emp.handlers = {
+			dispatch: this.dispatch,
+			state: this.gameState,
+			stageEntities: entities.stageEntities,
+		};
+
 		shields.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
@@ -217,8 +224,10 @@ export default class App extends PIXI.Application {
 				posY: 250,
 				latVelocity: 0,
 				longVelocity: 0,
+				facing: -1,
 			},
 			{
+				isDisabled: true,
 				playerRelation: 'friendly',
 				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
 				id: '1730_to_harpax',
@@ -673,6 +682,7 @@ export default class App extends PIXI.Application {
 
 		// collision detection
 		shots.detectCollisions();
+		emp.handleEMPDamage();
 
 		// current state
 		let currentState = this.gameState();
@@ -808,6 +818,13 @@ export default class App extends PIXI.Application {
 					this.camera.isFlipping = true;
 					this.camera.flipTimer = this.camera.maxFlipTimer;
 				}
+			}
+
+			if (Keyboard.isKeyPressed('KeyD')) {
+				emp.toggleEMP(playerId, true);
+			}
+			if (Keyboard.isKeyReleased('KeyD')) {
+				emp.toggleEMP(playerId, false);
 			}
 		}
 

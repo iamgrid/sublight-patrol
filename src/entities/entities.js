@@ -145,6 +145,11 @@ const entities = {
 			newEntity.displayId = '-';
 		}
 
+		if (newEntity.isDisabled) {
+			newEntity.systemStrength = 0;
+			newEntity.shieldStrength = 0;
+		}
+
 		// behavior logic
 		newEntity.assignedPlayerRelation = props.playerRelation;
 		if (newEntity.immutable.hasBehavior) {
@@ -190,6 +195,8 @@ const entities = {
 			entityId: newEntity.id,
 			entityStore: doStoreIn,
 			facing: facing,
+			isDisabled: newEntity.isDisabled,
+			hasEMP: newEntity.immutable.hasEMP,
 		};
 		if (type === 'buoy') {
 			stageEntityProps.coordX = pos.posX;

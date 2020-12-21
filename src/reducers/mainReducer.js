@@ -775,6 +775,12 @@ export default function mainReducer(state, action) {
 				];
 			}
 		}
+		case c.actions.EMP_DAMAGE: {
+			const damagedEntities = action.damagedEntities;
+			console.log(damagedEntities);
+
+			return null;
+		}
 		case c.actions.SHIELD_REGEN: {
 			const entityId = action.id;
 			const entityStore = action.store;

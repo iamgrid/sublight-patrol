@@ -40,7 +40,7 @@ export default class Fenrir extends Ship {
 		this.addChild(this.sprites['harness_inner']);
 		this.addChild(this.sprites['harness_main']);
 
-		this.createThrustersprites();
+		this.createThrusterSprites();
 		this.addTargetingReticuleSprites();
 	}
 }
