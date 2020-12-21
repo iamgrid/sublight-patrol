@@ -465,32 +465,38 @@ export default function mainReducer(state, action) {
 			}
 
 			if (entityStore === 'player') {
-				return [
-					() => action.callbackFn(),
-					{
-						...state,
-						game: {
-							...state.game,
-							targeting: null,
-							playerShips: {
-								...state.game.playerShips,
-								spent: state.game.playerShips.spent + 1,
+				let nextShip = null;
+				const spentShips = state.game.playerShips.spent + 1;
+				const unlockedShips = state.game.playerShips.unlocked;
+				if (unlockedShips - spentShips > 0) nextShip = spentShips;
+				if (state)
+					return [
+						() => action.callbackFn(),
+						{
+							...state,
+							game: {
+								...state.game,
+								targeting: null,
+								playerShips: {
+									...state.game.playerShips,
+									spent: spentShips,
+									next: nextShip,
+								},
 							},
-						},
-						entities: {
-							...state.entities,
-							player: {
-								id: newId,
-								displayId: '---',
-								contents: '---',
-								facing: entity.facing,
-								immutable: { typeShorthand: '---' },
+							entities: {
+								...state.entities,
+								player: {
+									id: newId,
+									displayId: '---',
+									contents: '---',
+									facing: entity.facing,
+									immutable: { typeShorthand: '---' },
+								},
 							},
+							velocities: newVelocities,
+							positions: newPositions,
 						},
-						velocities: newVelocities,
-						positions: newPositions,
-					},
-				];
+					];
 			} else {
 				return {
 					...state,
@@ -508,6 +514,7 @@ export default function mainReducer(state, action) {
 					positions: newPositions,
 				};
 			}
+			break;
 		}
 		case c.actions.TARGET: {
 			let newTarget;

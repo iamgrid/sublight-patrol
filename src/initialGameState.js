@@ -5,6 +5,7 @@ const initialGameState = {
 		playerShips: {
 			unlocked: 4,
 			spent: 0,
+			next: null,
 			order: [
 				'fenrir',
 				'fenrir_dominator',

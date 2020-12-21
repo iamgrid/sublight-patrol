@@ -48,18 +48,23 @@ const plates = {
 		);
 	},
 
-	loadPlate(plateId) {
+	loadPlate(plateId, quoteVariant = -1) {
 		// console.log('loadPlate', plateId);
 		let atlText = '';
 		let btlText = '';
 
+		const respawnQuoteVariants = [
+			"With a lil' help from my friends",
+			'Mess with the bull, get the horns',
+			"It's jackhammer o'clock",
+		];
+
 		switch (plateId) {
 			case 'respawning':
-				// With a lil' help from my friends
-				// Mess with the bull, get the horns
-				// It's wrecking ball (jackhammer?) o'clock
-				atlText = 'Mess with the bull, get the horns';
-				btlText = 'Returning to the scene with a new ship from your inventory';
+				atlText = respawnQuoteVariants[1];
+				if (quoteVariant > -1) atlText = respawnQuoteVariants[quoteVariant];
+				btlText =
+					'Returning to the scene with a stronger ship from your inventory';
 				break;
 			case 'game_over':
 				atlText = 'Tis but a scratch';
