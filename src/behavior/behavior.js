@@ -542,6 +542,10 @@ const behavior = {
 			) {
 				newLongVelocity = 0;
 			}
+		} else if (longDistance < entity.immutable.length * 3) {
+			// way too close to the enemy, backing up
+			// console.log(entity.id, 'is backing up');
+			newLongVelocity = -1 * newFacing * entity.immutable.thrusters.front;
 		}
 
 		const latDifference = enemyY - entityY;
