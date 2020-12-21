@@ -871,7 +871,8 @@ const behavior = {
 	) {
 		const currentFacing = entity.facing;
 
-		if (playerId === 'destroyed_player') return [false, currentFacing];
+		if (playerId === 'destroyed_player' || enemyId !== playerId)
+			return [false, currentFacing];
 
 		let newFacing = currentFacing;
 		let needsToFlip = false;

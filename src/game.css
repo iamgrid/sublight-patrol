@@ -146,6 +146,7 @@
 	text-transform: uppercase;
 	letter-spacing: 1em;
 	transform: translateX(0.5em);
+	cursor: default;
 }
 
 .game__plates_plate_atl {

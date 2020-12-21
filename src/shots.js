@@ -246,6 +246,9 @@ const shots = {
 		let candidates = {};
 		for (const posKey in positions) {
 			const [entityId, posV] = posKey.split('--');
+
+			if (entityId === 'destroyed_player') continue;
+
 			if (posV === 'posY') {
 				const entityY = positions[posKey];
 				const entity = entities.find((ent) => ent.id === entityId);
@@ -462,6 +465,7 @@ const shots = {
 
 				if (entityStore === 'player') {
 					moveTargetingReticule(null, shots.handlers.stageEntities);
+					formations.clearAll();
 				}
 
 				console.info(`removing ${entityId} from state`);

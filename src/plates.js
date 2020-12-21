@@ -49,13 +49,16 @@ const plates = {
 	},
 
 	loadPlate(plateId) {
-		console.log('loadPlate', plateId);
+		// console.log('loadPlate', plateId);
 		let atlText = '';
 		let btlText = '';
 
 		switch (plateId) {
 			case 'respawning':
-				atlText = 'We have the technology';
+				// With a lil' help from my friends
+				// Mess with the bull, get the horns
+				// It's wrecking ball (jackhammer?) o'clock
+				atlText = 'Mess with the bull, get the horns';
 				btlText = 'Returning to the scene with a new ship from your inventory';
 				break;
 			case 'game_over':
@@ -69,7 +72,7 @@ const plates = {
 	},
 
 	fadeInPlate(steps = 25, delayMS = 0) {
-		console.log('fadeInPlate', steps);
+		// console.log('fadeInPlate', steps);
 
 		document
 			.getElementById('game__plates_plate_line')
@@ -98,7 +101,7 @@ const plates = {
 	},
 
 	fadeOutPlate(steps = 25, delayMS = 0) {
-		console.log('fadeOutPlate', steps);
+		// console.log('fadeOutPlate', steps);
 
 		const opacityFraction = 1 / steps;
 
@@ -116,6 +119,8 @@ const plates = {
 					document
 						.getElementById('game__plates_plate_line')
 						.classList.remove('game__plates_plate_line--shown');
+					document.getElementById('game__plates_plate_atl').innerHTML = '';
+					document.getElementById('game__plates_plate_btl').innerHTML = '';
 				}
 			},
 			timing.modes.play,

@@ -355,6 +355,14 @@ export default function mainReducer(state, action) {
 				newPositionStore = state.positions;
 			}
 
+			if (storeIn === 'player') {
+				// remove 'destroyed_player' from positions when respawning the player
+				if (newPositionStore.cantMove['destroyed_player--posX'] !== undefined) {
+					delete newPositionStore.cantMove['destroyed_player--posX'];
+					delete newPositionStore.cantMove['destroyed_player--posY'];
+				}
+			}
+
 			let newVelocities = state.velocities;
 			if (positionStoreName === 'canMove') {
 				const newVelocityProps = {};
@@ -455,8 +463,6 @@ export default function mainReducer(state, action) {
 				delete newVelocities[`${entityId}--latVelocity`];
 				delete newVelocities[`${entityId}--longVelocity`];
 			}
-
-			console.log(action);
 
 			if (entityStore === 'player') {
 				return [
