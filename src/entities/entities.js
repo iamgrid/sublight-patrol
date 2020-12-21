@@ -9,6 +9,8 @@ import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
 import timing from '../utils/timing';
 import plates from '../plates';
+import hud from '../hud';
+import shots from '../shots';
 
 const entities = {
 	handlers: {
@@ -332,9 +334,17 @@ const entities = {
 				true
 			);
 			plates.fadeOutMatte(25, 5000);
+			timing.setTrigger(
+				'reinitiating pixi hud',
+				() => {
+					shots.registerEntityCannons(newPlayerId);
+					hud.reInitPixiHUD(newPlayerId);
+				},
+				timing.modes.play,
+				3000,
+				true
+			);
 			plates.fadeOutPlate(25, 7000);
-
-			// we also need to remove destroyed_player from positions
 		}
 	},
 };

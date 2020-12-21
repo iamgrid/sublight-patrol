@@ -438,6 +438,12 @@ const hud = {
 		hud.targetBlinker = hud.targetBlinker + 1;
 		if (hud.targetBlinker >= 30) hud.targetBlinker = 0;
 	},
+
+	reInitPixiHUD(playerId) {
+		hud.pixiHUDInitiated = false;
+		const playerShots = hud.handlers.cannonStates[playerId].remainingShots;
+		hud.handlers.pixiHUD.update(playerShots, false);
+	},
 };
 
 export default hud;

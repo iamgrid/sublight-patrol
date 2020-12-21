@@ -38,21 +38,12 @@ const shots = {
 		}
 
 		if (!shots.cannonStates[entityId]) {
-			shots.cannonStates[entityId] = {};
-			shots.cannonStates[entityId].maxShots = storeEntity.immutable.cannonShots;
-			shots.cannonStates[entityId].maxCannonCooldown =
-				storeEntity.immutable.cannonCooldown;
+			shots.registerEntityCannons(entityId);
 		}
 
 		window.clearInterval(shots.shotRegenIntervals[entityId]);
 
 		shots.cannonStates[entityId].activeCannon = 0;
-		if (!shots.cannonStates[entityId].remainingShots) {
-			// shooting for the first time
-			shots.cannonStates[entityId].remainingShots =
-				storeEntity.immutable.cannonShots;
-			shots.cannonStates[entityId].onCooldown = false;
-		}
 
 		shots.cannonStates[entityId].isShooting = true;
 
@@ -68,6 +59,25 @@ const shots = {
 			() => shots.shoot(entityId),
 			shotFrequency
 		);
+	},
+
+	registerEntityCannons(entityId) {
+		// console.log('registerEntityCannons called for', entityId);
+		const currentState = shots.handlers.state();
+		let storeEntity = getStoreEntity(entityId, currentState);
+		if (!storeEntity) {
+			return;
+		}
+
+		shots.cannonStates[entityId] = {};
+		shots.cannonStates[entityId].isShooting = false;
+		shots.cannonStates[entityId].onCooldown = false;
+		shots.cannonStates[entityId].activeCannon = 0;
+		shots.cannonStates[entityId].maxShots = storeEntity.immutable.cannonShots;
+		shots.cannonStates[entityId].remainingShots =
+			storeEntity.immutable.cannonShots;
+		shots.cannonStates[entityId].maxCannonCooldown =
+			storeEntity.immutable.cannonCooldown;
 	},
 
 	stopShooting(entityId) {

@@ -27,7 +27,18 @@ export default class HUD extends PIXI.Container {
 	}
 
 	init(maxShots) {
+		if (Object.keys(this.sprites).length > 0) {
+			// we already have sprites on screen, this must be a respawn
+			// so we have to clean up first
+			for (const spriteId2 in this.sprites) {
+				this.removeChild(this.sprites[spriteId2]);
+				delete this.sprites[spriteId2];
+			}
+			// console.log('sprites wiped: ', this.sprites);
+		}
+
 		this.maxShots = maxShots;
+		this.currentLine = 1;
 		if (maxShots % this.shotsPerLine !== 0) this.needsLastLineShift = true;
 		if (Math.ceil(maxShots / this.shotsPerLine) === 4) this.startY = 14; // Valkyrie
 		if (Math.ceil(maxShots / this.shotsPerLine) === 3) this.startY = 18; // Fenrir

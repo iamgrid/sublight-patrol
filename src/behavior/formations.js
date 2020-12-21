@@ -19,7 +19,7 @@ const formations = {
 			leadEntityId,
 			'as lead and',
 			flankingEntityId,
-			'on flankOne'
+			'on flank one'
 		);
 		if (formations.isInFormation(leadEntityId)) {
 			console.log(
