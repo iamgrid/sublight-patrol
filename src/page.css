@@ -235,6 +235,7 @@ input[type='range']::-ms-thumb {
 	margin-bottom: 0.5em;
 	text-align: center;
 	border-bottom: 1px dotted #ffffff20;
+	color: #ffffff30;
 }
 
 .controls__control {

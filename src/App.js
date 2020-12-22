@@ -1,4 +1,5 @@
 import * as PIXI from './pixi';
+import keyboardLayouts from './keyboardLayouts';
 import audio from './audio/audio';
 import soundEffects from './audio/soundEffects';
 import c from './utils/constants';
@@ -7,13 +8,11 @@ import timing from './utils/timing';
 import { decreaseNumberBy } from './utils/formulas';
 import {
 	repositionMovedEntities,
-	updateStageEntityVelocities,
 	fromSpriteSheet,
 	shields,
 	dialog,
 	alertsAndWarnings,
 	status,
-	moveTargetingReticule,
 	spawnBuoys,
 	hello,
 	getPosition,
@@ -668,19 +667,19 @@ export default class App extends PIXI.Application {
 		// behavior tick
 		behavior.tick();
 
-		// stage entity updates
+		// stage entity updates (thruster plume visibility, damage tints, etc.)
 		for (const sEK in entities.stageEntities) {
 			if (entities.stageEntities[sEK].hasUpdateMethod)
 				entities.stageEntities[sEK].onUpdate(delta);
 		}
 
-		// shot updates
+		// stage shot updates
 		for (const shotK in shots.stageShots) {
 			if (!shots.stageShots[shotK].hasBeenDestroyed)
 				shots.stageShots[shotK].onUpdate(delta);
 		}
 
-		// collision detection
+		// apply shot and EMP damage
 		shots.detectCollisions();
 		emp.handleEMPDamage();
 
@@ -700,137 +699,13 @@ export default class App extends PIXI.Application {
 		// loop volumes
 		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
 
-		function playerStageEntityVelocity(newLatVelocity, newLongVelocity) {
-			updateStageEntityVelocities(
-				playerId,
-				entities.stageEntities,
-				newLatVelocity,
-				newLongVelocity
-			);
-		}
-
-		function targetingCallback(newTargetId) {
-			moveTargetingReticule(newTargetId, entities.stageEntities);
-		}
-
-		if (playerId !== 'destroyed_player') {
-			// Keyboard
-			// https://www.npmjs.com/package/pixi.js-keyboard
-			let latDirection = 0;
-			let longDirection = 0;
-			if (Keyboard.isKeyDown('ArrowUp')) {
-				latDirection = -1;
-			} else if (Keyboard.isKeyDown('ArrowDown')) {
-				latDirection = 1;
-			}
-
-			if (Keyboard.isKeyDown('ArrowLeft')) {
-				longDirection = -1;
-			} else if (Keyboard.isKeyDown('ArrowRight')) {
-				longDirection = 1;
-			}
-
-			this.dispatch({
-				type: c.actions.CHANGE_ENTITY_VELOCITIES,
-				id: playerId,
-				latDirection: latDirection,
-				longDirection: longDirection,
-				callbackFn: playerStageEntityVelocity,
-			});
-
-			if (Keyboard.isKeyPressed('Space')) {
-				shots.startShooting(playerId);
-			}
-
-			if (Keyboard.isKeyReleased('Space')) {
-				shots.stopShooting(playerId);
-			}
-
-			if (Keyboard.isKeyPressed('KeyD')) {
-				this.dispatch({
-					type: c.actions.TARGET,
-					do: 'pointed-nearest',
-					stageEntities: entities.stageEntities,
-					callbackFn: targetingCallback,
-				});
-			}
-
-			if (Keyboard.isKeyPressed('KeyS')) {
-				this.dispatch({
-					type: c.actions.TARGET,
-					do: 'next',
-					stageEntities: entities.stageEntities,
-					callbackFn: targetingCallback,
-				});
-			}
-
-			if (Keyboard.isKeyPressed('KeyA')) {
-				this.dispatch({
-					type: c.actions.TARGET,
-					do: 'previous',
-					stageEntities: entities.stageEntities,
-					callbackFn: targetingCallback,
-				});
-			}
-
-			if (Keyboard.isKeyPressed('KeyC')) {
-				this.dispatch({
-					type: c.actions.TARGET,
-					do: 'clear',
-					callbackFn: targetingCallback,
-				});
-			}
-
-			if (Keyboard.isKeyPressed('KeyL')) {
-				const currentTarget = currentState.game.targeting;
-				console.log(
-					`%c target id: ${currentTarget}`,
-					'padding-top: 10px; color: aqua'
-				);
-				if (currentTarget !== null) {
-					console.info(
-						currentState.entities.targetable.find(
-							(ent) => ent.id === currentTarget
-						)
-					);
-					console.info(entities.stageEntities[currentTarget]);
-				}
-			}
-
-			if (Keyboard.isKeyPressed('KeyF')) {
-				if (!this.camera.isFlipping) {
-					if (currentState.entities.player.facing === 1) {
-						entities.stageEntities[playerId].targetRotation = Math.PI;
-						entities.stageEntities[playerId].facing = -1;
-						this.camera.newFacing = -1;
-					} else {
-						entities.stageEntities[playerId].targetRotation = 0;
-						entities.stageEntities[playerId].facing = 1;
-						this.camera.newFacing = 1;
-					}
-
-					this.dispatch({
-						type: c.actions.FLIP,
-						id: playerId,
-						store: 'player',
-					});
-
-					this.camera.isFlipping = true;
-					this.camera.flipTimer = this.camera.maxFlipTimer;
-				}
-			}
-
-			if (Keyboard.isKeyPressed('KeyE')) {
-				emp.toggleEMP(playerId, true);
-			}
-			if (Keyboard.isKeyReleased('KeyE')) {
-				emp.toggleEMP(playerId, false);
-			}
-		}
-
-		if (Keyboard.isKeyPressed('Escape')) {
-			this.togglePause();
-		}
+		// keyboard input
+		keyboardLayouts.play.execute(
+			playerId,
+			currentState,
+			this.dispatch,
+			this.camera
+		);
 
 		// update entity positions based on their velocities
 		let repositionHasRun = false;
@@ -968,20 +843,9 @@ export default class App extends PIXI.Application {
 			console.info('timing:', timing);
 			this.shownStateOnPause = true;
 		}
-		if (Keyboard.isKeyPressed('Escape')) {
-			this.togglePause();
-		}
 
-		const statusProperDiv = document.getElementById('game__status-proper');
-
-		if (status.store.length > 4) {
-			if (Keyboard.isKeyDown('ArrowUp')) {
-				statusProperDiv.scrollBy(0, -4);
-			}
-			if (Keyboard.isKeyDown('ArrowDown')) {
-				statusProperDiv.scrollBy(0, 4);
-			}
-		}
+		// keyboard input
+		keyboardLayouts.pause.execute();
 
 		// timing tick
 		timing.tick(timing.modes.pause, this.ticker.deltaMS);
