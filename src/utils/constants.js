@@ -46,16 +46,13 @@ const c = {
 	alertsAndWarnings: {
 		warnings: {
 			leavingVolume: {
-				m: 'You are approaching the edge of the playable volume!',
+				m: 'You are approaching the edge of the playable volume',
 			},
-			no_emp: { m: 'Your current ship does not carry an EMP weapon!' },
+			no_emp: { m: 'Your current ship has no EMP capability' },
 		},
 		alerts: {
 			leftVolume: { m: 'You are beyond the edge of the playable volume!' },
-			systemsOffline: {
-				m: 'Systems offline.',
-			},
-			otherAlert: { m: 'Other alert text!' },
+			systemsOffline: { m: 'Systems offline.' },
 		},
 	},
 	groups: {
@@ -65,8 +62,8 @@ const c = {
 			shieldDamageColor: 0x32ade6,
 			hullDamageColor: 0xff9090,
 		},
-		humans: {
-			groupId: 'humans',
+		human_empire: {
+			groupId: 'human_empire',
 			laserColor: 0xff4040,
 			shieldDamageColor: 0x32ade6,
 			hullDamageColor: 0xff9090,

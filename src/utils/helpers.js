@@ -260,26 +260,32 @@ export function toggleEMP(toggle = true) {
 export function updateEMP() {
 	if (!this.hasEMP) return;
 
+	const stepValue = 10;
+
 	const currentAlpha = this.sprites['emp_bubble'].alpha * 1000;
+
+	if (!this.empIsToggled && currentAlpha === 0) return;
 
 	let newAlpha = currentAlpha;
 	if (this.empIsToggled) {
 		if (this.empUpswing === undefined) this.empUpswing = true;
 
-		if (currentAlpha < 20) {
+		if (currentAlpha < 50) {
 			this.empUpswing = true;
-		} else if (currentAlpha > 50) {
+		} else if (currentAlpha > 100) {
 			this.empUpswing = false;
 		}
 
 		if (this.empUpswing) {
-			newAlpha = currentAlpha + 10;
+			newAlpha = currentAlpha + stepValue;
 		} else {
-			newAlpha = currentAlpha - 10;
+			newAlpha = currentAlpha - stepValue;
 		}
 	} else if (!this.empIsToggled) {
-		if (currentAlpha > 0) newAlpha = currentAlpha - 10;
+		if (currentAlpha > 0) newAlpha = currentAlpha - stepValue;
 	}
+
+	// console.log({ newAlpha });
 
 	this.sprites['emp_bubble'].alpha = newAlpha / 1000;
 }
