@@ -355,7 +355,7 @@ export function flipStageEntity(entityId, stageEntities, newFacing) {
 }
 
 export function fireThrusters() {
-	if (this.showingExplosion) {
+	if (this.showingExplosion || this.isDisabled) {
 		for (const orientation in this.thrusterAlphas.current) {
 			this.sprites.thrusters[orientation].forEach((thruster) => {
 				thruster.alpha = 0;

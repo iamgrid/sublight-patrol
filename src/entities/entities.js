@@ -11,6 +11,7 @@ import timing from '../utils/timing';
 import plates from '../plates';
 import hud from '../hud';
 import shots from '../shots';
+import emp from '../emp';
 
 const entities = {
 	handlers: {
@@ -145,9 +146,13 @@ const entities = {
 			newEntity.displayId = '-';
 		}
 
+		// emp-related stuff
 		if (newEntity.isDisabled) {
 			newEntity.systemStrength = 0;
 			newEntity.shieldStrength = 0;
+		}
+		if (newEntity.store === 'player') {
+			emp.playerHasEMP = newEntity.immutable.hasEMP;
 		}
 
 		// behavior logic

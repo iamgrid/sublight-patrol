@@ -48,10 +48,7 @@ const c = {
 			leavingVolume: {
 				m: 'You are approaching the edge of the playable volume!',
 			},
-			collision: { m: 'Collision imminent!' },
-			otherWarning: {
-				m: 'Other warning text!',
-			},
+			no_emp: { m: 'Your current ship does not carry an EMP weapon!' },
 		},
 		alerts: {
 			leftVolume: { m: 'You are beyond the edge of the playable volume!' },

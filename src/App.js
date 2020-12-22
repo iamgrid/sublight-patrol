@@ -746,7 +746,7 @@ export default class App extends PIXI.Application {
 				shots.stopShooting(playerId);
 			}
 
-			if (Keyboard.isKeyPressed('KeyE')) {
+			if (Keyboard.isKeyPressed('KeyD')) {
 				this.dispatch({
 					type: c.actions.TARGET,
 					do: 'pointed-nearest',
@@ -820,10 +820,10 @@ export default class App extends PIXI.Application {
 				}
 			}
 
-			if (Keyboard.isKeyPressed('KeyD')) {
+			if (Keyboard.isKeyPressed('KeyE')) {
 				emp.toggleEMP(playerId, true);
 			}
-			if (Keyboard.isKeyReleased('KeyD')) {
+			if (Keyboard.isKeyReleased('KeyE')) {
 				emp.toggleEMP(playerId, false);
 			}
 		}

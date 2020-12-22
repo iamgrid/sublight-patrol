@@ -777,9 +777,44 @@ export default function mainReducer(state, action) {
 		}
 		case c.actions.EMP_DAMAGE: {
 			const damagedEntities = action.damagedEntities;
-			console.log(damagedEntities);
+			const playerEMPStrength = state.entities.player.immutable.eMPStrength;
+			// console.log(damagedEntities, playerEMPStrength);
+			const newlyDisabledEntities = [];
 
-			return null;
+			const newTargetableStore = [...state.entities.targetable];
+			newTargetableStore.forEach((entity, ix) => {
+				if (damagedEntities.includes(entity.id) && entity.systemStrength > 0) {
+					let newSysStrength = entity.systemStrength - playerEMPStrength;
+					const newEntity = assignWPrototype(entity, {
+						systemStrength: Math.max(0, newSysStrength),
+					});
+
+					if (newSysStrength <= 0) {
+						newEntity.isDisabled = true;
+						newlyDisabledEntities.push(entity.id);
+					}
+					newTargetableStore[ix] = newEntity;
+				}
+			});
+
+			const newVelocities = { ...state.velocities };
+			for (const velProp in newVelocities) {
+				const [entityId] = velProp.split('--');
+				if (newlyDisabledEntities.includes(entityId))
+					newVelocities[velProp] = 0;
+			}
+
+			return [
+				() => action.callbackFn(newlyDisabledEntities),
+				{
+					...state,
+					entities: {
+						...state.entities,
+						targetable: newTargetableStore,
+					},
+					velocities: newVelocities,
+				},
+			];
 		}
 		case c.actions.SHIELD_REGEN: {
 			const entityId = action.id;

@@ -999,6 +999,7 @@ const behavior = {
 				let obstructionType = behavior.obstructionTypes.otherEntity;
 				let distanceFromEnemy = Math.abs(enemyX - candidateX);
 				if (
+					!storeEntity.isDisabled &&
 					storeEntity.immutable.hasCannons &&
 					storeEntity.behaviorAttacking === enemyId
 				) {
