@@ -280,6 +280,8 @@ footer {
 	color: #ffffff30;
 	padding-bottom: 0.6em;
 	padding-top: 0.6em;
+	/* correcting for the left padding on footer__home: */
+	padding-right: 12px;
 }
 
 .footer__text-separator {
