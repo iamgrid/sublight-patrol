@@ -19,6 +19,7 @@ const pieces = {
 			id: null,
 			displayId: null,
 			hasBeenScanned: false,
+			isDamaged: false,
 		},
 	},
 

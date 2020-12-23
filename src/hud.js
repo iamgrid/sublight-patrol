@@ -3,6 +3,7 @@ import timing from './utils/timing';
 import { getPosition } from './utils/helpers';
 import { calculateAngle, calculateDistance } from './utils/formulas';
 import Pointer from './components/Pointer';
+import HealthBars from './components/HealthBars';
 
 const hud = {
 	handlers: { pixiHUD: null, cannonStates: null, camera: null }, // gets its values in App.js
@@ -21,7 +22,10 @@ const hud = {
 	currentCameraCoords: [],
 	currentPointerCoords: {},
 	pointerZIndexIterator: 0,
+	stageHealthBars: {},
+	healthBarZIndexIterator: 10000,
 	largestRelevantDistance: 0,
+	healthBarsYOffset: 60,
 	edgeAngles: null,
 	targetBlinker: 0,
 
@@ -290,6 +294,8 @@ const hud = {
 			hostile: 0xe63232,
 		};
 
+		const healthBarsToUpdate = [];
+
 		if (hud.largestRelevantDistance === 0)
 			hud.largestRelevantDistance =
 				Math.abs(c.playVolume.minX) + c.playVolume.maxX;
@@ -326,7 +332,7 @@ const hud = {
 			const playerRelation = entity.playerRelation;
 			const [posX, posY] = getPosition(entityId, positions);
 
-			// if we see any new entities create a pointer for them
+			// if we see any new entities create a pointer and health bars for them
 			if (hud.stagePointers[entityId] === undefined) {
 				hud.stagePointers[entityId] = new Pointer();
 				hud.stagePointers[entityId].tint = tints[playerRelation];
@@ -339,8 +345,16 @@ const hud = {
 				hud.currentPointerTints[entityId] = pt;
 				hud.currentPointerCoords[entityId] = [posX, posY];
 
-				// iterate zindex
-				hud.pointerZIndexIterator = hud.pointerZIndexIterator + 1;
+				hud.stageHealthBars[entityId] = new HealthBars(entityId);
+				hud.stageHealthBars[entityId].position.set(
+					posX,
+					posY - hud.healthBarsYOffset
+				);
+				hud.stageHealthBars[entityId].zIndex = hud.healthBarZIndexIterator;
+
+				// iterate zindices
+				hud.pointerZIndexIterator++;
+				hud.healthBarZIndexIterator++;
 			}
 
 			const stagePointer = hud.stagePointers[entityId];
@@ -438,6 +452,10 @@ const hud = {
 
 		hud.targetBlinker = hud.targetBlinker + 1;
 		if (hud.targetBlinker >= 30) hud.targetBlinker = 0;
+	},
+
+	updateHealthBars(allEntities, positions, playerX, playerY) {
+		console.log('updateHealthBars:', allEntities, positions, playerX, playerY);
 	},
 
 	reInitPixiHUD(playerId) {

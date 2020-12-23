@@ -714,7 +714,8 @@ export default function mainReducer(state, action) {
 			let newHullStrength = oldEntity.hullStrength;
 
 			// hunting a bug here:
-			if (oldEntity.immutable === undefined) console.log(oldEntity);
+			if (oldEntity.immutable === undefined)
+				console.error('oldEntity.immutable is undefined: ', oldEntity);
 
 			let damageColor = oldEntity.immutable.colors.shieldDamageColor;
 
@@ -739,6 +740,8 @@ export default function mainReducer(state, action) {
 					shieldStrength: newShieldStrength,
 					hullStrength: newHullStrength,
 				});
+
+				if (!modifiedEntity.isDamaged) modifiedEntity.isDamaged = true;
 
 				if (modifiedEntity.immutable.hasBehavior) {
 					modifiedEntity.behaviorHitsSuffered++;
@@ -793,6 +796,9 @@ export default function mainReducer(state, action) {
 						newEntity.isDisabled = true;
 						newlyDisabledEntities.push(entity.id);
 					}
+
+					if (!newEntity.isDamaged) newEntity.isDamaged = true;
+
 					newTargetableStore[ix] = newEntity;
 				}
 			});
@@ -834,6 +840,18 @@ export default function mainReducer(state, action) {
 			const modifiedEntity = assignWPrototype(oldEntity, {
 				shieldStrength: newShieldStrength,
 			});
+
+			if (newShieldStrength === oldEntity.immutable.maxShieldStrength) {
+				// we might need to set isDamaged back to false, let's check:
+				if (
+					modifiedEntity.hullStrength ===
+						modifiedEntity.immutable.maxHullStrength &&
+					modifiedEntity.systemStrength ===
+						modifiedEntity.immutable.maxSystemStrength
+				) {
+					modifiedEntity.isDamaged = false;
+				}
+			}
 
 			let newEntities = {};
 			if (entityId === state.entities.player.id) {

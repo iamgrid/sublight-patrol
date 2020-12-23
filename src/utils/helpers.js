@@ -260,9 +260,9 @@ export function toggleEMP(toggle = true) {
 export function updateEMP() {
 	if (!this.hasEMP) return;
 
-	const stepValue = 10;
+	const stepValue = 1;
 
-	const currentAlpha = this.sprites['emp_bubble'].alpha * 1000;
+	const currentAlpha = this.sprites['emp_bubble'].alpha * 100;
 
 	if (!this.empIsToggled && currentAlpha === 0) return;
 
@@ -270,9 +270,9 @@ export function updateEMP() {
 	if (this.empIsToggled) {
 		if (this.empUpswing === undefined) this.empUpswing = true;
 
-		if (currentAlpha < 50) {
+		if (currentAlpha < 5) {
 			this.empUpswing = true;
-		} else if (currentAlpha > 100) {
+		} else if (currentAlpha > 10) {
 			this.empUpswing = false;
 		}
 
@@ -287,7 +287,7 @@ export function updateEMP() {
 
 	// console.log({ newAlpha });
 
-	this.sprites['emp_bubble'].alpha = newAlpha / 1000;
+	this.sprites['emp_bubble'].alpha = newAlpha / 100;
 }
 
 export function showDamageTint(damagableSprites = []) {
