@@ -34,6 +34,7 @@ const c = {
 		environmental: 0,
 		shots: 100000,
 		entities: 200000,
+		healthBars: 300000,
 	},
 	starScapeLayers: [
 		{ noOfStars: 15, speedMultiplier: 0.8 },

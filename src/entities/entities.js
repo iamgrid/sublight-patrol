@@ -150,6 +150,7 @@ const entities = {
 		if (newEntity.isDisabled) {
 			newEntity.systemStrength = 0;
 			newEntity.shieldStrength = 0;
+			newEntity.isDamaged = true;
 		}
 		if (newEntity.store === 'player') {
 			emp.playerHasEMP = newEntity.immutable.hasEMP;
@@ -278,12 +279,7 @@ const entities = {
 		stageEntity.destroy();
 		delete entities.stageEntities[entityId];
 
-		const stagePointer = entities.handlers.stagePointers[entityId];
-		if (stagePointer) {
-			entities.handlers.pixiHUD.removeChild(stagePointer);
-			stagePointer.destroy();
-			delete entities.handlers.stagePointers[entityId];
-		}
+		hud.removeEntity(entityId);
 
 		if (removeFromState) {
 			console.info(`removing ${entityId} from state`);

@@ -6,7 +6,7 @@ import Pointer from './components/Pointer';
 import HealthBars from './components/HealthBars';
 
 const hud = {
-	handlers: { pixiHUD: null, cannonStates: null, camera: null }, // gets its values in App.js
+	handlers: { pixiHUD: null, stage: null, cannonStates: null, camera: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,
@@ -23,9 +23,9 @@ const hud = {
 	currentPointerCoords: {},
 	pointerZIndexIterator: 0,
 	stageHealthBars: {},
-	healthBarZIndexIterator: 10000,
+	healthBarZIndexIterator: c.zIndices.healthBars,
 	largestRelevantDistance: 0,
-	healthBarsYOffset: 60,
+	healthBarsYOffset: -50,
 	edgeAngles: null,
 	targetBlinker: 0,
 
@@ -61,7 +61,7 @@ const hud = {
 		}, 30);
 	},
 
-	update(targeting, playerShips, allEntities, positions) {
+	update(targeting, playerShips, allEntities, positions, playerId) {
 		// player ships
 		const heartEmoji = '&#10084;';
 		if (
@@ -89,9 +89,15 @@ const hud = {
 		}
 
 		// off-screen entity pointers
-		const playerId = allEntities.player.id;
 		const [playerX, playerY] = getPosition(playerId, positions);
-		hud.updatePointers(targeting, allEntities, positions, playerX, playerY);
+		hud.updatePointersAndHealthBars(
+			targeting,
+			allEntities,
+			positions,
+			playerX,
+			playerY,
+			playerId
+		);
 
 		// player coords
 		const playerCoordsDisp = `${Math.trunc(playerX)} , ${Math.trunc(playerY)}`;
@@ -286,15 +292,20 @@ const hud = {
 		).style.width = `${meterValue}px`;
 	},
 
-	updatePointers(targeting, allEntities, positions, playerX, playerY) {
+	updatePointersAndHealthBars(
+		targeting,
+		allEntities,
+		positions,
+		playerX,
+		playerY,
+		playerId
+	) {
 		const tints = {
 			targeted: 0xffffff,
 			friendly: 0x37d837,
 			neutral: 0xe6b632,
 			hostile: 0xe63232,
 		};
-
-		const healthBarsToUpdate = [];
 
 		if (hud.largestRelevantDistance === 0)
 			hud.largestRelevantDistance =
@@ -327,47 +338,63 @@ const hud = {
 			hud.currentCameraCoords = [cameraCX, cameraCY];
 		}
 
-		allEntities.targetable.forEach((entity) => {
+		const relevantEntities = [allEntities.player, ...allEntities.targetable];
+
+		relevantEntities.forEach((entity) => {
 			const entityId = entity.id;
 			const playerRelation = entity.playerRelation;
 			const [posX, posY] = getPosition(entityId, positions);
 
-			// if we see any new entities create a pointer and health bars for them
+			// if we see any new entities create a pointer for them
 			if (hud.stagePointers[entityId] === undefined) {
-				hud.stagePointers[entityId] = new Pointer();
-				hud.stagePointers[entityId].tint = tints[playerRelation];
-				hud.stagePointers[entityId].zIndex = hud.pointerZIndexIterator;
-				hud.stagePointers[entityId].position.set(600, 225);
-				hud.handlers.pixiHUD.addChild(hud.stagePointers[entityId]);
+				if (entityId !== playerId) {
+					hud.stagePointers[entityId] = new Pointer();
+					hud.stagePointers[entityId].tint = tints[playerRelation];
+					hud.stagePointers[entityId].zIndex = hud.pointerZIndexIterator;
+					hud.stagePointers[entityId].position.set(600, 225);
+					hud.handlers.pixiHUD.addChild(hud.stagePointers[entityId]);
 
-				let pt = tints[playerRelation];
-				if (targeting === entityId) pt = tints.targeted;
-				hud.currentPointerTints[entityId] = pt;
+					let pt = tints[playerRelation];
+					if (targeting === entityId) pt = tints.targeted;
+					hud.currentPointerTints[entityId] = pt;
+
+					// iterate zindices
+					hud.pointerZIndexIterator++;
+				}
 				hud.currentPointerCoords[entityId] = [posX, posY];
+			}
 
-				hud.stageHealthBars[entityId] = new HealthBars(entityId);
+			// if we see any new entities create health bars for them
+			if (hud.stageHealthBars[entityId] === undefined) {
+				hud.stageHealthBars[entityId] = new HealthBars({
+					entityId,
+					hasShields: entity.immutable.hasShields,
+				});
 				hud.stageHealthBars[entityId].position.set(
 					posX,
-					posY - hud.healthBarsYOffset
+					posY + hud.healthBarsYOffset
 				);
 				hud.stageHealthBars[entityId].zIndex = hud.healthBarZIndexIterator;
+				hud.handlers.stage.addChild(hud.stageHealthBars[entityId]);
 
 				// iterate zindices
-				hud.pointerZIndexIterator++;
 				hud.healthBarZIndexIterator++;
 			}
 
 			const stagePointer = hud.stagePointers[entityId];
 
 			// hide pointers for entities currently on the screen
+			let pointerIsHidden = false;
 			if (
+				entityId !== playerId &&
 				posX >= cameraTLX &&
 				posX <= cameraBRX &&
 				posY >= cameraTLY &&
 				posY <= cameraBRY
 			) {
 				stagePointer.alpha = 0;
-				return;
+				// return;
+				pointerIsHidden = true;
 			}
 
 			let entityHasMoved = false;
@@ -378,7 +405,46 @@ const hud = {
 				entityHasMoved = true;
 			}
 
+			// move healthbars
 			if (cameraHasMoved || entityHasMoved) {
+				hud.stageHealthBars[entityId].position.set(
+					posX,
+					posY + hud.healthBarsYOffset
+				);
+			}
+
+			// update healtbars
+			const isDamaged = entity.isDamaged;
+			const isDisabled = entity.isDisabled;
+			if (isDisabled || !isDamaged) {
+				hud.stageHealthBars[entityId].update({}, false);
+			} else {
+				const shieldPrc = Math.trunc(
+					(entity.shieldStrength / entity.immutable.maxShieldStrength) * 100
+				);
+				const hullPrc = Math.trunc(
+					(entity.hullStrength / entity.immutable.maxHullStrength) * 100
+				);
+				const sysPrc = Math.trunc(
+					(entity.systemStrength / entity.immutable.maxSystemStrength) * 100
+				);
+
+				hud.stageHealthBars[entityId].update(
+					{
+						shields: shieldPrc,
+						hull: hullPrc,
+						sys: sysPrc,
+					},
+					true
+				);
+			}
+
+			// move pointer
+			if (
+				entityId !== playerId &&
+				!pointerIsHidden &&
+				(cameraHasMoved || entityHasMoved)
+			) {
 				const entityDistance = calculateDistance(
 					cameraCX,
 					cameraCY,
@@ -440,22 +506,34 @@ const hud = {
 			}
 
 			// change pointer tint
-			let newPointerTint = tints[playerRelation];
-			if (entityId === targeting && hud.targetBlinker > 15)
-				newPointerTint = tints.targeted;
+			if (entityId !== playerId) {
+				let newPointerTint = tints[playerRelation];
+				if (entityId === targeting && hud.targetBlinker > 15)
+					newPointerTint = tints.targeted;
 
-			if (newPointerTint !== hud.currentPointerTints[entityId]) {
-				stagePointer.tint = newPointerTint;
-				hud.currentPointerTints[entityId] = newPointerTint;
+				if (newPointerTint !== hud.currentPointerTints[entityId]) {
+					stagePointer.tint = newPointerTint;
+					hud.currentPointerTints[entityId] = newPointerTint;
+				}
 			}
 		});
+
+		// console.log(hud.stageHealthBars);
 
 		hud.targetBlinker = hud.targetBlinker + 1;
 		if (hud.targetBlinker >= 30) hud.targetBlinker = 0;
 	},
 
-	updateHealthBars(allEntities, positions, playerX, playerY) {
-		console.log('updateHealthBars:', allEntities, positions, playerX, playerY);
+	removeEntity(entityId) {
+		if (hud.stageHealthBars[entityId] !== undefined) {
+			hud.handlers.stage.removeChild(hud.stageHealthBars[entityId]);
+			delete hud.stageHealthBars[entityId];
+		}
+
+		if (hud.stagePointers[entityId] !== undefined) {
+			hud.handlers.stage.removeChild(hud.stagePointers[entityId]);
+			delete hud.stagePointers[entityId];
+		}
 	},
 
 	reInitPixiHUD(playerId) {

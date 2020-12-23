@@ -170,6 +170,7 @@ export default class App extends PIXI.Application {
 
 		hud.handlers = {
 			pixiHUD: this.pixiHUD,
+			stage: this.mainStage,
 			cannonStates: shots.cannonStates,
 			camera: this.camera,
 		};
@@ -693,7 +694,8 @@ export default class App extends PIXI.Application {
 			currentState.game.targeting,
 			currentState.game.playerShips,
 			currentState.entities,
-			currentState.positions
+			currentState.positions,
+			playerId
 		);
 
 		// loop volumes
