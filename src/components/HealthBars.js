@@ -33,16 +33,22 @@ export default class HealthBars extends PIXI.Container {
 				2
 			);
 			this.sprites[bar.id + 'Bg'].endFill();
-			this.sprites[bar.id + 'Bg'].alpha = 0.3;
 
 			this.sprites[bar.id] = new PIXI.Graphics();
 			this.sprites[bar.id].lineStyle(0);
 			this.sprites[bar.id].beginFill(bar.tint);
 			this.sprites[bar.id].drawRect(0, this.currentY, this.barsWidth, 2);
 			this.sprites[bar.id].endFill();
-			this.sprites[bar.id].alpha = 0.8;
 			this.sprites[bar.id].position.x = this.barsX;
 			this.sprites[bar.id].pivot.x = 0;
+
+			if (bar.id === 'sys') {
+				this.sprites[bar.id + 'Bg'].alpha = 0;
+				this.sprites[bar.id].alpha = 0;
+			} else {
+				this.sprites[bar.id + 'Bg'].alpha = 0.3;
+				this.sprites[bar.id].alpha = 0.8;
+			}
 
 			this.addChild(this.sprites[bar.id + 'Bg']);
 			this.addChild(this.sprites[bar.id]);
@@ -55,6 +61,11 @@ export default class HealthBars extends PIXI.Container {
 		if (!show) {
 			this.alpha = 0;
 			return;
+		}
+
+		if (precentages.sys < 100) {
+			this.sprites['sysBg'].alpha = 0.3;
+			this.sprites['sys'].alpha = 0.8;
 		}
 
 		this.alpha = 1;

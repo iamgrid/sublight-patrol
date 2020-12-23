@@ -362,54 +362,52 @@ export default class App extends PIXI.Application {
 			}
 		);
 
-		// entities.spawn(
-		// 	'valkyrie',
-		// 	{
-		// 		posX: 800,
-		// 		posY: 275,
-		// 		latVelocity: 0,
-		// 		longVelocity: 8,
-		// 		facing: 1,
-		// 	},
-		// 	{
-		// 		playerRelation: 'friendly',
-		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-		// 		id: 'alpha_3',
-		// 	}
-		// );
+		entities.spawn(
+			'valkyrie',
+			{
+				posX: 800,
+				posY: 275,
+				latVelocity: 0,
+				longVelocity: -8,
+				facing: -1,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
+				id: 'alpha_3',
+			}
+		);
 
-		// entities.spawn(
-		// 	'fenrir',
-		// 	{
-		// 		posX: 600,
-		// 		posY: 240,
-		// 		latVelocity: 0,
-		// 		longVelocity: 0,
-		// 	},
-		// 	{
-		// 		playerRelation: 'neutral',
-		// 		behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-		// 		id: 'beta_1',
-		// 		hasBeenScanned: true,
-		// 	}
-		// );
+		entities.spawn(
+			'fenrir',
+			{
+				posX: 600,
+				posY: 240,
+				latVelocity: 0,
+				longVelocity: 0,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'beta_1',
+			}
+		);
 
-		// entities.spawn(
-		// 	'fenrir',
-		// 	{
-		// 		posX: 2000,
-		// 		posY: 1200,
-		// 		latVelocity: 0,
-		// 		longVelocity: -8,
-		// 		facing: -1,
-		// 	},
-		// 	{
-		// 		playerRelation: 'hostile',
-		// 		behaviorAssignedGoal: behavior.possibleGoals.maintainVelocity,
-		// 		id: 'delta_1',
-		// 		hasBeenScanned: true,
-		// 	}
-		// );
+		entities.spawn(
+			'fenrir_dominator',
+			{
+				posX: 2000,
+				posY: 1200,
+				latVelocity: 0,
+				longVelocity: 0,
+				facing: -1,
+			},
+			{
+				playerRelation: 'friendly',
+				behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+				id: 'beta_2',
+			}
+		);
 
 		// entities.spawn(
 		// 	'fenrir',
@@ -689,15 +687,6 @@ export default class App extends PIXI.Application {
 
 		const playerId = currentState.entities.player.id;
 
-		// hud updates
-		hud.update(
-			currentState.game.targeting,
-			currentState.game.playerShips,
-			currentState.entities,
-			currentState.positions,
-			playerId
-		);
-
 		// loop volumes
 		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
 
@@ -815,6 +804,15 @@ export default class App extends PIXI.Application {
 			reposition();
 			this.triggered0 = true;
 		}
+
+		// hud updates
+		hud.update(
+			currentState.game.targeting,
+			currentState.game.playerShips,
+			currentState.entities,
+			currentState.positions,
+			playerId
+		);
 
 		// scanning
 		if (

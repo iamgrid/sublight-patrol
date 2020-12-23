@@ -5,12 +5,13 @@ export default class Valkyrie extends Ship {
 		super(props);
 
 		this.sprites['shipBody'] = this.fromSpriteSheet.create(19, 8, 40, 50);
+		this.sprites['shipBody'].x = 7;
 
 		this.sprites['harness_inner'] = this.fromSpriteSheet.create(157, 21, 8, 24);
-		this.sprites['harness_inner'].x = -30;
+		this.sprites['harness_inner'].x = -23;
 
 		this.sprites['harness_main'] = this.fromSpriteSheet.create(66, 3, 60, 60);
-		this.sprites['harness_main'].x = -12;
+		this.sprites['harness_main'].x = -5;
 
 		this.spritesToTintWhenDamaged = [
 			'shipBody',
@@ -19,18 +20,18 @@ export default class Valkyrie extends Ship {
 		];
 
 		this.createThrusters({
-			main: [{ x: -44, y: -1 }],
+			main: [{ x: -37, y: -1 }],
 			front: [
-				{ x: 16, y: 12 },
-				{ x: 16, y: -12 },
+				{ x: 23, y: 12 },
+				{ x: 23, y: -12 },
 			],
-			leftSide: [{ x: -18, y: -22 }],
-			rightSide: [{ x: -19, y: 21 }],
+			leftSide: [{ x: -11, y: -22 }],
+			rightSide: [{ x: -12, y: 21 }],
 		});
 
 		this.sprites['targetingReticule'] = this.createTargetingReticule({
-			xl: -38,
-			xr: 24,
+			xl: -31,
+			xr: 31,
 			yt: -32,
 			yb: 32,
 		});
