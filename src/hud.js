@@ -415,8 +415,7 @@ const hud = {
 
 			// update healtbars
 			const isDamaged = entity.isDamaged;
-			const isDisabled = entity.isDisabled;
-			if (isDisabled || !isDamaged) {
+			if (!isDamaged) {
 				hud.stageHealthBars[entityId].update({}, false);
 			} else {
 				const shieldPrc = Math.trunc(
@@ -531,7 +530,7 @@ const hud = {
 		}
 
 		if (hud.stagePointers[entityId] !== undefined) {
-			hud.handlers.stage.removeChild(hud.stagePointers[entityId]);
+			hud.handlers.pixiHUD.removeChild(hud.stagePointers[entityId]);
 			delete hud.stagePointers[entityId];
 		}
 	},
