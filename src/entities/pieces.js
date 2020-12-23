@@ -13,6 +13,7 @@ const pieces = {
 			fancyEffects: false,
 			hasShields: false,
 			isTargetable: false,
+			targetingPriority: 10,
 			colors: c.groups.general.groupId,
 		},
 		mutable: {
@@ -33,6 +34,7 @@ const pieces = {
 			canMove: true,
 			fancyEffects: true,
 			isTargetable: true,
+			targetingPriority: 5,
 			hasBehavior: true,
 		},
 		mutable: {
@@ -51,6 +53,7 @@ const pieces = {
 			model: '/other/GContainer',
 			hasHull: true,
 			isTargetable: true,
+			targetingPriority: 9,
 			maxHullStrength: 75,
 			maxSystemStrength: 50,
 			width: 34,
@@ -102,6 +105,7 @@ const pieces = {
 
 	hasCannons: {
 		immutable: {
+			targetingPriority: 1,
 			colors: null,
 			cannonPower: null,
 			cannonFiringSpeed: null,

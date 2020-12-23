@@ -94,13 +94,19 @@ function cycleTargets(current, direction, targetableStore) {
 	const relationPriorities = ['hostile', 'neutral', 'friendly'];
 
 	let temp = targetableStore.map((el) => {
-		const re = { id: el.id };
+		const re = { id: el.id, targetingPriority: el.immutable.targetingPriority };
 		re.rel = relationPriorities.findIndex(
 			(rPItem) => rPItem === el.playerRelation
 		);
 		return re;
 	});
 	temp.sort((a, b) => {
+		if (a.targetingPriority < b.targetingPriority) {
+			return -1;
+		} else if (a.targetingPriority > b.targetingPriority) {
+			return 1;
+		}
+
 		if (a.rel < b.rel) {
 			return -1;
 		} else if (a.rel > b.rel) {
