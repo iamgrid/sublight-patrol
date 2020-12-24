@@ -415,8 +415,9 @@ const hud = {
 
 			// update healtbars
 			const isDamaged = entity.isDamaged;
+			const isDisabled = entity.isDisabled;
 			if (!isDamaged) {
-				hud.stageHealthBars[entityId].update({}, false);
+				hud.stageHealthBars[entityId].update({}, isDisabled, false);
 			} else {
 				const shieldPrc = Math.trunc(
 					(entity.shieldStrength / entity.immutable.maxShieldStrength) * 100
@@ -434,6 +435,7 @@ const hud = {
 						hull: hullPrc,
 						sys: sysPrc,
 					},
+					isDisabled,
 					true
 				);
 			}

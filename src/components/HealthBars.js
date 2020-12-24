@@ -5,13 +5,16 @@ export default class HealthBars extends PIXI.Container {
 		super();
 		this.entityId = props.entityId;
 		this.hasShields = props.hasShields;
+		this.isDisabled = false;
+		this.isShowing = true;
+		this.sysIsShowing = false;
 		this.currentY = 0;
 		this.barsX = -20;
 		this.barsWidth = 40;
 		this.bars = [
-			{ id: 'shields', tint: 0x32ade6 },
-			{ id: 'hull', tint: 0xff5353 },
-			{ id: 'sys', tint: 0xe6b632 },
+			{ id: 'shields', tint: 0x32ade6, current: 100 },
+			{ id: 'hull', tint: 0xff5353, current: 100 },
+			{ id: 'sys', tint: 0xe6b632, current: 100 },
 		];
 
 		this.sprites = {};
@@ -55,26 +58,54 @@ export default class HealthBars extends PIXI.Container {
 
 			this.currentY += 4;
 		});
+
+		this.sprites['isDisabled'] = new PIXI.Graphics();
+		this.sprites['isDisabled'].lineStyle(1, 0xffffff, 1);
+		this.sprites['isDisabled'].moveTo(-3, -3);
+		this.sprites['isDisabled'].lineTo(3, 3);
+		this.sprites['isDisabled'].moveTo(-3, 3);
+		this.sprites['isDisabled'].lineTo(3, -3);
+		if (this.hasShields) {
+			this.sprites['isDisabled'].position.y = 5;
+		} else {
+			this.sprites['isDisabled'].position.y = 7;
+		}
+		this.sprites['isDisabled'].alpha = 0;
+
+		this.addChild(this.sprites['isDisabled']);
 	}
 
-	update(precentages, show = false) {
-		if (!show) {
+	update(precentages, isDisabled = false, show = false) {
+		if (!show && this.isShowing) {
 			this.alpha = 0;
+			this.isShowing = false;
 			return;
+		} else if (show && !this.isShowing) {
+			this.alpha = 1;
+			this.isShowing = true;
 		}
 
-		if (precentages.sys < 100) {
-			this.sprites['sysBg'].alpha = 0.3;
-			this.sprites['sys'].alpha = 0.8;
-		}
-
-		this.alpha = 1;
 		this.bars.forEach((bar) => {
+			if (precentages[bar.id] === bar.current) return;
+
 			if (bar.id === 'shields' && !this.hasShields) return;
 
 			this.sprites[bar.id].width = Math.round(
 				(precentages[bar.id] / 100) * this.barsWidth
 			);
+
+			if (bar.id === 'sys' && precentages.sys < 100 && !this.sysIsShowing) {
+				this.sprites['sysBg'].alpha = 0.3;
+				this.sprites['sys'].alpha = 0.8;
+				this.sysIsShowing = true;
+			}
+
+			bar.current = precentages[bar.id];
 		});
+
+		if (isDisabled && !this.isDisabled) {
+			this.sprites['isDisabled'].alpha = 1;
+			this.isDisabled = true;
+		}
 	}
 }
