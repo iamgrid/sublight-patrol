@@ -205,6 +205,22 @@ const keyboardLayouts = {
 			}
 		},
 	},
+
+	cutscene: {
+		id: 'cutscene',
+		descriptions: [
+			{ keys: 'esc', function: 'Pause game' },
+			{ keys: 'space', function: 'Advance dialog' },
+			{ keys: 'enter', function: 'Skip cutscene' },
+		],
+		execute() {
+			keyboardLayouts.showLayout(keyboardLayouts.cutscene.id);
+
+			if (Keyboard.isKeyPressed('Escape')) {
+				window.pixiapp.togglePause();
+			}
+		},
+	},
 };
 
 export default keyboardLayouts;

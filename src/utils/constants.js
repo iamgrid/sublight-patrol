@@ -82,6 +82,11 @@ const c = {
 		destruction: 'destruction',
 	},
 	empReach: 120,
+	cameraModes: {
+		gameplay: 'gameplay',
+		centeredEntity: 'centeredEntity',
+		static: 'static',
+	},
 
 	init() {
 		for (let key in this.alertsAndWarnings.warnings) {

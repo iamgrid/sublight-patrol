@@ -1,4 +1,5 @@
 const initialGameState = {
+	currentScene: null,
 	game: {
 		targeting: null,
 		targetHasBeenScanned: false,
