@@ -1,5 +1,6 @@
 import c from '../utils/constants';
 import { decreaseNumberBy, randomNumber } from '../utils/formulas';
+import entities from '../entities/entities';
 import shots from '../shots';
 import { calculateDistance } from '../utils/formulas';
 import {
@@ -288,7 +289,7 @@ const behavior = {
 
 			if (entity.playerRelation !== entity.assignedPlayerRelation) {
 				entityStoreUpdates.playerRelation = entity.assignedPlayerRelation;
-				behavior.handlers.stageEntities[entity.id].reticuleRelation(
+				entities.stageEntities[entity.id].reticuleRelation(
 					entity.assignedPlayerRelation
 				);
 			}
@@ -343,7 +344,7 @@ const behavior = {
 
 			if (entity.playerRelation !== entity.assignedPlayerRelation) {
 				entityStoreUpdates.playerRelation = entity.assignedPlayerRelation;
-				behavior.handlers.stageEntities[entity.id].reticuleRelation(
+				entities.stageEntities[entity.id].reticuleRelation(
 					entity.assignedPlayerRelation
 				);
 			}
@@ -735,7 +736,7 @@ const behavior = {
 			enemyId !== 'destroyed_player'
 		) {
 			entityStoreUpdates.playerRelation = 'hostile';
-			behavior.handlers.stageEntities[entityId].reticuleRelation('hostile');
+			entities.stageEntities[entityId].reticuleRelation('hostile');
 			entityStoreUpdates.behaviorAttacking = enemyId;
 			entityStoreUpdates.behaviorCurrentGoal =
 				behavior.possibleGoals.destroyEntity;
@@ -1053,7 +1054,7 @@ const behavior = {
 		for (const entityId2 in facingUpdates) {
 			flipStageEntity(
 				entityId2,
-				behavior.handlers.stageEntities,
+				entities.stageEntities,
 				facingUpdates[entityId2]
 			);
 		}
@@ -1061,7 +1062,7 @@ const behavior = {
 		for (const entityId in velocityUpdates) {
 			updateStageEntityVelocities(
 				entityId,
-				behavior.handlers.stageEntities,
+				entities.stageEntities,
 				velocityUpdates[entityId].latVelocity,
 				velocityUpdates[entityId].longVelocity
 			);

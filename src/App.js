@@ -149,26 +149,22 @@ export default class App extends PIXI.Application {
 			state: this.gameState,
 			stage: this.mainStage,
 			pixiHUD: this.pixiHUD,
-			stagePointers: hud.stagePointers,
 		};
 
 		behavior.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			stageEntities: entities.stageEntities,
 		};
 
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.mainStage,
-			stageEntities: entities.stageEntities,
 		};
 
 		emp.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
-			stageEntities: entities.stageEntities,
 		};
 
 		shields.handlers = {
@@ -179,7 +175,6 @@ export default class App extends PIXI.Application {
 		hud.handlers = {
 			pixiHUD: this.pixiHUD,
 			stage: this.mainStage,
-			cannonStates: shots.cannonStates,
 			camera: this.camera,
 		};
 

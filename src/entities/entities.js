@@ -19,7 +19,6 @@ const entities = {
 		state: null,
 		stage: null,
 		pixiHUD: null,
-		stagePointers: null,
 	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
@@ -359,10 +358,11 @@ const entities = {
 	},
 
 	cleanUp() {
-		entities.stageEntities.forEach((stageEntity) => {
+		for (const entityId in entities.stageEntities) {
+			const stageEntity = entities.stageEntities[entityId];
 			entities.handlers.stage.removeChild(stageEntity);
 			stageEntity.destroy();
-		});
+		}
 
 		entities.stageEntities = {};
 		entities.zIndexIterator = c.zIndices.entities;

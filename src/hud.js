@@ -4,9 +4,10 @@ import { getPosition } from './utils/helpers';
 import { calculateAngle, calculateDistance } from './utils/formulas';
 import Pointer from './components/Pointer';
 import HealthBars from './components/HealthBars';
+import shots from './shots';
 
 const hud = {
-	handlers: { pixiHUD: null, stage: null, cannonStates: null, camera: null }, // gets its values in App.js
+	handlers: { pixiHUD: null, stage: null, camera: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,
@@ -110,15 +111,15 @@ const hud = {
 		}
 
 		// player shots
-		if (hud.handlers.cannonStates[playerId] !== undefined) {
+		if (shots.cannonStates[playerId] !== undefined) {
 			// will start showing when the player starts using her cannons
 			if (!hud.pixiHUDInitiated) {
-				hud.handlers.pixiHUD.init(hud.handlers.cannonStates[playerId].maxShots);
+				hud.handlers.pixiHUD.init(shots.cannonStates[playerId].maxShots);
 				hud.pixiHUDInitiated = true;
 			}
 
-			const playerShots = hud.handlers.cannonStates[playerId].remainingShots;
-			const onCooldown = hud.handlers.cannonStates[playerId].onCooldown;
+			const playerShots = shots.cannonStates[playerId].remainingShots;
+			const onCooldown = shots.cannonStates[playerId].onCooldown;
 
 			if (onCooldown) {
 				hud.cannonCooldownStraggler = hud.cannonCooldownStraggler + 1;
@@ -525,25 +526,30 @@ const hud = {
 		if (hud.targetBlinker >= 30) hud.targetBlinker = 0;
 	},
 
-	removeEntity(entityId) {
+	removeEntity(entityId, deleteFromHUDState = true) {
 		if (hud.stageHealthBars[entityId] !== undefined) {
 			hud.handlers.stage.removeChild(hud.stageHealthBars[entityId]);
-			delete hud.stageHealthBars[entityId];
+			if (deleteFromHUDState) delete hud.stageHealthBars[entityId];
 		}
 
 		if (hud.stagePointers[entityId] !== undefined) {
 			hud.handlers.pixiHUD.removeChild(hud.stagePointers[entityId]);
-			delete hud.stagePointers[entityId];
+			if (deleteFromHUDState) delete hud.stagePointers[entityId];
 		}
 	},
 
 	reInitPixiHUD(playerId) {
+		// console.log('reInitPixiHUD called with:', playerId);
 		hud.pixiHUDInitiated = false;
-		const playerShots = hud.handlers.cannonStates[playerId].remainingShots;
+		const playerShots = shots.cannonStates[playerId].remainingShots;
 		hud.handlers.pixiHUD.update(playerShots, false);
 	},
 
 	cleanUp() {
+		for (const entityId in hud.stageHealthBars) {
+			hud.removeEntity(entityId, false);
+		}
+
 		hud.pixiHUDInitiated = false;
 		hud.pixiHUDFader = 0;
 		hud.pixiHUDFaderInterval = null;

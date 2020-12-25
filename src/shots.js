@@ -16,7 +16,6 @@ const shots = {
 		dispatch: null,
 		state: null,
 		stage: null,
-		stageEntities: null,
 	}, // gets its values in App.js
 	cannonStates: {},
 	shootingIntervals: {},
@@ -80,6 +79,11 @@ const shots = {
 			storeEntity.immutable.cannonShots;
 		shots.cannonStates[entityId].maxCannonCooldown =
 			storeEntity.immutable.cannonCooldown;
+
+		// console.log(
+		// 	'remainingShots:',
+		// 	shots.cannonStates[entityId].remainingShots
+		// );
 	},
 
 	stopShooting(entityId) {
@@ -131,7 +135,7 @@ const shots = {
 
 		if (timing.isPaused()) return;
 		if (shots.cannonStates[entityId].onCooldown) return;
-		if (shots.handlers.stageEntities[entityId].isFlipping) return;
+		if (entities.stageEntities[entityId].isFlipping) return;
 
 		shots.cannonStates[entityId].onCooldown = false;
 		const activeCannon = shots.cannonStates[entityId].activeCannon;
@@ -381,7 +385,6 @@ const shots = {
 								entityId,
 								entityStore,
 								showType,
-								shots.handlers.stageEntities,
 								stageShot.origin,
 								hullHealthPrc,
 								damageColor,
@@ -413,7 +416,6 @@ const shots = {
 		entityId,
 		entityStore,
 		type,
-		stageEntities,
 		origin,
 		hullHealthPrc,
 		damageColor,
@@ -421,12 +423,12 @@ const shots = {
 	) {
 		switch (type) {
 			case c.damageTypes.shieldDamage:
-				stageEntities[entityId].currentTint = damageColor;
+				entities.stageEntities[entityId].currentTint = damageColor;
 				soundEffects.playOnce(entityId, soundEffects.library.shield_damage.id);
 				break;
 
 			case c.damageTypes.hullDamage: {
-				stageEntities[entityId].currentTint = damageColor;
+				entities.stageEntities[entityId].currentTint = damageColor;
 				let variant = -1;
 				let effect = soundEffects.library.misc_damage.id;
 				if (fancyEffects) {
@@ -470,15 +472,15 @@ const shots = {
 
 				soundEffects.playOnce(entityId, effect);
 
-				stageEntities[entityId].blowUp(() => {
-					// shots.handlers.stageEntities[entityId].hasBeenDestroyed = true;
+				entities.stageEntities[entityId].blowUp(() => {
+					// entities.stageEntities[entityId].hasBeenDestroyed = true;
 					if (entityId !== 'destroyed_player')
 						entities.despawn(entityId, entityStore, false);
 				});
 
 				if (entityStore === 'player') {
-					moveTargetingReticule(null, shots.handlers.stageEntities);
-					formations.clearAll();
+					moveTargetingReticule(null, entities.stageEntities);
+					formations.cleanUp();
 					emp.playerEMPIsOn = false;
 				}
 
@@ -518,8 +520,7 @@ const shots = {
 			type: c.actions.TARGET,
 			do: 'specified',
 			targetId: entityId,
-			callbackFn: () =>
-				moveTargetingReticule(entityId, shots.handlers.stageEntities),
+			callbackFn: () => moveTargetingReticule(entityId, entities.stageEntities),
 		});
 	},
 

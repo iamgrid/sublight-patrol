@@ -80,9 +80,16 @@ const story = {
 		if (currentSceneBeatObj.cameraMode === c.cameraModes.gameplay) {
 			// toggle HUD
 			timing.setTrigger(
-				'story-hud-trigger',
+				'story-hud-trigger1',
 				() => {
 					shots.registerEntityCannons(playerId);
+				},
+				timing.modes.play,
+				1500
+			);
+			timing.setTrigger(
+				'story-hud-trigger2',
+				() => {
 					hud.reInitPixiHUD(playerId);
 					hud.toggle(true);
 				},

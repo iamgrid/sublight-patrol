@@ -38,6 +38,58 @@ const scene001 = {
 				);
 
 				entities.spawn(
+					'zangari_fighter_type_1',
+					{
+						posX: 600,
+						posY: 0,
+					},
+					{
+						playerRelation: 'neutral',
+						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+						id: 'zf_1',
+					}
+				);
+
+				entities.spawn(
+					'zangari_fighter_type_2',
+					{
+						posX: 600,
+						posY: 200,
+					},
+					{
+						playerRelation: 'neutral',
+						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+						id: 'zf_2',
+					}
+				);
+
+				entities.spawn(
+					'zangari_fighter_type_3',
+					{
+						posX: 600,
+						posY: -200,
+					},
+					{
+						playerRelation: 'neutral',
+						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+						id: 'zf_3',
+					}
+				);
+
+				entities.spawn(
+					'zangari_fighter_type_4',
+					{
+						posX: 600,
+						posY: 400,
+					},
+					{
+						playerRelation: 'neutral',
+						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+						id: 'zf_4',
+					}
+				);
+
+				entities.spawn(
 					'container',
 					{
 						posX: 900,

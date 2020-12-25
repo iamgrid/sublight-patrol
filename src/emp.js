@@ -2,6 +2,7 @@ import { getPosition, alertsAndWarnings } from './utils/helpers';
 import { calculateDistance } from './utils/formulas';
 import c from './utils/constants';
 import soundEffects from './audio/soundEffects';
+import entities from './entities/entities';
 import shots from './shots';
 import formations from './behavior/formations';
 import timing from './utils/timing';
@@ -9,7 +10,7 @@ import timing from './utils/timing';
 const emp = {
 	playerHasEMP: true,
 	playerEMPIsOn: false,
-	handlers: { dispatch: null, state: null, stageEntities: null }, // gets its values in App.js
+	handlers: { dispatch: null, state: null }, // gets its values in App.js
 
 	toggleEMP(entityId, toggle = true) {
 		if (emp.playerEMPIsOn === toggle) return;
@@ -26,7 +27,7 @@ const emp = {
 			return;
 		}
 
-		emp.handlers.stageEntities[entityId].toggleEMP(toggle);
+		entities.stageEntities[entityId].toggleEMP(toggle);
 		emp.playerEMPIsOn = toggle;
 
 		if (toggle) {
@@ -79,12 +80,12 @@ const emp = {
 		);
 
 		newlyDisabledEntities.forEach((entityId) => {
-			if (emp.handlers.stageEntities[entityId] !== undefined) {
-				emp.handlers.stageEntities[entityId].isDisabled = true;
-				emp.handlers.stageEntities[entityId].currentLatVelocity = 0;
-				emp.handlers.stageEntities[entityId].currentLongVelocity = 0;
-				emp.handlers.stageEntities[entityId].latVelocity = 0;
-				emp.handlers.stageEntities[entityId].longVelocity = 0;
+			if (entities.stageEntities[entityId] !== undefined) {
+				entities.stageEntities[entityId].isDisabled = true;
+				entities.stageEntities[entityId].currentLatVelocity = 0;
+				entities.stageEntities[entityId].currentLongVelocity = 0;
+				entities.stageEntities[entityId].latVelocity = 0;
+				entities.stageEntities[entityId].longVelocity = 0;
 			}
 			shots.stopShooting(entityId);
 
