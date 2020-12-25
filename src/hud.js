@@ -542,6 +542,27 @@ const hud = {
 		const playerShots = hud.handlers.cannonStates[playerId].remainingShots;
 		hud.handlers.pixiHUD.update(playerShots, false);
 	},
+
+	cleanUp() {
+		hud.pixiHUDInitiated = false;
+		hud.pixiHUDFader = 0;
+		hud.pixiHUDFaderInterval = null;
+		hud.cannonCooldownStraggler = 0;
+		hud.currentPlayerCoords = '';
+		hud.currentShots = 0;
+		hud.currentDisplay = {};
+		hud.maximums = {};
+		hud.stagePointers = {};
+		hud.currentPointerTints = {};
+		hud.currentCameraCoords = [];
+		hud.currentPointerCoords = {};
+		hud.pointerZIndexIterator = 0;
+		hud.stageHealthBars = {};
+		hud.healthBarZIndexIterator = c.zIndices.healthBars;
+		hud.largestRelevantDistance = 0;
+		hud.edgeAngles = null;
+		hud.targetBlinker = 0;
+	},
 };
 
 export default hud;

@@ -205,6 +205,12 @@ const soundEffects = {
 			}
 		}
 	},
+
+	cleanUp() {
+		for (const entityId in soundEffects.loops) {
+			soundEffects.removeAllSoundInstancesForEntity(entityId);
+		}
+	},
 };
 
 export default soundEffects;

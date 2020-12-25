@@ -893,6 +893,30 @@ export default function mainReducer(state, action) {
 				entities: newEntities,
 			};
 		}
+		case c.actions.CLEANUP: {
+			return {
+				...state,
+				game: {
+					...state.game,
+					targetHasBeenScanned: false,
+					targeting: null,
+				},
+				entities: {
+					player: {},
+					targetable: [],
+					other: [],
+				},
+				shots: {
+					ids: [],
+					sightLines: {},
+				},
+				velocities: {},
+				positions: {
+					canMove: {},
+					cantMove: {},
+				},
+			};
+		}
 		default:
 			console.error('Failed to run action:', action);
 			return state;

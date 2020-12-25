@@ -357,6 +357,16 @@ const entities = {
 			plates.fadeOutPlate(25, 7000);
 		}
 	},
+
+	cleanUp() {
+		entities.stageEntities.forEach((stageEntity) => {
+			entities.handlers.stage.removeChild(stageEntity);
+			stageEntity.destroy();
+		});
+
+		entities.stageEntities = {};
+		entities.zIndexIterator = c.zIndices.entities;
+	},
 };
 
 export default entities;

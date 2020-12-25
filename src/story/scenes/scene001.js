@@ -5,7 +5,6 @@ import entities from '../../entities/entities';
 import keyboardLayouts from '../../keyboardLayouts';
 // import plates from '../../plates';
 // import timing from '../../utils/timing';
-// import hud from '../../hud';
 
 const scene001 = {
 	id: '001',

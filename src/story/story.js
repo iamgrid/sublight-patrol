@@ -3,9 +3,14 @@ import scene001 from './scenes/scene001';
 import plates from '../plates';
 import timing from '../utils/timing';
 import hud from '../hud';
+import entities from '../entities/entities';
+import soundEffects from '../audio/soundEffects';
+import { shields } from '../utils/helpers';
+import formations from '../behavior/formations';
+import shots from '../shots';
 
 const story = {
-	handlers: { dispatch: null, state: null }, // gets its values in App.js
+	handlers: { dispatch: null, state: null, stage: null }, // gets its values in App.js
 	sceneList: [{ id: '001', sceneObject: scene001 }],
 	playerShipId: 'red_1',
 	playerShipSuffixes: ['a', 'b', 'c', 'd'],
@@ -63,17 +68,22 @@ const story = {
 			story.currentSceneBeat
 		);
 
-		if (cleanUpNeeded) story.cleanUp();
+		if (cleanUpNeeded) {
+			story.cleanUp();
+		}
 
 		plates.fullMatte();
 
+		// scene object execution
 		currentSceneBeatObj.execute(playerId, playerShipType);
 
 		if (currentSceneBeatObj.cameraMode === c.cameraModes.gameplay) {
 			// toggle HUD
 			timing.setTrigger(
-				'appjs-1st-trigger',
+				'story-hud-trigger',
 				() => {
+					shots.registerEntityCannons(playerId);
+					hud.reInitPixiHUD(playerId);
 					hud.toggle(true);
 				},
 				timing.modes.play,
@@ -88,6 +98,15 @@ const story = {
 
 	cleanUp() {
 		console.log('story.cleanUp() called');
+
+		story.handlers.dispatch({ type: c.actions.CLEANUP });
+
+		entities.cleanUp();
+		shots.cleanUp();
+		soundEffects.cleanUp();
+		shields.cleanUp();
+		formations.cleanUp();
+		hud.cleanUp();
 	},
 };
 

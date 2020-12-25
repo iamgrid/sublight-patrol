@@ -714,6 +714,10 @@ export const shields = {
 			1000
 		);
 	},
+
+	cleanUp() {
+		shields.entitiesWithShields = [];
+	},
 };
 
 export function dialog(speaker, say, hide = false) {

@@ -14,8 +14,6 @@ const initialGameState = {
 				'zangari_fighter_type_4',
 			],
 		},
-		cameraLTX: null,
-		cameraLTY: null,
 	},
 	entities: {
 		player: {},

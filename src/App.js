@@ -129,6 +129,7 @@ export default class App extends PIXI.Application {
 		story.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
+			stage: this.mainStage,
 		};
 
 		audio.handlers = {

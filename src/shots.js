@@ -522,6 +522,21 @@ const shots = {
 				moveTargetingReticule(entityId, shots.handlers.stageEntities),
 		});
 	},
+
+	cleanUp() {
+		for (const stageShotId in shots.stageShots) {
+			const stageShot = shots.stageShots[stageShotId];
+			shots.handlers.stage.removeChild(stageShot);
+			stageShot.hasBeenDestroyed = true;
+			stageShot.destroy();
+		}
+
+		shots.stageShots = {};
+		shots.cannonStates = {};
+		shots.cannonCooldowns = {};
+		shots.lastEntitiesHitByPlayer = [];
+		shots.zIndexIterator = c.zIndices.shots;
+	},
 };
 
 export default shots;

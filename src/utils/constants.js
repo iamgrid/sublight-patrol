@@ -19,6 +19,7 @@ const c = {
 		EMP_DAMAGE: 'EMP_DAMAGE',
 		SHIELD_REGEN: 'SHIELD_REGEN',
 		FLIP: 'FLIP',
+		CLEANUP: 'CLEANUP',
 	},
 	gameCanvas: {
 		width: 1200,

@@ -250,11 +250,8 @@ const formations = {
 		return { facing, leadX, leadY };
 	},
 
-	clearAll() {
-		console.log('formations.clearAll() called');
-		for (const formationId in formations.currentFormations) {
-			formations.dissolveFormation(formationId);
-		}
+	cleanUp() {
+		formations.currentFormations = {};
 	},
 };
 
