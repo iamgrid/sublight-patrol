@@ -635,7 +635,7 @@ const behavior = {
 				if (entitiesInShotRange.length === 1) {
 					if (entitiesInShotRange[0].id === enemyId) {
 						// clear shot to hit the enemy
-						shots.startShooting(entityId);
+						if (!needsToFlip) shots.startShooting(entityId);
 					}
 				} else if (entitiesInShotRange.length > 1) {
 					// the shot range has obstructions
@@ -749,7 +749,7 @@ const behavior = {
 		currentState,
 		formationId,
 		formationConfig,
-		facing,
+		formationFacing,
 		latOffset,
 		longOffset,
 		formationIndex,
@@ -766,8 +766,8 @@ const behavior = {
 		let newFacing = null;
 		let facingUpdate = null;
 
-		if (facing !== currentFacing) {
-			newFacing = facing;
+		if (formationFacing !== currentFacing) {
+			newFacing = formationFacing;
 			facingUpdate = newFacing;
 			entityStoreUpdates.facing = newFacing;
 		}
@@ -815,7 +815,8 @@ const behavior = {
 			if (longDifference < 0) dir = 1; // entity is to the left of the assigned position, move right
 
 			let maxLongVelocity = entity.immutable.thrusters.front;
-			if (facing === dir) maxLongVelocity = entity.immutable.thrusters.main;
+			if (currentFacing === dir)
+				maxLongVelocity = entity.immutable.thrusters.main;
 
 			newLongVelocity = dir * maxLongVelocity;
 			if (Math.abs(longDifference) < maxLongVelocity) {
@@ -840,7 +841,7 @@ const behavior = {
 				entityId,
 				entityX,
 				entityY,
-				newFacing,
+				currentFacing,
 				enemyId,
 				enemyX,
 				currentState
@@ -848,7 +849,26 @@ const behavior = {
 
 			if (entitiesInShotRange.length === 1) {
 				// clear shot to hit the enemy
-				if (entitiesInShotRange[0].id === enemyId) doShoot = true;
+				if (entitiesInShotRange[0].id === enemyId) {
+					doShoot = true;
+					console.log(
+						entityId,
+						'in',
+						formationId,
+						currentFacing,
+						'starts shooting',
+						entitiesInShotRange
+					);
+				} else {
+					console.log(
+						entityId,
+						'in',
+						formationId,
+						currentFacing,
+						'stops shooting',
+						entitiesInShotRange
+					);
+				}
 			}
 		}
 

@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "webpack-dev-server --config webpack.dev.js",
-		"build": "npm --no-git-tag-version version patch && webpack --config webpack.prod.js"
+		"build": "npm --no-git-tag-version version patch && webpack --config webpack.prod.js",
+		"buildWoVersionBump": "webpack --config webpack.prod.js"
 	},
 	"repository": {
 		"type": "git",

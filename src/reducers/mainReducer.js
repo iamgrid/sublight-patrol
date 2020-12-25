@@ -801,6 +801,8 @@ export default function mainReducer(state, action) {
 					if (newSysStrength <= 0) {
 						newEntity.isDisabled = true;
 						newlyDisabledEntities.push(entity.id);
+
+						if (newEntity.immutable.hasShields) newEntity.shieldStrength = 0;
 					}
 
 					if (!newEntity.isDamaged) newEntity.isDamaged = true;
