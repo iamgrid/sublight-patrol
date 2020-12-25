@@ -146,6 +146,17 @@ function cycleTargets(current, direction, targetableStore) {
 
 export default function mainReducer(state, action) {
 	switch (action.type) {
+		case c.actions.SET_CURRENT_SCENE: {
+			const newCurrentScene = action.newCurrentScene;
+
+			return {
+				...state,
+				game: {
+					...state.game,
+					currentScene: newCurrentScene,
+				},
+			};
+		}
 		case c.actions.CHANGE_ENTITY_VELOCITIES: {
 			const [currentLatVel, currentLongVel] = getVelocity(
 				action.id,
@@ -883,7 +894,7 @@ export default function mainReducer(state, action) {
 			};
 		}
 		default:
-			console.error(`Failed to run action: ${action}`);
+			console.error('Failed to run action:', action);
 			return state;
 	}
 }

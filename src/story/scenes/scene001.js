@@ -1,8 +1,11 @@
 import c from '../../utils/constants';
-// import sc from '../storyConstants';
+import sc from '../storyConstants';
 import behavior from '../../behavior/behavior';
 import entities from '../../entities/entities';
 import keyboardLayouts from '../../keyboardLayouts';
+// import plates from '../../plates';
+// import timing from '../../utils/timing';
+// import hud from '../../hud';
 
 const scene001 = {
 	id: '001',
@@ -13,14 +16,14 @@ const scene001 = {
 			cameraMode: c.cameraModes.gameplay,
 			objectives: [
 				{
-					type: c.objectiveTypes.scan,
+					type: sc.objectiveTypes.scan,
 					entityId: 'b2508-014',
 					text: 'all containers in the area',
 				},
 			],
-			execute() {
+			execute(playerId, playerShipType) {
 				entities.spawn(
-					'!playerShip',
+					playerShipType,
 					{
 						posX: 100,
 						posY: 225,
@@ -30,7 +33,7 @@ const scene001 = {
 					{
 						playerRelation: 'self',
 						behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
-						id: '!playerId',
+						id: playerId,
 					},
 					'player'
 				);

@@ -309,7 +309,8 @@ const entities = {
 			console.log('Spawn player with their next ship');
 
 			const newPlayerId = 'red_1' + idSuffixes[spentShips];
-			const newPlayerShipType = currentState.game.playerShips.order[nextShip];
+			const newPlayerShipType =
+				currentState.game.playerShips.orderedHangar[nextShip];
 
 			let [newPlayerShipX, newPlayerShipY] = getPosition(
 				'destroyed_player',

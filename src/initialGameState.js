@@ -1,13 +1,13 @@
 const initialGameState = {
-	currentScene: null,
 	game: {
+		currentScene: null,
 		targeting: null,
 		targetHasBeenScanned: false,
 		playerShips: {
 			unlocked: 4,
 			spent: 0,
 			next: null,
-			order: [
+			orderedHangar: [
 				'fenrir',
 				'fenrir_dominator',
 				'valkyrie',
