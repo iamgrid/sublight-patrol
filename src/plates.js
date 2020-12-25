@@ -48,6 +48,10 @@ const plates = {
 		);
 	},
 
+	fullMatte() {
+		document.getElementById('game__plates_matte').style.opacity = 1;
+	},
+
 	loadPlate(plateId, quoteVariant = -1) {
 		// console.log('loadPlate', plateId);
 		let atlText = '';

@@ -851,23 +851,23 @@ const behavior = {
 				// clear shot to hit the enemy
 				if (entitiesInShotRange[0].id === enemyId) {
 					doShoot = true;
-					console.log(
-						entityId,
-						'in',
-						formationId,
-						currentFacing,
-						'starts shooting',
-						entitiesInShotRange
-					);
+					// console.log(
+					// 	entityId,
+					// 	'in',
+					// 	formationId,
+					// 	currentFacing,
+					// 	'starts shooting',
+					// 	entitiesInShotRange
+					// );
 				} else {
-					console.log(
-						entityId,
-						'in',
-						formationId,
-						currentFacing,
-						'stops shooting',
-						entitiesInShotRange
-					);
+					// console.log(
+					// 	entityId,
+					// 	'in',
+					// 	formationId,
+					// 	currentFacing,
+					// 	'stops shooting',
+					// 	entitiesInShotRange
+					// );
 				}
 			}
 		}

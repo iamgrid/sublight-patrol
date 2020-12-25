@@ -29,6 +29,7 @@ import emp from './emp';
 import behavior from './behavior/behavior';
 // import story from './story/story';
 import HUD from './components/HUD';
+import plates from './plates';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -109,6 +110,8 @@ export default class App extends PIXI.Application {
 	}
 
 	draw() {
+		plates.fullMatte();
+
 		this.spriteSheet = PIXI.Texture.from('spriteSheet');
 		fromSpriteSheet.defaultSpriteSheet = this.spriteSheet;
 
@@ -655,6 +658,8 @@ export default class App extends PIXI.Application {
 			timing.modes.play,
 			20000
 		);
+
+		plates.fadeOutMatte(50);
 	}
 
 	gameLoop(delta) {
