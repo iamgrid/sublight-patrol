@@ -224,8 +224,24 @@
 
 .game__pause-objectives {
 	text-align: left;
-	padding: 1em 8px;
-	font-size: 11px;
+	padding: 1em 10px;
+	font-size: 12px;
+}
+
+.game__pause-objectives-title {
+	margin-bottom: 3px;
+	font-weight: bold;
+}
+
+.game__pause-objectives-list {
+	margin: 0;
+	padding-left: 2em;
+}
+
+.game__pause-objective {
+	margin: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 .game__pause-objective--yellow {

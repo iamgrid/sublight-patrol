@@ -1,5 +1,4 @@
 import c from '../utils/constants';
-import sc from '../story/storyConstants';
 import { calculateDistance } from '../utils/formulas';
 import {
 	isEmptyObject,
@@ -643,7 +642,7 @@ export default function mainReducer(state, action) {
 						{ hasBeenScanned: true }
 					);
 					return [
-						() => action.callbackFn(targetId, sc.objectiveTypes.inspected.id),
+						() => action.callbackFn(targetId, c.objectiveTypes.inspected.id),
 						{
 							...state,
 							game: {

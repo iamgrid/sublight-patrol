@@ -83,6 +83,64 @@ const c = {
 		hullDamage: 'hullDamage',
 		destruction: 'destruction',
 	},
+	possibleGoals: {
+		playerDetermined: 'playerDetermined',
+		holdStation: 'holdStation',
+		maintainVelocity: 'maintainVelocity',
+		/*guardEntity: 'guardEntity',*/
+		flee: 'flee',
+		destroyEntity: 'destroyEntity',
+		/*defendEntity: 'defendEntity',*/
+	},
+	obstructionTypes: {
+		entityAttackingThePlayer: 'entityAttackingThePlayer',
+		partnerInTheSameFormation: 'partnerInTheSameFormation',
+		enemy: 'enemy',
+		otherEntity: 'otherEntity',
+	},
+	objectiveTypes: {
+		inspected: {
+			id: 'inspected',
+			desc: 'must be inspected',
+			completed_desc: 'was inspected',
+			meansFailureIfObjectiveWas: [],
+		},
+		disabled: {
+			id: 'disabled',
+			desc: 'must be disabled',
+			completed_desc: 'was disabled',
+			meansFailureIfObjectiveWas: [],
+		},
+		forcedToFlee: {
+			id: 'forcedToFlee',
+			desc: 'must be forced to flee',
+			completed_desc: 'was forced to flee',
+			meansFailureIfObjectiveWas: ['disabled', 'mustHaveArrived'],
+		},
+		destroyed: {
+			id: 'destroyed',
+			desc: 'must be destroyed',
+			completed_desc: 'was destroyed',
+			meansFailureIfObjectiveWas: [
+				'disabled',
+				'forcedToFlee',
+				'mustHaveSurvived',
+				'mustHaveArrived',
+			],
+		},
+		mustHaveSurvived: {
+			id: 'mustHaveSurvived',
+			desc: 'must have survived until other objectives completed',
+			completed_desc: 'has survived until other objectives completed',
+			meansFailureIfObjectiveWas: [],
+		},
+		mustHaveArrived: {
+			id: 'mustHaveArrived',
+			desc: 'must have arrived',
+			completed_desc: 'has arrived',
+			meansFailureIfObjectiveWas: [],
+		},
+	},
 	empReach: 120,
 	cameraModes: {
 		gameplay: 'gameplay',

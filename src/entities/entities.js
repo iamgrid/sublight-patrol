@@ -4,7 +4,6 @@ import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
 import { getPosition, shields, makeName } from '../utils/helpers';
-import behavior from '../behavior/behavior';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
 import timing from '../utils/timing';
@@ -161,15 +160,12 @@ const entities = {
 		newEntity.assignedPlayerRelation = props.playerRelation;
 		if (newEntity.immutable.hasBehavior) {
 			newEntity.behaviorCurrentGoal = newEntity.behaviorAssignedGoal;
-			if (
-				newEntity.behaviorAssignedGoal ===
-				behavior.possibleGoals.maintainVelocity
-			) {
+			if (newEntity.behaviorAssignedGoal === c.possibleGoals.maintainVelocity) {
 				newEntity.behaviorAssignedDirection = facing;
 				newEntity.behaviorAssignedLongVelocity = pos.longVelocity;
 			}
 			if (
-				newEntity.behaviorAssignedGoal === behavior.possibleGoals.holdStation &&
+				newEntity.behaviorAssignedGoal === c.possibleGoals.holdStation &&
 				props.behaviorAssignedStationX === undefined
 			) {
 				newEntity.behaviorAssignedStationX = pos.posX;
@@ -334,7 +330,7 @@ const entities = {
 						},
 						{
 							playerRelation: 'self',
-							behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
+							behaviorAssignedGoal: c.possibleGoals.playerDetermined,
 							id: newPlayerId,
 						},
 						'player'

@@ -1,5 +1,5 @@
 import c from '../utils/constants';
-import sc from './storyConstants';
+// import sc from './storyConstants';
 import scene001 from './scenes/scene001';
 import plates from '../plates';
 import timing from '../utils/timing';
@@ -22,6 +22,29 @@ const story = {
 		advanceWhen: [],
 	},
 	currentStoryEntities: {},
+
+	assertType(entityId) {
+		const storyEntity = story.currentStoryEntities[entityId];
+		if (storyEntity === undefined) {
+			return '';
+		} else {
+			const fullTypeName = storyEntity.type;
+
+			if (
+				fullTypeName.includes('fighter') ||
+				fullTypeName.includes('fenrir') ||
+				fullTypeName.includes('valkyrie')
+			) {
+				return 'Fighter ';
+			} else if (fullTypeName.includes('shuttle')) {
+				return 'Shuttle ';
+			} else if (fullTypeName.includes('freighter')) {
+				return 'Freighter ';
+			} else if (fullTypeName.includes('container')) {
+				return 'Container ';
+			}
+		}
+	},
 
 	advance(nextScene = null, nextSceneBeat = 0) {
 		console.log('advance()', nextScene, nextSceneBeat);
@@ -168,7 +191,7 @@ const story = {
 						} else {
 							// check if this event fails this objective
 							if (
-								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
 									eventId
 								)
 							) {
@@ -186,7 +209,7 @@ const story = {
 						} else {
 							// check if this event fails this objective
 							if (
-								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
 									eventId
 								)
 							) {
@@ -215,7 +238,7 @@ const story = {
 							allComplete = false;
 							// check if this event fails this objective
 							if (
-								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
 									eventId
 								)
 							) {
@@ -238,7 +261,7 @@ const story = {
 							allComplete = false;
 							// check if this event fails this objective
 							if (
-								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
 									eventId
 								)
 							) {
@@ -258,14 +281,18 @@ const story = {
 		if (meansProgress) statusColor = 'green';
 		if (missionFailed) statusColor = 'red';
 
-		if (eventId === sc.objectiveTypes.inspected.id && !meansProgress) {
+		if (eventId === c.objectiveTypes.inspected.id && !meansProgress) {
 			printStatus = false;
 		}
+
+		let entityType = story.assertType(entityId);
 
 		if (printStatus) {
 			status.add(
 				statusColor,
-				`[${makeName(entityId)}] ${sc.objectiveTypes[eventId].completed_desc}`,
+				`${entityType}[${makeName(entityId)}] ${
+					c.objectiveTypes[eventId].completed_desc
+				}`,
 				timing.times.play
 			);
 		}
@@ -301,17 +328,30 @@ const story = {
 			if (obj.failed) itemColor = 'red';
 			let objectiveText;
 			if (obj.groupId === undefined) {
-				objectiveText = `${obj.entityId} ${
+				let entityType = story.assertType(obj.entityId);
+				objectiveText = `${entityType}${makeName(obj.entityId)} ${
 					completed
-						? sc.objectiveTypes[obj.type].completed_desc
-						: sc.objectiveTypes[obj.type].desc
+						? c.objectiveTypes[obj.type].completed_desc
+						: c.objectiveTypes[obj.type].desc
 				} (${completed ? 'completed' : 'incomplete'})`;
 			} else {
-				objectiveText = `${obj.requiredPercentage}% of group ${obj.groupId} ${
-					completed
-						? sc.objectiveTypes[obj.type].completed_desc
-						: sc.objectiveTypes[obj.type].desc
-				} (${Math.ceil(obj.currentPercentage)}% complete)`;
+				let groupType = '';
+				let firstInGroup = Object.values(story.currentStoryEntities).find(
+					(en) => en.groupId === obj.groupId
+				);
+				if (firstInGroup !== undefined)
+					groupType = story.assertType(firstInGroup.id);
+				if (groupType !== '') groupType = groupType.toLowerCase();
+				if (story.assertType)
+					objectiveText = `${obj.requiredPercentage}% of ${groupType}group ${
+						obj.groupId
+					} ${
+						completed
+							? c.objectiveTypes[obj.type].completed_desc
+							: c.objectiveTypes[obj.type].desc
+					} (${
+						completed ? '' : Math.ceil(obj.currentPercentage) + '% '
+					}complete)`;
 			}
 
 			return `<li class='game__pause-objective game__pause-objective--${itemColor}'>${objectiveText}</li>`;

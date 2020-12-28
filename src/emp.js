@@ -6,11 +6,17 @@ import entities from './entities/entities';
 import shots from './shots';
 import formations from './behavior/formations';
 import timing from './utils/timing';
+// import sc from './story/storyConstants';
+// import story from './story/story';
 
 const emp = {
 	playerHasEMP: true,
 	playerEMPIsOn: false,
-	handlers: { dispatch: null, state: null }, // gets its values in App.js
+	handlers: {
+		dispatch: null,
+		state: null,
+		checkAgainstCurrentObjectives: null,
+	}, // gets its values in App.js
 
 	toggleEMP(entityId, toggle = true) {
 		if (emp.playerEMPIsOn === toggle) return;
@@ -95,6 +101,10 @@ const emp = {
 			const formationId = formations.isInFormation(entityId);
 			if (formationId)
 				formations.removeEntityFromFormation(formationId, entityId);
+
+			if (typeof emp.handlers.checkAgainstCurrentObjectives === 'function') {
+				emp.handlers.checkAgainstCurrentObjectives(entityId, 'disabled');
+			}
 		});
 	},
 };

@@ -14,22 +14,27 @@ import {
 import formations from './formations';
 
 const behavior = {
-	handlers: { dispatch: null, state: null, stageEntities: null }, // gets its values in App.js
-	possibleGoals: {
-		playerDetermined: 'playerDetermined',
-		holdStation: 'holdStation',
-		maintainVelocity: 'maintainVelocity',
-		/*guardEntity: 'guardEntity',*/
-		flee: 'flee',
-		destroyEntity: 'destroyEntity',
-		/*defendEntity: 'defendEntity',*/
-	},
-	obstructionTypes: {
-		entityAttackingThePlayer: 'entityAttackingThePlayer',
-		partnerInTheSameFormation: 'partnerInTheSameFormation',
-		enemy: 'enemy',
-		otherEntity: 'otherEntity',
-	},
+	handlers: {
+		dispatch: null,
+		state: null,
+		stageEntities: null,
+		checkAgainstCurrentObjectives: null,
+	}, // gets its values in App.js
+	// possibleGoals: {
+	// 	playerDetermined: 'playerDetermined',
+	// 	holdStation: 'holdStation',
+	// 	maintainVelocity: 'maintainVelocity',
+	// 	/*guardEntity: 'guardEntity',*/
+	// 	flee: 'flee',
+	// 	destroyEntity: 'destroyEntity',
+	// 	/*defendEntity: 'defendEntity',*/
+	// },
+	// obstructionTypes: {
+	// 	entityAttackingThePlayer: 'entityAttackingThePlayer',
+	// 	partnerInTheSameFormation: 'partnerInTheSameFormation',
+	// 	enemy: 'enemy',
+	// 	otherEntity: 'otherEntity',
+	// },
 	currentFormations: formations.currentFormations,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
@@ -66,9 +71,7 @@ const behavior = {
 					) {
 						updatesToEntity = behavior.flee(entity, currentState);
 					} else {
-						if (
-							entity.behaviorCurrentGoal === behavior.possibleGoals.holdStation
-						) {
+						if (entity.behaviorCurrentGoal === c.possibleGoals.holdStation) {
 							updatesToEntity = behavior.holdStation(entity, currentState);
 						}
 					}
@@ -106,8 +109,7 @@ const behavior = {
 						if (
 							(entity.behaviorHitsSuffered > 0 &&
 								entity.behaviorLastHitOrigin === playerId) ||
-							(entity.behaviorCurrentGoal ===
-								behavior.possibleGoals.destroyEntity &&
+							(entity.behaviorCurrentGoal === c.possibleGoals.destroyEntity &&
 								entity.behaviorAttacking === playerId &&
 								playerId !== 'destroyed_player')
 						) {
@@ -141,13 +143,13 @@ const behavior = {
 						} else {
 							// return to the originally assigned behavior
 							switch (entity.behaviorAssignedGoal) {
-								case behavior.possibleGoals.maintainVelocity:
+								case c.possibleGoals.maintainVelocity:
 									updatesToEntity = behavior.maintainVelocity(
 										entity,
 										currentState
 									);
 									break;
-								case behavior.possibleGoals.holdStation:
+								case c.possibleGoals.holdStation:
 									updatesToEntity = behavior.holdStation(entity, currentState);
 									break;
 							}
@@ -280,11 +282,8 @@ const behavior = {
 
 		shots.stopShooting(entity.id);
 
-		if (
-			entity.behaviorCurrentGoal !== behavior.possibleGoals.maintainVelocity
-		) {
-			entityStoreUpdates.behaviorCurrentGoal =
-				behavior.possibleGoals.maintainVelocity;
+		if (entity.behaviorCurrentGoal !== c.possibleGoals.maintainVelocity) {
+			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.maintainVelocity;
 			entityStoreUpdates.behaviorAttacking = '';
 
 			if (entity.playerRelation !== entity.assignedPlayerRelation) {
@@ -337,9 +336,8 @@ const behavior = {
 
 		shots.stopShooting(entity.id);
 
-		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.holdStation) {
-			entityStoreUpdates.behaviorCurrentGoal =
-				behavior.possibleGoals.holdStation;
+		if (entity.behaviorCurrentGoal !== c.possibleGoals.holdStation) {
+			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.holdStation;
 			entityStoreUpdates.behaviorAttacking = '';
 
 			if (entity.playerRelation !== entity.assignedPlayerRelation) {
@@ -486,8 +484,17 @@ const behavior = {
 				newFacing * entity.immutable.thrusters.main;
 		}
 
-		if (entity.behaviorCurrentGoal !== behavior.possibleGoals.flee)
-			entityStoreUpdates.behaviorCurrentGoal = behavior.possibleGoals.flee;
+		if (entity.behaviorCurrentGoal !== c.possibleGoals.flee) {
+			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.flee;
+			if (
+				typeof behavior.handlers.checkAgainstCurrentObjectives === 'function'
+			) {
+				behavior.handlers.checkAgainstCurrentObjectives(
+					entityId,
+					c.objectiveTypes.forcedToFlee.id
+				);
+			}
+		}
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
@@ -646,17 +653,17 @@ const behavior = {
 
 					// console.log(entityId, entitiesInShotRange);
 
-					let cumulativeObstructionType = behavior.obstructionTypes.otherEntity;
+					let cumulativeObstructionType = c.obstructionTypes.otherEntity;
 					let partnerId = null;
 					let closestObstruction = null;
 					for (let currentEntity of entitiesInShotRange) {
 						if (currentEntity.id !== enemyId) {
 							if (
 								currentEntity.obstructionType ===
-								behavior.obstructionTypes.entityAttackingThePlayer
+								c.obstructionTypes.entityAttackingThePlayer
 							) {
 								cumulativeObstructionType =
-									behavior.obstructionTypes.entityAttackingThePlayer;
+									c.obstructionTypes.entityAttackingThePlayer;
 								partnerId = currentEntity.id;
 								break;
 							} else {
@@ -666,9 +673,7 @@ const behavior = {
 						}
 					}
 
-					if (
-						cumulativeObstructionType === behavior.obstructionTypes.otherEntity
-					) {
+					if (cumulativeObstructionType === c.obstructionTypes.otherEntity) {
 						// move closer to the enemy
 
 						// console.log(
@@ -738,8 +743,7 @@ const behavior = {
 			entityStoreUpdates.playerRelation = 'hostile';
 			entities.stageEntities[entityId].reticuleRelation('hostile');
 			entityStoreUpdates.behaviorAttacking = enemyId;
-			entityStoreUpdates.behaviorCurrentGoal =
-				behavior.possibleGoals.destroyEntity;
+			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.destroyEntity;
 		}
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
@@ -1017,14 +1021,14 @@ const behavior = {
 				entityY >= candidateY - halvedwidth &&
 				entityY <= candidateY + halvedwidth
 			) {
-				let obstructionType = behavior.obstructionTypes.otherEntity;
+				let obstructionType = c.obstructionTypes.otherEntity;
 				let distanceFromEnemy = Math.abs(enemyX - candidateX);
 				if (
 					!storeEntity.isDisabled &&
 					storeEntity.immutable.hasCannons &&
 					storeEntity.behaviorAttacking === enemyId
 				) {
-					obstructionType = behavior.obstructionTypes.entityAttackingThePlayer;
+					obstructionType = c.obstructionTypes.entityAttackingThePlayer;
 					const currentEntityFormationId = formations.isInFormation(entityId);
 					if (currentEntityFormationId) {
 						if (
@@ -1032,13 +1036,12 @@ const behavior = {
 						) {
 							// our current entity and the candidate are
 							// part of the same formation
-							obstructionType =
-								behavior.obstructionTypes.partnerInTheSameFormation;
+							obstructionType = c.obstructionTypes.partnerInTheSameFormation;
 						}
 					}
 				}
 				if (storeEntity.id === enemyId) {
-					obstructionType = behavior.obstructionTypes.enemy;
+					obstructionType = c.obstructionTypes.enemy;
 				}
 
 				re.push({ id: candidateId, obstructionType, distanceFromEnemy });

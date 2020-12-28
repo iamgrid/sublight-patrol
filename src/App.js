@@ -23,11 +23,10 @@ import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
 import StarScapeLayer from './components/StarscapeLayer';
 import entities from './entities/entities';
-import shots from './shots';
-import emp from './emp';
 import behavior from './behavior/behavior';
+import shots from './shots';
 import story from './story/story';
-// import sc from './story/storyConstants';
+import emp from './emp';
 import HUD from './components/HUD';
 // import plates from './plates';
 
@@ -152,20 +151,25 @@ export default class App extends PIXI.Application {
 			pixiHUD: this.pixiHUD,
 		};
 
+		this.checkAgainstCurrentObjectives = story.checkAgainstCurrentObjectives;
+
 		behavior.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
+			checkAgainstCurrentObjectives: this.checkAgainstCurrentObjectives,
 		};
 
 		shots.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.mainStage,
+			checkAgainstCurrentObjectives: this.checkAgainstCurrentObjectives,
 		};
 
 		emp.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
+			checkAgainstCurrentObjectives: this.checkAgainstCurrentObjectives,
 		};
 
 		shields.handlers = {

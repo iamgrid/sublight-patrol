@@ -1,6 +1,5 @@
 import c from '../../utils/constants';
-import sc from '../storyConstants';
-import behavior from '../../behavior/behavior';
+// import sc from '../storyConstants';
 import entities from '../../entities/entities';
 import keyboardLayouts from '../../keyboardLayouts';
 // import plates from '../../plates';
@@ -14,28 +13,28 @@ const scene001 = {
 			groupId: 'habeen',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'neutral',
-			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		habeen_2: {
 			id: 'habeen_2',
 			groupId: 'habeen',
 			type: 'zangari_fighter_type_2',
 			playerRelation: 'neutral',
-			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		habeen_3: {
 			id: 'habeen_3',
 			groupId: 'habeen',
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'neutral',
-			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		habeen_4: {
 			id: 'habeen_4',
 			groupId: 'habeen',
 			type: 'zangari_fighter_type_4',
 			playerRelation: 'neutral',
-			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		b2508_012: {
 			id: 'b2508_012',
@@ -65,14 +64,19 @@ const scene001 = {
 				return {
 					show: [
 						{
-							type: sc.objectiveTypes.inspected.id,
+							type: c.objectiveTypes.inspected.id,
 							groupId: scene001.entities.b2508_012.groupId,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.disabled.id,
+							entityId: scene001.entities.habeen_2.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: sc.objectiveTypes.inspected.id,
+							type: c.objectiveTypes.inspected.id,
 							entityId: scene001.entities.b2508_014.id,
 							requiredPercentage: 100,
 						},
@@ -90,7 +94,7 @@ const scene001 = {
 					},
 					{
 						playerRelation: 'self',
-						behaviorAssignedGoal: behavior.possibleGoals.playerDetermined,
+						behaviorAssignedGoal: c.possibleGoals.playerDetermined,
 						id: playerId,
 					},
 					'player'

@@ -16,6 +16,7 @@ const shots = {
 		dispatch: null,
 		state: null,
 		stage: null,
+		checkAgainstCurrentObjectives: null,
 	}, // gets its values in App.js
 	cannonStates: {},
 	shootingIntervals: {},
@@ -471,6 +472,17 @@ const shots = {
 				soundEffects.removeAllSoundInstancesForEntity(entityId);
 
 				soundEffects.playOnce(entityId, effect);
+
+				if (entityStore !== 'player') {
+					if (
+						typeof shots.handlers.checkAgainstCurrentObjectives === 'function'
+					) {
+						shots.handlers.checkAgainstCurrentObjectives(
+							entityId,
+							c.objectiveTypes.destroyed.id
+						);
+					}
+				}
 
 				entities.stageEntities[entityId].blowUp(() => {
 					// entities.stageEntities[entityId].hasBeenDestroyed = true;
