@@ -27,6 +27,7 @@ import shots from './shots';
 import emp from './emp';
 import behavior from './behavior/behavior';
 import story from './story/story';
+// import sc from './story/storyConstants';
 import HUD from './components/HUD';
 // import plates from './plates';
 
@@ -359,7 +360,10 @@ export default class App extends PIXI.Application {
 			!currentState.game.targetHasBeenScanned &&
 			currentState.game.targeting
 		) {
-			this.dispatch({ type: c.actions.SCAN });
+			this.dispatch({
+				type: c.actions.SCAN,
+				callbackFn: story.checkAgainstCurrentObjectives,
+			});
 		}
 
 		// timing tick

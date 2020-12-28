@@ -9,6 +9,13 @@ export function isEmptyObject(obj) {
 	return Object.keys(obj).length < 1;
 }
 
+export function makeName(input) {
+	return input
+		.split('_')
+		.map((el) => `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`)
+		.join(' ');
+}
+
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
 		return [

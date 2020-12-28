@@ -3,7 +3,7 @@ import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
-import { getPosition, shields } from '../utils/helpers';
+import { getPosition, shields, makeName } from '../utils/helpers';
 import behavior from '../behavior/behavior';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
@@ -48,7 +48,7 @@ const entities = {
 			mutable: { ...pieces.entity.mutable },
 		};
 		const entityType = fromPieces[fromPieces.length - 1];
-		re.immutable.entityType = this.makeName(entityType);
+		re.immutable.entityType = makeName(entityType);
 
 		const hasMaxValue = [];
 
@@ -92,13 +92,6 @@ const entities = {
 		Object.freeze(re.mutable);
 
 		this.types[entityType] = re;
-	},
-
-	makeName(input) {
-		return input
-			.split('_')
-			.map((el) => `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`)
-			.join(' ');
 	},
 
 	checkForNullValues(identifier, object) {
@@ -148,7 +141,7 @@ const entities = {
 
 		// assigning entity id, creating display name
 		if (newEntity.id !== null) {
-			newEntity.displayId = this.makeName(newEntity.id);
+			newEntity.displayId = makeName(newEntity.id);
 		} else {
 			newEntity.id = idCreator.create();
 			newEntity.displayId = '-';

@@ -122,6 +122,7 @@ export default function overlays() {
 		</div>
 		<div class="game__pause" id="game__pause">
 			<div class="game__pause-text">[Paused]</div>
+			<div class="game__pause-objectives" id="game__pause-objectives"></div>
 		</div>
 		<div class="game__status game__status--hidden" id="game__status">
 			<div class="game__status-expand" id="game__status-expand">

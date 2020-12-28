@@ -1,11 +1,12 @@
 import c from '../utils/constants';
+import sc from './storyConstants';
 import scene001 from './scenes/scene001';
 import plates from '../plates';
 import timing from '../utils/timing';
 import hud from '../hud';
 import entities from '../entities/entities';
 import soundEffects from '../audio/soundEffects';
-import { shields } from '../utils/helpers';
+import { shields, status, makeName } from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
 
@@ -20,8 +21,10 @@ const story = {
 		show: [],
 		advanceWhen: [],
 	},
+	currentStoryEntities: {},
 
 	advance(nextScene = null, nextSceneBeat = 0) {
+		console.log('advance()', nextScene, nextSceneBeat);
 		const currentState = story.handlers.state();
 
 		let cleanUpNeeded = false;
@@ -50,6 +53,9 @@ const story = {
 		const currentSceneObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
 		).sceneObject;
+
+		if (nextSceneBeat === 0)
+			story.currentStoryEntities = currentSceneObject.entities;
 
 		let currentStateScene = currentState.game.currentScene;
 		if (currentStateScene !== story.currentScene) {
@@ -117,11 +123,204 @@ const story = {
 			...story.currentObjectives.show,
 			...updates.show,
 		];
+		story.currentObjectives.show.forEach((sitem) => {
+			sitem.currentPercentage = 0;
+			sitem.failed = false;
+		});
 		story.currentObjectives.advanceWhen = updates.advanceWhen;
+		story.currentObjectives.advanceWhen.forEach((awitem) => {
+			awitem.currentPercentage = 0;
+			awitem.failed = false;
+		});
+
+		story.updateObjectiveDisplay();
 	},
 
 	checkAgainstCurrentObjectives(entityId, eventId) {
 		console.log('checkAgainstCurrentObjectives', entityId, eventId);
+		let missionFailed = false;
+		let meansProgress = false;
+
+		let entityGroup = null;
+		let entitiesInGroup = 0;
+		const currentStoryEntity = story.currentStoryEntities[entityId];
+		if (currentStoryEntity !== undefined) {
+			if (currentStoryEntity.groupId !== undefined) {
+				entityGroup = currentStoryEntity.groupId;
+				// entitiesInGroup = story.currentStoryEntities.reduce((acc, el) => {
+				// 	if (el.groupId === entityGroup) return acc + 1;
+				// }, 0);
+				for (const storyEntityId in story.currentStoryEntities) {
+					if (story.currentStoryEntities[storyEntityId].groupId === entityGroup)
+						entitiesInGroup++;
+				}
+			}
+		}
+
+		// checking against showing objectives
+		story.currentObjectives.show.forEach((obj) => {
+			if (obj.currentPercentage !== obj.requiredPercentage) {
+				if (obj.groupId === undefined) {
+					if (entityId === obj.entityId) {
+						if (eventId === obj.type) {
+							obj.currentPercentage = 100;
+							meansProgress = true;
+						} else {
+							// check if this event fails this objective
+							if (
+								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+									eventId
+								)
+							) {
+								obj.failed = true;
+								missionFailed = true;
+							}
+						}
+					}
+				} else {
+					if (entityGroup === null) return;
+					if (entityGroup === obj.groupId) {
+						if (eventId === obj.type) {
+							obj.currentPercentage += (1 / entitiesInGroup) * 100;
+							meansProgress = true;
+						} else {
+							// check if this event fails this objective
+							if (
+								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+									eventId
+								)
+							) {
+								obj.failed = true;
+								missionFailed = true;
+							}
+						}
+					}
+				}
+			}
+		});
+
+		story.updateObjectiveDisplay();
+
+		// checking against 'advanceWhen' objectives
+		let allComplete = true;
+
+		story.currentObjectives.advanceWhen.forEach((obj) => {
+			if (obj.currentPercentage !== obj.requiredPercentage) {
+				if (obj.groupId === undefined) {
+					if (entityId === obj.entityId) {
+						if (eventId === obj.type) {
+							obj.currentPercentage = 100;
+							// meansProgress = true;
+						} else {
+							allComplete = false;
+							// check if this event fails this objective
+							if (
+								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+									eventId
+								)
+							) {
+								obj.failed = true;
+								missionFailed = true;
+							}
+						}
+					} else {
+						allComplete = false;
+					}
+				} else {
+					if (entityGroup === null) return;
+					if (entityGroup === obj.groupId) {
+						if (eventId === obj.type) {
+							obj.currentPercentage += (1 / entitiesInGroup) * 100;
+							// meansProgress = true;
+							if (obj.currentPercentage < obj.requiredPercentage)
+								allComplete = false;
+						} else {
+							allComplete = false;
+							// check if this event fails this objective
+							if (
+								sc.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
+									eventId
+								)
+							) {
+								obj.failed = true;
+								missionFailed = true;
+							}
+						}
+					} else {
+						allComplete = false;
+					}
+				}
+			}
+		});
+
+		let printStatus = true;
+		let statusColor = 'yellow';
+		if (meansProgress) statusColor = 'green';
+		if (missionFailed) statusColor = 'red';
+
+		if (eventId === sc.objectiveTypes.inspected.id && !meansProgress) {
+			printStatus = false;
+		}
+
+		if (printStatus) {
+			status.add(
+				statusColor,
+				`[${makeName(entityId)}] ${sc.objectiveTypes[eventId].completed_desc}`,
+				timing.times.play
+			);
+		}
+
+		if (allComplete) {
+			console.log(
+				'ALLCOMPLETE IS TRUE, ADVANCE TO THE NEXT STORY BEAT!',
+				entityId,
+				eventId,
+				story.currentObjectives
+			);
+		}
+
+		if (missionFailed) {
+			console.log('MISSION FAILED!', story.currentObjectives);
+		}
+	},
+
+	updateObjectiveDisplay() {
+		console.log('updateObjectiveDisplay() called');
+		const re = [];
+		re.push(
+			"<div class='game__pause-objectives-title'>Current objectives:</div>\n<ul class='game__pause-objectives-list'>"
+		);
+
+		const objectiveLis = story.currentObjectives.show.map((obj) => {
+			let completed = false;
+			let itemColor = 'yellow';
+			if (obj.requiredPercentage <= Math.ceil(obj.currentPercentage)) {
+				itemColor = 'green';
+				completed = true;
+			}
+			if (obj.failed) itemColor = 'red';
+			let objectiveText;
+			if (obj.groupId === undefined) {
+				objectiveText = `${obj.entityId} ${
+					completed
+						? sc.objectiveTypes[obj.type].completed_desc
+						: sc.objectiveTypes[obj.type].desc
+				} (${completed ? 'completed' : 'incomplete'})`;
+			} else {
+				objectiveText = `${obj.requiredPercentage}% of group ${obj.groupId} ${
+					completed
+						? sc.objectiveTypes[obj.type].completed_desc
+						: sc.objectiveTypes[obj.type].desc
+				} (${Math.ceil(obj.currentPercentage)}% complete)`;
+			}
+
+			return `<li class='game__pause-objective game__pause-objective--${itemColor}'>${objectiveText}</li>`;
+		});
+
+		re.push(objectiveLis.join(''));
+
+		re.push('</ul>');
+		document.getElementById('game__pause-objectives').innerHTML = re.join('');
 	},
 
 	cleanUp() {

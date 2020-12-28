@@ -74,6 +74,7 @@ const scene001 = {
 						{
 							type: sc.objectiveTypes.inspected.id,
 							entityId: scene001.entities.b2508_014.id,
+							requiredPercentage: 100,
 						},
 					],
 				};

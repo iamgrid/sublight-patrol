@@ -1,4 +1,5 @@
 import c from '../utils/constants';
+import sc from '../story/storyConstants';
 import { calculateDistance } from '../utils/formulas';
 import {
 	isEmptyObject,
@@ -626,8 +627,8 @@ export default function mainReducer(state, action) {
 			if (
 				nearEnoughToScan(state.entities.player.id, targetId, state.positions)
 			) {
-				// no update needed
 				if (state.entities.targetable[targetIdx].hasBeenScanned) {
+					// no update needed
 					return {
 						...state,
 						game: {
@@ -635,29 +636,32 @@ export default function mainReducer(state, action) {
 							targetHasBeenScanned: true,
 						},
 					};
+				} else {
+					// really hasnt been scanned yet
+					const newEntityObj = assignWPrototype(
+						state.entities.targetable[targetIdx],
+						{ hasBeenScanned: true }
+					);
+					return [
+						() => action.callbackFn(targetId, sc.objectiveTypes.inspected.id),
+						{
+							...state,
+							game: {
+								...state.game,
+								targetHasBeenScanned: true,
+							},
+							entities: {
+								...state.entities,
+								targetable: [
+									...state.entities.targetable.filter(
+										(_, idx) => idx !== targetIdx
+									),
+									newEntityObj,
+								],
+							},
+						},
+					];
 				}
-
-				// really hasnt been scanned yet
-				const newEntityObj = assignWPrototype(
-					state.entities.targetable[targetIdx],
-					{ hasBeenScanned: true }
-				);
-				return {
-					...state,
-					game: {
-						...state.game,
-						targetHasBeenScanned: true,
-					},
-					entities: {
-						...state.entities,
-						targetable: [
-							...state.entities.targetable.filter(
-								(_, idx) => idx !== targetIdx
-							),
-							newEntityObj,
-						],
-					},
-				};
 			} else {
 				return null;
 			}

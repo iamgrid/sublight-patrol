@@ -222,6 +222,24 @@
 	animation: 0.5s ease-in-out infinite alternate doPulse;
 }
 
+.game__pause-objectives {
+	text-align: left;
+	padding: 1em 8px;
+	font-size: 11px;
+}
+
+.game__pause-objective--yellow {
+	color: #e6b632;
+}
+
+.game__pause-objective--red {
+	color: #e63232;
+}
+
+.game__pause-objective--green {
+	color: #37d837;
+}
+
 .game__status {
 	position: absolute;
 	bottom: 0;
