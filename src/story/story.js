@@ -16,6 +16,10 @@ const story = {
 	playerShipSuffixes: ['a', 'b', 'c', 'd'],
 	currentScene: null,
 	currentSceneBeat: null,
+	currentObjectives: {
+		show: [],
+		advanceWhen: [],
+	},
 
 	advance(nextScene = null, nextSceneBeat = 0) {
 		const currentState = story.handlers.state();
@@ -74,8 +78,9 @@ const story = {
 
 		plates.fullMatte();
 
-		//register objectives
-		console.log(currentSceneBeatObj.registerObjectives());
+		//register new objectives
+		const objectiveUpdates = currentSceneBeatObj.registerObjectives();
+		story.updateCurrentObjectives(objectiveUpdates);
 
 		// scene object execution
 		currentSceneBeatObj.execute(playerId, playerShipType);
@@ -106,8 +111,26 @@ const story = {
 		plates.fadeOutMatte(50);
 	},
 
+	updateCurrentObjectives(updates) {
+		console.log('updateCurrentObjectives()', updates);
+		story.currentObjectives.show = [
+			...story.currentObjectives.show,
+			...updates.show,
+		];
+		story.currentObjectives.advanceWhen = updates.advanceWhen;
+	},
+
+	checkAgainstCurrentObjectives(entityId, eventId) {
+		console.log('checkAgainstCurrentObjectives', entityId, eventId);
+	},
+
 	cleanUp() {
 		console.log('story.cleanUp() called');
+
+		story.currentObjectives = {
+			show: [],
+			advanceWhen: [],
+		};
 
 		story.handlers.dispatch({ type: c.actions.CLEANUP });
 

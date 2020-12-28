@@ -62,13 +62,21 @@ const scene001 = {
 			keyboardLayout: keyboardLayouts.play.id,
 			cameraMode: c.cameraModes.gameplay,
 			registerObjectives() {
-				return [
-					{
-						type: sc.objectiveTypes.inspected.id,
-						entityId: scene001.entities.b2508_014.id,
-						text: 'all containers in the area',
-					},
-				];
+				return {
+					show: [
+						{
+							type: sc.objectiveTypes.inspected.id,
+							groupId: scene001.entities.b2508_012.groupId,
+							requiredPercentage: 100,
+						},
+					],
+					advanceWhen: [
+						{
+							type: sc.objectiveTypes.inspected.id,
+							entityId: scene001.entities.b2508_014.id,
+						},
+					],
+				};
 			},
 			execute(playerId, playerShipType) {
 				entities.spawn(
