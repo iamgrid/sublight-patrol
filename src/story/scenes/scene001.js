@@ -8,18 +8,68 @@ import keyboardLayouts from '../../keyboardLayouts';
 
 const scene001 = {
 	id: '001',
+	entities: {
+		habeen_1: {
+			id: 'habeen_1',
+			groupId: 'habeen',
+			type: 'zangari_fighter_type_1',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+		},
+		habeen_2: {
+			id: 'habeen_2',
+			groupId: 'habeen',
+			type: 'zangari_fighter_type_2',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+		},
+		habeen_3: {
+			id: 'habeen_3',
+			groupId: 'habeen',
+			type: 'zangari_fighter_type_3',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+		},
+		habeen_4: {
+			id: 'habeen_4',
+			groupId: 'habeen',
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: behavior.possibleGoals.holdStation,
+		},
+		b2508_012: {
+			id: 'b2508_012',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Food rations',
+		},
+		b2508_013: {
+			id: 'b2508_013',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Smithing tools',
+		},
+		b2508_014: {
+			id: 'b2508_014',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Medicine',
+		},
+	},
 	storyBeats: [
 		{
 			id: '01',
 			keyboardLayout: keyboardLayouts.play.id,
 			cameraMode: c.cameraModes.gameplay,
-			objectives: [
-				{
-					type: sc.objectiveTypes.scan,
-					entityId: 'b2508-014',
-					text: 'all containers in the area',
-				},
-			],
+			registerObjectives() {
+				return [
+					{
+						type: sc.objectiveTypes.inspected.id,
+						entityId: scene001.entities.b2508_014.id,
+						text: 'all containers in the area',
+					},
+				];
+			},
 			execute(playerId, playerShipType) {
 				entities.spawn(
 					playerShipType,
@@ -37,93 +87,41 @@ const scene001 = {
 					'player'
 				);
 
-				entities.spawn(
-					'zangari_fighter_type_1',
-					{
-						posX: 600,
-						posY: 0,
-					},
-					{
-						playerRelation: 'neutral',
-						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-						id: 'zf_1',
-					}
-				);
+				entities.spawn(scene001.entities.habeen_1, {
+					posX: 600,
+					posY: 0,
+				});
 
-				entities.spawn(
-					'zangari_fighter_type_2',
-					{
-						posX: 600,
-						posY: 200,
-					},
-					{
-						playerRelation: 'neutral',
-						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-						id: 'zf_2',
-					}
-				);
+				entities.spawn(scene001.entities.habeen_2, {
+					posX: 600,
+					posY: 200,
+				});
 
-				entities.spawn(
-					'zangari_fighter_type_3',
-					{
-						posX: 600,
-						posY: -200,
-					},
-					{
-						playerRelation: 'neutral',
-						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-						id: 'zf_3',
-					}
-				);
+				entities.spawn(scene001.entities.habeen_3, {
+					posX: 600,
+					posY: -200,
+					facing: -1,
+				});
 
-				entities.spawn(
-					'zangari_fighter_type_4',
-					{
-						posX: 600,
-						posY: 400,
-					},
-					{
-						playerRelation: 'neutral',
-						behaviorAssignedGoal: behavior.possibleGoals.holdStation,
-						id: 'zf_4',
-					}
-				);
+				entities.spawn(scene001.entities.habeen_4, {
+					posX: 600,
+					posY: 400,
+				});
 
-				entities.spawn(
-					'container',
-					{
-						posX: 900,
-						posY: 350,
-					},
-					{
-						id: 'b2508-012',
-						contents: 'Food rations',
-					}
-				);
+				entities.spawn(scene001.entities.b2508_012, {
+					posX: 900,
+					posY: 350,
+				});
 
-				entities.spawn(
-					'container',
-					{
-						posX: 1800,
-						posY: 350,
-					},
-					{
-						id: 'b2508-013',
-						contents: 'Medicine',
-					}
-				);
+				entities.spawn(scene001.entities.b2508_013, {
+					posX: 1800,
+					posY: 350,
+				});
 
-				entities.spawn(
-					'container',
-					{
-						posX: 900,
-						posY: -200,
-					},
-					{
-						id: 'b2508-014',
-						contents: 'Smithing tools',
-					}
-				);
+				entities.spawn(scene001.entities.b2508_014, {
+					posX: 900,
+					posY: -200,
+				});
 			},
 		},
 		{

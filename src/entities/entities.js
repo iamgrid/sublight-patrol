@@ -114,7 +114,16 @@ const entities = {
 			);
 	},
 
-	spawn(type, pos, props, storeIn = 'targetable') {
+	spawn(typeOrEntityObject, pos, incomingProps = {}, storeIn = 'targetable') {
+		let type, props;
+		if (typeof typeOrEntityObject === 'object') {
+			type = typeOrEntityObject.type;
+			props = { ...typeOrEntityObject, ...incomingProps };
+		} else {
+			type = typeOrEntityObject;
+			props = incomingProps;
+			props.type = type;
+		}
 		if (!this.types[type]) {
 			console.error(`Unable to find type [${type}].`);
 			return null;

@@ -74,6 +74,9 @@ const story = {
 
 		plates.fullMatte();
 
+		//register objectives
+		console.log(currentSceneBeatObj.registerObjectives());
+
 		// scene object execution
 		currentSceneBeatObj.execute(playerId, playerShipType);
 
