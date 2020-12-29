@@ -367,14 +367,19 @@ const story = {
 		if (objectiveObj.failed) itemColor = 'red';
 		if (objectiveObj.groupId === undefined) {
 			let entityType = story.assertType(objectiveObj.entityId);
+			let mainText = c.objectiveTypes[objectiveObj.type].desc;
 			let parensText = 'incomplete';
-			if (completed) parensText = 'completed';
-			if (objectiveObj.failed) parensText = 'failed';
-			objectiveText = `${entityType}${makeName(objectiveObj.entityId)} ${
-				completed
-					? c.objectiveTypes[objectiveObj.type].completed_desc
-					: c.objectiveTypes[objectiveObj.type].desc
-			} (${parensText})`;
+			if (completed) {
+				parensText = 'completed';
+				mainText = c.objectiveTypes[objectiveObj.type].completed_desc;
+			}
+			if (objectiveObj.failed) {
+				parensText = 'failed';
+				mainText = c.objectiveTypes[objectiveObj.type].desc;
+			}
+			objectiveText = `${entityType}${makeName(
+				objectiveObj.entityId
+			)} ${mainText} (${parensText})`;
 		} else {
 			let groupType = '';
 			let firstInGroup = Object.values(story.currentStoryEntities).find(
@@ -383,23 +388,23 @@ const story = {
 			if (firstInGroup !== undefined)
 				groupType = story.assertType(firstInGroup.id);
 			if (groupType !== '') groupType = groupType.toLowerCase();
-			if (story.assertType) {
-				let parensText = completed
-					? ''
-					: Math.ceil(objectiveObj.currentPercentage) + '% ';
-				parensText = parensText + 'complete';
-				if (objectiveObj.failed) parensText = 'failed';
-				objectiveText = `${
-					objectiveObj.requiredPercentage
-				}% of ${groupType}group ${
-					objectiveObj.groupId.charAt(0).toUpperCase() +
-					objectiveObj.groupId.slice(1)
-				} ${
-					completed
-						? c.objectiveTypes[objectiveObj.type].completed_desc
-						: c.objectiveTypes[objectiveObj.type].desc
-				} (${parensText})`;
+
+			let mainText = c.objectiveTypes[objectiveObj.type].desc;
+			let parensText = Math.ceil(objectiveObj.currentPercentage) + '% complete';
+			if (completed) {
+				parensText = 'complete';
+				mainText = c.objectiveTypes[objectiveObj.type].completed_desc;
 			}
+			if (objectiveObj.failed) {
+				parensText = 'failed';
+				mainText = c.objectiveTypes[objectiveObj.type].desc;
+			}
+			objectiveText = `${
+				objectiveObj.requiredPercentage
+			}% of ${groupType}group ${
+				objectiveObj.groupId.charAt(0).toUpperCase() +
+				objectiveObj.groupId.slice(1)
+			} ${mainText} (${parensText})`;
 		}
 
 		return [itemColor, objectiveText];
