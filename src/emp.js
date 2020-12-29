@@ -6,8 +6,6 @@ import entities from './entities/entities';
 import shots from './shots';
 import formations from './behavior/formations';
 import timing from './utils/timing';
-// import sc from './story/storyConstants';
-// import story from './story/story';
 
 const emp = {
 	playerHasEMP: true,

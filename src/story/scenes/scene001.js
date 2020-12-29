@@ -70,8 +70,8 @@ const scene001 = {
 						},
 						{
 							type: c.objectiveTypes.disabled.id,
-							entityId: scene001.entities.habeen_2.id,
-							requiredPercentage: 100,
+							groupId: scene001.entities.habeen_2.groupId,
+							requiredPercentage: 50,
 						},
 					],
 					advanceWhen: [

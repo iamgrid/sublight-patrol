@@ -20,21 +20,6 @@ const behavior = {
 		stageEntities: null,
 		checkAgainstCurrentObjectives: null,
 	}, // gets its values in App.js
-	// possibleGoals: {
-	// 	playerDetermined: 'playerDetermined',
-	// 	holdStation: 'holdStation',
-	// 	maintainVelocity: 'maintainVelocity',
-	// 	/*guardEntity: 'guardEntity',*/
-	// 	flee: 'flee',
-	// 	destroyEntity: 'destroyEntity',
-	// 	/*defendEntity: 'defendEntity',*/
-	// },
-	// obstructionTypes: {
-	// 	entityAttackingThePlayer: 'entityAttackingThePlayer',
-	// 	partnerInTheSameFormation: 'partnerInTheSameFormation',
-	// 	enemy: 'enemy',
-	// 	otherEntity: 'otherEntity',
-	// },
 	currentFormations: formations.currentFormations,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,

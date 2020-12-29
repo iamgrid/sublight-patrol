@@ -144,11 +144,14 @@ export default class App extends PIXI.Application {
 		};
 		soundEffects.init();
 
+		this.entityWasDespawned = story.entityWasDespawned;
+
 		entities.handlers = {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.mainStage,
 			pixiHUD: this.pixiHUD,
+			entityWasDespawned: this.entityWasDespawned,
 		};
 
 		this.checkAgainstCurrentObjectives = story.checkAgainstCurrentObjectives;

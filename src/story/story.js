@@ -161,8 +161,6 @@ const story = {
 
 	checkAgainstCurrentObjectives(entityId, eventId) {
 		console.log('checkAgainstCurrentObjectives', entityId, eventId);
-		let missionFailed = false;
-		let meansProgress = false;
 
 		let entityGroup = null;
 		let entitiesInGroup = 0;
@@ -170,9 +168,6 @@ const story = {
 		if (currentStoryEntity !== undefined) {
 			if (currentStoryEntity.groupId !== undefined) {
 				entityGroup = currentStoryEntity.groupId;
-				// entitiesInGroup = story.currentStoryEntities.reduce((acc, el) => {
-				// 	if (el.groupId === entityGroup) return acc + 1;
-				// }, 0);
 				for (const storyEntityId in story.currentStoryEntities) {
 					if (story.currentStoryEntities[storyEntityId].groupId === entityGroup)
 						entitiesInGroup++;
@@ -180,121 +175,100 @@ const story = {
 			}
 		}
 
-		// checking against showing objectives
-		story.currentObjectives.show.forEach((obj) => {
-			if (obj.currentPercentage !== obj.requiredPercentage) {
-				if (obj.groupId === undefined) {
-					if (entityId === obj.entityId) {
-						if (eventId === obj.type) {
-							obj.currentPercentage = 100;
-							meansProgress = true;
-						} else {
-							// check if this event fails this objective
-							if (
-								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
-									eventId
-								)
-							) {
-								obj.failed = true;
-								missionFailed = true;
-							}
+		let entityType = story.assertType(entityId);
+
+		let entityInvolvedIn = [];
+
+		// look through all incomplete objectives in both stores
+		// to see if the entity is involved
+		for (const objectiveStore in story.currentObjectives) {
+			story.currentObjectives[objectiveStore].forEach((obj) => {
+				if (obj.currentPercentage !== obj.requiredPercentage) {
+					if (obj.groupId === undefined) {
+						if (entityId === obj.entityId) {
+							entityInvolvedIn.push({
+								store: objectiveStore,
+								objectiveObj: obj,
+							});
 						}
-					}
-				} else {
-					if (entityGroup === null) return;
-					if (entityGroup === obj.groupId) {
-						if (eventId === obj.type) {
-							obj.currentPercentage += (1 / entitiesInGroup) * 100;
-							meansProgress = true;
-						} else {
-							// check if this event fails this objective
-							if (
-								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
-									eventId
-								)
-							) {
-								obj.failed = true;
-								missionFailed = true;
-							}
+					} else {
+						if (entityGroup === null) return;
+						if (entityGroup === obj.groupId) {
+							entityInvolvedIn.push({
+								store: objectiveStore,
+								objectiveObj: obj,
+							});
 						}
 					}
 				}
+			});
+		}
+
+		// walk through the collected objectives and update them
+		// based on this event
+		let failState = false;
+		let meansProgress = false;
+		let updatedObjectiveMessages = [];
+
+		entityInvolvedIn.forEach((el) => {
+			const objectiveType = el.objectiveObj.type;
+			let hasUpdated = false;
+			if (c.objectiveTypes[objectiveType].failsIfEventIs.includes(eventId)) {
+				// the entity should have been inspected/disabled, it was forced to flee or destroyed instead
+				failState = true;
+				el.objectiveObj.failed = true;
+				hasUpdated = true;
+			} else {
+				if (eventId === objectiveType) {
+					meansProgress = true;
+					hasUpdated = true;
+					if (el.objectiveObj.groupId === undefined) {
+						// this objective only involves a single entity
+						el.objectiveObj.currentPercentage = 100;
+					} else {
+						el.objectiveObj.currentPercentage += (1 / entitiesInGroup) * 100;
+					}
+				}
+			}
+
+			if (hasUpdated && el.store !== 'advanceWhen') {
+				const [itemColor, objectiveText] = story.returnObjectiveText(
+					el.objectiveObj
+				);
+				updatedObjectiveMessages.push({
+					color: itemColor,
+					message: 'Objectives: ' + objectiveText,
+				});
 			}
 		});
 
 		story.updateObjectiveDisplay();
 
-		// checking against 'advanceWhen' objectives
+		// if all 'advanceWhen' objectives are done, we can advance to the
+		// next story beat
 		let allComplete = true;
-
 		story.currentObjectives.advanceWhen.forEach((obj) => {
-			if (obj.currentPercentage !== obj.requiredPercentage) {
-				if (obj.groupId === undefined) {
-					if (entityId === obj.entityId) {
-						if (eventId === obj.type) {
-							obj.currentPercentage = 100;
-							// meansProgress = true;
-						} else {
-							allComplete = false;
-							// check if this event fails this objective
-							if (
-								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
-									eventId
-								)
-							) {
-								obj.failed = true;
-								missionFailed = true;
-							}
-						}
-					} else {
-						allComplete = false;
-					}
-				} else {
-					if (entityGroup === null) return;
-					if (entityGroup === obj.groupId) {
-						if (eventId === obj.type) {
-							obj.currentPercentage += (1 / entitiesInGroup) * 100;
-							// meansProgress = true;
-							if (obj.currentPercentage < obj.requiredPercentage)
-								allComplete = false;
-						} else {
-							allComplete = false;
-							// check if this event fails this objective
-							if (
-								c.objectiveTypes[obj.type].meansFailureIfObjectiveWas.includes(
-									eventId
-								)
-							) {
-								obj.failed = true;
-								missionFailed = true;
-							}
-						}
-					} else {
-						allComplete = false;
-					}
-				}
-			}
+			if (obj.currentPercentage < obj.requiredPercentage) allComplete = false;
 		});
 
-		let printStatus = true;
-		let statusColor = 'yellow';
-		if (meansProgress) statusColor = 'green';
-		if (missionFailed) statusColor = 'red';
+		if (updatedObjectiveMessages.length < 1) {
+			let printStatus = true;
+			let statusColor = 'yellow';
+			let statusMessage = `${entityType}[${makeName(entityId)}] ${
+				c.objectiveTypes[eventId].completed_desc
+			}`;
 
-		if (eventId === c.objectiveTypes.inspected.id && !meansProgress) {
-			printStatus = false;
-		}
+			if (eventId === c.objectiveTypes.inspected.id && !meansProgress) {
+				printStatus = false;
+			}
 
-		let entityType = story.assertType(entityId);
-
-		if (printStatus) {
-			status.add(
-				statusColor,
-				`${entityType}[${makeName(entityId)}] ${
-					c.objectiveTypes[eventId].completed_desc
-				}`,
-				timing.times.play
-			);
+			if (printStatus) {
+				status.add(statusColor, statusMessage, timing.times.play);
+			}
+		} else {
+			updatedObjectiveMessages.forEach((el) => {
+				status.add(el.color, el.message, timing.times.play);
+			});
 		}
 
 		if (allComplete) {
@@ -306,9 +280,17 @@ const story = {
 			);
 		}
 
-		if (missionFailed) {
+		if (failState) {
 			console.log('MISSION FAILED!', story.currentObjectives);
 		}
+	},
+
+	entityWasDespawned(entityId) {
+		console.log('entityWasDespawned:', entityId);
+		if (story.currentStoryEntities[entityId] === undefined) return;
+		story.currentStoryEntities[entityId].wasDespawned = true;
+
+		// see if this makes an objective fail / impossible to complete
 	},
 
 	updateObjectiveDisplay() {
@@ -319,41 +301,7 @@ const story = {
 		);
 
 		const objectiveLis = story.currentObjectives.show.map((obj) => {
-			let completed = false;
-			let itemColor = 'yellow';
-			if (obj.requiredPercentage <= Math.ceil(obj.currentPercentage)) {
-				itemColor = 'green';
-				completed = true;
-			}
-			if (obj.failed) itemColor = 'red';
-			let objectiveText;
-			if (obj.groupId === undefined) {
-				let entityType = story.assertType(obj.entityId);
-				objectiveText = `${entityType}${makeName(obj.entityId)} ${
-					completed
-						? c.objectiveTypes[obj.type].completed_desc
-						: c.objectiveTypes[obj.type].desc
-				} (${completed ? 'completed' : 'incomplete'})`;
-			} else {
-				let groupType = '';
-				let firstInGroup = Object.values(story.currentStoryEntities).find(
-					(en) => en.groupId === obj.groupId
-				);
-				if (firstInGroup !== undefined)
-					groupType = story.assertType(firstInGroup.id);
-				if (groupType !== '') groupType = groupType.toLowerCase();
-				if (story.assertType)
-					objectiveText = `${obj.requiredPercentage}% of ${groupType}group ${
-						obj.groupId
-					} ${
-						completed
-							? c.objectiveTypes[obj.type].completed_desc
-							: c.objectiveTypes[obj.type].desc
-					} (${
-						completed ? '' : Math.ceil(obj.currentPercentage) + '% '
-					}complete)`;
-			}
-
+			const [itemColor, objectiveText] = story.returnObjectiveText(obj);
 			return `<li class='game__pause-objective game__pause-objective--${itemColor}'>${objectiveText}</li>`;
 		});
 
@@ -361,6 +309,57 @@ const story = {
 
 		re.push('</ul>');
 		document.getElementById('game__pause-objectives').innerHTML = re.join('');
+	},
+
+	returnObjectiveText(objectiveObj) {
+		let itemColor = 'yellow';
+		let objectiveText = '';
+		let completed = false;
+
+		if (
+			objectiveObj.requiredPercentage <=
+			Math.ceil(objectiveObj.currentPercentage)
+		) {
+			itemColor = 'green';
+			completed = true;
+		}
+
+		if (objectiveObj.failed) itemColor = 'red';
+		if (objectiveObj.groupId === undefined) {
+			let entityType = story.assertType(objectiveObj.entityId);
+			let parensText = 'incomplete';
+			if (completed) parensText = 'completed';
+			if (objectiveObj.failed) parensText = 'failed';
+			objectiveText = `${entityType}${makeName(objectiveObj.entityId)} ${
+				completed
+					? c.objectiveTypes[objectiveObj.type].completed_desc
+					: c.objectiveTypes[objectiveObj.type].desc
+			} (${parensText})`;
+		} else {
+			let groupType = '';
+			let firstInGroup = Object.values(story.currentStoryEntities).find(
+				(en) => en.groupId === objectiveObj.groupId
+			);
+			if (firstInGroup !== undefined)
+				groupType = story.assertType(firstInGroup.id);
+			if (groupType !== '') groupType = groupType.toLowerCase();
+			if (story.assertType) {
+				let parensText = completed
+					? ''
+					: Math.ceil(objectiveObj.currentPercentage) + '% ';
+				parensText = parensText + 'complete';
+				if (objectiveObj.failed) parensText = 'failed';
+				objectiveText = `${
+					objectiveObj.requiredPercentage
+				}% of ${groupType}group ${objectiveObj.groupId} ${
+					completed
+						? c.objectiveTypes[objectiveObj.type].completed_desc
+						: c.objectiveTypes[objectiveObj.type].desc
+				} (${parensText})`;
+			}
+		}
+
+		return [itemColor, objectiveText];
 	},
 
 	cleanUp() {

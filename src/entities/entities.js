@@ -18,6 +18,7 @@ const entities = {
 		state: null,
 		stage: null,
 		pixiHUD: null,
+		entityWasDespawned: null,
 	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
@@ -286,6 +287,10 @@ const entities = {
 				store: entityStore,
 				callbackFn: entities.playerShipDestruction,
 			});
+		}
+
+		if (typeof entities.handlers.entityWasDespawned === 'function') {
+			entities.handlers.entityWasDespawned(entityId);
 		}
 	},
 
