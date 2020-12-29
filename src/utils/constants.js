@@ -137,7 +137,8 @@ const c = {
 		},
 		hasDespawned: {
 			id: 'hasDespawned',
-			desc: '???',
+			desc:
+				'!!! This objective only exists for program logic, do not use it in your scenes!',
 			completed_desc: '???',
 			failsIfEventIs: [],
 		},

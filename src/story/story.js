@@ -47,6 +47,7 @@ const story = {
 	},
 
 	advance(nextScene = null, nextSceneBeat = 0) {
+		// call with nextScene = null to auto-advance scenes
 		console.log('advance()', nextScene, nextSceneBeat);
 		const currentState = story.handlers.state();
 
@@ -66,10 +67,17 @@ const story = {
 			if (nextScene !== null) {
 				story.currentScene = nextScene;
 			} else {
-				let oldIndex = story.sceneList.findIndex(
+				let index = story.sceneList.findIndex(
 					(el) => el.id === story.currentScene
 				);
-				story.currentScene = story.sceneList[oldIndex + 1];
+				index++;
+				if (story.sceneList[index] !== undefined) {
+					// more scenes exist
+					story.currentScene = story.sceneList[index];
+				} else {
+					// no more scenes, end of the game
+					console.log('THIS IS THE END OF THE GAME');
+				}
 			}
 		}
 
@@ -105,7 +113,7 @@ const story = {
 			story.cleanUp();
 		}
 
-		plates.fullMatte();
+		if (nextSceneBeat === 0) plates.fullMatte();
 
 		//register new objectives
 		const objectiveUpdates = currentSceneBeatObj.registerObjectives();
@@ -137,7 +145,7 @@ const story = {
 			hud.toggle(false);
 		}
 
-		plates.fadeOutMatte(50);
+		if (nextSceneBeat === 0) plates.fadeOutMatte(50);
 	},
 
 	updateCurrentObjectives(updates) {
@@ -147,13 +155,17 @@ const story = {
 			...updates.show,
 		];
 		story.currentObjectives.show.forEach((sitem) => {
-			sitem.currentPercentage = 0;
-			sitem.failed = false;
+			if (sitem.currentPercentage === undefined) {
+				sitem.currentPercentage = 0;
+				sitem.failed = false;
+			}
 		});
 		story.currentObjectives.advanceWhen = updates.advanceWhen;
 		story.currentObjectives.advanceWhen.forEach((awitem) => {
-			awitem.currentPercentage = 0;
-			awitem.failed = false;
+			if (awitem.currentPercentage === undefined) {
+				awitem.currentPercentage = 0;
+				awitem.failed = false;
+			}
 		});
 
 		story.updateObjectiveDisplay();
@@ -270,12 +282,25 @@ const story = {
 
 		story.updateObjectiveDisplay();
 
-		// if all 'advanceWhen' objectives are done, we can advance to the
+		// if all needed objectives are done, we can advance to the
 		// next story beat
 		let allComplete = true;
 		story.currentObjectives.advanceWhen.forEach((obj) => {
-			if (obj.currentPercentage < obj.requiredPercentage) allComplete = false;
+			if (obj.currentPercentage < obj.requiredPercentage || obj.failed)
+				allComplete = false;
 		});
+		const currentSceneObject = story.sceneList.find(
+			(el) => el.id === story.currentScene
+		).sceneObject;
+		if (
+			currentSceneObject.storyBeats[story.currentSceneBeat]
+				.isTheFinalGameplayBeat
+		) {
+			story.currentObjectives.show.forEach((obj) => {
+				if (obj.currentPercentage < obj.requiredPercentage || obj.failed)
+					allComplete = false;
+			});
+		}
 
 		if (updatedObjectiveMessages.length < 1) {
 			let printStatus = true;
@@ -315,6 +340,14 @@ const story = {
 				eventId,
 				story.currentObjectives
 			);
+
+			if (story.currentSceneBeat < currentSceneObject.storyBeats.length - 1) {
+				// there are more beats in this scene
+				story.advance(story.currentScene, story.currentSceneBeat + 1);
+			} else {
+				// advance to the next scene
+				story.advance(null, 0);
+			}
 		}
 
 		if (failState) {

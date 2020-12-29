@@ -57,9 +57,9 @@ const scene001 = {
 	},
 	storyBeats: [
 		{
-			id: '01',
 			keyboardLayout: keyboardLayouts.play.id,
 			cameraMode: c.cameraModes.gameplay,
+			isTheFinalGameplayBeat: false,
 			registerObjectives() {
 				return {
 					show: [
@@ -138,13 +138,23 @@ const scene001 = {
 			},
 		},
 		{
-			id: '02',
-			keyboardLayout: keyboardLayouts.cutscene.id,
-			cameraMode: c.cameraModes.centeredEntity,
-			cameraCenteredEntity: '!playerId',
-			objectives: [],
+			keyboardLayout: keyboardLayouts.play.id,
+			cameraMode: c.cameraModes.gameplay,
+			isTheFinalGameplayBeat: true,
+			registerObjectives() {
+				return {
+					show: [
+						{
+							type: c.objectiveTypes.forcedToFlee.id,
+							entityId: scene001.entities.habeen_3.id,
+							requiredPercentage: 100,
+						},
+					],
+					advanceWhen: [],
+				};
+			},
 			execute() {
-				console.log('storyBeat 02');
+				console.log('storyBeat 2');
 			},
 		},
 	],
