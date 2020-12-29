@@ -280,6 +280,8 @@ const entities = {
 		hud.removeEntity(entityId);
 
 		if (removeFromState) {
+			// blown up entities dont execute this part,
+			// but entities that leave the playable volume do
 			console.info(`removing ${entityId} from state`);
 			entities.handlers.dispatch({
 				type: c.actions.REMOVE_ENTITY,
@@ -287,10 +289,10 @@ const entities = {
 				store: entityStore,
 				callbackFn: entities.playerShipDestruction,
 			});
-		}
 
-		if (typeof entities.handlers.entityWasDespawned === 'function') {
-			entities.handlers.entityWasDespawned(entityId);
+			if (typeof entities.handlers.entityWasDespawned === 'function') {
+				entities.handlers.entityWasDespawned(entityId);
+			}
 		}
 	},
 

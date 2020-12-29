@@ -162,6 +162,10 @@ const story = {
 	checkAgainstCurrentObjectives(entityId, eventId) {
 		console.log('checkAgainstCurrentObjectives', entityId, eventId);
 
+		if (eventId === c.objectiveTypes.destroyed.id) {
+			story.currentStoryEntities[entityId].wasDespawned = true;
+		}
+
 		let entityGroup = null;
 		let entitiesInGroup = 0;
 		const currentStoryEntity = story.currentStoryEntities[entityId];
@@ -179,26 +183,24 @@ const story = {
 
 		let entityInvolvedIn = [];
 
-		// look through all incomplete objectives in both stores
+		// look through all objectives in both stores
 		// to see if the entity is involved
 		for (const objectiveStore in story.currentObjectives) {
 			story.currentObjectives[objectiveStore].forEach((obj) => {
-				if (obj.currentPercentage !== obj.requiredPercentage) {
-					if (obj.groupId === undefined) {
-						if (entityId === obj.entityId) {
-							entityInvolvedIn.push({
-								store: objectiveStore,
-								objectiveObj: obj,
-							});
-						}
-					} else {
-						if (entityGroup === null) return;
-						if (entityGroup === obj.groupId) {
-							entityInvolvedIn.push({
-								store: objectiveStore,
-								objectiveObj: obj,
-							});
-						}
+				if (obj.groupId === undefined) {
+					if (entityId === obj.entityId) {
+						entityInvolvedIn.push({
+							store: objectiveStore,
+							objectiveObj: obj,
+						});
+					}
+				} else {
+					if (entityGroup === null) return;
+					if (entityGroup === obj.groupId) {
+						entityInvolvedIn.push({
+							store: objectiveStore,
+							objectiveObj: obj,
+						});
 					}
 				}
 			});
@@ -214,10 +216,34 @@ const story = {
 			const objectiveType = el.objectiveObj.type;
 			let hasUpdated = false;
 			if (c.objectiveTypes[objectiveType].failsIfEventIs.includes(eventId)) {
-				// the entity should have been inspected/disabled, it was forced to flee or destroyed instead
-				failState = true;
-				el.objectiveObj.failed = true;
-				hasUpdated = true;
+				// example: the entity should have been inspected,
+				// but it was destroyed instead
+				if (
+					el.objectiveObj.groupId === undefined ||
+					el.objectiveObj.requiredPercentage === 100
+				) {
+					failState = true;
+					el.objectiveObj.failed = true;
+					hasUpdated = true;
+				} else {
+					// determine if the objective can still be completed
+					// after this change
+					let remainingPercentage = 0;
+					for (const cseid in story.currentStoryEntities) {
+						if (
+							story.currentStoryEntities[cseid].groupId === entityGroup &&
+							!story.currentStoryEntities[cseid].wasDespawned
+						) {
+							remainingPercentage += (1 / entitiesInGroup) * 100;
+						}
+					}
+
+					if (remainingPercentage < el.objectiveObj.requiredPercentage) {
+						failState = true;
+						el.objectiveObj.failed = true;
+						hasUpdated = true;
+					}
+				}
 			} else {
 				if (eventId === objectiveType) {
 					meansProgress = true;
@@ -258,7 +284,10 @@ const story = {
 				c.objectiveTypes[eventId].completed_desc
 			}`;
 
-			if (eventId === c.objectiveTypes.inspected.id && !meansProgress) {
+			if (
+				(eventId === c.objectiveTypes.inspected.id && !meansProgress) ||
+				(eventId === c.objectiveTypes.hasDespawned.id && !failState)
+			) {
 				printStatus = false;
 			}
 
@@ -267,7 +296,15 @@ const story = {
 			}
 		} else {
 			updatedObjectiveMessages.forEach((el) => {
-				status.add(el.color, el.message, timing.times.play);
+				let printThisStatus = true;
+
+				if (eventId === c.objectiveTypes.hasDespawned.id && !failState) {
+					printThisStatus = false;
+				}
+
+				if (printThisStatus) {
+					status.add(el.color, el.message, timing.times.play);
+				}
 			});
 		}
 
@@ -290,7 +327,10 @@ const story = {
 		if (story.currentStoryEntities[entityId] === undefined) return;
 		story.currentStoryEntities[entityId].wasDespawned = true;
 
-		// see if this makes an objective fail / impossible to complete
+		story.checkAgainstCurrentObjectives(
+			entityId,
+			c.objectiveTypes.hasDespawned.id
+		);
 	},
 
 	updateObjectiveDisplay() {
@@ -351,7 +391,10 @@ const story = {
 				if (objectiveObj.failed) parensText = 'failed';
 				objectiveText = `${
 					objectiveObj.requiredPercentage
-				}% of ${groupType}group ${objectiveObj.groupId} ${
+				}% of ${groupType}group ${
+					objectiveObj.groupId.charAt(0).toUpperCase() +
+					objectiveObj.groupId.slice(1)
+				} ${
 					completed
 						? c.objectiveTypes[objectiveObj.type].completed_desc
 						: c.objectiveTypes[objectiveObj.type].desc
