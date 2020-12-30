@@ -120,7 +120,7 @@ const c = {
 			id: 'mustHaveSurvived',
 			desc: 'must have survived until other objectives completed',
 			completed_desc: 'has survived until other objectives completed',
-			failsIfEventIs: ['forcedToFlee', 'destroyed', 'hasDespawned'],
+			failsIfEventIs: ['destroyed'],
 		},
 		mustHaveArrived: {
 			id: 'mustHaveArrived',

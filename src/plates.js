@@ -52,7 +52,7 @@ const plates = {
 		document.getElementById('game__plates_matte').style.opacity = 1;
 	},
 
-	loadPlate(plateId, quoteVariant = -1, mainText = '') {
+	loadPlate(plateId, quoteVariant = -1, mainText = '', wittyText = '') {
 		// console.log('loadPlate', plateId);
 		let atlText = '';
 		let btlText = '';
@@ -80,6 +80,10 @@ const plates = {
 				break;
 			case 'mission_failed':
 				atlText = 'dagnabbit';
+				btlText = mainText;
+				break;
+			case 'mission_title':
+				atlText = wittyText;
 				btlText = mainText;
 				break;
 		}

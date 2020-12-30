@@ -1,6 +1,7 @@
 import c from '../utils/constants';
 // import sc from './storyConstants';
 import scene001 from './scenes/scene001';
+import scene002 from './scenes/scene002';
 import plates from '../plates';
 import timing from '../utils/timing';
 import hud from '../hud';
@@ -12,7 +13,10 @@ import shots from '../shots';
 
 const story = {
 	handlers: { dispatch: null, state: null, stage: null, playVolume: null }, // gets its values in App.js
-	sceneList: [{ id: '001', sceneObject: scene001 }],
+	sceneList: [
+		{ id: '001', sceneObject: scene001 },
+		{ id: '002', sceneObject: scene002 },
+	],
 	playerShipId: 'red_1',
 	playerShipSuffixes: ['a', 'b', 'c', 'd'],
 	currentScene: null,
@@ -74,7 +78,7 @@ const story = {
 				index++;
 				if (story.sceneList[index] !== undefined) {
 					// more scenes exist
-					story.currentScene = story.sceneList[index];
+					story.currentScene = story.sceneList[index].id;
 				} else {
 					// no more scenes, end of the game
 					console.log('THIS IS THE END OF THE GAME');
@@ -87,6 +91,8 @@ const story = {
 				}
 			}
 		}
+
+		console.log('story.currentScene:', story.currentScene);
 
 		const currentSceneObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
@@ -107,6 +113,8 @@ const story = {
 
 		story.currentSceneBeat = playSceneBeat;
 
+		console.log('story.currentSceneBeat:', story.currentSceneBeat);
+
 		const currentSceneBeatObj =
 			currentSceneObject.storyBeats[story.currentSceneBeat];
 
@@ -122,7 +130,18 @@ const story = {
 			story.cleanUp();
 		}
 
-		if (playSceneBeat === 0) plates.fullMatte();
+		if (playSceneBeat === 0) {
+			plates.fullMatte();
+			plates.loadPlate(
+				'mission_title',
+				-1,
+				currentSceneObject.titlePlate.mainText,
+				currentSceneObject.titlePlate.wittyText
+			);
+			plates.fadeInPlate(10);
+			plates.fadeOutMatte(50, 4000);
+			plates.fadeOutPlate(25, 6000);
+		}
 
 		//register new objectives
 		const objectiveUpdates = currentSceneBeatObj.registerObjectives();
@@ -153,8 +172,6 @@ const story = {
 		} else {
 			hud.toggle(false);
 		}
-
-		if (playSceneBeat === 0) plates.fadeOutMatte(50);
 	},
 
 	updateCurrentObjectives(updates) {

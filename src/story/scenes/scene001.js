@@ -7,6 +7,10 @@ import keyboardLayouts from '../../keyboardLayouts';
 
 const scene001 = {
 	id: '001',
+	titlePlate: {
+		wittyText: "it's time to put your big boy pants on",
+		mainText: 'Mission 1: Welcome to vacuum',
+	},
 	playVolume: {
 		minX: -2000,
 		maxX: 4000,
@@ -63,7 +67,7 @@ const scene001 = {
 			type: 'shuttle',
 			playerRelation: 'friendly',
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: 'empty',
+			contents: 'No cargo',
 		},
 	},
 	storyBeats: [
@@ -210,7 +214,6 @@ const scene001 = {
 				return { show: [], advanceWhen: [] };
 			},
 			execute() {
-				console.log('im heere');
 				entities.spawn(
 					scene001.entities.red_2,
 					{
