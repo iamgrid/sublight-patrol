@@ -52,7 +52,7 @@ const plates = {
 		document.getElementById('game__plates_matte').style.opacity = 1;
 	},
 
-	loadPlate(plateId, quoteVariant = -1) {
+	loadPlate(plateId, quoteVariant = -1, mainText = '') {
 		// console.log('loadPlate', plateId);
 		let atlText = '';
 		let btlText = '';
@@ -77,6 +77,10 @@ const plates = {
 			case 'the_end':
 				atlText = "All's well that ends well";
 				btlText = 'Congratulations, you have finished the game!';
+				break;
+			case 'mission_failed':
+				atlText = 'dagnabbit';
+				btlText = mainText;
 				break;
 		}
 

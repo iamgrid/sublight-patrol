@@ -81,6 +81,8 @@ const story = {
 					plates.loadPlate('the_end');
 					plates.fadeInPlate(25);
 					plates.fadeInMatte(50, 1000);
+					// TODO: stop the game from continuing
+					// and show the appropriate buttons
 					return;
 				}
 			}
@@ -395,6 +397,11 @@ const story = {
 
 		if (failState) {
 			console.log('MISSION FAILED!', story.currentObjectives);
+			plates.loadPlate('mission_failed', -1, 'Mission failed');
+			plates.fadeInPlate(25);
+			plates.fadeInMatte(50, 1000);
+			// TODO: stop the game from continuing
+			// and show the appropriate buttons
 		}
 	},
 
