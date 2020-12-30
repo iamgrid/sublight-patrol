@@ -187,6 +187,13 @@ const story = {
 	checkAgainstCurrentObjectives(entityId, eventId) {
 		console.log('checkAgainstCurrentObjectives', entityId, eventId);
 
+		if (typeof eventId !== 'string') {
+			console.error(
+				'eventId must be a string, this was received instead:',
+				eventId
+			);
+		}
+
 		if (eventId === c.objectiveTypes.destroyed.id) {
 			story.currentStoryEntities[entityId].wasDespawned = true;
 		}
@@ -419,7 +426,7 @@ const story = {
 	},
 
 	updateObjectiveDisplay() {
-		console.log('updateObjectiveDisplay() called');
+		// console.log('updateObjectiveDisplay() called');
 		const re = [];
 		re.push(
 			"<div class='game__pause-objectives-title'>Current objectives:</div>\n<ul class='game__pause-objectives-list'>"
