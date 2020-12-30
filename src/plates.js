@@ -1,4 +1,5 @@
 import timing from './utils/timing';
+import { randomNumber } from './utils/formulas';
 
 const plates = {
 	fadeInMatte(steps = 25, delayMS = 0) {
@@ -53,7 +54,7 @@ const plates = {
 	},
 
 	loadPlate(plateId, quoteVariant = -1, mainText = '', wittyText = '') {
-		// console.log('loadPlate', plateId);
+		console.log('loadPlate', plateId, quoteVariant, mainText, wittyText);
 		let atlText = '';
 		let btlText = '';
 
@@ -61,6 +62,14 @@ const plates = {
 			"With a lil' help from my friends",
 			'Mess with the bull, get the horns',
 			"It's jackhammer o'clock",
+		];
+
+		const missionSuccessQuoteVariants = [
+			'Yeah baby!',
+			'Easy-peasy',
+			'This was worth getting out of bed for',
+			"Ya boy 's got some moves",
+			"Kickin' ass, takin' names",
 		];
 
 		switch (plateId) {
@@ -81,6 +90,13 @@ const plates = {
 			case 'mission_failed':
 				atlText = 'dagnabbit';
 				btlText = mainText;
+				break;
+			case 'mission_success':
+				atlText =
+					missionSuccessQuoteVariants[
+						randomNumber(0, missionSuccessQuoteVariants.length - 1)
+					];
+				btlText = 'Mission success';
 				break;
 			case 'mission_title':
 				atlText = wittyText;

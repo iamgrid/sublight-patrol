@@ -138,7 +138,7 @@ const story = {
 				currentSceneObject.titlePlate.mainText,
 				currentSceneObject.titlePlate.wittyText
 			);
-			plates.fadeInPlate(10);
+			plates.fadeInPlate(25);
 			plates.fadeOutMatte(50, 4000);
 			plates.fadeOutPlate(25, 6000);
 		}
@@ -417,7 +417,17 @@ const story = {
 				story.advance(story.currentScene, story.currentSceneBeat + 1);
 			} else {
 				// advance to the next scene
-				story.advance(null, 0);
+				plates.loadPlate('mission_success');
+				plates.fadeInPlate(25);
+				plates.fadeInMatte(50);
+				plates.fadeOutPlate(50, 4000);
+				timing.setTimeout(
+					() => {
+						story.advance(null, 0);
+					},
+					timing.modes.play,
+					7500
+				);
 			}
 		}
 

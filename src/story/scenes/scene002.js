@@ -27,14 +27,6 @@ const scene002 = {
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		mylok_2: {
-			id: 'mylok_2',
-			groupId: 'mylok',
-			type: 'zangari_fighter_type_3',
-			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
-			behaviorAssignedGoal: c.possibleGoals.holdStation,
-		},
 		red_2: {
 			id: 'red_2',
 			groupId: 'red',
@@ -59,14 +51,14 @@ const scene002 = {
 						},
 						{
 							type: c.objectiveTypes.destroyed.id,
-							groupId: scene002.entities.mylok_1.groupId,
+							entityId: scene002.entities.mylok_1.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.destroyed.id,
-							groupId: scene002.entities.mylok_1.groupId,
+							entityId: scene002.entities.mylok_1.id,
 							requiredPercentage: 100,
 						},
 					],
@@ -103,18 +95,6 @@ const scene002 = {
 					{
 						behaviorAssignedStationX: 980,
 						behaviorAssignedStationY: 170,
-					}
-				);
-
-				entities.spawn(
-					scene002.entities.mylok_2,
-					{
-						posX: 3900,
-						posY: 0,
-					},
-					{
-						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 100,
 					}
 				);
 			},
