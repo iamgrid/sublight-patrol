@@ -65,6 +65,10 @@ export default class App extends PIXI.Application {
 			maxFlipTimer: 50,
 		};
 
+		this.playVolume = {
+			current: {},
+		};
+
 		this.triggered0 = false;
 
 		const [state, dispatch] = useReducer(mainReducer, initialGameState);
@@ -84,7 +88,6 @@ export default class App extends PIXI.Application {
 		c.init();
 		status.init();
 		shields.init();
-		behavior.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v10.png');
 
@@ -92,16 +95,6 @@ export default class App extends PIXI.Application {
 			this.loader.add(
 				soundName,
 				'./assets/sound_effects/' + soundEffects.manifest[soundName]
-			);
-		}
-
-		this.softBoundaries = {};
-
-		for (const side in c.playVolume) {
-			if (side === 'softBoundary') continue;
-			this.softBoundaries[side] = decreaseNumberBy(
-				c.playVolume[side],
-				c.playVolume.softBoundary
 			);
 		}
 
@@ -130,6 +123,7 @@ export default class App extends PIXI.Application {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.mainStage,
+			playVolume: this.playVolume,
 		};
 
 		audio.handlers = {
@@ -160,6 +154,7 @@ export default class App extends PIXI.Application {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			checkAgainstCurrentObjectives: this.checkAgainstCurrentObjectives,
+			playVolume: this.playVolume,
 		};
 
 		shots.handlers = {
@@ -184,6 +179,7 @@ export default class App extends PIXI.Application {
 			pixiHUD: this.pixiHUD,
 			stage: this.mainStage,
 			camera: this.camera,
+			playVolume: this.playVolume,
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
@@ -192,9 +188,21 @@ export default class App extends PIXI.Application {
 
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
 
-		spawnBuoys(entities);
-
 		story.advance();
+
+		this.softBoundaries = {};
+
+		for (const side in this.playVolume.current) {
+			if (side === 'softBoundary') continue;
+			this.softBoundaries[side] = decreaseNumberBy(
+				this.playVolume.current[side],
+				this.playVolume.current.softBoundary
+			);
+		}
+
+		spawnBuoys(entities, this.playVolume.current);
+
+		behavior.init();
 
 		console.log(this.gameState());
 
@@ -256,7 +264,8 @@ export default class App extends PIXI.Application {
 					movedEntities,
 					entities.stageEntities,
 					currentState.positions.canMove,
-					playerId
+					playerId,
+					this.playVolume
 				);
 			}
 
@@ -281,10 +290,10 @@ export default class App extends PIXI.Application {
 			}
 
 			if (
-				playerX < c.playVolume.minX ||
-				playerX > c.playVolume.maxX ||
-				playerY < c.playVolume.minY ||
-				playerY > c.playVolume.maxY
+				playerX < this.playVolume.current.minX ||
+				playerX > this.playVolume.current.maxX ||
+				playerY < this.playVolume.current.minY ||
+				playerY > this.playVolume.current.maxY
 			) {
 				if (!this.showingCoordAlert) {
 					if (this.showingCoordWarning) {

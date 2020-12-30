@@ -7,7 +7,7 @@ import HealthBars from './components/HealthBars';
 import shots from './shots';
 
 const hud = {
-	handlers: { pixiHUD: null, stage: null, camera: null }, // gets its values in App.js
+	handlers: { pixiHUD: null, stage: null, camera: null, playVolume: null }, // gets its values in App.js
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,
@@ -310,7 +310,8 @@ const hud = {
 
 		if (hud.largestRelevantDistance === 0)
 			hud.largestRelevantDistance =
-				Math.abs(c.playVolume.minX) + c.playVolume.maxX;
+				Math.abs(hud.handlers.playVolume.current.minX) +
+				hud.handlers.playVolume.current.maxX;
 
 		const cameraTLX = Math.round(playerX - hud.handlers.camera.currentShift);
 

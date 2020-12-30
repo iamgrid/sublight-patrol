@@ -54,7 +54,8 @@ export function repositionMovedEntities(
 	movedEntities,
 	stageEntities,
 	canMoveStore,
-	playerId
+	playerId,
+	playVolume
 ) {
 	movedEntities.forEach((entityId) => {
 		const newX = canMoveStore[`${entityId}--posX`];
@@ -62,10 +63,10 @@ export function repositionMovedEntities(
 		stageEntities[entityId].position.set(newX, newY);
 
 		if (
-			newX < c.playVolume.minX ||
-			newX > c.playVolume.maxX ||
-			newY < c.playVolume.minY ||
-			newY > c.playVolume.maxY
+			newX < playVolume.minX ||
+			newX > playVolume.maxX ||
+			newY < playVolume.minY ||
+			newY > playVolume.maxY
 		) {
 			if (entityId === playerId) return;
 
@@ -988,17 +989,17 @@ export const status = {
 	},
 };
 
-export function spawnBuoys(entities) {
+export function spawnBuoys(entities, playVolume) {
 	const buoys = [
 		{ x: 0, y: 0 },
-		{ x: c.playVolume.minX, y: 0 },
-		{ x: c.playVolume.maxX, y: 0 },
-		{ x: 0, y: c.playVolume.minY },
-		{ x: 0, y: c.playVolume.maxY },
-		{ x: c.playVolume.minX, y: c.playVolume.minY },
-		{ x: c.playVolume.maxX, y: c.playVolume.minY },
-		{ x: c.playVolume.minX, y: c.playVolume.maxY },
-		{ x: c.playVolume.maxX, y: c.playVolume.maxY },
+		{ x: playVolume.minX, y: 0 },
+		{ x: playVolume.maxX, y: 0 },
+		{ x: 0, y: playVolume.minY },
+		{ x: 0, y: playVolume.maxY },
+		{ x: playVolume.minX, y: playVolume.minY },
+		{ x: playVolume.maxX, y: playVolume.minY },
+		{ x: playVolume.minX, y: playVolume.maxY },
+		{ x: playVolume.maxX, y: playVolume.maxY },
 	];
 
 	buoys.forEach(({ x, y }) => {

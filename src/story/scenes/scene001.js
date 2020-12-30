@@ -7,6 +7,13 @@ import keyboardLayouts from '../../keyboardLayouts';
 
 const scene001 = {
 	id: '001',
+	playVolume: {
+		minX: -2000,
+		maxX: 4000,
+		minY: -2500,
+		maxY: 2500,
+		softBoundary: 300,
+	},
 	entities: {
 		habeen_1: {
 			id: 'habeen_1',
@@ -161,7 +168,7 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.habeen_1,
 					{
-						posX: 9900,
+						posX: 3900,
 						posY: 500,
 					},
 					{
@@ -173,7 +180,7 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.habeen_2,
 					{
-						posX: 9900,
+						posX: 3900,
 						posY: 0,
 					},
 					{
@@ -185,7 +192,7 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.argoon_1,
 					{
-						posX: 9900,
+						posX: 3900,
 						posY: -500,
 					},
 					{

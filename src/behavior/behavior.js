@@ -19,6 +19,7 @@ const behavior = {
 		state: null,
 		stageEntities: null,
 		checkAgainstCurrentObjectives: null,
+		playVolume: null,
 	}, // gets its values in App.js
 	currentFormations: formations.currentFormations,
 	maxShotTravelDistance: 1000,
@@ -1080,11 +1081,11 @@ const behavior = {
 
 	// init //
 	init() {
-		const softBoundary = c.playVolume.softBoundary;
-		for (const side in c.playVolume) {
+		const softBoundary = behavior.handlers.playVolume.current.softBoundary;
+		for (const side in behavior.handlers.playVolume.current) {
 			if (side === 'softBoundary') continue;
 			behavior.playVolumeBoundaries[side] = decreaseNumberBy(
-				c.playVolume[side],
+				behavior.handlers.playVolume.current[side],
 				softBoundary
 			);
 		}
