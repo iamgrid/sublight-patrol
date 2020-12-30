@@ -3,7 +3,7 @@ import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
-import { getPosition, shields, makeName } from '../utils/helpers';
+import { getPosition, shields, makeName, status } from '../utils/helpers';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
 import timing from '../utils/timing';
@@ -246,6 +246,22 @@ const entities = {
 				entities.shieldCallback(newEntity.immutable.hasShields, newEntity.id);
 			},
 		});
+
+		// new craft alert
+		if (doStoreIn !== 'player' && positionStore === 'canMove') {
+			let updateColor = 'green';
+			if (newEntity.playerRelation === 'neutral') {
+				updateColor = 'yellow';
+			} else if (newEntity.playerRelation === 'hostile') {
+				updateColor = 'red';
+			}
+
+			status.add(
+				updateColor,
+				`New craft alert: ${makeName(type)} at [${pos.posX}, ${pos.posY}]`,
+				timing.times.play
+			);
+		}
 
 		this.zIndexIterator++;
 	},

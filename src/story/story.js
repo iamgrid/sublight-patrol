@@ -291,8 +291,6 @@ const story = {
 			}
 		});
 
-		story.updateObjectiveDisplay();
-
 		const currentSceneObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
 		).sceneObject;
@@ -325,6 +323,8 @@ const story = {
 				});
 			}
 		}
+
+		story.updateObjectiveDisplay();
 
 		// if all needed objectives are done, we can advance to the
 		// next story beat
