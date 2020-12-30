@@ -108,6 +108,7 @@ const entities = {
 	},
 
 	spawn(typeOrEntityObject, pos, incomingProps = {}, storeIn = 'targetable') {
+		// console.log('spawn()', typeOrEntityObject, pos, incomingProps, storeIn);
 		let type, props;
 		if (typeof typeOrEntityObject === 'object') {
 			type = typeOrEntityObject.type;
@@ -183,7 +184,10 @@ const entities = {
 		// position store
 		let positionStore = 'canMove';
 		if (!newEntity.immutable.canMove) positionStore = 'cantMove';
-
+		if (positionStore === 'canMove') {
+			if (pos.latVelocity === undefined) pos.latVelocity = 0;
+			if (pos.longVelocity === undefined) pos.longVelocity = 0;
+		}
 		let positionArray = [pos.posX, pos.posY, pos.latVelocity, pos.longVelocity];
 
 		// model availability
@@ -222,7 +226,11 @@ const entities = {
 		if (newEntity.immutable.isTargetable)
 			stageEntity.reticuleRelation(newEntity.playerRelation);
 
-		stageEntity.position.set(pos.posX, pos.posY);
+		if (Number.isInteger(pos.posX) && Number.isInteger(pos.posY)) {
+			stageEntity.position.set(pos.posX, pos.posY);
+		} else {
+			console.error('spawn was called with a weird pos object:', pos);
+		}
 		stageEntity.zIndex = this.zIndexIterator;
 
 		this.stageEntities[newEntity.id] = stageEntity;

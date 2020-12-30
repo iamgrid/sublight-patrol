@@ -74,6 +74,10 @@ const plates = {
 				atlText = 'Tis but a scratch';
 				btlText = 'Game Over';
 				break;
+			case 'the_end':
+				atlText = "All's well that ends well";
+				btlText = 'Congratulations, you have finished the game!';
+				break;
 		}
 
 		document.getElementById('game__plates_plate_atl').innerHTML = atlText;

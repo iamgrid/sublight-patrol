@@ -12,28 +12,24 @@ const scene001 = {
 			id: 'habeen_1',
 			groupId: 'habeen',
 			type: 'zangari_fighter_type_1',
-			playerRelation: 'neutral',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		habeen_2: {
 			id: 'habeen_2',
 			groupId: 'habeen',
+			type: 'zangari_fighter_type_1',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		argoon_1: {
+			id: 'argoon_1',
+			groupId: 'argoon',
 			type: 'zangari_fighter_type_2',
-			playerRelation: 'neutral',
-			behaviorAssignedGoal: c.possibleGoals.holdStation,
-		},
-		habeen_3: {
-			id: 'habeen_3',
-			groupId: 'habeen',
-			type: 'zangari_fighter_type_3',
-			playerRelation: 'neutral',
-			behaviorAssignedGoal: c.possibleGoals.holdStation,
-		},
-		habeen_4: {
-			id: 'habeen_4',
-			groupId: 'habeen',
-			type: 'zangari_fighter_type_4',
-			playerRelation: 'neutral',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		b2508_012: {
@@ -54,6 +50,14 @@ const scene001 = {
 			type: 'container',
 			contents: 'Medicine',
 		},
+		red_2: {
+			id: 'red_2',
+			groupId: 'red',
+			type: 'shuttle',
+			playerRelation: 'friendly',
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+			contents: 'empty',
+		},
 	},
 	storyBeats: [
 		{
@@ -67,11 +71,6 @@ const scene001 = {
 							type: c.objectiveTypes.inspected.id,
 							groupId: scene001.entities.b2508_012.groupId,
 							requiredPercentage: 100,
-						},
-						{
-							type: c.objectiveTypes.disabled.id,
-							groupId: scene001.entities.habeen_2.groupId,
-							requiredPercentage: 50,
 						},
 					],
 					advanceWhen: [
@@ -100,41 +99,100 @@ const scene001 = {
 					'player'
 				);
 
-				entities.spawn(scene001.entities.habeen_1, {
-					posX: 600,
-					posY: 0,
-				});
-
-				entities.spawn(scene001.entities.habeen_2, {
-					posX: 600,
-					posY: 200,
-				});
-
-				entities.spawn(scene001.entities.habeen_3, {
-					posX: 600,
-					posY: -200,
-					facing: -1,
-				});
-
-				entities.spawn(scene001.entities.habeen_4, {
-					posX: 600,
-					posY: 400,
-				});
-
 				entities.spawn(scene001.entities.b2508_012, {
 					posX: 900,
-					posY: 350,
+					posY: 225,
 				});
 
 				entities.spawn(scene001.entities.b2508_013, {
-					posX: 1800,
-					posY: 350,
+					posX: 900,
+					posY: 150,
 				});
 
 				entities.spawn(scene001.entities.b2508_014, {
 					posX: 900,
-					posY: -200,
+					posY: 300,
 				});
+			},
+		},
+		{
+			keyboardLayout: keyboardLayouts.play.id,
+			cameraMode: c.cameraModes.gameplay,
+			isTheFinalGameplayBeat: false,
+			registerObjectives() {
+				return {
+					show: [
+						{
+							type: c.objectiveTypes.mustHaveSurvived.id,
+							entityId: scene001.entities.b2508_014.id,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.mustHaveArrived.id,
+							entityId: scene001.entities.red_2.id,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.destroyed.id,
+							groupId: scene001.entities.habeen_1.groupId,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.destroyed.id,
+							entityId: scene001.entities.argoon_1.id,
+							requiredPercentage: 100,
+						},
+					],
+					advanceWhen: [
+						{
+							type: c.objectiveTypes.destroyed.id,
+							groupId: scene001.entities.habeen_1.groupId,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.destroyed.id,
+							entityId: scene001.entities.argoon_1.id,
+							requiredPercentage: 100,
+						},
+					],
+				};
+			},
+			execute() {
+				entities.spawn(
+					scene001.entities.habeen_1,
+					{
+						posX: 9900,
+						posY: 500,
+					},
+					{
+						behaviorAssignedStationX: 980,
+						behaviorAssignedStationY: 170,
+					}
+				);
+
+				entities.spawn(
+					scene001.entities.habeen_2,
+					{
+						posX: 9900,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: 980,
+						behaviorAssignedStationY: 100,
+					}
+				);
+
+				entities.spawn(
+					scene001.entities.argoon_1,
+					{
+						posX: 9900,
+						posY: -500,
+					},
+					{
+						behaviorAssignedStationX: 980,
+						behaviorAssignedStationY: 30,
+					}
+				);
 			},
 		},
 		{
@@ -142,19 +200,21 @@ const scene001 = {
 			cameraMode: c.cameraModes.gameplay,
 			isTheFinalGameplayBeat: true,
 			registerObjectives() {
-				return {
-					show: [
-						{
-							type: c.objectiveTypes.forcedToFlee.id,
-							entityId: scene001.entities.habeen_3.id,
-							requiredPercentage: 100,
-						},
-					],
-					advanceWhen: [],
-				};
+				return { show: [], advanceWhen: [] };
 			},
 			execute() {
-				console.log('storyBeat 2');
+				console.log('im heere');
+				entities.spawn(
+					scene001.entities.red_2,
+					{
+						posX: -1800,
+						posY: 500,
+					},
+					{
+						behaviorAssignedStationX: 820,
+						behaviorAssignedStationY: 300,
+					}
+				);
 			},
 		},
 	],

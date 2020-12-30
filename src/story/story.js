@@ -78,6 +78,10 @@ const story = {
 				} else {
 					// no more scenes, end of the game
 					console.log('THIS IS THE END OF THE GAME');
+					plates.loadPlate('the_end');
+					plates.fadeInPlate(25);
+					plates.fadeInMatte(50, 1000);
+					return;
 				}
 			}
 		}
@@ -287,6 +291,39 @@ const story = {
 
 		story.updateObjectiveDisplay();
 
+		const currentSceneObject = story.sceneList.find(
+			(el) => el.id === story.currentScene
+		).sceneObject;
+		const isTheFinalGameplayBeat =
+			currentSceneObject.storyBeats[story.currentSceneBeat]
+				.isTheFinalGameplayBeat;
+
+		// if this is the final gameplay beat, all other objectives
+		// are complete, and the designated entities survived
+		// then set the mustHaveSurvived objectives to 100%
+		if (isTheFinalGameplayBeat) {
+			let allOthersComplete = true;
+			story.currentObjectives.show.forEach((obj) => {
+				if (
+					obj.type !== c.objectiveTypes.mustHaveSurvived.id &&
+					Math.ceil(obj.currentPercentage) < obj.requiredPercentage
+				) {
+					allOthersComplete = false;
+				}
+			});
+
+			if (allOthersComplete) {
+				story.currentObjectives.show.forEach((obj2) => {
+					if (
+						obj2.type === c.objectiveTypes.mustHaveSurvived.id &&
+						obj2.failed === false
+					) {
+						obj2.currentPercentage = 100;
+					}
+				});
+			}
+		}
+
 		// if all needed objectives are done, we can advance to the
 		// next story beat
 		let allComplete = true;
@@ -294,13 +331,8 @@ const story = {
 			if (obj.currentPercentage < obj.requiredPercentage || obj.failed)
 				allComplete = false;
 		});
-		const currentSceneObject = story.sceneList.find(
-			(el) => el.id === story.currentScene
-		).sceneObject;
-		if (
-			currentSceneObject.storyBeats[story.currentSceneBeat]
-				.isTheFinalGameplayBeat
-		) {
+
+		if (isTheFinalGameplayBeat) {
 			story.currentObjectives.show.forEach((obj) => {
 				if (
 					Math.ceil(obj.currentPercentage) < obj.requiredPercentage ||

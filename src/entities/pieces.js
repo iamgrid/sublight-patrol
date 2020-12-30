@@ -327,9 +327,7 @@ const pieces = {
 			width: 52,
 			length: 48,
 		},
-		mutable: {
-			behaviorAllowedToFlee: false,
-		},
+		mutable: {},
 	},
 	zangari_fighter_type_2: {
 		immutable: {
@@ -358,9 +356,7 @@ const pieces = {
 			width: 52,
 			length: 40,
 		},
-		mutable: {
-			behaviorAllowedToFlee: false,
-		},
+		mutable: {},
 	},
 	zangari_fighter_type_3: {
 		immutable: {

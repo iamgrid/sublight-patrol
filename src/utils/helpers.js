@@ -18,17 +18,21 @@ export function makeName(input) {
 
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
-		return [
-			positions.canMove[`${entityId}--posX`],
-			positions.canMove[`${entityId}--posY`],
-		];
+		const reX = positions.canMove[`${entityId}--posX`];
+		const reY = positions.canMove[`${entityId}--posY`];
+		if (!Number.isInteger(reX) || !Number.isInteger(reY)) {
+			console.error({ entityId, reX, reY, positions });
+		}
+		return [reX, reY];
 	}
 
 	if (positions.cantMove[`${entityId}--posX`] !== undefined) {
-		return [
-			positions.cantMove[`${entityId}--posX`],
-			positions.cantMove[`${entityId}--posY`],
-		];
+		const reX = positions.cantMove[`${entityId}--posX`];
+		const reY = positions.cantMove[`${entityId}--posY`];
+		if (!Number.isInteger(reX) || !Number.isInteger(reY)) {
+			console.error({ entityId, reX, reY, positions });
+		}
+		return [reX, reY];
 	}
 
 	console.error(`Unable to ascertain position for ${entityId}`, positions);

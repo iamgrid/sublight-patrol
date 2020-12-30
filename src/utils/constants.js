@@ -103,7 +103,7 @@ const c = {
 			id: 'inspected',
 			desc: 'must be inspected',
 			completed_desc: 'was inspected',
-			failsIfEventIs: ['destroyed', 'hasDespawned'],
+			failsIfEventIs: [],
 		},
 		disabled: {
 			id: 'disabled',
@@ -121,7 +121,7 @@ const c = {
 			id: 'destroyed',
 			desc: 'must be destroyed',
 			completed_desc: 'was destroyed',
-			failsIfEventIs: [],
+			failsIfEventIs: ['hasDespawned'],
 		},
 		mustHaveSurvived: {
 			id: 'mustHaveSurvived',

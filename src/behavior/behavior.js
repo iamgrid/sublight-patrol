@@ -335,6 +335,10 @@ const behavior = {
 
 		const [entityX, entityY] = getPosition(entity.id, currentState.positions);
 
+		if (!Number.isInteger(entityX) || !Number.isInteger(entityY)) {
+			return [{}, {}, null];
+		}
+
 		const velocityUpdates = {};
 
 		let needsToFlip = false;
@@ -418,9 +422,9 @@ const behavior = {
 			facingUpdate = newFacing;
 		}
 
-		// if (entity.id === 'alpha_1') {
+		// if (entity.id === 'red_2') {
 		// 	console.log(
-		// 		'alpha_1',
+		// 		'red_2',
 		// 		entityStoreUpdates,
 		// 		velocityUpdates,
 		// 		facingUpdate,
@@ -428,6 +432,23 @@ const behavior = {
 		// 		entityX
 		// 	);
 		// }
+
+		if (
+			velocityUpdates.latVelocity === 0 &&
+			velocityUpdates.longVelocity === 0
+		) {
+			const [prevLatVel, prevLongVel] = getVelocity(
+				entity.id,
+				currentState.velocities
+			);
+			if (prevLatVel !== 0 || prevLongVel !== 0) {
+				console.log(entity.id, 'is in position');
+				behavior.handlers.checkAgainstCurrentObjectives(
+					entity.id,
+					c.objectiveTypes.mustHaveArrived.id
+				);
+			}
+		}
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
