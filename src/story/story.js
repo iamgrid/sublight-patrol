@@ -46,9 +46,10 @@ const story = {
 		}
 	},
 
-	advance(nextScene = null, nextSceneBeat = 0) {
-		// call with nextScene = null to auto-advance scenes
-		console.log('advance()', nextScene, nextSceneBeat);
+	advance(playScene = null, playSceneBeat = 0) {
+		// call with playScene = null to auto-advance
+		// to the next scene
+		console.log('advance()', playScene, playSceneBeat);
 		const currentState = story.handlers.state();
 
 		let cleanUpNeeded = false;
@@ -63,9 +64,9 @@ const story = {
 		if (story.currentScene === null) {
 			story.currentScene = story.sceneList[0].id;
 		} else {
-			if (nextSceneBeat === 0) cleanUpNeeded = true;
-			if (nextScene !== null) {
-				story.currentScene = nextScene;
+			if (playSceneBeat === 0) cleanUpNeeded = true;
+			if (playScene !== null) {
+				story.currentScene = playScene;
 			} else {
 				let index = story.sceneList.findIndex(
 					(el) => el.id === story.currentScene
@@ -85,7 +86,7 @@ const story = {
 			(el) => el.id === story.currentScene
 		).sceneObject;
 
-		if (nextSceneBeat === 0)
+		if (playSceneBeat === 0)
 			story.currentStoryEntities = currentSceneObject.entities;
 
 		let currentStateScene = currentState.game.currentScene;
@@ -96,7 +97,7 @@ const story = {
 			});
 		}
 
-		story.currentSceneBeat = nextSceneBeat;
+		story.currentSceneBeat = playSceneBeat;
 
 		const currentSceneBeatObj =
 			currentSceneObject.storyBeats[story.currentSceneBeat];
@@ -113,7 +114,7 @@ const story = {
 			story.cleanUp();
 		}
 
-		if (nextSceneBeat === 0) plates.fullMatte();
+		if (playSceneBeat === 0) plates.fullMatte();
 
 		//register new objectives
 		const objectiveUpdates = currentSceneBeatObj.registerObjectives();
@@ -145,7 +146,7 @@ const story = {
 			hud.toggle(false);
 		}
 
-		if (nextSceneBeat === 0) plates.fadeOutMatte(50);
+		if (playSceneBeat === 0) plates.fadeOutMatte(50);
 	},
 
 	updateCurrentObjectives(updates) {
@@ -167,6 +168,10 @@ const story = {
 				awitem.failed = false;
 			}
 		});
+
+		if (updates.show.length > 0) {
+			status.add('yellow', 'Mission objectives updated.', timing.times.play);
+		}
 
 		story.updateObjectiveDisplay();
 	},
@@ -297,10 +302,16 @@ const story = {
 				.isTheFinalGameplayBeat
 		) {
 			story.currentObjectives.show.forEach((obj) => {
-				if (obj.currentPercentage < obj.requiredPercentage || obj.failed)
+				if (
+					Math.ceil(obj.currentPercentage) < obj.requiredPercentage ||
+					obj.failed
+				)
 					allComplete = false;
 			});
+
+			console.log('isTheFinalGameplayBeat');
 		}
+		console.log('allComplete:', allComplete, story.currentObjectives);
 
 		if (updatedObjectiveMessages.length < 1) {
 			let printStatus = true;
@@ -403,7 +414,7 @@ const story = {
 			let mainText = c.objectiveTypes[objectiveObj.type].desc;
 			let parensText = 'incomplete';
 			if (completed) {
-				parensText = 'completed';
+				parensText = 'complete';
 				mainText = c.objectiveTypes[objectiveObj.type].completed_desc;
 			}
 			if (objectiveObj.failed) {
