@@ -69,7 +69,7 @@ const plates = {
 			'Easy-peasy',
 			'This was worth getting out of bed for',
 			"Ya boy 's got some moves",
-			"Kickin' ass, takin' names",
+			"Kickin' butt, takin' names",
 			"That's what I do. I drink and I green objectives.",
 		];
 

@@ -927,14 +927,14 @@ export const status = {
 			properDiv.classList.add('game__status-proper--with-scrollbar');
 		}
 
-		const disp = [...this.store]
-			.reverse()
-			.map(
-				({ color, text, at }) =>
-					`<span class='time'>${at}&nbsp;</span> <span class='${color}'>${text}</span>`
-			);
+		const disp = [...this.store].map(
+			({ color, text, at }) =>
+				`<span class='time'>${at}&nbsp;</span> <span class='${color}'>${text}</span>`
+		);
 
 		properDiv.innerHTML = disp.join('<br />');
+
+		status.scrollToBottom();
 
 		if (this.isHidden) {
 			this.toggleHide('show');
@@ -942,6 +942,12 @@ export const status = {
 
 		window.clearTimeout(status.hiderTimeout);
 		this.hiderTimeout = window.setTimeout(status.toggleHide, 10000);
+	},
+
+	scrollToBottom() {
+		const domElement = document.getElementById('game__status-proper');
+		document.getElementById('game__status-proper').scrollTop =
+			domElement.scrollHeight - domElement.clientHeight;
 	},
 
 	toggleHide(toggle = 'hide') {
@@ -972,11 +978,12 @@ export const status = {
 		if (doExpand) {
 			mainDivClasses.add('game__status--expanded');
 			this.isExpanded = true;
+			status.scrollToBottom();
 		} else {
-			document.getElementById('game__status-proper').scrollTo(0, 0);
 			this.isExpanded = false;
 			window.setTimeout(() => {
 				mainDivClasses.remove('game__status--expanded');
+				status.scrollToBottom();
 			}, 50);
 		}
 	},

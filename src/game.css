@@ -291,6 +291,7 @@
 	height: 25px;
 	overflow-y: hidden;
 	line-height: 2em;
+	padding: 0 0 2px;
 }
 
 .game__status--hidden .game__status-proper {
