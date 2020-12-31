@@ -5,10 +5,11 @@ import soundEffects from './audio/soundEffects';
 import c from './utils/constants';
 import overlays from './overlays';
 import timing from './utils/timing';
-import { decreaseNumberBy } from './utils/formulas';
+// import { decreaseNumberBy } from './utils/formulas';
 import {
-	repositionMovedEntities,
+	recalculateSoftBoundaries,
 	fromSpriteSheet,
+	repositionMovedEntities,
 	shields,
 	alertsAndWarnings,
 	status,
@@ -52,8 +53,6 @@ export default class App extends PIXI.Application {
 		document.getElementById('pixicanvas').tabIndex = 0;
 		document.getElementById('pixicanvas').focus();
 
-		this.init();
-
 		this.inSlipStream = false;
 		this.showingCoordWarning = false;
 		this.showingCoordAlert = false;
@@ -68,17 +67,11 @@ export default class App extends PIXI.Application {
 		this.playVolume = {
 			current: {},
 			softBoundaries: {},
-
-			recalculateSoftBoundaries() {
-				for (const side in this.current) {
-					if (side === 'softBoundary') continue;
-					this.softBoundaries[side] = decreaseNumberBy(
-						this.current[side],
-						this.current.softBoundary
-					);
-				}
-			},
 		};
+
+		this.playVolume.recalculateSoftBoundaries = recalculateSoftBoundaries.bind(
+			this.playVolume
+		);
 
 		this.triggered0 = false;
 
@@ -92,6 +85,8 @@ export default class App extends PIXI.Application {
 		// console.log(story);
 
 		this.shownStateOnPause = false;
+
+		this.init();
 	}
 
 	init() {

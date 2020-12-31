@@ -1,6 +1,6 @@
 import * as PIXI from '../pixi';
 import c from './constants';
-import { fadeHexColor, easing } from './formulas';
+import { fadeHexColor, easing, decreaseNumberBy } from './formulas';
 import timing from './timing';
 import entities from '../entities/entities';
 import soundEffects from '../audio/soundEffects';
@@ -141,6 +141,16 @@ export const fromSpriteSheet = {
 		return sprite;
 	},
 };
+
+export function recalculateSoftBoundaries() {
+	for (const side in this.current) {
+		if (side === 'softBoundary') continue;
+		this.softBoundaries[side] = decreaseNumberBy(
+			this.current[side],
+			this.current.softBoundary
+		);
+	}
+}
 
 export function createTargetingReticule(params) {
 	let re = {};
