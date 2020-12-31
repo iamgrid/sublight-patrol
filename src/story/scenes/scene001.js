@@ -6,6 +6,7 @@ import keyboardLayouts from '../../keyboardLayouts';
 // import timing from '../../utils/timing';
 
 const scene001 = {
+	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
 	id: '001',
 	titlePlate: {
 		wittyText: "it's time to put your big boy pants on",
@@ -47,7 +48,8 @@ const scene001 = {
 			id: 'b2508_012',
 			groupId: 'b2508',
 			type: 'container',
-			contents: 'Food rations',
+			contents: 'Tranquilizers',
+			contentClassification: c.entityContentClassifications.illicit,
 		},
 		b2508_013: {
 			id: 'b2508_013',
@@ -60,14 +62,16 @@ const scene001 = {
 			groupId: 'b2508',
 			type: 'container',
 			contents: 'Medicine',
+			contentClassification: c.entityContentClassifications.missionObjective,
 		},
-		red_2: {
-			id: 'red_2',
+		htran_091: {
+			id: 'htran_091',
 			groupId: 'red',
 			type: 'shuttle',
 			playerRelation: 'friendly',
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 			contents: 'No cargo',
+			hasBeenScanned: true,
 		},
 	},
 	storyBeats: [
@@ -111,17 +115,17 @@ const scene001 = {
 				);
 
 				entities.spawn(scene001.entities.b2508_012, {
-					posX: 900,
+					posX: 1900,
 					posY: 225,
 				});
 
 				entities.spawn(scene001.entities.b2508_013, {
-					posX: 900,
+					posX: 1900,
 					posY: 150,
 				});
 
 				entities.spawn(scene001.entities.b2508_014, {
-					posX: 900,
+					posX: 1900,
 					posY: 300,
 				});
 			},
@@ -140,7 +144,7 @@ const scene001 = {
 						},
 						{
 							type: c.objectiveTypes.mustHaveArrived.id,
-							entityId: scene001.entities.red_2.id,
+							entityId: scene001.entities.htran_091.id,
 							requiredPercentage: 100,
 						},
 						{
@@ -176,7 +180,7 @@ const scene001 = {
 						posY: 500,
 					},
 					{
-						behaviorAssignedStationX: 980,
+						behaviorAssignedStationX: 1980,
 						behaviorAssignedStationY: 170,
 					}
 				);
@@ -188,7 +192,7 @@ const scene001 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 980,
+						behaviorAssignedStationX: 1980,
 						behaviorAssignedStationY: 100,
 					}
 				);
@@ -200,7 +204,7 @@ const scene001 = {
 						posY: -500,
 					},
 					{
-						behaviorAssignedStationX: 980,
+						behaviorAssignedStationX: 1980,
 						behaviorAssignedStationY: 30,
 					}
 				);
@@ -215,13 +219,13 @@ const scene001 = {
 			},
 			execute() {
 				entities.spawn(
-					scene001.entities.red_2,
+					scene001.entities.htran_091,
 					{
 						posX: -1800,
 						posY: 500,
 					},
 					{
-						behaviorAssignedStationX: 820,
+						behaviorAssignedStationX: 1820,
 						behaviorAssignedStationY: 300,
 					}
 				);

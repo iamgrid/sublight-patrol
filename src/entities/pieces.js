@@ -43,6 +43,7 @@ const pieces = {
 			assignedPlayerRelation: null,
 			playerRelation: null,
 			contents: 'No cargo',
+			contentClassification: c.entityContentClassifications.irrelevant,
 			facing: 1,
 		},
 	},
@@ -64,6 +65,7 @@ const pieces = {
 			contents: null,
 			hullStrength: null,
 			systemStrength: null,
+			contentClassification: c.entityContentClassifications.irrelevant,
 		},
 	},
 

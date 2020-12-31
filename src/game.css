@@ -324,7 +324,7 @@
 }
 
 .game__status-proper .red {
-	color: #e63232;
+	color: #ff6161;
 }
 
 .game__status-proper .yellow {
@@ -484,6 +484,18 @@
 
 .game__hud-contents-text--unknown {
 	color: #ffffff40;
+}
+
+.game__hud-contents-text--irrelevant {
+	color: #ffffff70;
+}
+
+.game__hud-contents-text--illicit {
+	color: #ff5353;
+}
+
+.game__hud-contents-text--missionObjective {
+	color: #32ade6;
 }
 
 .game__hud--visible .game__hud-id-text,

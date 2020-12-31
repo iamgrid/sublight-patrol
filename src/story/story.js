@@ -131,6 +131,13 @@ const story = {
 		}
 
 		if (playSceneBeat === 0) {
+			currentSceneObject.handlers.checkBeatCompletion =
+				story.checkBeatCompletion;
+			status.add(
+				'aqua',
+				`--- ${currentSceneObject.titlePlate.mainText} ---`,
+				timing.times.play
+			);
 			plates.fullMatte();
 			plates.loadPlate(
 				'mission_title',
@@ -195,7 +202,7 @@ const story = {
 		});
 
 		if (updates.show.length > 0) {
-			status.add('yellow', 'Mission objectives updated.', timing.times.play);
+			status.add('aqua', 'Mission objectives updated.', timing.times.play);
 		}
 
 		story.updateObjectiveDisplay();
@@ -317,6 +324,57 @@ const story = {
 			}
 		});
 
+		story.updateObjectiveDisplay();
+
+		if (updatedObjectiveMessages.length < 1) {
+			// this event didnt cause any progress with the objectives
+			// so we'll print a yellow status message
+			let printStatus = true;
+			let statusColor = 'yellow';
+			let statusMessage = `${entityType}[${makeName(entityId)}] ${
+				c.objectiveTypes[eventId].completed_desc
+			}`;
+
+			if (
+				(eventId === c.objectiveTypes.inspected.id && !meansProgress) ||
+				(eventId === c.objectiveTypes.hasDespawned.id && !failState) ||
+				eventId === c.objectiveTypes.mustHaveArrived.id
+			) {
+				printStatus = false;
+			}
+
+			if (printStatus) {
+				status.add(statusColor, statusMessage, timing.times.play);
+			}
+		} else {
+			updatedObjectiveMessages.forEach((el) => {
+				let printThisStatus = true;
+
+				if (eventId === c.objectiveTypes.hasDespawned.id && !failState) {
+					printThisStatus = false;
+				}
+
+				if (printThisStatus) {
+					status.add(el.color, el.message, timing.times.play);
+				}
+			});
+		}
+
+		story.checkBeatCompletion();
+
+		if (failState) {
+			console.log('MISSION FAILED!', story.currentObjectives);
+			plates.loadPlate('mission_failed', -1, 'Mission failed');
+			plates.fadeInPlate(25);
+			plates.fadeInMatte(50, 1000);
+			// TODO: stop the game from continuing
+			// and show the appropriate buttons
+		}
+	},
+
+	checkBeatCompletion() {
+		let updatedObjectiveMessages = [];
+
 		const currentSceneObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
 		).sceneObject;
@@ -345,12 +403,23 @@ const story = {
 						obj2.failed === false
 					) {
 						obj2.currentPercentage = 100;
+						const [itemColor, objectiveText] = story.returnObjectiveText(obj2);
+						updatedObjectiveMessages.push({
+							color: itemColor,
+							message: 'Objectives: ' + objectiveText,
+						});
 					}
 				});
 			}
 		}
 
 		story.updateObjectiveDisplay();
+
+		if (updatedObjectiveMessages.length > 0) {
+			updatedObjectiveMessages.forEach((el) => {
+				status.add(el.color, el.message, timing.times.play);
+			});
+		}
 
 		// if all needed objectives are done, we can advance to the
 		// next story beat
@@ -373,42 +442,9 @@ const story = {
 		}
 		console.log('allComplete:', allComplete, story.currentObjectives);
 
-		if (updatedObjectiveMessages.length < 1) {
-			let printStatus = true;
-			let statusColor = 'yellow';
-			let statusMessage = `${entityType}[${makeName(entityId)}] ${
-				c.objectiveTypes[eventId].completed_desc
-			}`;
-
-			if (
-				(eventId === c.objectiveTypes.inspected.id && !meansProgress) ||
-				(eventId === c.objectiveTypes.hasDespawned.id && !failState)
-			) {
-				printStatus = false;
-			}
-
-			if (printStatus) {
-				status.add(statusColor, statusMessage, timing.times.play);
-			}
-		} else {
-			updatedObjectiveMessages.forEach((el) => {
-				let printThisStatus = true;
-
-				if (eventId === c.objectiveTypes.hasDespawned.id && !failState) {
-					printThisStatus = false;
-				}
-
-				if (printThisStatus) {
-					status.add(el.color, el.message, timing.times.play);
-				}
-			});
-		}
-
 		if (allComplete) {
 			console.log(
 				'ALLCOMPLETE IS TRUE, ADVANCE TO THE NEXT STORY BEAT!',
-				entityId,
-				eventId,
 				story.currentObjectives
 			);
 
@@ -429,15 +465,6 @@ const story = {
 					7500
 				);
 			}
-		}
-
-		if (failState) {
-			console.log('MISSION FAILED!', story.currentObjectives);
-			plates.loadPlate('mission_failed', -1, 'Mission failed');
-			plates.fadeInPlate(25);
-			plates.fadeInMatte(50, 1000);
-			// TODO: stop the game from continuing
-			// and show the appropriate buttons
 		}
 	},
 

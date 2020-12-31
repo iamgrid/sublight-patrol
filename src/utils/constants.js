@@ -91,6 +91,11 @@ const c = {
 		enemy: 'enemy',
 		otherEntity: 'otherEntity',
 	},
+	entityContentClassifications: {
+		irrelevant: 'irrelevant',
+		illicit: 'illicit',
+		missionObjective: 'missionObjective',
+	},
 	objectiveTypes: {
 		inspected: {
 			id: 'inspected',

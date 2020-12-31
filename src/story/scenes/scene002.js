@@ -6,6 +6,7 @@ import keyboardLayouts from '../../keyboardLayouts';
 // import timing from '../../utils/timing';
 
 const scene002 = {
+	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
 	id: '002',
 	titlePlate: {
 		wittyText: 'It seemed way too easy',
@@ -27,13 +28,15 @@ const scene002 = {
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		red_2: {
-			id: 'red_2',
+		htran_091: {
+			id: 'htran_091',
 			groupId: 'red',
 			type: 'shuttle',
 			playerRelation: 'friendly',
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 			contents: 'Medicine',
+			contentClassification: c.entityContentClassifications.missionObjective,
+			hasBeenScanned: true,
 		},
 	},
 	storyBeats: [
@@ -46,7 +49,7 @@ const scene002 = {
 					show: [
 						{
 							type: c.objectiveTypes.mustHaveSurvived.id,
-							entityId: scene002.entities.red_2.id,
+							entityId: scene002.entities.htran_091.id,
 							requiredPercentage: 100,
 						},
 						{
@@ -81,7 +84,7 @@ const scene002 = {
 					'player'
 				);
 
-				entities.spawn(scene002.entities.red_2, {
+				entities.spawn(scene002.entities.htran_091, {
 					posX: 100,
 					posY: 150,
 				});
@@ -111,6 +114,13 @@ const scene002 = {
 			},
 			execute() {
 				console.log('this is the new ending and stuff');
+				if (typeof scene002.handlers.checkBeatCompletion === 'function') {
+					scene002.handlers.checkBeatCompletion();
+				} else {
+					console.error(
+						'failed to set the checkBeatCompletion handler in story.js'
+					);
+				}
 			},
 		},
 	],

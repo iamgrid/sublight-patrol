@@ -12,7 +12,13 @@ export function isEmptyObject(obj) {
 export function makeName(input) {
 	return input
 		.split('_')
-		.map((el) => `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`)
+		.map((el) => {
+			if (el === 'htran') {
+				return 'HTran';
+			} else {
+				return `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`;
+			}
+		})
 		.join(' ');
 }
 

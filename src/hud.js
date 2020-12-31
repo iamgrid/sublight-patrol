@@ -190,6 +190,7 @@ const hud = {
 		re[entityName + 'System'] = entity.systemStrength;
 		re[entityName + 'IsDisabled'] = entity.isDisabled;
 		re[entityName + 'Contents'] = entity.contents;
+		re[entityName + 'ContentClassification'] = entity.contentClassification;
 
 		const name = `${entity.immutable.typeShorthand} ${entity.displayId}`;
 		re[entityName + 'Id'] = name;
@@ -218,13 +219,26 @@ const hud = {
 					const targetContentsDivClasses = document.getElementById(
 						'game__hud-target-contents'
 					).classList;
-					targetContentsDivClasses.remove('game__hud-contents-text--unknown');
+
+					for (const cls in c.entityContentClassifications) {
+						targetContentsDivClasses.remove(
+							`game__hud-contents-text--${c.entityContentClassifications[cls]}`
+						);
+					}
+
 					if (
 						completeDisplayObj.targetExists &&
 						!completeDisplayObj.targetHasBeenScanned
 					) {
 						contentsDisp = '- unknown -';
 						targetContentsDivClasses.add('game__hud-contents-text--unknown');
+					} else {
+						targetContentsDivClasses.remove('game__hud-contents-text--unknown');
+						const contentClassification =
+							completeDisplayObj[`${entity}ContentClassification`];
+						targetContentsDivClasses.add(
+							`game__hud-contents-text--${contentClassification}`
+						);
 					}
 				}
 

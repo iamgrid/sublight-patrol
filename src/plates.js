@@ -70,6 +70,7 @@ const plates = {
 			'This was worth getting out of bed for',
 			"Ya boy 's got some moves",
 			"Kickin' ass, takin' names",
+			"That's what I do. I drink and I green objectives.",
 		];
 
 		switch (plateId) {
