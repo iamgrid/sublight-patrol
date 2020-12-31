@@ -73,6 +73,13 @@ const plates = {
 			"That's what I do. I drink and I green objectives.",
 		];
 
+		const missionFailedQuoteVariants = [
+			'Dagnabbit',
+			'Gosh darnit',
+			'Darn it all to heck!',
+			'Fork.',
+		];
+
 		switch (plateId) {
 			case 'respawning':
 				atlText = respawnQuoteVariants[1];
@@ -89,7 +96,10 @@ const plates = {
 				btlText = 'Congratulations, you have finished the game!';
 				break;
 			case 'mission_failed':
-				atlText = 'dagnabbit';
+				atlText =
+					missionFailedQuoteVariants[
+						randomNumber(0, missionFailedQuoteVariants.length - 1)
+					];
 				btlText = mainText;
 				break;
 			case 'mission_success':

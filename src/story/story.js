@@ -216,8 +216,17 @@ const story = {
 		story.updateObjectiveDisplay();
 	},
 
-	checkAgainstCurrentObjectives(entityId, eventId) {
-		console.log('checkAgainstCurrentObjectives', entityId, eventId);
+	checkAgainstCurrentObjectives(
+		entityId,
+		eventId,
+		wasPreviouslyInspected = false
+	) {
+		console.log(
+			'checkAgainstCurrentObjectives',
+			entityId,
+			eventId,
+			wasPreviouslyInspected
+		);
 
 		if (typeof eventId !== 'string') {
 			console.error(
@@ -279,8 +288,13 @@ const story = {
 		entityInvolvedIn.forEach((el) => {
 			const objectiveType = el.objectiveObj.type;
 			let hasUpdated = false;
-			if (c.objectiveTypes[objectiveType].failsIfEventIs.includes(eventId)) {
-				// example: the entity should have been inspected,
+			if (
+				c.objectiveTypes[objectiveType].failsIfEventIs.includes(eventId) ||
+				(eventId === c.objectiveTypes.destroyed.id &&
+					!wasPreviouslyInspected &&
+					objectiveType === c.objectiveTypes.inspected.id)
+			) {
+				// example: the entity should have been disabled,
 				// but it was destroyed instead
 				if (
 					el.objectiveObj.groupId === undefined ||
@@ -461,16 +475,16 @@ const story = {
 				story.advance(story.currentScene, story.currentSceneBeat + 1);
 			} else {
 				// advance to the next scene
-				plates.loadPlate('mission_success');
-				plates.fadeInPlate(25);
-				plates.fadeInMatte(50);
-				plates.fadeOutPlate(50, 4000);
+				plates.loadPlate('mission_success', 1000);
+				plates.fadeInPlate(25, 1000);
+				plates.fadeInMatte(50, 1000);
+				plates.fadeOutPlate(50, 5000);
 				timing.setTimeout(
 					() => {
 						story.advance(null, 0);
 					},
 					timing.modes.play,
-					7500
+					8500
 				);
 			}
 		}

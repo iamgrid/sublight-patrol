@@ -728,6 +728,7 @@ export default function mainReducer(state, action) {
 			let show = c.damageTypes.shieldDamage;
 			let hullHealthPrc = null; // only relevant on hullDamage
 			let fancyEffects = null; // relevant on hullDamage and explosion
+			let wasPreviouslyInspected = null; // relevant on explosion
 			let currentShieldStrength = oldEntity.shieldStrength;
 			if (currentShieldStrength === undefined) currentShieldStrength = 0;
 			let newShieldStrength = currentShieldStrength - shotDamage;
@@ -753,6 +754,8 @@ export default function mainReducer(state, action) {
 				show = c.damageTypes.destruction;
 				damageColor = null;
 				fancyEffects = oldEntity.immutable.fancyEffects;
+				wasPreviouslyInspected = oldEntity.hasBeenScanned;
+				// console.log(entityId, wasPreviouslyInspected);
 			}
 
 			if (show !== c.damageTypes.destruction) {
@@ -786,14 +789,26 @@ export default function mainReducer(state, action) {
 
 				return [
 					() =>
-						action.callbackFn(show, hullHealthPrc, damageColor, fancyEffects),
+						action.callbackFn(
+							show,
+							hullHealthPrc,
+							damageColor,
+							wasPreviouslyInspected,
+							fancyEffects
+						),
 					{ ...state, entities: newEntities },
 				];
 			} else {
 				// REMOVE_ENTITY will be called in the callback function
 				return [
 					() =>
-						action.callbackFn(show, hullHealthPrc, damageColor, fancyEffects),
+						action.callbackFn(
+							show,
+							hullHealthPrc,
+							damageColor,
+							wasPreviouslyInspected,
+							fancyEffects
+						),
 					null,
 				];
 			}

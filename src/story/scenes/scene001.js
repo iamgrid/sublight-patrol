@@ -147,6 +147,11 @@ const scene001 = {
 				return {
 					show: [
 						{
+							type: c.objectiveTypes.destroyed.id,
+							entityId: scene001.entities.b2508_012.id,
+							requiredPercentage: 100,
+						},
+						{
 							type: c.objectiveTypes.mustHaveSurvived.id,
 							entityId: scene001.entities.b2508_014.id,
 							requiredPercentage: 100,
@@ -168,6 +173,11 @@ const scene001 = {
 						},
 					],
 					advanceWhen: [
+						{
+							type: c.objectiveTypes.destroyed.id,
+							entityId: scene001.entities.b2508_012.id,
+							requiredPercentage: 100,
+						},
 						{
 							type: c.objectiveTypes.destroyed.id,
 							groupId: scene001.entities.habeen_1.groupId,

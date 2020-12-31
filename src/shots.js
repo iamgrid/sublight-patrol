@@ -381,7 +381,13 @@ const shots = {
 						entityId: entityId,
 						shotDamage: shotDamage,
 						origin: stageShot.origin,
-						callbackFn: (showType, hullHealthPrc, damageColor, fancyEffects) =>
+						callbackFn: (
+							showType,
+							hullHealthPrc,
+							damageColor,
+							wasPreviouslyInspected,
+							fancyEffects
+						) =>
 							shots.showDamage(
 								entityId,
 								entityStore,
@@ -389,6 +395,7 @@ const shots = {
 								stageShot.origin,
 								hullHealthPrc,
 								damageColor,
+								wasPreviouslyInspected,
 								fancyEffects
 							),
 					});
@@ -420,6 +427,7 @@ const shots = {
 		origin,
 		hullHealthPrc,
 		damageColor,
+		wasPreviouslyInspected,
 		fancyEffects
 	) {
 		switch (type) {
@@ -479,7 +487,8 @@ const shots = {
 					) {
 						shots.handlers.checkAgainstCurrentObjectives(
 							entityId,
-							c.objectiveTypes.destroyed.id
+							c.objectiveTypes.destroyed.id,
+							wasPreviouslyInspected
 						);
 					}
 				}
