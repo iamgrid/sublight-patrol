@@ -1,5 +1,5 @@
 import c from '../utils/constants';
-import { decreaseNumberBy, randomNumber } from '../utils/formulas';
+import { randomNumber } from '../utils/formulas';
 import entities from '../entities/entities';
 import shots from '../shots';
 import { calculateDistance } from '../utils/formulas';
@@ -25,7 +25,6 @@ const behavior = {
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
 	widthOfWidestEntityInTheGame: 49,
-	playVolumeBoundaries: {},
 	overcorrectingEntities: {},
 
 	tick() {
@@ -552,8 +551,10 @@ const behavior = {
 
 			// Don't move beyond the behavior boundaries
 			if (
-				entityX + newLongVelocity < behavior.playVolumeBoundaries.minX ||
-				entityX + newLongVelocity > behavior.playVolumeBoundaries.maxX
+				entityX + newLongVelocity <
+					behavior.handlers.playVolume.softBoundaries.minX ||
+				entityX + newLongVelocity >
+					behavior.handlers.playVolume.softBoundaries.maxX
 			) {
 				newLongVelocity = 0;
 			}
@@ -732,8 +733,10 @@ const behavior = {
 
 		// Don't move beyond the behavior boundaries
 		if (
-			entityY + newLatVelocity < behavior.playVolumeBoundaries.minY ||
-			entityY + newLatVelocity > behavior.playVolumeBoundaries.maxY
+			entityY + newLatVelocity <
+				behavior.handlers.playVolume.softBoundaries.minY ||
+			entityY + newLatVelocity >
+				behavior.handlers.playVolume.softBoundaries.maxY
 		) {
 			newLatVelocity = 0;
 		}
@@ -1075,18 +1078,6 @@ const behavior = {
 				entities.stageEntities,
 				velocityUpdates[entityId].latVelocity,
 				velocityUpdates[entityId].longVelocity
-			);
-		}
-	},
-
-	// init //
-	init() {
-		const softBoundary = behavior.handlers.playVolume.current.softBoundary;
-		for (const side in behavior.handlers.playVolume.current) {
-			if (side === 'softBoundary') continue;
-			behavior.playVolumeBoundaries[side] = decreaseNumberBy(
-				behavior.handlers.playVolume.current[side],
-				softBoundary
 			);
 		}
 	},

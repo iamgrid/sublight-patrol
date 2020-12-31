@@ -73,6 +73,10 @@ const scene001 = {
 			contents: 'No cargo',
 			hasBeenScanned: true,
 		},
+		harpax_52164: {
+			id: 'harpax_52164',
+			type: 'buoy',
+		},
 	},
 	storyBeats: [
 		{
@@ -98,6 +102,11 @@ const scene001 = {
 				};
 			},
 			execute(playerId, playerShipType) {
+				entities.spawn(scene001.entities.harpax_52164, {
+					posX: 300,
+					posY: 225,
+				});
+
 				entities.spawn(
 					playerShipType,
 					{

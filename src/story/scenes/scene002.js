@@ -9,8 +9,8 @@ const scene002 = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
 	id: '002',
 	titlePlate: {
-		wittyText: 'It seemed way too easy',
-		mainText: 'Mission 2: Just like in the movies',
+		wittyText: 'Forking Dylan jinxed it.',
+		mainText: "Mission 2: Baby's first standoff",
 	},
 	playVolume: {
 		minX: -2000,
@@ -37,6 +37,10 @@ const scene002 = {
 			contents: 'Medicine',
 			contentClassification: c.entityContentClassifications.missionObjective,
 			hasBeenScanned: true,
+		},
+		harpax_00097: {
+			id: 'harpax_00097',
+			type: 'buoy',
 		},
 	},
 	storyBeats: [
@@ -68,6 +72,11 @@ const scene002 = {
 				};
 			},
 			execute(playerId, playerShipType) {
+				entities.spawn(scene002.entities.harpax_00097, {
+					posX: 1000,
+					posY: 345,
+				});
+
 				entities.spawn(
 					playerShipType,
 					{

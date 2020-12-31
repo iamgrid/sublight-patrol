@@ -12,7 +12,13 @@ import formations from '../behavior/formations';
 import shots from '../shots';
 
 const story = {
-	handlers: { dispatch: null, state: null, stage: null, playVolume: null }, // gets its values in App.js
+	handlers: {
+		dispatch: null,
+		state: null,
+		stage: null,
+		playVolume: null,
+		playVolumeBoundaries: null,
+	}, // gets its values in App.js
 	sceneList: [
 		{ id: '001', sceneObject: scene001 },
 		{ id: '002', sceneObject: scene002 },
@@ -101,6 +107,8 @@ const story = {
 		if (playSceneBeat === 0) {
 			story.currentStoryEntities = currentSceneObject.entities;
 			story.handlers.playVolume.current = currentSceneObject.playVolume;
+			story.handlers.playVolume.recalculateSoftBoundaries();
+			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
 		}
 
 		let currentStateScene = currentState.game.currentScene;
@@ -202,7 +210,7 @@ const story = {
 		});
 
 		if (updates.show.length > 0) {
-			status.add('aqua', 'Mission objectives updated.', timing.times.play);
+			status.add('yellow', 'Mission objectives updated.', timing.times.play);
 		}
 
 		story.updateObjectiveDisplay();

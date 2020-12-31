@@ -1,4 +1,5 @@
 import * as PIXI from '../../pixi';
+import { makeName } from '../../utils/helpers';
 
 export default class Buoy extends PIXI.Container {
 	constructor(props) {
@@ -7,7 +8,7 @@ export default class Buoy extends PIXI.Container {
 
 		this.entityId = props.entityId;
 		this.entityStore = props.entityStore;
-		this.labelText = `[ ${props.coordX} , ${props.coordY} ]`;
+		this.labelText = `[ ${makeName(this.entityId)} ]`;
 		this.blinkTimer = 0;
 
 		this.sprites = {};

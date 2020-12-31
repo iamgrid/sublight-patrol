@@ -995,34 +995,6 @@ export const status = {
 	},
 };
 
-export function spawnBuoys(entities, playVolume) {
-	const buoys = [
-		{ x: 0, y: 0 },
-		{ x: playVolume.minX, y: 0 },
-		{ x: playVolume.maxX, y: 0 },
-		{ x: 0, y: playVolume.minY },
-		{ x: 0, y: playVolume.maxY },
-		{ x: playVolume.minX, y: playVolume.minY },
-		{ x: playVolume.maxX, y: playVolume.minY },
-		{ x: playVolume.minX, y: playVolume.maxY },
-		{ x: playVolume.maxX, y: playVolume.maxY },
-	];
-
-	buoys.forEach(({ x, y }) => {
-		entities.spawn(
-			'buoy',
-			{
-				posX: x,
-				posY: y,
-			},
-			{
-				id: `${x}_${y}`,
-				contents: '-',
-			}
-		);
-	});
-}
-
 export function hello() {
 	let helloPadding = '\n';
 	if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {

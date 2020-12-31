@@ -12,7 +12,6 @@ import {
 	shields,
 	alertsAndWarnings,
 	status,
-	spawnBuoys,
 	hello,
 	getPosition,
 } from './utils/helpers';
@@ -21,7 +20,8 @@ import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
-import StarScapeLayer from './components/StarscapeLayer';
+import StarscapeLayer from './components/StarscapeLayer';
+import PlayVolumeBoundaries from './components/PlayVolumeBoundaries';
 import entities from './entities/entities';
 import behavior from './behavior/behavior';
 import shots from './shots';
@@ -67,6 +67,17 @@ export default class App extends PIXI.Application {
 
 		this.playVolume = {
 			current: {},
+			softBoundaries: {},
+
+			recalculateSoftBoundaries() {
+				for (const side in this.current) {
+					if (side === 'softBoundary') continue;
+					this.softBoundaries[side] = decreaseNumberBy(
+						this.current[side],
+						this.current.softBoundary
+					);
+				}
+			},
 		};
 
 		this.triggered0 = false;
@@ -109,12 +120,14 @@ export default class App extends PIXI.Application {
 
 		this.starScapeStage = new PIXI.Container();
 		this.mainStage = new PIXI.Container();
+		this.playVolumeBoundaries = new PlayVolumeBoundaries();
 		this.hudStage = new PIXI.Container();
 		this.pixiHUD = new HUD();
 		this.pixiHUD.alpha = 0;
 		this.hudStage.addChild(this.pixiHUD);
 
 		this.mainStage.sortableChildren = true;
+		this.mainStage.addChild(this.playVolumeBoundaries);
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
@@ -124,6 +137,7 @@ export default class App extends PIXI.Application {
 			state: this.gameState,
 			stage: this.mainStage,
 			playVolume: this.playVolume,
+			playVolumeBoundaries: this.playVolumeBoundaries,
 		};
 
 		audio.handlers = {
@@ -183,26 +197,14 @@ export default class App extends PIXI.Application {
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
-			(el) => new StarScapeLayer(el)
+			(el) => new StarscapeLayer(el)
 		);
 
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
 
 		story.advance();
 
-		this.softBoundaries = {};
-
-		for (const side in this.playVolume.current) {
-			if (side === 'softBoundary') continue;
-			this.softBoundaries[side] = decreaseNumberBy(
-				this.playVolume.current[side],
-				this.playVolume.current.softBoundary
-			);
-		}
-
-		spawnBuoys(entities, this.playVolume.current);
-
-		behavior.init();
+		// behavior.init();
 
 		console.log(this.gameState());
 
@@ -273,10 +275,10 @@ export default class App extends PIXI.Application {
 
 			// out of bounds warning/alert
 			if (
-				playerX < this.softBoundaries.minX ||
-				playerX > this.softBoundaries.maxX ||
-				playerY < this.softBoundaries.minY ||
-				playerY > this.softBoundaries.maxY
+				playerX < this.playVolume.softBoundaries.minX ||
+				playerX > this.playVolume.softBoundaries.maxX ||
+				playerY < this.playVolume.softBoundaries.minY ||
+				playerY > this.playVolume.softBoundaries.maxY
 			) {
 				if (!this.showingCoordWarning && !this.showingCoordAlert) {
 					alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);

@@ -78,14 +78,14 @@ const plates = {
 				atlText = respawnQuoteVariants[1];
 				if (quoteVariant > -1) atlText = respawnQuoteVariants[quoteVariant];
 				btlText =
-					'Returning to the scene with a stronger ship from your inventory';
+					'Returning to the scene with a another craft from your hangar';
 				break;
 			case 'game_over':
 				atlText = 'Tis but a scratch';
 				btlText = 'Game Over';
 				break;
 			case 'the_end':
-				atlText = "All's well that ends well";
+				atlText = "I'm proud of you.";
 				btlText = 'Congratulations, you have finished the game!';
 				break;
 			case 'mission_failed':
