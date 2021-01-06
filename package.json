@@ -65,6 +65,7 @@
 		"@pixi/utils": "^5.3.3",
 		"pixi-sound": "^3.0.5",
 		"pixi.js-keyboard": "^1.0.9",
+		"pixi.js-mouse": "^1.0.4",
 		"uuid": "^8.3.1"
 	}
 }

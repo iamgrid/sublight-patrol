@@ -1,5 +1,5 @@
 import * as PIXI from './pixi';
-import keyboardLayouts from './keyboardLayouts';
+import controlSchemes from './controlSchemes';
 import audio from './audio/audio';
 import soundEffects from './audio/soundEffects';
 import c from './utils/constants';
@@ -21,6 +21,7 @@ import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
+import Mouse from 'pixi.js-mouse';
 import StarscapeLayer from './components/StarscapeLayer';
 import PlayVolumeBoundaries from './components/PlayVolumeBoundaries';
 import entities from './entities/entities';
@@ -29,6 +30,8 @@ import shots from './shots';
 import story from './story/story';
 import emp from './emp';
 import HUD from './components/HUD';
+import Matte from './components/Matte';
+import gameMenus from './gameMenus';
 // import plates from './plates';
 
 export default class App extends PIXI.Application {
@@ -120,12 +123,23 @@ export default class App extends PIXI.Application {
 		this.pixiHUD = new HUD();
 		this.pixiHUD.alpha = 0;
 		this.hudStage.addChild(this.pixiHUD);
+		this.menuStage = new PIXI.Container();
+		this.Matte = new Matte();
+		this.Matte.alpha = 0;
+		this.menuStage.addChild(this.Matte);
 
 		this.mainStage.sortableChildren = true;
 		this.mainStage.addChild(this.playVolumeBoundaries);
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
+		this.stage.addChild(this.menuStage);
+
+		gameMenus.handlers = {
+			menuStage: this.menuStage,
+			Matte: this.Matte,
+			pixiHUD: this.pixiHUD,
+		};
 
 		story.handlers = {
 			dispatch: this.dispatch,
@@ -213,6 +227,7 @@ export default class App extends PIXI.Application {
 	gameLoop(delta) {
 		this.pixiState(delta);
 		Keyboard.update();
+		Mouse.update();
 	}
 
 	play(delta) {
@@ -244,7 +259,7 @@ export default class App extends PIXI.Application {
 		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
 
 		// keyboard input
-		keyboardLayouts.play.execute(
+		controlSchemes.play.execute(
 			playerId,
 			currentState,
 			this.dispatch,
@@ -402,7 +417,7 @@ export default class App extends PIXI.Application {
 		}
 
 		// keyboard input
-		keyboardLayouts.pause.execute();
+		controlSchemes.pause.execute();
 
 		// timing tick
 		timing.tick(timing.modes.pause, this.ticker.deltaMS);
@@ -416,6 +431,8 @@ export default class App extends PIXI.Application {
 			timing.currentMode = timing.modes.pause;
 			soundEffects.muteUnmuteAllLoops(true);
 			this.pixiState = this.pause;
+			gameMenus.fadeInMatte();
+			gameMenus.showPauseButtonSet();
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
@@ -423,6 +440,8 @@ export default class App extends PIXI.Application {
 			soundEffects.muteUnmuteAllLoops(false);
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
+			gameMenus.clearButtons();
+			gameMenus.fadeOutMatte();
 		}
 	}
 }

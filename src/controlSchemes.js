@@ -5,17 +5,18 @@ import {
 	status,
 } from './utils/helpers';
 import Keyboard from 'pixi.js-keyboard';
+import Mouse from 'pixi.js-mouse';
 import entities from './entities/entities';
 import shots from './shots';
 import emp from './emp';
 
-const keyboardLayouts = {
+const controlSchemes = {
 	// https://www.npmjs.com/package/pixi.js-keyboard
 
 	currentlyShowingLayout: null,
 	showLayout(layout) {
-		if (keyboardLayouts.currentlyShowingLayout !== layout) {
-			const currentDescriptions = keyboardLayouts[layout].descriptions;
+		if (controlSchemes.currentlyShowingLayout !== layout) {
+			const currentDescriptions = controlSchemes[layout].descriptions;
 			// console.log('showLayout: ', currentDescriptions);
 
 			const re = [];
@@ -29,7 +30,7 @@ const keyboardLayouts = {
 
 			document.getElementById('controls').innerHTML = re.join('\n');
 
-			keyboardLayouts.currentlyShowingLayout = layout;
+			controlSchemes.currentlyShowingLayout = layout;
 		}
 	},
 
@@ -40,7 +41,7 @@ const keyboardLayouts = {
 			{ keys: 'up, down', function: 'Scroll messages' },
 		],
 		execute() {
-			keyboardLayouts.showLayout(keyboardLayouts.pause.id);
+			controlSchemes.showLayout(controlSchemes.pause.id);
 
 			if (Keyboard.isKeyPressed('Escape')) {
 				window.pixiapp.togglePause();
@@ -72,7 +73,7 @@ const keyboardLayouts = {
 			{ keys: 'e', function: 'EMP' },
 		],
 		execute(playerId, currentState, dispatch, camera) {
-			keyboardLayouts.showLayout(keyboardLayouts.play.id);
+			controlSchemes.showLayout(controlSchemes.play.id);
 
 			function playerStageEntityVelocity(newLatVelocity, newLongVelocity) {
 				updateStageEntityVelocities(
@@ -214,7 +215,7 @@ const keyboardLayouts = {
 			{ keys: 'enter', function: 'Skip cutscene' },
 		],
 		execute() {
-			keyboardLayouts.showLayout(keyboardLayouts.cutscene.id);
+			controlSchemes.showLayout(controlSchemes.cutscene.id);
 
 			if (Keyboard.isKeyPressed('Escape')) {
 				window.pixiapp.togglePause();
@@ -223,4 +224,4 @@ const keyboardLayouts = {
 	},
 };
 
-export default keyboardLayouts;
+export default controlSchemes;

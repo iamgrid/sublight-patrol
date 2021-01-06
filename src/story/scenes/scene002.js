@@ -1,7 +1,7 @@
 import c from '../../utils/constants';
 // import sc from '../storyConstants';
 import entities from '../../entities/entities';
-import keyboardLayouts from '../../keyboardLayouts';
+import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
 // import timing from '../../utils/timing';
 
@@ -10,7 +10,7 @@ const scene002 = {
 	id: '002',
 	titlePlate: {
 		wittyText: 'Forking Dylan jinxed it.',
-		mainText: "Mission 2: Baby's first standoff",
+		mainText: "Mission 2 of 8: Baby's first standoff",
 	},
 	playVolume: {
 		minX: -2000,
@@ -45,7 +45,7 @@ const scene002 = {
 	},
 	storyBeats: [
 		{
-			keyboardLayout: keyboardLayouts.play.id,
+			keyboardLayout: controlSchemes.play.id,
 			cameraMode: c.cameraModes.gameplay,
 			isTheFinalGameplayBeat: false,
 			registerObjectives() {
@@ -112,7 +112,7 @@ const scene002 = {
 			},
 		},
 		{
-			keyboardLayout: keyboardLayouts.play.id,
+			keyboardLayout: controlSchemes.play.id,
 			cameraMode: c.cameraModes.gameplay,
 			isTheFinalGameplayBeat: true,
 			registerObjectives() {
