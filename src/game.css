@@ -337,6 +337,10 @@
 	color: #37d837;
 }
 
+.game__status-proper .dark_green {
+	color: #1f851f;
+}
+
 .game__status-expand {
 	flex: 0 0;
 	margin: 0 5px;

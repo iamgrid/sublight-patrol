@@ -337,7 +337,8 @@ const story = {
 
 			if (hasUpdated && el.store !== 'advanceWhen') {
 				const [itemColor, objectiveText] = story.returnObjectiveText(
-					el.objectiveObj
+					el.objectiveObj,
+					meansProgress
 				);
 				updatedObjectiveMessages.push({
 					color: itemColor,
@@ -425,7 +426,10 @@ const story = {
 						obj2.failed === false
 					) {
 						obj2.currentPercentage = 100;
-						const [itemColor, objectiveText] = story.returnObjectiveText(obj2);
+						const [itemColor, objectiveText] = story.returnObjectiveText(
+							obj2,
+							true
+						);
 						updatedObjectiveMessages.push({
 							color: itemColor,
 							message: 'Objectives: ' + objectiveText,
@@ -519,8 +523,9 @@ const story = {
 		document.getElementById('game__pause-objectives').innerHTML = re.join('');
 	},
 
-	returnObjectiveText(objectiveObj) {
+	returnObjectiveText(objectiveObj, meansProgress = false) {
 		let itemColor = 'yellow';
+		if (meansProgress) itemColor = 'dark_green';
 		let objectiveText = '';
 		let completed = false;
 

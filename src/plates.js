@@ -78,6 +78,7 @@ const plates = {
 			'Gosh darnit',
 			'Darn it all to heck!',
 			'Fork.',
+			'You forgot to work the thingamabob.',
 		];
 
 		switch (plateId) {
