@@ -88,6 +88,10 @@ export default class App extends PIXI.Application {
 
 		this.shownStateOnPause = false;
 
+		this.showingMissionMenu = {
+			actual: false,
+		};
+
 		this.init();
 	}
 
@@ -138,6 +142,7 @@ export default class App extends PIXI.Application {
 			menuStage: this.menuStage,
 			Matte: this.Matte,
 			pixiHUD: this.pixiHUD,
+			showingMissionMenu: this.showingMissionMenu,
 		};
 
 		story.handlers = {
@@ -256,12 +261,16 @@ export default class App extends PIXI.Application {
 		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
 
 		// keyboard input
-		controlSchemes.play.execute(
-			playerId,
-			currentState,
-			this.dispatch,
-			this.camera
-		);
+		if (!this.showingMissionMenu.actual) {
+			controlSchemes.play.execute(
+				playerId,
+				currentState,
+				this.dispatch,
+				this.camera
+			);
+		} else {
+			controlSchemes.missionMenus.execute();
+		}
 
 		// update entity positions based on their velocities
 		let repositionHasRun = false;

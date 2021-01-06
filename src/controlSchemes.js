@@ -74,6 +74,29 @@ const controlSchemes = {
 		},
 	},
 
+	missionMenus: {
+		id: 'missionMenus',
+		descriptions: [
+			{ keys: 'left, right', function: 'Cycle menu buttons' },
+			{ keys: 'enter', function: 'Activate menu button' },
+		],
+		execute() {
+			controlSchemes.showLayout(controlSchemes.missionMenus.id);
+
+			if (Keyboard.isKeyPressed('ArrowRight')) {
+				gameMenus.cycleFocus('forward');
+			}
+
+			if (Keyboard.isKeyPressed('ArrowLeft')) {
+				gameMenus.cycleFocus('back');
+			}
+
+			if (Keyboard.isKeyPressed('Enter')) {
+				gameMenus.activateFocusedButton();
+			}
+		},
+	},
+
 	play: {
 		id: 'play',
 		descriptions: [

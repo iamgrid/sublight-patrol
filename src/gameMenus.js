@@ -3,7 +3,12 @@ import Button from './components/Button';
 // import story from './story/story';
 
 const gameMenus = {
-	handlers: { menuStage: null, Matte: null, pixiHUD: null }, // gets its values in App.js
+	handlers: {
+		menuStage: null,
+		Matte: null,
+		pixiHUD: null,
+		showingMissionMenu: null,
+	}, // gets its values in App.js
 	buttonFunctions: {
 		restartMission: null, // registered in story.js@init()
 		mainMenu: null, // registered in story.js@init()
@@ -17,6 +22,7 @@ const gameMenus = {
 	fadeInMatte() {
 		gameMenus.handlers.pixiHUD.alpha = 0;
 		document.getElementById('game__hud').style.opacity = 0;
+		gameMenus.currentMatteAlpha = 0;
 		timing.setTrigger(
 			'gameMenus fadeInMatte',
 			() => {
@@ -36,6 +42,7 @@ const gameMenus = {
 	fadeOutMatte() {
 		gameMenus.handlers.pixiHUD.alpha = 1;
 		document.getElementById('game__hud').style.opacity = 1;
+		gameMenus.currentMatteAlpha = gameMenus.maxMatteAlpha;
 		timing.setTrigger(
 			'gameMenus fadeOutMatte',
 			() => {
@@ -50,6 +57,18 @@ const gameMenus = {
 			22,
 			40
 		);
+	},
+
+	fullMatte() {
+		gameMenus.handlers.pixiHUD.alpha = 0;
+		document.getElementById('game__hud').style.opacity = 0;
+		gameMenus.handlers.Matte.alpha = 1;
+	},
+
+	clearMatte() {
+		gameMenus.handlers.pixiHUD.alpha = 1;
+		document.getElementById('game__hud').style.opacity = 1;
+		gameMenus.handlers.Matte.alpha = 0;
 	},
 
 	showPauseButtonSet() {
@@ -69,6 +88,7 @@ const gameMenus = {
 			doActivate: () => {
 				console.log('doActivate resumeGame');
 				window.pixiapp.togglePause();
+				gameMenus.clearButtons();
 			},
 		});
 
@@ -86,6 +106,8 @@ const gameMenus = {
 				if (typeof gameMenus.buttonFunctions.restartMission === 'function') {
 					gameMenus.buttonFunctions.restartMission();
 					window.pixiapp.togglePause();
+					gameMenus.clearButtons();
+					gameMenus.clearMatte();
 				}
 			},
 		});
@@ -104,6 +126,8 @@ const gameMenus = {
 				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
 					gameMenus.buttonFunctions.mainMenu();
 					window.pixiapp.togglePause();
+					gameMenus.clearButtons();
+					gameMenus.clearMatte();
 				}
 			},
 		});
@@ -115,7 +139,60 @@ const gameMenus = {
 		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['mainMenu']);
 	},
 
+	showMissionFailedButtonSet() {
+		gameMenus.currentFocus = 'restartMission';
+
+		gameMenus.handlers.showingMissionMenu.actual = true;
+
+		const startX = 390;
+		const startY = 209;
+
+		gameMenus.stageButtons['restartMission'] = new Button({
+			coordsAndDimensions: {
+				x: startX,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Restart mission',
+			isFocused: true,
+			doActivate: () => {
+				console.log('doActivate restartMission');
+				if (typeof gameMenus.buttonFunctions.restartMission === 'function') {
+					gameMenus.buttonFunctions.restartMission();
+					gameMenus.clearButtons();
+					gameMenus.clearMatte();
+				}
+			},
+		});
+
+		gameMenus.stageButtons['mainMenu'] = new Button({
+			coordsAndDimensions: {
+				x: startX + 220,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Main menu',
+			isFocused: false,
+			doActivate: () => {
+				console.log('doActivate mainMenu');
+				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
+					gameMenus.buttonFunctions.mainMenu();
+					gameMenus.clearButtons();
+					gameMenus.clearMatte();
+				}
+			},
+		});
+
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['restartMission']
+		);
+		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['mainMenu']);
+	},
+
 	clearButtons() {
+		gameMenus.handlers.showingMissionMenu.actual = false;
 		for (const stageButtonId in gameMenus.stageButtons) {
 			gameMenus.handlers.menuStage.removeChild(
 				gameMenus.stageButtons[stageButtonId]

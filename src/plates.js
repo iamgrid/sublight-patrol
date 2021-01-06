@@ -7,6 +7,8 @@ const plates = {
 		// console.log('fadeInMatte', steps);
 		const opacityFraction = 1 / steps;
 
+		document.getElementById('game__plates_matte').style.opacity = 1;
+
 		timing.setTrigger(
 			'fadeInMatte',
 			() => {
@@ -30,6 +32,8 @@ const plates = {
 	fadeOutMatte(steps = 25, delayMS = 0) {
 		const opacityFraction = 1 / steps;
 
+		document.getElementById('game__plates_matte').style.opacity = 1;
+
 		timing.setTrigger(
 			'fadeInMatte',
 			() => {
@@ -51,6 +55,10 @@ const plates = {
 
 	fullMatte() {
 		document.getElementById('game__plates_matte').style.opacity = 1;
+	},
+
+	clearMatte() {
+		document.getElementById('game__plates_matte').style.opacity = 0;
 	},
 
 	loadPlate(plateId, quoteVariant = -1, mainText = '', wittyText = '') {

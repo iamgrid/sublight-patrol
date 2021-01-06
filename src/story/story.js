@@ -406,6 +406,16 @@ const story = {
 			plates.loadPlate('mission_failed', -1, 'Mission failed');
 			plates.fadeInPlate(25);
 			plates.fadeInMatte(50, 1000);
+			plates.fadeOutPlate(25, 4000);
+			timing.setTimeout(
+				() => {
+					gameMenus.fullMatte();
+					plates.clearMatte();
+					gameMenus.showMissionFailedButtonSet();
+				},
+				timing.modes.play,
+				5100
+			);
 			// TODO: stop the game from continuing
 			// and show the appropriate buttons
 		}
