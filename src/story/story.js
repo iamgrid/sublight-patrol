@@ -10,6 +10,7 @@ import soundEffects from '../audio/soundEffects';
 import { shields, status, makeName } from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
+import gameMenus from '../gameMenus';
 
 const story = {
 	handlers: {
@@ -187,6 +188,21 @@ const story = {
 		} else {
 			hud.toggle(false);
 		}
+	},
+
+	restartMission() {
+		// console.log('story restartMission()');
+		status.add('aqua', 'Mission restarted...', timing.times.play);
+		story.advance(story.currentScene, 0);
+	},
+
+	mainMenu() {
+		console.log('story mainMenu()');
+	},
+
+	init() {
+		gameMenus.buttonFunctions.restartMission = story.restartMission;
+		gameMenus.buttonFunctions.mainMenu = story.mainMenu;
 	},
 
 	updateCurrentObjectives(updates) {

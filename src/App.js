@@ -211,9 +211,8 @@ export default class App extends PIXI.Application {
 
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
 
+		story.init();
 		story.advance();
-
-		// behavior.init();
 
 		console.log(this.gameState());
 

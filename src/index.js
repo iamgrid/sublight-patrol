@@ -26,7 +26,14 @@ document.getElementById('toggle-footer__link').onclick = toggleFooter;
 // prevent keyboard scroll events (space and arrow keys) on window
 // https://keycode.info/
 function preventDefaultOnKeys(event) {
-	const prevent = ['Space', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+	const prevent = [
+		'Enter',
+		'Space',
+		'ArrowLeft',
+		'ArrowUp',
+		'ArrowRight',
+		'ArrowDown',
+	];
 	if (prevent.includes(event.code)) event.preventDefault();
 }
 

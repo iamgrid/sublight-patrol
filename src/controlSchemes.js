@@ -6,6 +6,7 @@ import {
 } from './utils/helpers';
 import Keyboard from 'pixi.js-keyboard';
 import Mouse from 'pixi.js-mouse';
+import gameMenus from './gameMenus';
 import entities from './entities/entities';
 import shots from './shots';
 import emp from './emp';
@@ -38,6 +39,8 @@ const controlSchemes = {
 		id: 'pause',
 		descriptions: [
 			{ keys: 'esc', function: 'Resume game' },
+			{ keys: 'left, right', function: 'Cycle menu buttons' },
+			{ keys: 'enter', function: 'Activate menu button' },
 			{ keys: 'up, down', function: 'Scroll messages' },
 		],
 		execute() {
@@ -45,6 +48,18 @@ const controlSchemes = {
 
 			if (Keyboard.isKeyPressed('Escape')) {
 				window.pixiapp.togglePause();
+			}
+
+			if (Keyboard.isKeyPressed('ArrowRight')) {
+				gameMenus.cycleFocus('forward');
+			}
+
+			if (Keyboard.isKeyPressed('ArrowLeft')) {
+				gameMenus.cycleFocus('back');
+			}
+
+			if (Keyboard.isKeyPressed('Enter')) {
+				gameMenus.activateFocusedButton();
 			}
 
 			const statusProperDiv = document.getElementById('game__status-proper');

@@ -12,17 +12,17 @@ export default class Button extends PIXI.Container {
 				},
 				label: '',
 				isFocused: false,
-				onActivation: () => {}
+				doActivate: () => {}
 			}
 		*/
 		super();
 		this.coordsAndDimensions = props.coordsAndDimensions;
 		this.label = props.label;
 		this.isFocused = props.isFocused;
-		this.onActivation = props.onActivation;
+		this.doActivate = props.doActivate;
 		this.sprites = {};
-		this.blurredBorderAlpha = 0.3;
-		this.focusedBorderAlpha = 0.8;
+		this.blurredBorderAlpha = 0.5;
+		this.focusedBorderAlpha = 1;
 
 		this.sprites['bg'] = new PIXI.Graphics();
 
@@ -71,11 +71,13 @@ export default class Button extends PIXI.Container {
 		this.addChild(this.sprites['label']);
 	}
 
-	onFocus() {
+	doFocus() {
+		this.isFocused = true;
 		this.sprites['border'].alpha = this.focusedBorderAlpha;
 	}
 
-	onBlur() {
+	doBlur() {
+		this.isFocused = false;
 		this.sprites['border'].alpha = this.blurredBorderAlpha;
 	}
 }
