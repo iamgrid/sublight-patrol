@@ -21,7 +21,6 @@ import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
 import Keyboard from 'pixi.js-keyboard';
-import Mouse from 'pixi.js-mouse';
 import StarscapeLayer from './components/StarscapeLayer';
 import PlayVolumeBoundaries from './components/PlayVolumeBoundaries';
 import entities from './entities/entities';
@@ -226,7 +225,6 @@ export default class App extends PIXI.Application {
 	gameLoop(delta) {
 		this.pixiState(delta);
 		Keyboard.update();
-		Mouse.update();
 	}
 
 	play(delta) {

@@ -5,7 +5,6 @@ import {
 	status,
 } from './utils/helpers';
 import Keyboard from 'pixi.js-keyboard';
-import Mouse from 'pixi.js-mouse';
 import gameMenus from './gameMenus';
 import entities from './entities/entities';
 import shots from './shots';
