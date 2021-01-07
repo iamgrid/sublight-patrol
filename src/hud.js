@@ -367,6 +367,7 @@ const hud = {
 					hud.stagePointers[entityId] = new Pointer();
 					hud.stagePointers[entityId].tint = tints[playerRelation];
 					hud.stagePointers[entityId].zIndex = hud.pointerZIndexIterator;
+					hud.stagePointers[entityId].alpha = 0;
 					hud.stagePointers[entityId].position.set(600, 225);
 					hud.handlers.pixiHUD.addChild(hud.stagePointers[entityId]);
 
@@ -462,19 +463,6 @@ const hud = {
 				!pointerIsHidden &&
 				(cameraHasMoved || entityHasMoved)
 			) {
-				const entityDistance = calculateDistance(
-					cameraCX,
-					cameraCY,
-					posX,
-					posY
-				);
-
-				// change pointer alpha based on entity distance
-				stagePointer.alpha = Math.max(
-					0.3,
-					(1 - entityDistance / hud.largestRelevantDistance) / 1.2
-				);
-
 				const pointerAngle = calculateAngle(cameraCX, cameraCY, posX, posY);
 
 				// change pointer rotation
@@ -520,6 +508,19 @@ const hud = {
 				}
 
 				stagePointer.position.set(newPointerX, newPointerY);
+
+				// change pointer alpha based on entity distance
+				const entityDistance = calculateDistance(
+					cameraCX,
+					cameraCY,
+					posX,
+					posY
+				);
+
+				stagePointer.alpha = Math.max(
+					0.3,
+					(1 - entityDistance / hud.largestRelevantDistance) / 1.2
+				);
 			}
 
 			// change pointer tint
