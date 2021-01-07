@@ -331,6 +331,11 @@ const entities = {
 			console.log('Game over');
 
 			plates.fadeInMatte(25, 0);
+			timing.toggleEntityMovement(
+				false,
+				'entities.js@playerShipDestruction() 1',
+				1000
+			);
 			plates.loadPlate('game_over');
 			plates.fadeInPlate(25, 2000);
 		} else {
@@ -346,6 +351,10 @@ const entities = {
 			);
 
 			plates.fadeInMatte(25, 0);
+			timing.toggleEntityMovement(
+				false,
+				'entities.js@playerShipDestruction() 2'
+			);
 			plates.loadPlate('respawning', nextShip - 1);
 			plates.fadeInPlate(25, 1500);
 			timing.setTrigger(
@@ -372,6 +381,11 @@ const entities = {
 				true
 			);
 			plates.fadeOutMatte(25, 5000);
+			timing.toggleEntityMovement(
+				true,
+				'entities.js@playerShipDestruction() 3',
+				4000
+			);
 			timing.setTrigger(
 				'reinitiating pixi hud',
 				() => {

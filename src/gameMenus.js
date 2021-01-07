@@ -20,6 +20,7 @@ const gameMenus = {
 	matteStep: 4,
 
 	fadeInMatte() {
+		console.log('gameMenus.js@fadeInMatte()');
 		gameMenus.handlers.pixiHUD.alpha = 0;
 		document.getElementById('game__hud').style.opacity = 0;
 		gameMenus.currentMatteAlpha = 0;
@@ -40,6 +41,7 @@ const gameMenus = {
 	},
 
 	fadeOutMatte() {
+		console.log('gameMenus.js@fadeOutMatte()');
 		gameMenus.handlers.pixiHUD.alpha = 1;
 		document.getElementById('game__hud').style.opacity = 1;
 		gameMenus.currentMatteAlpha = gameMenus.maxMatteAlpha;
@@ -60,12 +62,14 @@ const gameMenus = {
 	},
 
 	fullMatte() {
+		console.log('gameMenus.js@fullMatte()');
 		gameMenus.handlers.pixiHUD.alpha = 0;
 		document.getElementById('game__hud').style.opacity = 0;
 		gameMenus.handlers.Matte.alpha = 1;
 	},
 
 	clearMatte() {
+		console.log('gameMenus.js@clearMatte()');
 		gameMenus.handlers.pixiHUD.alpha = 1;
 		document.getElementById('game__hud').style.opacity = 1;
 		gameMenus.handlers.Matte.alpha = 0;

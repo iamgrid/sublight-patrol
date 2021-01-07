@@ -134,7 +134,7 @@ const shots = {
 			return;
 		}
 
-		if (timing.isPaused()) return;
+		if (timing.isPaused() || !timing.isEntityMovementEnabled()) return;
 
 		if (shots.cannonStates[entityId] === undefined) return;
 

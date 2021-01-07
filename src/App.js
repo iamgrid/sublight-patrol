@@ -233,24 +233,26 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
-		// behavior tick
-		behavior.tick();
+		if (timing.isEntityMovementEnabled()) {
+			// behavior tick
+			behavior.tick();
 
-		// stage entity updates (thruster plume visibility, damage tints, etc.)
-		for (const sEK in entities.stageEntities) {
-			if (entities.stageEntities[sEK].hasUpdateMethod)
-				entities.stageEntities[sEK].onUpdate(delta);
+			// stage entity updates (thruster plume visibility, damage tints, etc.)
+			for (const sEK in entities.stageEntities) {
+				if (entities.stageEntities[sEK].hasUpdateMethod)
+					entities.stageEntities[sEK].onUpdate(delta);
+			}
+
+			// stage shot updates
+			for (const shotK in shots.stageShots) {
+				if (!shots.stageShots[shotK].hasBeenDestroyed)
+					shots.stageShots[shotK].onUpdate(delta);
+			}
+
+			// apply shot and EMP damage
+			shots.detectCollisions();
+			emp.handleEMPDamage();
 		}
-
-		// stage shot updates
-		for (const shotK in shots.stageShots) {
-			if (!shots.stageShots[shotK].hasBeenDestroyed)
-				shots.stageShots[shotK].onUpdate(delta);
-		}
-
-		// apply shot and EMP damage
-		shots.detectCollisions();
-		emp.handleEMPDamage();
 
 		// current state
 		let currentState = this.gameState();
@@ -370,34 +372,36 @@ export default class App extends PIXI.Application {
 			repositionHasRun = true;
 		};
 
-		this.dispatch({
-			type: c.actions.UPDATE_ENTITY_COORDS,
-			callbackFn: reposition,
-		});
-
-		if (!repositionHasRun && (!this.triggered0 || this.camera.isFlipping)) {
-			reposition();
-			this.triggered0 = true;
-		}
-
-		// hud updates
-		hud.update(
-			currentState.game.targeting,
-			currentState.game.playerShips,
-			currentState.entities,
-			currentState.positions,
-			playerId
-		);
-
-		// scanning
-		if (
-			!currentState.game.targetHasBeenScanned &&
-			currentState.game.targeting
-		) {
+		if (timing.isEntityMovementEnabled()) {
 			this.dispatch({
-				type: c.actions.SCAN,
-				callbackFn: story.checkAgainstCurrentObjectives,
+				type: c.actions.UPDATE_ENTITY_COORDS,
+				callbackFn: reposition,
 			});
+
+			if (!repositionHasRun && (!this.triggered0 || this.camera.isFlipping)) {
+				reposition();
+				this.triggered0 = true;
+			}
+
+			// hud updates
+			hud.update(
+				currentState.game.targeting,
+				currentState.game.playerShips,
+				currentState.entities,
+				currentState.positions,
+				playerId
+			);
+
+			// scanning
+			if (
+				!currentState.game.targetHasBeenScanned &&
+				currentState.game.targeting
+			) {
+				this.dispatch({
+					type: c.actions.SCAN,
+					callbackFn: story.checkAgainstCurrentObjectives,
+				});
+			}
 		}
 
 		// timing tick

@@ -23,11 +23,37 @@ const timing = {
 		pause: {},
 	},
 	startTime: 0,
+	entityMovementEnabled: false,
 	currentMode: 'play',
 
 	isPaused() {
 		if (timing.currentMode === timing.modes.pause) return true;
 		return false;
+	},
+
+	toggleEntityMovement(toggle = true, requestedBy = '', delayMS = 0) {
+		if (delayMS === 0) {
+			console.log(requestedBy, 'Entity movement toggled: ', toggle, delayMS);
+			timing.entityMovementEnabled = toggle;
+		} else {
+			timing.setTimeout(
+				() => {
+					console.log(
+						requestedBy,
+						'Entity movement toggled: ',
+						toggle,
+						delayMS
+					);
+					timing.entityMovementEnabled = toggle;
+				},
+				timing.modes.play,
+				delayMS
+			);
+		}
+	},
+
+	isEntityMovementEnabled() {
+		return timing.entityMovementEnabled;
 	},
 
 	tick(mode, deltaMS) {

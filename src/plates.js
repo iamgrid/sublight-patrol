@@ -4,13 +4,11 @@ import { randomNumber } from './utils/formulas';
 const plates = {
 	fadeInMatte(steps = 25, delayMS = 0) {
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
-		// console.log('fadeInMatte', steps);
+		console.log('plates.js@fadeInMatte()', steps, delayMS);
 		const opacityFraction = 1 / steps;
 
-		document.getElementById('game__plates_matte').style.opacity = 1;
-
 		timing.setTrigger(
-			'fadeInMatte',
+			'plates.js fadeInMatte',
 			() => {
 				const currentOpacity = Number(
 					document.getElementById('game__plates_matte').style.opacity
@@ -30,12 +28,11 @@ const plates = {
 	},
 
 	fadeOutMatte(steps = 25, delayMS = 0) {
+		console.log('plates.js@fadeOutMatte()', steps, delayMS);
 		const opacityFraction = 1 / steps;
 
-		document.getElementById('game__plates_matte').style.opacity = 1;
-
 		timing.setTrigger(
-			'fadeInMatte',
+			'plates.js fadeOutMatte',
 			() => {
 				const currentOpacity = Number(
 					document.getElementById('game__plates_matte').style.opacity
@@ -54,10 +51,12 @@ const plates = {
 	},
 
 	fullMatte() {
+		console.log('plates.js@fullMatte()');
 		document.getElementById('game__plates_matte').style.opacity = 1;
 	},
 
 	clearMatte() {
+		console.log('plates.js@clearMatte()');
 		document.getElementById('game__plates_matte').style.opacity = 0;
 	},
 
