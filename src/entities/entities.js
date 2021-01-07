@@ -360,9 +360,16 @@ const entities = {
 			plates.fadeInMatte(25, 0);
 			timing.toggleEntityMovement(
 				false,
-				'entities.js@playerShipDestruction() 2'
+				'entities.js@playerShipDestruction() 2',
+				1000
 			);
-			soundEffects.muteUnmuteAllLoops(true);
+			timing.setTimeout(
+				() => {
+					soundEffects.muteUnmuteAllLoops(true);
+				},
+				timing.modes.play,
+				1000
+			);
 			plates.loadPlate('respawning', nextShip - 1);
 			plates.fadeInPlate(25, 1500);
 			timing.setTrigger(
@@ -392,14 +399,14 @@ const entities = {
 			timing.toggleEntityMovement(
 				true,
 				'entities.js@playerShipDestruction() 3',
-				4000
+				4300
 			);
 			timing.setTimeout(
 				() => {
 					soundEffects.muteUnmuteAllLoops(false);
 				},
 				timing.modes.play,
-				4000
+				4300
 			);
 			timing.setTrigger(
 				'reinitiating stuff after player ship respawn',

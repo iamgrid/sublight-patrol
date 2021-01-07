@@ -520,7 +520,7 @@ export function fireThrusters() {
 }
 
 export function blowUp(callbackFn = null) {
-	// console.log(`blowing up`, this);
+	console.log(`blowing up`, this.entityId);
 	const timings = {
 		explosionsDone: 1500,
 		s1: 0,

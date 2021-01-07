@@ -237,7 +237,8 @@ export default class App extends PIXI.Application {
 			// behavior tick
 			behavior.tick();
 
-			// stage entity updates (thruster plume visibility, damage tints, etc.)
+			// stage entity updates (ship explosions, thruster plume
+			// visibility, damage tints, etc.)
 			for (const sEK in entities.stageEntities) {
 				if (entities.stageEntities[sEK].hasUpdateMethod)
 					entities.stageEntities[sEK].onUpdate(delta);
