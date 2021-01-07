@@ -19,6 +19,7 @@ const story = {
 		stage: null,
 		playVolume: null,
 		playVolumeBoundaries: null,
+		frameZero: null,
 	}, // gets its values in App.js
 	sceneList: [
 		{ id: '001', sceneObject: scene001 },
@@ -212,6 +213,7 @@ const story = {
 		// console.log('story restartMission()');
 		status.add('aqua', 'Mission restarted...', timing.times.play);
 		story.advance(story.currentScene, 0);
+		story.handlers.frameZero.actual = true;
 	},
 
 	mainMenu() {

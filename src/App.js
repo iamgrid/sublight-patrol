@@ -75,8 +75,6 @@ export default class App extends PIXI.Application {
 			this.playVolume
 		);
 
-		this.triggered0 = false;
-
 		const [state, dispatch] = useReducer(mainReducer, initialGameState);
 		this.gameState = state;
 		this.dispatch = dispatch;
@@ -87,6 +85,10 @@ export default class App extends PIXI.Application {
 		// console.log(story);
 
 		this.shownStateOnPause = false;
+
+		this.frameZero = {
+			actual: true,
+		};
 
 		this.showingMissionMenu = {
 			actual: false,
@@ -151,6 +153,7 @@ export default class App extends PIXI.Application {
 			stage: this.mainStage,
 			playVolume: this.playVolume,
 			playVolumeBoundaries: this.playVolumeBoundaries,
+			frameZero: this.frameZero,
 		};
 
 		audio.handlers = {
@@ -379,9 +382,12 @@ export default class App extends PIXI.Application {
 				callbackFn: reposition,
 			});
 
-			if (!repositionHasRun && (!this.triggered0 || this.camera.isFlipping)) {
+			if (
+				!repositionHasRun &&
+				(this.frameZero.actual || this.camera.isFlipping)
+			) {
 				reposition();
-				this.triggered0 = true;
+				this.frameZero.actual = false;
 			}
 
 			// hud updates
