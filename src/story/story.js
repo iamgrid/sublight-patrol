@@ -92,6 +92,13 @@ const story = {
 					plates.loadPlate('the_end');
 					plates.fadeInPlate(25);
 					timing.toggleEntityMovement(false, 'story.js@advance() 1', 1000);
+					timing.setTimeout(
+						() => {
+							soundEffects.muteUnmuteAllLoops(true);
+						},
+						timing.modes.play,
+						1000
+					);
 					plates.fadeInMatte(50, 1000);
 					// TODO: stop the game from continuing
 					// and show the appropriate buttons
@@ -156,9 +163,17 @@ const story = {
 				currentSceneObject.titlePlate.wittyText
 			);
 			timing.toggleEntityMovement(false, 'story.js@advance() 2');
+			soundEffects.muteUnmuteAllLoops(true);
 			plates.fadeInPlate(25);
 			plates.fadeOutMatte(50, 4000);
 			timing.toggleEntityMovement(true, 'story.js@advance() 3', 4000);
+			timing.setTimeout(
+				() => {
+					soundEffects.muteUnmuteAllLoops(false);
+				},
+				timing.modes.play,
+				4000
+			);
 			plates.fadeOutPlate(25, 6000);
 		}
 
@@ -413,9 +428,15 @@ const story = {
 				'story.js@checkAgainstCurrentObjectives() 1',
 				1000
 			);
+			timing.setTimeout(
+				() => {
+					soundEffects.muteUnmuteAllLoops(true);
+				},
+				timing.modes.play,
+				1000
+			);
 			plates.fadeInMatte(50, 1000);
 			plates.fadeOutPlate(25, 4000);
-			// timing.toggleEntityMovement(true, 'story.js@checkAgainstCurrentObjectives() 2', 4000);
 			timing.setTimeout(
 				() => {
 					gameMenus.fullMatte();
@@ -519,6 +540,13 @@ const story = {
 				timing.toggleEntityMovement(
 					false,
 					'story.js@checkBeatCompletion() 1',
+					2000
+				);
+				timing.setTimeout(
+					() => {
+						soundEffects.muteUnmuteAllLoops(true);
+					},
+					timing.modes.play,
 					2000
 				);
 				plates.fadeInMatte(50, 1000);

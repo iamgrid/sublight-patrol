@@ -336,6 +336,13 @@ const entities = {
 				'entities.js@playerShipDestruction() 1',
 				1000
 			);
+			timing.setTimeout(
+				() => {
+					soundEffects.muteUnmuteAllLoops(true);
+				},
+				timing.modes.play,
+				1000
+			);
 			plates.loadPlate('game_over');
 			plates.fadeInPlate(25, 2000);
 		} else {
@@ -355,6 +362,7 @@ const entities = {
 				false,
 				'entities.js@playerShipDestruction() 2'
 			);
+			soundEffects.muteUnmuteAllLoops(true);
 			plates.loadPlate('respawning', nextShip - 1);
 			plates.fadeInPlate(25, 1500);
 			timing.setTrigger(
@@ -386,8 +394,15 @@ const entities = {
 				'entities.js@playerShipDestruction() 3',
 				4000
 			);
+			timing.setTimeout(
+				() => {
+					soundEffects.muteUnmuteAllLoops(false);
+				},
+				timing.modes.play,
+				4000
+			);
 			timing.setTrigger(
-				'reinitiating pixi hud',
+				'reinitiating stuff after player ship respawn',
 				() => {
 					shots.registerEntityCannons(newPlayerId);
 					hud.reInitPixiHUD(newPlayerId);
