@@ -113,7 +113,6 @@ export default function overlays() {
 			</div>
 		</div>
 		<div class="game__plates" id="game__plates">
-			<div class="game__plates_matte" id="game__plates_matte"></div>
 			<div class="game__plates_plate" id="game__plates_plate">
 				<div class="game__plates_plate_atl" id="game__plates_plate_atl"></div>
 				<div class="game__plates_plate_line" id="game__plates_plate_line"></div>

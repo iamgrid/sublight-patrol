@@ -8,6 +8,7 @@ const gameMenus = {
 		Matte: null,
 		pixiHUD: null,
 		showingMissionMenu: null,
+		matteIsBeingUsedByPlates: null,
 	}, // gets its values in App.js
 	buttonFunctions: {
 		restartMission: null, // registered in story.js@init()
@@ -15,21 +16,29 @@ const gameMenus = {
 	},
 	stageButtons: {},
 	currentFocus: null,
-	currentMatteAlpha: 0,
 	maxMatteAlpha: 80,
 	matteStep: 4,
 
-	fadeInMatte() {
-		console.log('gameMenus.js@fadeInMatte()');
+	fadeInMatte(requestedBy = '') {
+		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
+			console.log(
+				requestedBy,
+				'gameMenus fadeInMatte prevented, its being used by plates.js'
+			);
+			return;
+		}
+		console.log(requestedBy, 'gameMenus.js@fadeInMatte()');
 		gameMenus.handlers.pixiHUD.alpha = 0;
 		document.getElementById('game__hud').style.opacity = 0;
-		gameMenus.currentMatteAlpha = 0;
+
 		timing.setTrigger(
 			'gameMenus fadeInMatte',
 			() => {
-				if (gameMenus.currentMatteAlpha < gameMenus.maxMatteAlpha) {
-					gameMenus.currentMatteAlpha += gameMenus.matteStep;
-					gameMenus.handlers.Matte.alpha = gameMenus.currentMatteAlpha / 100;
+				if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) return;
+				let currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
+				if (currentOpacity < gameMenus.maxMatteAlpha) {
+					currentOpacity += gameMenus.matteStep;
+					gameMenus.handlers.Matte.alpha = currentOpacity / 100;
 				}
 			},
 			timing.modes.pause,
@@ -40,17 +49,30 @@ const gameMenus = {
 		);
 	},
 
-	fadeOutMatte() {
-		console.log('gameMenus.js@fadeOutMatte()');
+	fadeOutMatte(requestedBy = '') {
+		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
+			console.log(
+				requestedBy,
+				'gameMenus fadeOutMatte prevented, its being used by plates.js'
+			);
+			return;
+		}
+		console.log(
+			requestedBy,
+			'gameMenus.js@fadeOutMatte()',
+			gameMenus.handlers.matteIsBeingUsedByPlates.actual
+		);
 		gameMenus.handlers.pixiHUD.alpha = 1;
 		document.getElementById('game__hud').style.opacity = 1;
-		gameMenus.currentMatteAlpha = gameMenus.maxMatteAlpha;
+
 		timing.setTrigger(
 			'gameMenus fadeOutMatte',
 			() => {
-				if (gameMenus.currentMatteAlpha > 0) {
-					gameMenus.currentMatteAlpha -= gameMenus.matteStep;
-					gameMenus.handlers.Matte.alpha = gameMenus.currentMatteAlpha / 100;
+				if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) return;
+				let currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
+				if (currentOpacity > 0) {
+					currentOpacity -= gameMenus.matteStep;
+					gameMenus.handlers.Matte.alpha = currentOpacity / 100;
 				}
 			},
 			timing.modes.play,
@@ -59,20 +81,6 @@ const gameMenus = {
 			22,
 			40
 		);
-	},
-
-	fullMatte() {
-		console.log('gameMenus.js@fullMatte()');
-		gameMenus.handlers.pixiHUD.alpha = 0;
-		document.getElementById('game__hud').style.opacity = 0;
-		gameMenus.handlers.Matte.alpha = 1;
-	},
-
-	clearMatte() {
-		console.log('gameMenus.js@clearMatte()');
-		gameMenus.handlers.pixiHUD.alpha = 1;
-		document.getElementById('game__hud').style.opacity = 1;
-		gameMenus.handlers.Matte.alpha = 0;
 	},
 
 	showPauseButtonSet() {
@@ -111,7 +119,6 @@ const gameMenus = {
 					gameMenus.buttonFunctions.restartMission();
 					window.pixiapp.togglePause();
 					gameMenus.clearButtons();
-					gameMenus.clearMatte();
 				}
 			},
 		});
@@ -131,7 +138,6 @@ const gameMenus = {
 					gameMenus.buttonFunctions.mainMenu();
 					window.pixiapp.togglePause();
 					gameMenus.clearButtons();
-					gameMenus.clearMatte();
 				}
 			},
 		});
@@ -165,7 +171,6 @@ const gameMenus = {
 				if (typeof gameMenus.buttonFunctions.restartMission === 'function') {
 					gameMenus.buttonFunctions.restartMission();
 					gameMenus.clearButtons();
-					gameMenus.clearMatte();
 				}
 			},
 		});
@@ -184,7 +189,6 @@ const gameMenus = {
 				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
 					gameMenus.buttonFunctions.mainMenu();
 					gameMenus.clearButtons();
-					gameMenus.clearMatte();
 				}
 			},
 		});

@@ -8,6 +8,7 @@ import shots from './shots';
 
 const hud = {
 	handlers: { pixiHUD: null, stage: null, camera: null, playVolume: null }, // gets its values in App.js
+	hudIsShowing: false,
 	pixiHUDInitiated: false,
 	pixiHUDFader: 0,
 	pixiHUDFaderInterval: null,
@@ -31,6 +32,8 @@ const hud = {
 	targetBlinker: 0,
 
 	toggle(show = false) {
+		hud.hudIsShowing = show;
+		document.getElementById('game__hud').style.opacity = 1;
 		const hudDiv = document.getElementById('game__hud');
 		if (show) {
 			hudDiv.classList.add('game__hud--visible');
@@ -60,6 +63,14 @@ const hud = {
 			}
 			hud.handlers.pixiHUD.alpha = hud.pixiHUDFader;
 		}, 30);
+	},
+
+	removeAtOnce() {
+		document.getElementById('game__hud').style.opacity = 0;
+		document.getElementById('game__hud').classList.remove('game__hud--visible');
+		hud.handlers.pixiHUD.alpha = 0;
+		hud.hudIsShowing = false;
+
 	},
 
 	update(targeting, playerShips, allEntities, positions, playerId) {

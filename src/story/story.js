@@ -202,7 +202,7 @@ const story = {
 					hud.toggle(true);
 				},
 				timing.modes.play,
-				2000
+				6000
 			);
 		} else {
 			hud.toggle(false);
@@ -425,24 +425,22 @@ const story = {
 			console.log('MISSION FAILED!', story.currentObjectives);
 			plates.loadPlate('mission_failed', -1, 'Mission failed');
 			plates.fadeInPlate(25);
+			plates.fadeInMatte(50, 1000);
 			timing.toggleEntityMovement(
 				false,
 				'story.js@checkAgainstCurrentObjectives() 1',
-				1000
+				3000
 			);
 			timing.setTimeout(
 				() => {
 					soundEffects.muteUnmuteAllLoops(true);
 				},
 				timing.modes.play,
-				1000
+				3000
 			);
-			plates.fadeInMatte(50, 1000);
 			plates.fadeOutPlate(25, 4000);
 			timing.setTimeout(
 				() => {
-					gameMenus.fullMatte();
-					plates.clearMatte();
 					gameMenus.showMissionFailedButtonSet();
 				},
 				timing.modes.play,

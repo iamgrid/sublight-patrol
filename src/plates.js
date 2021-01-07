@@ -1,22 +1,35 @@
 import timing from './utils/timing';
+import hud from './hud';
 import { randomNumber } from './utils/formulas';
 
 const plates = {
+	handlers: { Matte: null, matteIsBeingUsedByPlates: null }, // gets its values in App.js
+
 	fadeInMatte(steps = 25, delayMS = 0) {
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
-		console.log('plates.js@fadeInMatte()', steps, delayMS);
-		const opacityFraction = 1 / steps;
+
+		if (hud.hudIsShowing) hud.toggle(false);
+
+		plates.handlers.matteIsBeingUsedByPlates.actual = true;
+
+		const opacityFraction = 100 / steps;
+
+		plates.handlers.Matte.alpha = 0;
+		console.log(
+			'plates.js@fadeInMatte()',
+			steps,
+			delayMS,
+			plates.handlers.Matte.alpha
+		);
 
 		timing.setTrigger(
 			'plates.js fadeInMatte',
 			() => {
-				const currentOpacity = Number(
-					document.getElementById('game__plates_matte').style.opacity
-				);
+				const currentOpacity = Math.trunc(plates.handlers.Matte.alpha * 100);
 
-				if (currentOpacity < 1) {
-					document.getElementById('game__plates_matte').style.opacity =
-						currentOpacity + opacityFraction;
+				if (currentOpacity < 100) {
+					plates.handlers.Matte.alpha =
+						(currentOpacity + opacityFraction) / 100;
 				}
 			},
 			timing.modes.play,
@@ -28,19 +41,24 @@ const plates = {
 	},
 
 	fadeOutMatte(steps = 25, delayMS = 0) {
-		console.log('plates.js@fadeOutMatte()', steps, delayMS);
-		const opacityFraction = 1 / steps;
+		const opacityFraction = 100 / steps;
+
+		plates.handlers.Matte.alpha = 1;
+		console.log(
+			'plates.js@fadeOutMatte()',
+			steps,
+			delayMS,
+			plates.handlers.Matte.alpha
+		);
 
 		timing.setTrigger(
 			'plates.js fadeOutMatte',
 			() => {
-				const currentOpacity = Number(
-					document.getElementById('game__plates_matte').style.opacity
-				);
+				const currentOpacity = Math.trunc(plates.handlers.Matte.alpha * 100);
 
 				if (currentOpacity > 0)
-					document.getElementById('game__plates_matte').style.opacity =
-						currentOpacity - opacityFraction;
+					plates.handlers.Matte.alpha =
+						(currentOpacity - opacityFraction) / 100;
 			},
 			timing.modes.play,
 			delayMS,
@@ -48,16 +66,27 @@ const plates = {
 			steps,
 			40
 		);
+
+		timing.setTimeout(
+			() => {
+				plates.handlers.matteIsBeingUsedByPlates.actual = false;
+			},
+			timing.modes.play,
+			delayMS + steps * 40
+		);
 	},
 
 	fullMatte() {
-		console.log('plates.js@fullMatte()');
-		document.getElementById('game__plates_matte').style.opacity = 1;
+		plates.handlers.Matte.alpha = 1;
+		plates.handlers.matteIsBeingUsedByPlates.actual = true;
+		console.log('plates.js@fullMatte()', plates.handlers.Matte.alpha);
+		if (hud.hudIsShowing) hud.removeAtOnce();
 	},
 
 	clearMatte() {
-		console.log('plates.js@clearMatte()');
-		document.getElementById('game__plates_matte').style.opacity = 0;
+		plates.handlers.matteIsBeingUsedByPlates.actual = false;
+		plates.handlers.Matte.alpha = 0;
+		console.log('plates.js@clearMatte()', plates.handlers.Matte.alpha);
 	},
 
 	loadPlate(plateId, quoteVariant = -1, mainText = '', wittyText = '') {

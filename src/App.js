@@ -31,7 +31,7 @@ import emp from './emp';
 import HUD from './components/HUD';
 import Matte from './components/Matte';
 import gameMenus from './gameMenus';
-// import plates from './plates';
+import plates from './plates';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -94,6 +94,10 @@ export default class App extends PIXI.Application {
 			actual: false,
 		};
 
+		this.matteIsBeingUsedByPlates = {
+			actual: false,
+		};
+
 		this.init();
 	}
 
@@ -140,11 +144,17 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.hudStage);
 		this.stage.addChild(this.menuStage);
 
+		plates.handlers = {
+			Matte: this.Matte,
+			matteIsBeingUsedByPlates: this.matteIsBeingUsedByPlates,
+		};
+
 		gameMenus.handlers = {
 			menuStage: this.menuStage,
 			Matte: this.Matte,
 			pixiHUD: this.pixiHUD,
 			showingMissionMenu: this.showingMissionMenu,
+			matteIsBeingUsedByPlates: this.matteIsBeingUsedByPlates,
 		};
 
 		story.handlers = {
@@ -448,7 +458,7 @@ export default class App extends PIXI.Application {
 			timing.currentMode = timing.modes.pause;
 			soundEffects.muteUnmuteAllLoops(true);
 			this.pixiState = this.pause;
-			gameMenus.fadeInMatte();
+			gameMenus.fadeInMatte('App.js@togglePause 1');
 			gameMenus.showPauseButtonSet();
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
@@ -458,7 +468,7 @@ export default class App extends PIXI.Application {
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 			gameMenus.clearButtons();
-			gameMenus.fadeOutMatte();
+			gameMenus.fadeOutMatte('App.js@togglePause 2');
 		}
 	}
 }
