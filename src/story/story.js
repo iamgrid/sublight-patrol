@@ -27,7 +27,7 @@ const story = {
 		{ id: '002', sceneObject: scene002 },
 	],
 	playerShipId: 'red_1',
-	playerShipSuffixes: ['a', 'b', 'c', 'd'],
+	playerShipSuffixes: ['a', 'b', 'c', 'd', 'e', 'f'],
 	currentScene: null,
 	currentSceneBeat: null,
 	currentObjectives: {
@@ -68,12 +68,12 @@ const story = {
 
 		let cleanUpNeeded = false;
 
-		let nextPlayerShip = currentState.game.playerShips.next;
-		if (nextPlayerShip === null) nextPlayerShip = 0;
 		const playerId =
-			story.playerShipId + story.playerShipSuffixes[nextPlayerShip];
-		const playerShipType =
-			currentState.game.playerShips.orderedHangar[nextPlayerShip];
+			story.playerShipId +
+			story.playerShipSuffixes[
+				currentState.game.playerShips.lostOnThisMission.length
+			];
+		const playerShipType = currentState.game.playerShips.current;
 
 		if (story.currentScene === null) {
 			story.currentScene = story.sceneList[0].id;

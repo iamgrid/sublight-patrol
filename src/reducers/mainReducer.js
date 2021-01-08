@@ -482,10 +482,12 @@ export default function mainReducer(state, action) {
 			}
 
 			if (entityStore === 'player') {
-				let nextShip = null;
-				const spentShips = state.game.playerShips.spent + 1;
-				const unlockedShips = state.game.playerShips.unlocked;
-				if (unlockedShips - spentShips > 0) nextShip = spentShips;
+				const updatedHangarContents = [
+					...state.game.playerShips.hangarContents,
+				];
+				let nextShip = updatedHangarContents.shift();
+				if (!nextShip) nextShip = null;
+
 				if (state)
 					return [
 						() => action.callbackFn(),
@@ -496,8 +498,12 @@ export default function mainReducer(state, action) {
 								targeting: null,
 								playerShips: {
 									...state.game.playerShips,
-									spent: spentShips,
-									next: nextShip,
+									lostOnThisMission: [
+										...state.game.playerShips.lostOnThisMission,
+										nextShip,
+									],
+									current: nextShip,
+									hangarContents: updatedHangarContents,
 								},
 							},
 							entities: {
@@ -916,8 +922,12 @@ export default function mainReducer(state, action) {
 				...state,
 				game: {
 					...state.game,
-					targetHasBeenScanned: false,
 					targeting: null,
+					targetHasBeenScanned: false,
+					playerShips: {
+						...state.game.playerShips,
+						lostOnThisMission: [],
+					},
 				},
 				entities: {
 					player: {},
@@ -932,6 +942,26 @@ export default function mainReducer(state, action) {
 				positions: {
 					canMove: {},
 					cantMove: {},
+				},
+			};
+		}
+		case c.actions.RESTART_MISSION: {
+			const updatedHangarContents = [
+				...state.game.playerShips.lostOnThisMission,
+				...state.game.playerShips.hangarContents,
+			].filter((el) => el !== null);
+			const spawnWithShip = updatedHangarContents.shift();
+
+			return {
+				...state,
+				game: {
+					...state.game,
+					playerShips: {
+						...state.game.playerShips,
+						current: spawnWithShip,
+						hangarContents: updatedHangarContents,
+						lostOnThisMission: [],
+					},
 				},
 			};
 		}

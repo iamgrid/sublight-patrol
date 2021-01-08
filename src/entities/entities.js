@@ -323,11 +323,12 @@ const entities = {
 	playerShipDestruction() {
 		let currentState = entities.handlers.state();
 		const idSuffixes = ['a', 'b', 'c', 'd'];
-		const unlockedShips = currentState.game.playerShips.unlocked;
-		const spentShips = currentState.game.playerShips.spent;
-		const nextShip = currentState.game.playerShips.next;
+		const shipsInHangar = currentState.game.playerShips.hangarContents.length;
+		const nextShip = currentState.game.playerShips.current;
+		const shipsLostOnMission =
+			currentState.game.playerShips.lostOnThisMission.length;
 
-		if (spentShips >= unlockedShips) {
+		if (shipsInHangar < 1 && nextShip === null) {
 			console.log('Game over');
 
 			plates.fadeInMatte(25, 0);
@@ -351,9 +352,8 @@ const entities = {
 		} else {
 			console.log('Spawn player with their next ship');
 
-			const newPlayerId = 'red_1' + idSuffixes[spentShips];
-			const newPlayerShipType =
-				currentState.game.playerShips.orderedHangar[nextShip];
+			const newPlayerId = 'red_1' + idSuffixes[shipsLostOnMission];
+			const newPlayerShipType = nextShip;
 
 			let [newPlayerShipX, newPlayerShipY] = getPosition(
 				'destroyed_player',
@@ -376,7 +376,7 @@ const entities = {
 				timing.modes.play,
 				1000
 			);
-			plates.loadPlate('respawning', nextShip - 1);
+			plates.loadPlate('respawning', nextShip);
 			plates.fadeInPlate(25, 1500);
 			timing.setTrigger(
 				'spawn in player with a new ship',

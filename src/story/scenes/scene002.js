@@ -101,7 +101,7 @@ const scene002 = {
 				entities.spawn(
 					scene002.entities.mylok_1,
 					{
-						posX: 3900,
+						posX: 2900,
 						posY: 500,
 					},
 					{

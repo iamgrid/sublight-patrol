@@ -100,17 +100,17 @@ const plates = {
 	// 	console.log('plates.js@clearMatte()', plates.handlers.Matte.alpha);
 	// },
 
-	loadPlate(plateId, quoteVariant = -1, mainText = '', wittyText = '') {
+	loadPlate(plateId, quoteVariant = '', mainText = '', wittyText = '') {
 		if (c.debug.sequentialEvents)
 			console.log('loadPlate', plateId, quoteVariant, mainText, wittyText);
 		let atlText = '';
 		let btlText = '';
 
-		const respawnQuoteVariants = [
-			"With a lil' help from my friends",
-			'Mess with the bull, get the horns',
-			"It's jackhammer o'clock",
-		];
+		const respawnQuoteVariants = {
+			fenrir_dominator: "With a lil' help from my friends",
+			valkyrie: 'Mess with the bull, get the horns',
+			zangari_fighter_type_4: "It's jackhammer o'clock",
+		};
 
 		const missionSuccessQuoteVariants = [
 			'Yeah baby!',
@@ -131,8 +131,8 @@ const plates = {
 
 		switch (plateId) {
 			case 'respawning':
-				atlText = respawnQuoteVariants[1];
-				if (quoteVariant > -1) atlText = respawnQuoteVariants[quoteVariant];
+				atlText = '';
+				if (quoteVariant !== '') atlText = respawnQuoteVariants[quoteVariant];
 				btlText =
 					'Returning to the scene with a another craft from your hangar';
 				break;

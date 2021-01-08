@@ -44,6 +44,14 @@ const scene001 = {
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
+		mylok_1: {
+			id: 'mylok_1',
+			groupId: 'mylok',
+			type: 'zangari_fighter_type_3',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
 		b2508_012: {
 			id: 'b2508_012',
 			groupId: 'b2508',
@@ -121,6 +129,18 @@ const scene001 = {
 						id: playerId,
 					},
 					'player'
+				);
+
+				entities.spawn(
+					scene001.entities.mylok_1,
+					{
+						posX: 2900,
+						posY: 500,
+					},
+					{
+						behaviorAssignedStationX: 980,
+						behaviorAssignedStationY: 170,
+					}
 				);
 
 				entities.spawn(scene001.entities.b2508_012, {

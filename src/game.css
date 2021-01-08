@@ -423,16 +423,20 @@
 .game__hud-lives {
 	font-size: 12px;
 	padding-top: 12px;
+	color: transparent;
+	/* text-shadow: 0 0 0 #ffffff60; */
 }
 
-.game__hud-lives-life--spent {
-	color: #fff;
-	opacity: 0.3;
+.game__hud-lives-life--unused {
+	text-shadow: 0 0 0 #ffffff60;
+}
+
+.game__hud-lives-life--lost {
+	text-shadow: 0 0 0 #ff7070ff;
 }
 
 .game__hud-lives-life--available {
-	/* color: #ff5353; */
-	color: #fff;
+	text-shadow: 0 0 0 #ffffffff;
 }
 
 .game__hud-coords {

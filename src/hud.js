@@ -14,8 +14,7 @@ const hud = {
 	pixiHUDFaderInterval: null,
 	cannonCooldownStraggler: 0,
 	currentPlayerCoords: '',
-	currentUnlockedPlayerShips: -1,
-	currentSpentPlayerShips: -1,
+	currentLostPlayerShips: -1,
 	currentShots: 0,
 	currentDisplay: {},
 	maximums: {},
@@ -80,27 +79,27 @@ const hud = {
 
 	update(targeting, playerShips, allEntities, positions, playerId) {
 		// player ships
-		const heartEmoji = '&#10084;';
-		if (
-			playerShips.unlocked !== hud.currentUnlockedPlayerShips ||
-			playerShips.spent !== hud.currentSpentPlayerShips
-		) {
-			const remaining = playerShips.unlocked - playerShips.spent;
+		// const heartEmoji = '&#10084;';
+		const rocketEmoji = '&#x1F680';
+		const shipsLostOnMission = playerShips.lostOnThisMission.length;
+		if (shipsLostOnMission !== hud.currentLostPlayerShips) {
 			let newStr = [];
-			for (let i = 0; i < playerShips.unlocked; i++) {
-				let add = `<span class='game__hud-lives-life--spent'>${heartEmoji}</span>`;
-				if (remaining > i) {
-					add = `<span class='game__hud-lives-life--available'>${heartEmoji}</span>`;
+			const shipsInHangar = playerShips.hangarContents.length;
+			for (let i = 0; i < playerShips.hangarBerths; i++) {
+				let add = `<span class='game__hud-lives-life--unused'>${rocketEmoji}</span>`;
+				if (shipsInHangar + 1 > i) {
+					add = `<span class='game__hud-lives-life--available'>${rocketEmoji}</span>`;
+				} else if (shipsInHangar + 1 + shipsLostOnMission > i) {
+					add = `<span class='game__hud-lives-life--lost'>${rocketEmoji}</span>`;
 				}
 				newStr.push(add);
 			}
 
 			document.getElementById('game__hud-lives').innerHTML = newStr.join('');
 
-			hud.currentUnlockedPlayerShips = playerShips.unlocked;
-			hud.currentSpentPlayerShips = playerShips.spent;
+			hud.currentLostPlayerShips = shipsLostOnMission;
 
-			if (remaining < 1) {
+			if (shipsInHangar < 1) {
 				// GAME OVER
 			}
 		}
