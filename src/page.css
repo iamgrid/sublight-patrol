@@ -194,7 +194,7 @@ input[type='range']::-ms-thumb {
 	top: 0;
 	right: 0;
 	z-index: 2;
-	margin-right: 59px;
+	margin-right: 72px;
 	display: flex;
 	align-items: center;
 }

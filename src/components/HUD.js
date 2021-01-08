@@ -19,7 +19,7 @@ export default class HUD extends PIXI.Container {
 		this.cooldownTriggered = false;
 
 		this.sprites = {};
-		this.startX = 1008;
+		this.startX = 995;
 		this.startY = 12;
 		this.currentX = 0;
 		this.currentY = 0;
