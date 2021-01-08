@@ -1,7 +1,9 @@
 const c = {
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
 	debug: {
-		verboseReducers: false,
+		reducers: false,
+		sequentialEvents: false,
+		objectives: false,
 	},
 	actions: {
 		SET_CURRENT_SCENE: 'SET_CURRENT_SCENE',

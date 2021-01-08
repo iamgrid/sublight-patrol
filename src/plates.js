@@ -1,26 +1,32 @@
+import c from './utils/constants';
 import timing from './utils/timing';
 import hud from './hud';
 import { randomNumber } from './utils/formulas';
 
 const plates = {
-	handlers: { Matte: null, matteIsBeingUsedByPlates: null }, // gets its values in App.js
+	handlers: {
+		Matte: null,
+		matteIsBeingUsedByPlates: null,
+		hudShouldBeShowing: null,
+	}, // gets its values in App.js
 
 	fadeInMatte(steps = 25, delayMS = 0) {
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
 
-		if (hud.hudIsShowing) hud.toggle(false);
+		if (hud.hudIsShowing) hud.toggle('plates.js@fadeInMatte()', false);
 
 		plates.handlers.matteIsBeingUsedByPlates.actual = true;
 
 		const opacityFraction = 100 / steps;
 
 		plates.handlers.Matte.alpha = 0;
-		console.log(
-			'plates.js@fadeInMatte()',
-			steps,
-			delayMS,
-			plates.handlers.Matte.alpha
-		);
+		if (c.debug.sequentialEvents)
+			console.log(
+				'plates.js@fadeInMatte()',
+				steps,
+				delayMS,
+				plates.handlers.Matte.alpha
+			);
 
 		timing.setTrigger(
 			'plates.js fadeInMatte',
@@ -44,12 +50,13 @@ const plates = {
 		const opacityFraction = 100 / steps;
 
 		plates.handlers.Matte.alpha = 1;
-		console.log(
-			'plates.js@fadeOutMatte()',
-			steps,
-			delayMS,
-			plates.handlers.Matte.alpha
-		);
+		if (c.debug.sequentialEvents)
+			console.log(
+				'plates.js@fadeOutMatte()',
+				steps,
+				delayMS,
+				plates.handlers.Matte.alpha
+			);
 
 		timing.setTrigger(
 			'plates.js fadeOutMatte',
@@ -70,6 +77,9 @@ const plates = {
 		timing.setTimeout(
 			() => {
 				plates.handlers.matteIsBeingUsedByPlates.actual = false;
+				if (plates.handlers.hudShouldBeShowing) {
+					hud.toggle('plates.js@fadeOutMatte()', true);
+				}
 			},
 			timing.modes.play,
 			delayMS + steps * 40
@@ -79,18 +89,20 @@ const plates = {
 	fullMatte() {
 		plates.handlers.Matte.alpha = 1;
 		plates.handlers.matteIsBeingUsedByPlates.actual = true;
-		console.log('plates.js@fullMatte()', plates.handlers.Matte.alpha);
-		if (hud.hudIsShowing) hud.removeAtOnce();
+		if (c.debug.sequentialEvents)
+			console.log('plates.js@fullMatte()', plates.handlers.Matte.alpha);
+		if (hud.hudIsShowing) hud.toggle('plates.js@fullMatte()', false);
 	},
 
-	clearMatte() {
-		plates.handlers.matteIsBeingUsedByPlates.actual = false;
-		plates.handlers.Matte.alpha = 0;
-		console.log('plates.js@clearMatte()', plates.handlers.Matte.alpha);
-	},
+	// clearMatte() {
+	// 	plates.handlers.matteIsBeingUsedByPlates.actual = false;
+	// 	plates.handlers.Matte.alpha = 0;
+	// 	console.log('plates.js@clearMatte()', plates.handlers.Matte.alpha);
+	// },
 
 	loadPlate(plateId, quoteVariant = -1, mainText = '', wittyText = '') {
-		console.log('loadPlate', plateId, quoteVariant, mainText, wittyText);
+		if (c.debug.sequentialEvents)
+			console.log('loadPlate', plateId, quoteVariant, mainText, wittyText);
 		let atlText = '';
 		let btlText = '';
 

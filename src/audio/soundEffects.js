@@ -1,3 +1,4 @@
+import c from '../utils/constants';
 import audioLibrary from './audioLibrary';
 import { randomNumber, calculateDistance } from '../utils/formulas';
 import { getPosition } from '../utils/helpers';
@@ -183,7 +184,9 @@ const soundEffects = {
 		delete soundEffects.loops[entityId];
 	},
 
-	muteUnmuteAllLoops(doMute) {
+	muteUnmuteAllLoops(requestedBy = '', doMute = true) {
+		if (c.debug.sequentialEvents)
+			console.log(requestedBy, '-> soundEffects.js@muteUnmuteAllLoops', doMute);
 		for (const entityId in soundEffects.loops) {
 			for (const libraryItemId in soundEffects.loops[entityId]) {
 				for (const emitterId in soundEffects.loops[entityId][libraryItemId]) {

@@ -1,3 +1,4 @@
+import c from './constants';
 import idCreator from './idCreator';
 
 const timing = {
@@ -32,18 +33,13 @@ const timing = {
 	},
 
 	toggleEntityMovement(toggle = true, requestedBy = '', delayMS = 0) {
+		if (c.debug.sequentialEvents)
+			console.log(requestedBy, '-> Entity movement toggled: ', toggle, delayMS);
 		if (delayMS === 0) {
-			console.log(requestedBy, 'Entity movement toggled: ', toggle, delayMS);
 			timing.entityMovementEnabled = toggle;
 		} else {
 			timing.setTimeout(
 				() => {
-					console.log(
-						requestedBy,
-						'Entity movement toggled: ',
-						toggle,
-						delayMS
-					);
 					timing.entityMovementEnabled = toggle;
 				},
 				timing.modes.play,

@@ -338,7 +338,10 @@ const entities = {
 			);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(true);
+					soundEffects.muteUnmuteAllLoops(
+						'entities.js@playerShipDestruction() 2',
+						true
+					);
 				},
 				timing.modes.play,
 				1000
@@ -360,12 +363,15 @@ const entities = {
 			plates.fadeInMatte(25, 0);
 			timing.toggleEntityMovement(
 				false,
-				'entities.js@playerShipDestruction() 2',
+				'entities.js@playerShipDestruction() 3',
 				1000
 			);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(true);
+					soundEffects.muteUnmuteAllLoops(
+						'entities.js@playerShipDestruction() 4',
+						true
+					);
 				},
 				timing.modes.play,
 				1000
@@ -398,12 +404,15 @@ const entities = {
 			plates.fadeOutMatte(25, 5000);
 			timing.toggleEntityMovement(
 				true,
-				'entities.js@playerShipDestruction() 3',
+				'entities.js@playerShipDestruction() 5',
 				4300
 			);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(false);
+					soundEffects.muteUnmuteAllLoops(
+						'entities.js@playerShipDestruction() 6',
+						false
+					);
 				},
 				timing.modes.play,
 				4300

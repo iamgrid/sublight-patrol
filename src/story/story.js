@@ -20,6 +20,7 @@ const story = {
 		playVolume: null,
 		playVolumeBoundaries: null,
 		frameZero: null,
+		hudShouldBeShowing: null,
 	}, // gets its values in App.js
 	sceneList: [
 		{ id: '001', sceneObject: scene001 },
@@ -61,7 +62,8 @@ const story = {
 	advance(playScene = null, playSceneBeat = 0) {
 		// call with playScene = null to auto-advance
 		// to the next scene
-		console.log('advance()', playScene, playSceneBeat);
+		if (c.debug.sequentialEvents)
+			console.log('advance()', playScene, playSceneBeat);
 		const currentState = story.handlers.state();
 
 		let cleanUpNeeded = false;
@@ -89,26 +91,28 @@ const story = {
 					story.currentScene = story.sceneList[index].id;
 				} else {
 					// no more scenes, end of the game
-					console.log('THIS IS THE END OF THE GAME');
+					if (c.debug.sequentialEvents)
+						console.log('THIS IS THE END OF THE GAME');
+					plates.fullMatte();
 					plates.loadPlate('the_end');
 					plates.fadeInPlate(25);
 					timing.toggleEntityMovement(false, 'story.js@advance() 1', 1000);
 					timing.setTimeout(
 						() => {
-							soundEffects.muteUnmuteAllLoops(true);
+							soundEffects.muteUnmuteAllLoops('story.js@advance() 2', true);
 						},
 						timing.modes.play,
 						1000
 					);
-					plates.fadeInMatte(50, 1000);
-					// TODO: stop the game from continuing
-					// and show the appropriate buttons
+
+					// TODO: show the appropriate buttons
 					return;
 				}
 			}
 		}
 
-		console.log('story.currentScene:', story.currentScene);
+		if (c.debug.sequentialEvents)
+			console.log('story.currentScene:', story.currentScene);
 
 		const currentSceneObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
@@ -131,18 +135,13 @@ const story = {
 
 		story.currentSceneBeat = playSceneBeat;
 
-		console.log('story.currentSceneBeat:', story.currentSceneBeat);
+		if (c.debug.sequentialEvents)
+			console.log('story.currentSceneBeat:', story.currentSceneBeat);
 
 		const currentSceneBeatObj =
 			currentSceneObject.storyBeats[story.currentSceneBeat];
 
-		console.log(
-			'currentScene:',
-			story.currentScene,
-			currentSceneObject,
-			'currentSceneBeat:',
-			story.currentSceneBeat
-		);
+		if (c.debug.sequentialEvents) console.log(currentSceneObject);
 
 		if (cleanUpNeeded) {
 			story.cleanUp();
@@ -163,14 +162,14 @@ const story = {
 				currentSceneObject.titlePlate.mainText,
 				currentSceneObject.titlePlate.wittyText
 			);
-			timing.toggleEntityMovement(false, 'story.js@advance() 2');
-			soundEffects.muteUnmuteAllLoops(true);
+			timing.toggleEntityMovement(false, 'story.js@advance() 3');
+			soundEffects.muteUnmuteAllLoops('story.js@advance() 4', true);
 			plates.fadeInPlate(25);
 			plates.fadeOutMatte(50, 4000);
-			timing.toggleEntityMovement(true, 'story.js@advance() 3', 4000);
+			timing.toggleEntityMovement(true, 'story.js@advance() 5', 4000);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(false);
+					soundEffects.muteUnmuteAllLoops('story.js@advance() 6', false);
 				},
 				timing.modes.play,
 				4000
@@ -186,7 +185,7 @@ const story = {
 		currentSceneBeatObj.execute(playerId, playerShipType);
 
 		if (currentSceneBeatObj.cameraMode === c.cameraModes.gameplay) {
-			// toggle HUD
+			story.handlers.hudShouldBeShowing.actual = true;
 			timing.setTrigger(
 				'story-hud-trigger1',
 				() => {
@@ -199,13 +198,15 @@ const story = {
 				'story-hud-trigger2',
 				() => {
 					hud.reInitPixiHUD(playerId);
-					hud.toggle(true);
+
+					// hud.toggle('story.js@advance() 4', true);
 				},
 				timing.modes.play,
 				6000
 			);
 		} else {
-			hud.toggle(false);
+			story.handlers.hudShouldBeShowing.actual = false;
+			// hud.toggle('story.js@advance() 4', false);
 		}
 	},
 
@@ -226,7 +227,7 @@ const story = {
 	},
 
 	updateCurrentObjectives(updates) {
-		console.log('updateCurrentObjectives()', updates);
+		if (c.debug.objectives) console.log('updateCurrentObjectives()', updates);
 		story.currentObjectives.show = [
 			...story.currentObjectives.show,
 			...updates.show,
@@ -257,12 +258,13 @@ const story = {
 		eventId,
 		wasPreviouslyInspected = false
 	) {
-		console.log(
-			'checkAgainstCurrentObjectives',
-			entityId,
-			eventId,
-			wasPreviouslyInspected
-		);
+		if (c.debug.objectives)
+			console.log(
+				'checkAgainstCurrentObjectives',
+				entityId,
+				eventId,
+				wasPreviouslyInspected
+			);
 
 		if (typeof eventId !== 'string') {
 			console.error(
@@ -422,7 +424,8 @@ const story = {
 		story.checkBeatCompletion();
 
 		if (failState) {
-			console.log('MISSION FAILED!', story.currentObjectives);
+			if (c.debug.objectives)
+				console.log('MISSION FAILED!', story.currentObjectives);
 			plates.loadPlate('mission_failed', -1, 'Mission failed');
 			plates.fadeInPlate(25);
 			plates.fadeInMatte(50, 1000);
@@ -433,7 +436,10 @@ const story = {
 			);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(true);
+					soundEffects.muteUnmuteAllLoops(
+						'story.js@checkAgainstCurrentObjectives() 2',
+						true
+					);
 				},
 				timing.modes.play,
 				3000
@@ -520,15 +526,17 @@ const story = {
 					allComplete = false;
 			});
 
-			console.log('isTheFinalGameplayBeat');
+			if (c.debug.objectives) console.log('isTheFinalGameplayBeat');
 		}
-		console.log('allComplete:', allComplete, story.currentObjectives);
+		if (c.debug.objectives)
+			console.log('allComplete:', allComplete, story.currentObjectives);
 
 		if (allComplete) {
-			console.log(
-				'ALLCOMPLETE IS TRUE, ADVANCE TO THE NEXT STORY BEAT!',
-				story.currentObjectives
-			);
+			if (c.debug.objectives)
+				console.log(
+					'ALLCOMPLETE IS TRUE, ADVANCE TO THE NEXT STORY BEAT!',
+					story.currentObjectives
+				);
 
 			if (story.currentSceneBeat < currentSceneObject.storyBeats.length - 1) {
 				// there are more beats in this scene
@@ -544,7 +552,10 @@ const story = {
 				);
 				timing.setTimeout(
 					() => {
-						soundEffects.muteUnmuteAllLoops(true);
+						soundEffects.muteUnmuteAllLoops(
+							'story.js@checkBeatCompletion() 2',
+							true
+						);
 					},
 					timing.modes.play,
 					2000
@@ -563,7 +574,7 @@ const story = {
 	},
 
 	entityWasDespawned(entityId) {
-		console.log('entityWasDespawned:', entityId);
+		if (c.debug.objectives) console.log('entityWasDespawned:', entityId);
 		if (story.currentStoryEntities[entityId] === undefined) return;
 		story.currentStoryEntities[entityId].wasDespawned = true;
 
@@ -652,7 +663,7 @@ const story = {
 	},
 
 	cleanUp() {
-		console.log('story.cleanUp() called');
+		if (c.debug.objectives) console.log('story.cleanUp() called');
 
 		story.currentObjectives = {
 			show: [],

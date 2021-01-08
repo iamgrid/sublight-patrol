@@ -98,6 +98,10 @@ export default class App extends PIXI.Application {
 			actual: false,
 		};
 
+		this.hudShouldBeShowing = {
+			actual: false,
+		};
+
 		this.init();
 	}
 
@@ -147,6 +151,7 @@ export default class App extends PIXI.Application {
 		plates.handlers = {
 			Matte: this.Matte,
 			matteIsBeingUsedByPlates: this.matteIsBeingUsedByPlates,
+			hudShouldBeShowing: this.hudShouldBeShowing,
 		};
 
 		gameMenus.handlers = {
@@ -155,6 +160,7 @@ export default class App extends PIXI.Application {
 			pixiHUD: this.pixiHUD,
 			showingMissionMenu: this.showingMissionMenu,
 			matteIsBeingUsedByPlates: this.matteIsBeingUsedByPlates,
+			hudShouldBeShowing: this.hudShouldBeShowing,
 		};
 
 		story.handlers = {
@@ -164,6 +170,7 @@ export default class App extends PIXI.Application {
 			playVolume: this.playVolume,
 			playVolumeBoundaries: this.playVolumeBoundaries,
 			frameZero: this.frameZero,
+			hudShouldBeShowing: this.hudShouldBeShowing,
 		};
 
 		audio.handlers = {
@@ -456,19 +463,19 @@ export default class App extends PIXI.Application {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
-			soundEffects.muteUnmuteAllLoops(true);
+			soundEffects.muteUnmuteAllLoops('App.js@togglePause 1', true);
 			this.pixiState = this.pause;
-			gameMenus.fadeInMatte('App.js@togglePause 1');
+			gameMenus.fadeInMatte('App.js@togglePause 2');
 			gameMenus.showPauseButtonSet();
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			timing.currentMode = timing.modes.play;
-			soundEffects.muteUnmuteAllLoops(false);
+			soundEffects.muteUnmuteAllLoops('App.js@togglePause 3', false);
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 			gameMenus.clearButtons();
-			gameMenus.fadeOutMatte('App.js@togglePause 2');
+			gameMenus.fadeOutMatte('App.js@togglePause 4');
 		}
 	}
 }

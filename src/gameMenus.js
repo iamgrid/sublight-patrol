@@ -1,3 +1,4 @@
+import c from './utils/constants';
 import timing from './utils/timing';
 import Button from './components/Button';
 // import story from './story/story';
@@ -9,6 +10,7 @@ const gameMenus = {
 		pixiHUD: null,
 		showingMissionMenu: null,
 		matteIsBeingUsedByPlates: null,
+		hudShouldBeShowing: null,
 	}, // gets its values in App.js
 	buttonFunctions: {
 		restartMission: null, // registered in story.js@init()
@@ -16,18 +18,30 @@ const gameMenus = {
 	},
 	stageButtons: {},
 	currentFocus: null,
-	maxMatteAlpha: 80,
+	mattePauseOpacity: 80,
+	correctedToPauseOpacityFrom: null,
 	matteStep: 4,
 
 	fadeInMatte(requestedBy = '') {
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
-			console.log(
-				requestedBy,
-				'gameMenus fadeInMatte prevented, its being used by plates.js'
-			);
+			document.getElementById('game__plates').style.opacity = 0.2;
+			const currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
+			if (currentOpacity < gameMenus.mattePauseOpacity) {
+				gameMenus.correctedToPauseOpacityFrom = currentOpacity;
+				gameMenus.handlers.Matte.alpha = gameMenus.mattePauseOpacity / 100;
+			}
+			if (c.debug.sequentialEvents)
+				console.log(
+					requestedBy,
+					'-> gameMenus fadeInMatte (currently in use by plates.js)',
+					currentOpacity,
+					gameMenus.correctedToPauseOpacityFrom
+				);
+
 			return;
 		}
-		console.log(requestedBy, 'gameMenus.js@fadeInMatte()');
+		if (c.debug.sequentialEvents)
+			console.log(requestedBy, '-> gameMenus.js@fadeInMatte()');
 		gameMenus.handlers.pixiHUD.alpha = 0;
 		document.getElementById('game__hud').style.opacity = 0;
 
@@ -36,7 +50,7 @@ const gameMenus = {
 			() => {
 				if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) return;
 				let currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
-				if (currentOpacity < gameMenus.maxMatteAlpha) {
+				if (currentOpacity < gameMenus.mattePauseOpacity) {
 					currentOpacity += gameMenus.matteStep;
 					gameMenus.handlers.Matte.alpha = currentOpacity / 100;
 				}
@@ -51,17 +65,26 @@ const gameMenus = {
 
 	fadeOutMatte(requestedBy = '') {
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
-			console.log(
-				requestedBy,
-				'gameMenus fadeOutMatte prevented, its being used by plates.js'
-			);
+			document.getElementById('game__plates').style.opacity = 1;
+			if (gameMenus.correctedToPauseOpacityFrom !== null) {
+				gameMenus.handlers.Matte.alpha =
+					gameMenus.correctedToPauseOpacityFrom / 100;
+				gameMenus.correctedToPauseOpacityFrom = null;
+			}
+			if (c.debug.sequentialEvents)
+				console.log(
+					requestedBy,
+					'-> gameMenus fadeOutMatte (currently in use by plates.js)',
+					gameMenus.correctedToPauseOpacityFrom
+				);
 			return;
 		}
-		console.log(
-			requestedBy,
-			'gameMenus.js@fadeOutMatte()',
-			gameMenus.handlers.matteIsBeingUsedByPlates.actual
-		);
+		if (c.debug.sequentialEvents)
+			console.log(
+				requestedBy,
+				'-> gameMenus.js@fadeOutMatte()',
+				gameMenus.handlers.matteIsBeingUsedByPlates.actual
+			);
 		gameMenus.handlers.pixiHUD.alpha = 1;
 		document.getElementById('game__hud').style.opacity = 1;
 

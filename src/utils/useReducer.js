@@ -84,7 +84,7 @@ export default function useReducer(reducer, initialArg = {}) {
 				}
 			}
 			if (newStore !== null) {
-				if (c.debug.verboseReducers) console.log(action);
+				if (c.debug.reducers) console.log(action);
 				if (!isPlainObject(newStore)) {
 					console.error(
 						'Failed to execute reducer with action:',

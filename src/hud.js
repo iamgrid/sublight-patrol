@@ -31,22 +31,28 @@ const hud = {
 	edgeAngles: null,
 	targetBlinker: 0,
 
-	toggle(show = false) {
-		hud.hudIsShowing = show;
-		document.getElementById('game__hud').style.opacity = 1;
-		const hudDiv = document.getElementById('game__hud');
-		if (show) {
-			hudDiv.classList.add('game__hud--visible');
-			timing.setTimeout(
-				() => {
-					hud.fadePixiHUD(true);
-				},
-				timing.modes.play,
-				1000
-			);
-		} else {
-			hudDiv.classList.remove('game__hud--visible');
-			hud.fadePixiHUD(false);
+	toggle(requestedBy = '', show = false) {
+		if (c.debug.sequentialEvents)
+			console.log(requestedBy, '-> hud.js@toggle()', show, hud.hudIsShowing);
+		if (show !== hud.hudIsShowing) {
+			document.getElementById('game__hud').style.opacity = 1;
+			const hudDiv = document.getElementById('game__hud');
+			if (show) {
+				if (c.debug.sequentialEvents) console.log('hud.js@toggle() ON');
+				hudDiv.classList.add('game__hud--visible');
+				timing.setTimeout(
+					() => {
+						hud.fadePixiHUD(true);
+					},
+					timing.modes.play,
+					1000
+				);
+			} else {
+				if (c.debug.sequentialEvents) console.log('hud.js@toggle() OFF');
+				hudDiv.classList.remove('game__hud--visible');
+				hud.fadePixiHUD(false);
+			}
+			hud.hudIsShowing = show;
 		}
 	},
 
@@ -70,7 +76,6 @@ const hud = {
 		document.getElementById('game__hud').classList.remove('game__hud--visible');
 		hud.handlers.pixiHUD.alpha = 0;
 		hud.hudIsShowing = false;
-
 	},
 
 	update(targeting, playerShips, allEntities, positions, playerId) {
