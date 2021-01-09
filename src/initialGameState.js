@@ -7,6 +7,7 @@ const initialGameState = {
 			repairsAvailable: false,
 			hangarBerths: 5,
 			current: 'fenrir',
+			currentIdSuffix: 'a',
 			hangarContents: [
 				'fenrir_dominator',
 				'valkyrie',

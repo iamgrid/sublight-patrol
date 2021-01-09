@@ -36,7 +36,7 @@ const story = {
 	},
 	currentStoryEntities: {},
 
-	assertType(entityId) {
+	assertClassification(entityId) {
 		const storyEntity = story.currentStoryEntities[entityId];
 		if (storyEntity === undefined) {
 			return '';
@@ -290,7 +290,7 @@ const story = {
 			}
 		}
 
-		let entityType = story.assertType(entityId);
+		let entityClassification = story.assertClassification(entityId);
 
 		let entityInvolvedIn = [];
 
@@ -392,7 +392,7 @@ const story = {
 			// so we'll print a yellow status message
 			let printStatus = true;
 			let statusColor = 'yellow';
-			let statusMessage = `${entityType}[${makeName(entityId)}] ${
+			let statusMessage = `${entityClassification}[${makeName(entityId)}] ${
 				c.objectiveTypes[eventId].completed_desc
 			}`;
 
@@ -618,7 +618,9 @@ const story = {
 
 		if (objectiveObj.failed) itemColor = 'red';
 		if (objectiveObj.groupId === undefined) {
-			let entityType = story.assertType(objectiveObj.entityId);
+			let entityClassification = story.assertClassification(
+				objectiveObj.entityId
+			);
 			let mainText = c.objectiveTypes[objectiveObj.type].desc;
 			let parensText = 'incomplete';
 			if (completed) {
@@ -629,17 +631,18 @@ const story = {
 				parensText = 'failed';
 				mainText = c.objectiveTypes[objectiveObj.type].desc;
 			}
-			objectiveText = `${entityType}${makeName(
+			objectiveText = `${entityClassification}${makeName(
 				objectiveObj.entityId
 			)} ${mainText} (${parensText})`;
 		} else {
-			let groupType = '';
+			let groupClassification = '';
 			let firstInGroup = Object.values(story.currentStoryEntities).find(
 				(en) => en.groupId === objectiveObj.groupId
 			);
 			if (firstInGroup !== undefined)
-				groupType = story.assertType(firstInGroup.id);
-			if (groupType !== '') groupType = groupType.toLowerCase();
+				groupClassification = story.assertClassification(firstInGroup.id);
+			if (groupClassification !== '')
+				groupClassification = groupClassification.toLowerCase();
 
 			let mainText = c.objectiveTypes[objectiveObj.type].desc;
 			let parensText = Math.ceil(objectiveObj.currentPercentage) + '% complete';
@@ -653,7 +656,7 @@ const story = {
 			}
 			objectiveText = `${
 				objectiveObj.requiredPercentage
-			}% of ${groupType}group ${
+			}% of ${groupClassification}group ${
 				objectiveObj.groupId.charAt(0).toUpperCase() +
 				objectiveObj.groupId.slice(1)
 			} ${mainText} (${parensText})`;

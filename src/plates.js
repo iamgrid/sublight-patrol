@@ -19,7 +19,6 @@ const plates = {
 
 		const opacityFraction = 100 / steps;
 
-		plates.handlers.Matte.alpha = 0;
 		if (c.debug.sequentialEvents)
 			console.log(
 				'plates.js@fadeInMatte()',
@@ -28,10 +27,18 @@ const plates = {
 				plates.handlers.Matte.alpha
 			);
 
+		let firstRun = true;
+
 		timing.setTrigger(
 			'plates.js fadeInMatte',
 			() => {
+				if (firstRun) {
+					plates.handlers.Matte.alpha = 0;
+					firstRun = false;
+					return;
+				}
 				const currentOpacity = Math.trunc(plates.handlers.Matte.alpha * 100);
+				if (c.debug.sequentialEvents) console.log(currentOpacity);
 
 				if (currentOpacity < 100) {
 					plates.handlers.Matte.alpha =
@@ -41,7 +48,7 @@ const plates = {
 			timing.modes.play,
 			delayMS,
 			true,
-			steps,
+			steps + 1,
 			40
 		);
 	},
@@ -49,7 +56,6 @@ const plates = {
 	fadeOutMatte(steps = 25, delayMS = 0) {
 		const opacityFraction = 100 / steps;
 
-		plates.handlers.Matte.alpha = 1;
 		if (c.debug.sequentialEvents)
 			console.log(
 				'plates.js@fadeOutMatte()',
@@ -58,10 +64,18 @@ const plates = {
 				plates.handlers.Matte.alpha
 			);
 
+		let firstRun = true;
+
 		timing.setTrigger(
 			'plates.js fadeOutMatte',
 			() => {
+				if (firstRun) {
+					plates.handlers.Matte.alpha = 1;
+					firstRun = false;
+					return;
+				}
 				const currentOpacity = Math.trunc(plates.handlers.Matte.alpha * 100);
+				if (c.debug.sequentialEvents) console.log(currentOpacity);
 
 				if (currentOpacity > 0)
 					plates.handlers.Matte.alpha =
@@ -70,7 +84,7 @@ const plates = {
 			timing.modes.play,
 			delayMS,
 			true,
-			steps,
+			steps + 1,
 			40
 		);
 
@@ -82,7 +96,7 @@ const plates = {
 				}
 			},
 			timing.modes.play,
-			delayMS + steps * 40
+			delayMS + (steps + 1) * 40
 		);
 	},
 
