@@ -524,7 +524,8 @@ const behavior = {
 		if (!formations.isLeadInAFormation(entityId)) {
 			currentState.entities.targetable.forEach((buddy) => {
 				if (foundAFormationToJoin) return;
-				if (buddy.playerRelation === 'hostile') {
+				if (buddy.id === entityId) return;
+				if (buddy.playerRelation === 'hostile' && buddy.immutable.hasCannons) {
 					const [buddyX, buddyY] = getPosition(
 						buddy.id,
 						currentState.positions
@@ -544,6 +545,9 @@ const behavior = {
 								currentState,
 								false
 							);
+							foundAFormationToJoin = true;
+						} else {
+							formations.createFormation(entityId, buddy.id, currentState);
 							foundAFormationToJoin = true;
 						}
 					}
