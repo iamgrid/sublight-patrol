@@ -47,7 +47,23 @@ const scene001 = {
 		mylok_1: {
 			id: 'mylok_1',
 			groupId: 'mylok',
-			type: 'zangari_fighter_type_3',
+			type: 'zangari_fighter_type_1',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		mylok_2: {
+			id: 'mylok_2',
+			groupId: 'mylok',
+			type: 'zangari_fighter_type_1',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		mylok_3: {
+			id: 'mylok_3',
+			groupId: 'mylok',
+			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
@@ -95,6 +111,11 @@ const scene001 = {
 				return {
 					show: [
 						{
+							type: c.objectiveTypes.destroyed.id,
+							groupId: scene001.entities.mylok_1.groupId,
+							requiredPercentage: 100,
+						},
+						{
 							type: c.objectiveTypes.inspected.id,
 							groupId: scene001.entities.b2508_012.groupId,
 							requiredPercentage: 100,
@@ -139,7 +160,29 @@ const scene001 = {
 					},
 					{
 						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 170,
+						behaviorAssignedStationY: 225,
+					}
+				);
+				entities.spawn(
+					scene001.entities.mylok_2,
+					{
+						posX: 2900,
+						posY: 300,
+					},
+					{
+						behaviorAssignedStationX: 980,
+						behaviorAssignedStationY: 100,
+					}
+				);
+				entities.spawn(
+					scene001.entities.mylok_3,
+					{
+						posX: 2900,
+						posY: 100,
+					},
+					{
+						behaviorAssignedStationX: 980,
+						behaviorAssignedStationY: 350,
 					}
 				);
 

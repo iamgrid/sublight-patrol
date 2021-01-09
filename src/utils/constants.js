@@ -44,12 +44,12 @@ const c = {
 	alertsAndWarnings: {
 		warnings: {
 			leavingVolume: {
-				m: 'You are approaching the edge of the playable volume',
+				m: 'You are approaching the edge of the mission volume',
 			},
 			no_emp: { m: 'Your current ship has no EMP capability' },
 		},
 		alerts: {
-			leftVolume: { m: 'You are beyond the edge of the playable volume!' },
+			leftVolume: { m: 'You are beyond the edge of the mission volume!' },
 			systemsOffline: { m: 'Systems offline.' },
 		},
 	},

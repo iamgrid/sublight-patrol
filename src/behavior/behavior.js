@@ -517,6 +517,48 @@ const behavior = {
 		const entityId = entity.id;
 		const entityStoreUpdates = {};
 
+		// This is a lone attacker, look for other
+		// attackers in the vicinity to make a formation with.
+
+		let foundAFormationToJoin = false;
+		if (!formations.isLeadInAFormation(entityId)) {
+			currentState.entities.targetable.forEach((buddy) => {
+				if (foundAFormationToJoin) return;
+				if (buddy.playerRelation === 'hostile') {
+					const [buddyX, buddyY] = getPosition(
+						buddy.id,
+						currentState.positions
+					);
+					const distanceToBuddy = calculateDistance(
+						entityX,
+						entityY,
+						buddyX,
+						buddyY
+					);
+					if (distanceToBuddy < 150) {
+						const formationId = formations.isInFormation(buddy.id);
+						if (formationId) {
+							formations.addEntityToFormation(
+								formationId,
+								entityId,
+								currentState,
+								false
+							);
+							foundAFormationToJoin = true;
+						}
+					}
+				}
+			});
+		}
+
+		if (foundAFormationToJoin) {
+			// This entity will start to be controlled by
+			// its formation starting on the next tick
+			return [{}, {}, null];
+		}
+
+		// Turn towards the player.
+
 		const [needsToFlip, newFacing] = behavior._turn(
 			'toward',
 			entity,
@@ -533,6 +575,8 @@ const behavior = {
 			facingUpdate = newFacing;
 		}
 
+		// Velocity updates.
+
 		let newLatVelocity = 0;
 		let newLongVelocity = 0;
 
@@ -548,16 +592,6 @@ const behavior = {
 			const maxLongVelocity = entity.immutable.thrusters.main;
 			newLongVelocity =
 				newFacing * Math.min(Math.abs(enemyLongVel), maxLongVelocity);
-
-			// Don't move beyond the behavior boundaries
-			if (
-				entityX + newLongVelocity <
-					behavior.handlers.playVolume.softBoundaries.minX ||
-				entityX + newLongVelocity >
-					behavior.handlers.playVolume.softBoundaries.maxX
-			) {
-				newLongVelocity = 0;
-			}
 		} else if (longDistance < entity.immutable.length * 3) {
 			// way too close to the enemy, backing up
 			// console.log(entity.id, 'is backing up');
