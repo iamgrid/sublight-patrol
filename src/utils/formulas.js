@@ -14,6 +14,31 @@ export function decreaseNumberBy(num, by) {
 	return re;
 }
 
+export function numberToLetter(num) {
+	if (!Number.isInteger(num)) {
+		console.error(
+			'numberToLetter() - expected integer, got this instead:',
+			num,
+			"...returning 'a'"
+		);
+		return 'a';
+	}
+	// fromCharCode: 97 = a, 122 = z
+	return String.fromCharCode((num % 26) + 97);
+}
+
+export function letterToNumber(letter) {
+	const letterRegexp = RegExp(/^[a-z]$/);
+	if (!letterRegexp.test(letter)) {
+		console.error(
+			'numberToLetter() - expected a lowercase letter of the alphabet got this instead:',
+			letter
+		);
+	} else {
+		return letter.charCodeAt(0) - 97;
+	}
+}
+
 export function calculateDistance(x1, y1, x2, y2) {
 	return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }

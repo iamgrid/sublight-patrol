@@ -22,6 +22,7 @@ const c = {
 		SHIELD_REGEN: 'SHIELD_REGEN',
 		FLIP: 'FLIP',
 		CLEANUP: 'CLEANUP',
+		RESTART_MISSION: 'RESTART_MISSION',
 	},
 	gameCanvas: {
 		width: 1200,
@@ -144,6 +145,7 @@ const c = {
 		},
 	},
 	empReach: 120,
+	playerIdPartial: 'red_1',
 	cameraModes: {
 		gameplay: 'gameplay',
 		centeredEntity: 'centeredEntity',

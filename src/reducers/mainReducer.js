@@ -1,5 +1,9 @@
 import c from '../utils/constants';
-import { calculateDistance } from '../utils/formulas';
+import {
+	calculateDistance,
+	numberToLetter,
+	letterToNumber,
+} from '../utils/formulas';
 import {
 	isEmptyObject,
 	getPosition,
@@ -487,6 +491,10 @@ export default function mainReducer(state, action) {
 				];
 				let nextShip = updatedHangarContents.shift();
 				if (!nextShip) nextShip = null;
+				const lostShip = state.game.playerShips.current;
+				const newSuffix = numberToLetter(
+					letterToNumber(state.game.playerShips.currentIdSuffix) + 1
+				);
 
 				if (state)
 					return [
@@ -500,9 +508,10 @@ export default function mainReducer(state, action) {
 									...state.game.playerShips,
 									lostOnThisMission: [
 										...state.game.playerShips.lostOnThisMission,
-										nextShip,
+										lostShip,
 									],
 									current: nextShip,
+									currentIdSuffix: newSuffix,
 									hangarContents: updatedHangarContents,
 								},
 							},
@@ -948,9 +957,18 @@ export default function mainReducer(state, action) {
 		case c.actions.RESTART_MISSION: {
 			const updatedHangarContents = [
 				...state.game.playerShips.lostOnThisMission,
+				state.game.playerShips.current,
 				...state.game.playerShips.hangarContents,
 			].filter((el) => el !== null);
+			console.log(updatedHangarContents);
 			const spawnWithShip = updatedHangarContents.shift();
+			const newSuffix = numberToLetter(
+				Math.max(
+					0,
+					letterToNumber(state.game.playerShips.currentIdSuffix) -
+						state.game.playerShips.lostOnThisMission.length
+				)
+			);
 
 			return {
 				...state,
@@ -959,6 +977,7 @@ export default function mainReducer(state, action) {
 					playerShips: {
 						...state.game.playerShips,
 						current: spawnWithShip,
+						currentIdSuffix: newSuffix,
 						hangarContents: updatedHangarContents,
 						lostOnThisMission: [],
 					},

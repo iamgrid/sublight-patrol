@@ -26,8 +26,6 @@ const story = {
 		{ id: '001', sceneObject: scene001 },
 		{ id: '002', sceneObject: scene002 },
 	],
-	playerShipId: 'red_1',
-	playerShipSuffixes: ['a', 'b', 'c', 'd', 'e', 'f'],
 	currentScene: null,
 	currentSceneBeat: null,
 	currentObjectives: {
@@ -69,10 +67,7 @@ const story = {
 		let cleanUpNeeded = false;
 
 		const playerId =
-			story.playerShipId +
-			story.playerShipSuffixes[
-				currentState.game.playerShips.lostOnThisMission.length
-			];
+			c.playerIdPartial + currentState.game.playerShips.currentIdSuffix;
 		const playerShipType = currentState.game.playerShips.current;
 
 		if (story.currentScene === null) {
@@ -213,6 +208,7 @@ const story = {
 	restartMission() {
 		// console.log('story restartMission()');
 		status.add('aqua', 'Mission restarted...', timing.times.play);
+		story.handlers.dispatch({ type: c.actions.RESTART_MISSION });
 		story.advance(story.currentScene, 0);
 		story.handlers.frameZero.actual = true;
 	},

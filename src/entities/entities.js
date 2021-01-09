@@ -322,11 +322,9 @@ const entities = {
 
 	playerShipDestruction() {
 		let currentState = entities.handlers.state();
-		const idSuffixes = ['a', 'b', 'c', 'd'];
 		const shipsInHangar = currentState.game.playerShips.hangarContents.length;
 		const nextShip = currentState.game.playerShips.current;
-		const shipsLostOnMission =
-			currentState.game.playerShips.lostOnThisMission.length;
+		const nextSuffix = currentState.game.playerShips.currentIdSuffix;
 
 		if (shipsInHangar < 1 && nextShip === null) {
 			console.log('Game over');
@@ -352,7 +350,7 @@ const entities = {
 		} else {
 			console.log('Spawn player with their next ship');
 
-			const newPlayerId = 'red_1' + idSuffixes[shipsLostOnMission];
+			const newPlayerId = c.playerIdPartial + nextSuffix;
 			const newPlayerShipType = nextShip;
 
 			let [newPlayerShipX, newPlayerShipY] = getPosition(
