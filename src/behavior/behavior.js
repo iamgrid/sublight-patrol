@@ -596,6 +596,16 @@ const behavior = {
 			const maxLongVelocity = entity.immutable.thrusters.main;
 			newLongVelocity =
 				newFacing * Math.min(Math.abs(enemyLongVel), maxLongVelocity);
+
+			// Don't move beyond the behavior boundaries (X axis)
+			if (
+				entityX + newLongVelocity <
+					behavior.handlers.playVolume.softBoundaries.minX ||
+				entityX + newLongVelocity >
+					behavior.handlers.playVolume.softBoundaries.maxX
+			) {
+				newLongVelocity = 0;
+			}
 		} else if (longDistance < entity.immutable.length * 3) {
 			// way too close to the enemy, backing up
 			// console.log(entity.id, 'is backing up');
@@ -769,7 +779,7 @@ const behavior = {
 			}
 		}
 
-		// Don't move beyond the behavior boundaries
+		// Don't move beyond the behavior boundaries (Y axis)
 		if (
 			entityY + newLatVelocity <
 				behavior.handlers.playVolume.softBoundaries.minY ||

@@ -457,7 +457,7 @@ export default class App extends PIXI.Application {
 		timing.tick(timing.modes.pause, this.ticker.deltaMS);
 	}
 
-	togglePause() {
+	togglePause(dontFadeMatte = '') {
 		const pauseDiv = document.getElementById('game__pause');
 		if (!timing.isPaused()) {
 			status.toggleStatusExpansion.bind(status, '', 'show')();
@@ -465,7 +465,7 @@ export default class App extends PIXI.Application {
 			timing.currentMode = timing.modes.pause;
 			soundEffects.muteUnmuteAllLoops('App.js@togglePause 1', true);
 			this.pixiState = this.pause;
-			gameMenus.fadeInMatte('App.js@togglePause 2');
+			if (dontFadeMatte === '') gameMenus.fadeInMatte('App.js@togglePause 2');
 			gameMenus.showPauseButtonSet();
 		} else {
 			status.toggleStatusExpansion.bind(status, '', 'hide')();
@@ -475,7 +475,11 @@ export default class App extends PIXI.Application {
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 			gameMenus.clearButtons();
-			gameMenus.fadeOutMatte('App.js@togglePause 4');
+			if (dontFadeMatte === '') {
+				gameMenus.fadeOutMatte('App.js@togglePause 4');
+			} else {
+				document.getElementById('game__plates').style.opacity = 1;
+			}
 		}
 	}
 }

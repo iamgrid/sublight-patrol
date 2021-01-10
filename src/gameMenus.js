@@ -140,7 +140,7 @@ const gameMenus = {
 				console.log('doActivate restartMission');
 				if (typeof gameMenus.buttonFunctions.restartMission === 'function') {
 					gameMenus.buttonFunctions.restartMission();
-					window.pixiapp.togglePause();
+					window.pixiapp.togglePause('dontFadeMatte');
 					gameMenus.clearButtons();
 				}
 			},
@@ -159,7 +159,7 @@ const gameMenus = {
 				console.log('doActivate mainMenu');
 				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
 					gameMenus.buttonFunctions.mainMenu();
-					window.pixiapp.togglePause();
+					window.pixiapp.togglePause('dontFadeMatte');
 					gameMenus.clearButtons();
 				}
 			},
