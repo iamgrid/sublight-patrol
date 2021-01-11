@@ -11,6 +11,7 @@ import plates from '../plates';
 import hud from '../hud';
 import shots from '../shots';
 import emp from '../emp';
+import gameMenus from '../gameMenus';
 
 const entities = {
 	handlers: {
@@ -347,6 +348,14 @@ const entities = {
 			);
 			plates.loadPlate('game_over');
 			plates.fadeInPlate(25, 2000);
+			plates.fadeOutPlate(25, 7000);
+			timing.setTimeout(
+				() => {
+					gameMenus.showMissionFailedButtonSet();
+				},
+				timing.modes.play,
+				8500
+			);
 		} else {
 			console.log('Spawn player with their next ship');
 

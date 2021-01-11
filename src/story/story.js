@@ -101,7 +101,6 @@ const story = {
 						1000
 					);
 
-					// TODO: show the appropriate buttons
 					return;
 				}
 			}
@@ -451,8 +450,6 @@ const story = {
 				timing.modes.play,
 				5100
 			);
-			// TODO: stop the game from continuing
-			// and show the appropriate buttons
 		}
 	},
 

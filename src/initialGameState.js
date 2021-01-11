@@ -5,13 +5,13 @@ const initialGameState = {
 		targetHasBeenScanned: false,
 		playerShips: {
 			repairsAvailable: false,
-			hangarBerths: 5,
+			hangarBerths: 1,
 			current: 'fenrir',
 			currentIdSuffix: 'a',
 			hangarContents: [
-				'fenrir_dominator',
-				'valkyrie',
-				'zangari_fighter_type_4',
+				// 'fenrir_dominator',
+				// 'valkyrie',
+				// 'zangari_fighter_type_4',
 			],
 			lostOnThisMission: [],
 		},
