@@ -20,6 +20,15 @@ const scene001 = {
 		softBoundary: 300,
 	},
 	entities: {
+		crg_15496e: {
+			id: 'crg_15496e',
+			groupId: 'crg',
+			type: 'freighter_l1',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
+			contents: 'Empty',
+			hasBeenScanned: false,
+		},
 		habeen_1: {
 			id: 'habeen_1',
 			groupId: 'habeen',
@@ -49,7 +58,7 @@ const scene001 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		mylok_2: {
@@ -57,7 +66,7 @@ const scene001 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		mylok_3: {
@@ -65,7 +74,7 @@ const scene001 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		b2508_012: {
@@ -150,6 +159,18 @@ const scene001 = {
 						id: playerId,
 					},
 					'player'
+				);
+
+				entities.spawn(
+					scene001.entities.crg_15496e,
+					{
+						posX: 1600,
+						posY: 375,
+						latVelocity: 0,
+						longVelocity: -4,
+						facing: -1,
+					},
+					{}
 				);
 
 				entities.spawn(
