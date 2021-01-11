@@ -28,6 +28,7 @@ const story = {
 	],
 	currentScene: null,
 	currentSceneBeat: null,
+	missionFailureWasTriggered: false,
 	currentObjectives: {
 		show: [],
 		advanceWhen: [],
@@ -118,6 +119,7 @@ const story = {
 			story.handlers.playVolume.current = currentSceneObject.playVolume;
 			story.handlers.playVolume.recalculateSoftBoundaries();
 			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
+			story.missionFailureWasTriggered = false;
 		}
 
 		let currentStateScene = currentState.game.currentScene;
@@ -419,7 +421,8 @@ const story = {
 
 		story.checkBeatCompletion();
 
-		if (failState) {
+		if (failState && !story.missionFailureWasTriggered) {
+			story.missionFailureWasTriggered = true;
 			if (c.debug.objectives)
 				console.log('MISSION FAILED!', story.currentObjectives);
 			plates.loadPlate('mission_failed', -1, 'Mission failed');
