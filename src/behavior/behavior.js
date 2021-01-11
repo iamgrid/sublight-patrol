@@ -109,11 +109,11 @@ const behavior = {
 							itsGoTimeBuddy = true;
 						}
 
-						if (itsGoTimeBuddy) {
-							if (
-								formations.isLeadInAFormation(entity.id) ||
-								!formations.isInFormation(entity.id)
-							) {
+						if (
+							!formations.isInFormation(entity.id) ||
+							formations.isLeadInAFormation(entity.id)
+						) {
+							if (itsGoTimeBuddy) {
 								updatesToEntity = behavior.destroyEntity(
 									entity,
 									playerId,
@@ -124,19 +124,36 @@ const behavior = {
 									entityY,
 									distance
 								);
-							}
-						} else {
-							// return to the originally assigned behavior
-							switch (entity.behaviorAssignedGoal) {
-								case c.possibleGoals.maintainVelocity:
-									updatesToEntity = behavior.maintainVelocity(
-										entity,
-										currentState
-									);
-									break;
-								case c.possibleGoals.holdStation:
-									updatesToEntity = behavior.holdStation(entity, currentState);
-									break;
+							} else {
+								// execute originally assigned behavior
+								switch (entity.behaviorAssignedGoal) {
+									case c.possibleGoals.maintainVelocity:
+										updatesToEntity = behavior.maintainVelocity(
+											entity,
+											currentState
+										);
+										break;
+									case c.possibleGoals.holdStation:
+										updatesToEntity = behavior.holdStation(
+											entity,
+											currentState
+										);
+										break;
+								}
+
+								if (
+									entity.behaviorAssignedGoal !== entity.behaviorCurrentGoal
+								) {
+									if (c.debug.behavior)
+										console.log(
+											entity.id,
+											'used to',
+											entity.behaviorCurrentGoal,
+											entity.behaviorAttacking,
+											'but now we return it to',
+											entity.behaviorAssignedGoal
+										);
+								}
 							}
 						}
 					}
@@ -153,10 +170,20 @@ const behavior = {
 				if (!isEmptyObject(updatesToEntity[1])) {
 					updatedSomething = true;
 					stageVelocityUpdates[entity.id] = updatesToEntity[1];
-					stateVelocityUpdates[`${entity.id}--latVelocity`] =
-						updatesToEntity[1].latVelocity;
-					stateVelocityUpdates[`${entity.id}--longVelocity`] =
-						updatesToEntity[1].longVelocity;
+					if (
+						currentState.velocities[`${entity.id}--latVelocity`] !==
+						updatesToEntity[1].latVelocity
+					) {
+						stateVelocityUpdates[`${entity.id}--latVelocity`] =
+							updatesToEntity[1].latVelocity;
+					}
+					if (
+						currentState.velocities[`${entity.id}--longVelocity`] !==
+						updatesToEntity[1].longVelocity
+					) {
+						stateVelocityUpdates[`${entity.id}--longVelocity`] =
+							updatesToEntity[1].longVelocity;
+					}
 				}
 				if (updatesToEntity[2] !== null) {
 					updatedSomething = true;
@@ -230,10 +257,22 @@ const behavior = {
 					if (!isEmptyObject(updatesToEntity2[1])) {
 						updatedSomething = true;
 						stageVelocityUpdates[entityId] = updatesToEntity2[1];
-						stateVelocityUpdates[`${entityId}--latVelocity`] =
-							updatesToEntity2[1].latVelocity;
-						stateVelocityUpdates[`${entityId}--longVelocity`] =
-							updatesToEntity2[1].longVelocity;
+						if (
+							currentState.velocities[`${entityId}--latVelocity`] !==
+							updatesToEntity2[1].latVelocity
+						) {
+							stateVelocityUpdates[`${entityId}--latVelocity`] =
+								updatesToEntity2[1].latVelocity;
+						}
+						if (
+							currentState.velocities[`${entityId}--longVelocity`] !==
+							updatesToEntity2[1].longVelocity
+						) {
+							stateVelocityUpdates[`${entityId}--longVelocity`] =
+								updatesToEntity2[1].longVelocity;
+						}
+						// stateVelocityUpdates[`${entityId}--longVelocity`] =
+						// 	updatesToEntity2[1].longVelocity;
 					}
 					if (updatesToEntity2[2] !== null) {
 						updatedSomething = true;
@@ -241,6 +280,13 @@ const behavior = {
 					}
 				}
 			}
+		}
+
+		if (c.debug.behaviorPerTick) {
+			if (!isEmptyObject(stateVelocityUpdates))
+				console.log('stateVelocityUpdates:', stateVelocityUpdates);
+			if (!isEmptyObject(entityStoreUpdates))
+				console.log('entityStoreUpdates:', entityStoreUpdates);
 		}
 
 		function updateSEV() {
@@ -312,6 +358,13 @@ const behavior = {
 		};
 
 		// console.log(entity.id, entityStoreUpdates, velocityUpdates, facingUpdate);
+
+		if (c.debug.behaviorPerTick)
+			console.log('maintainVelocity() (return values)', entity.id, {
+				...entityStoreUpdates,
+				...velocityUpdates,
+				facingUpdate,
+			});
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
@@ -442,13 +495,21 @@ const behavior = {
 				currentState.velocities
 			);
 			if (prevLatVel !== 0 || prevLongVel !== 0) {
-				console.log(entity.id, 'is in position');
+				if (c.debug.behavior)
+					console.log('holdStation():', entity.id, 'is in position');
 				behavior.handlers.checkAgainstCurrentObjectives(
 					entity.id,
 					c.objectiveTypes.mustHaveArrived.id
 				);
 			}
 		}
+
+		if (c.debug.behaviorPerTick)
+			console.log('holdStation() (return values)', entity.id, {
+				...entityStoreUpdates,
+				...velocityUpdates,
+				facingUpdate,
+			});
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
@@ -492,6 +553,7 @@ const behavior = {
 
 		if (entity.behaviorCurrentGoal !== c.possibleGoals.flee) {
 			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.flee;
+			entityStoreUpdates.behaviorAttacking = '';
 			if (
 				typeof behavior.handlers.checkAgainstCurrentObjectives === 'function'
 			) {
@@ -501,6 +563,13 @@ const behavior = {
 				);
 			}
 		}
+
+		if (c.debug.behaviorPerTick)
+			console.log('flee() (return values)', entity.id, {
+				...entityStoreUpdates,
+				...velocityUpdates,
+				facingUpdate,
+			});
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
@@ -517,6 +586,17 @@ const behavior = {
 		const entityId = entity.id;
 		const entityStoreUpdates = {};
 
+		// Setting new behavior.
+		if (
+			entity.behaviorAttacking !== enemyId &&
+			enemyId !== 'destroyed_player'
+		) {
+			entityStoreUpdates.playerRelation = 'hostile';
+			entities.stageEntities[entityId].reticuleRelation('hostile');
+			entityStoreUpdates.behaviorAttacking = enemyId;
+			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.destroyEntity;
+		}
+
 		// This is a lone attacker, look for other
 		// attackers in the vicinity to make a formation with.
 
@@ -525,7 +605,11 @@ const behavior = {
 			currentState.entities.targetable.forEach((buddy) => {
 				if (foundAFormationToJoin) return;
 				if (buddy.id === entityId) return;
-				if (buddy.playerRelation === 'hostile' && buddy.immutable.hasCannons) {
+				if (
+					buddy.playerRelation === 'hostile' &&
+					buddy.immutable.hasCannons &&
+					buddy.behaviorAttacking === enemyId
+				) {
 					const [buddyX, buddyY] = getPosition(
 						buddy.id,
 						currentState.positions
@@ -558,7 +642,7 @@ const behavior = {
 		if (foundAFormationToJoin) {
 			// This entity will start to be controlled by
 			// its formation starting on the next tick
-			return [{}, {}, null];
+			return [entityStoreUpdates, {}, null];
 		}
 
 		// Turn towards the player.
@@ -794,15 +878,12 @@ const behavior = {
 			longVelocity: newLongVelocity,
 		};
 
-		if (
-			entity.behaviorAttacking !== enemyId &&
-			enemyId !== 'destroyed_player'
-		) {
-			entityStoreUpdates.playerRelation = 'hostile';
-			entities.stageEntities[entityId].reticuleRelation('hostile');
-			entityStoreUpdates.behaviorAttacking = enemyId;
-			entityStoreUpdates.behaviorCurrentGoal = c.possibleGoals.destroyEntity;
-		}
+		if (c.debug.behaviorPerTick)
+			console.log('destroyEntity() (return values)', entity.id, {
+				...entityStoreUpdates,
+				...velocityUpdates,
+				facingUpdate,
+			});
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},
@@ -834,6 +915,13 @@ const behavior = {
 			facingUpdate = newFacing;
 			entityStoreUpdates.facing = newFacing;
 		}
+
+		// if (c.debug.behavior)
+		// 	console.log('attackInFormation():', entityId, {
+		// 		formationFacing,
+		// 		currentFacing,
+		// 		newFacing,
+		// 	});
 
 		let isInFlankTwo = false;
 		if (formationIndex % 2 === 0) {
@@ -941,7 +1029,12 @@ const behavior = {
 			shots.stopShooting(entityId);
 		}
 
-		// console.log('attackInFormation velocityUpdates:', velocityUpdates);
+		if (c.debug.behaviorPerTick)
+			console.log('attackInFormation(): (return values)', entity.id, {
+				...entityStoreUpdates,
+				...velocityUpdates,
+				facingUpdate,
+			});
 
 		return [entityStoreUpdates, velocityUpdates, facingUpdate];
 	},

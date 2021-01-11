@@ -2,6 +2,8 @@ const c = {
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
 	debug: {
 		reducers: false,
+		behavior: true,
+		behaviorPerTick: false,
 		sequentialEvents: false,
 		objectives: false,
 	},

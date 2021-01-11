@@ -49,7 +49,7 @@ const scene001 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		mylok_2: {
@@ -57,7 +57,7 @@ const scene001 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		mylok_3: {
@@ -65,7 +65,7 @@ const scene001 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		b2508_012: {

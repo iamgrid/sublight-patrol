@@ -280,7 +280,7 @@ export default function mainReducer(state, action) {
 			if (!isEmptyObject(action.entityStoreUpdates)) {
 				newTargetableStore = [...state.entities.targetable];
 
-				console.log('behavior update:', action.entityStoreUpdates);
+				// console.log('behavior update:', action.entityStoreUpdates);
 
 				for (const entityId in action.entityStoreUpdates) {
 					const entityIndex = newTargetableStore.findIndex(
