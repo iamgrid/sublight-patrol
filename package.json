@@ -1,6 +1,6 @@
 {
 	"name": "sublight-patrol",
-	"version": "0.7.6",
+	"version": "0.7.7",
 	"description": "A side-scrolling shooter game built with PixiJS and Webpack.",
 	"main": "index.js",
 	"scripts": {

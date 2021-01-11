@@ -29,6 +29,9 @@ const story = {
 	currentScene: null,
 	currentSceneBeat: null,
 	missionFailureWasTriggered: false,
+	noOfTimesHitEscMessageWasAppended: 0,
+	escAddendum:
+		'&nbsp;&nbsp;&nbsp;&lt;&nbsp;&nbsp;&nbsp;Hit [ESC] to see your current objectives',
 	currentObjectives: {
 		show: [],
 		advanceWhen: [],
@@ -148,7 +151,7 @@ const story = {
 				story.checkBeatCompletion;
 			status.add(
 				'aqua',
-				`--- ${currentSceneObject.titlePlate.mainText} ---`,
+				`---&nbsp;&nbsp;&nbsp;${currentSceneObject.titlePlate.mainText}&nbsp;&nbsp;&nbsp;---`,
 				timing.times.play
 			);
 			plates.fullMatte();
@@ -244,7 +247,16 @@ const story = {
 		});
 
 		if (updates.show.length > 0) {
-			status.add('yellow', 'Mission objectives updated.', timing.times.play);
+			let escAddendum = '';
+			if (story.noOfTimesHitEscMessageWasAppended < 4) {
+				escAddendum = story.escAddendum;
+				story.noOfTimesHitEscMessageWasAppended++;
+			}
+			status.add(
+				'yellow',
+				'Mission objectives updated.' + escAddendum,
+				timing.times.play
+			);
 		}
 
 		story.updateObjectiveDisplay();
@@ -375,9 +387,14 @@ const story = {
 					el.objectiveObj,
 					meansProgress
 				);
+				let escAddendum = '';
+				if (story.noOfTimesHitEscMessageWasAppended < 4) {
+					escAddendum = story.escAddendum;
+					story.noOfTimesHitEscMessageWasAppended++;
+				}
 				updatedObjectiveMessages.push({
 					color: itemColor,
-					message: 'Objectives: ' + objectiveText,
+					message: 'Objectives: ' + objectiveText + escAddendum,
 				});
 			}
 		});
