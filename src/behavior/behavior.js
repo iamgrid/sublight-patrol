@@ -675,13 +675,24 @@ const behavior = {
 		);
 		if (longDistance > entity.behaviorPreferredAttackDistance) {
 			// Try to move into range with the enemy horizontally.
-			// Attempt to match velocity with the enemy if its also moving.
 
 			const maxLongVelocity = entity.immutable.thrusters.main;
-			newLongVelocity =
-				newFacing * Math.min(Math.abs(enemyLongVel), maxLongVelocity);
+			let tempLongVel = maxLongVelocity;
+			const absEnemyLongVel = Math.abs(enemyLongVel);
+			if (
+				absEnemyLongVel > 0 &&
+				absEnemyLongVel < maxLongVelocity &&
+				((newFacing < 0 && enemyLongVel < 0) ||
+					(newFacing > 0 && enemyLongVel > 0))
+			) {
+				// Match velocity with the enemy
+				// if its also moving in the same direction.
+				tempLongVel = absEnemyLongVel;
+			}
+			newLongVelocity = newFacing * tempLongVel;
 
 			// Don't move beyond the behavior boundaries (X axis)
+			let boundaryOverride = false;
 			if (
 				entityX + newLongVelocity <
 					behavior.handlers.playVolume.softBoundaries.minX ||
@@ -689,7 +700,16 @@ const behavior = {
 					behavior.handlers.playVolume.softBoundaries.maxX
 			) {
 				newLongVelocity = 0;
+				boundaryOverride = true;
 			}
+
+			if (c.debug.behaviorPerTick)
+				console.log(
+					entity.id,
+					'is outside its preferred attack distance, moving closer:',
+					entity.behaviorPreferredAttackDistance,
+					{ longDistance, maxLongVelocity, newLongVelocity, boundaryOverride }
+				);
 		} else if (longDistance < entity.immutable.length * 3) {
 			// way too close to the enemy, backing up
 			// console.log(entity.id, 'is backing up');
