@@ -102,6 +102,11 @@ export default class App extends PIXI.Application {
 			actual: false,
 		};
 
+		this.activeKeyboardLayout = {
+			current: null,
+			currentStoryBeatLayout: null,
+		};
+
 		this.init();
 	}
 
@@ -171,6 +176,7 @@ export default class App extends PIXI.Application {
 			playVolumeBoundaries: this.playVolumeBoundaries,
 			frameZero: this.frameZero,
 			hudShouldBeShowing: this.hudShouldBeShowing,
+			activeKeyboardLayout: this.activeKeyboardLayout,
 		};
 
 		audio.handlers = {
@@ -284,16 +290,19 @@ export default class App extends PIXI.Application {
 		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
 
 		// keyboard input
-		if (!this.showingMissionMenu.actual) {
-			controlSchemes.play.execute(
-				playerId,
-				currentState,
-				this.dispatch,
-				this.camera
-			);
-		} else {
-			controlSchemes.missionMenus.execute();
-		}
+		let currentKeyboardLayout = null;
+		if (this.activeKeyboardLayout.current !== null)
+			currentKeyboardLayout = this.activeKeyboardLayout.current;
+		if (this.showingMissionMenu.actual)
+			currentKeyboardLayout = controlSchemes.gameMenus.id;
+
+		// console.log({ currentKeyboardLayout });
+		controlSchemes[currentKeyboardLayout].execute(
+			playerId,
+			currentState,
+			this.dispatch,
+			this.camera
+		);
 
 		// update entity positions based on their velocities
 		let repositionHasRun = false;

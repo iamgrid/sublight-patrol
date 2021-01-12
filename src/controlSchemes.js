@@ -74,14 +74,14 @@ const controlSchemes = {
 		},
 	},
 
-	missionMenus: {
-		id: 'missionMenus',
+	gameMenus: {
+		id: 'gameMenus',
 		descriptions: [
 			{ keys: 'left, right', function: 'Cycle menu buttons' },
 			{ keys: 'enter', function: 'Activate menu button' },
 		],
 		execute() {
-			controlSchemes.showLayout(controlSchemes.missionMenus.id);
+			controlSchemes.showLayout(controlSchemes.gameMenus.id);
 
 			if (Keyboard.isKeyPressed('ArrowRight')) {
 				gameMenus.cycleFocus('forward');

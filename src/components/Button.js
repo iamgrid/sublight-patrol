@@ -12,6 +12,7 @@ export default class Button extends PIXI.Container {
 				},
 				label: '',
 				isFocused: false,
+				isDisabled: false,
 				doActivate: () => {}
 			}
 		*/
@@ -19,6 +20,8 @@ export default class Button extends PIXI.Container {
 		this.coordsAndDimensions = props.coordsAndDimensions;
 		this.label = props.label;
 		this.isFocused = props.isFocused;
+		this.isDisabled = false;
+		if (props.isDisabled !== undefined) this.isDisabled = props.isDisabled;
 		this.doActivate = props.doActivate;
 		this.sprites = {};
 		this.blurredBorderAlpha = 0.5;
@@ -27,7 +30,9 @@ export default class Button extends PIXI.Container {
 		this.sprites['bg'] = new PIXI.Graphics();
 
 		this.sprites['bg'].lineStyle(0);
-		this.sprites['bg'].beginFill(0x606060, 1);
+		this.bgColor = 0x606060;
+		if (this.isDisabled) this.bgColor = 0xa0a0a0;
+		this.sprites['bg'].beginFill(this.bgColor, 1);
 		this.sprites['bg'].drawRoundedRect(
 			this.coordsAndDimensions.x,
 			this.coordsAndDimensions.y,

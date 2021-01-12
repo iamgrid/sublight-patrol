@@ -265,7 +265,8 @@
 	right: 0;
 	z-index: 10;
 	background-color: #ffffff10;
-	display: flex;
+	display: none;
+	/* set to display: flex; to show */
 	cursor: pointer;
 	transition: background-color ease 0.25s;
 }

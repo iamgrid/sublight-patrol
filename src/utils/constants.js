@@ -4,7 +4,7 @@ const c = {
 		reducers: false,
 		behavior: true,
 		behaviorPerTick: false,
-		sequentialEvents: false,
+		sequentialEvents: true,
 		objectives: false,
 	},
 	actions: {
@@ -151,7 +151,7 @@ const c = {
 	cameraModes: {
 		gameplay: 'gameplay',
 		centeredEntity: 'centeredEntity',
-		static: 'static',
+		stationary: 'stationary',
 	},
 
 	init() {

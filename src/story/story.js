@@ -1,5 +1,6 @@
 import c from '../utils/constants';
 // import sc from './storyConstants';
+import mainMenu from './scenes/mainMenu';
 import scene001 from './scenes/scene001';
 import scene002 from './scenes/scene002';
 import plates from '../plates';
@@ -21,10 +22,33 @@ const story = {
 		playVolumeBoundaries: null,
 		frameZero: null,
 		hudShouldBeShowing: null,
+		activeKeyboardLayout: null,
 	}, // gets its values in App.js
 	sceneList: [
-		{ id: '001', sceneObject: scene001 },
-		{ id: '002', sceneObject: scene002 },
+		{
+			id: 'mainMenu',
+			sceneObject: mainMenu,
+			hasTitlePlate: false,
+			hasEntities: false,
+			hasGameplay: false,
+			showStatusBar: false,
+		},
+		{
+			id: '001',
+			sceneObject: scene001,
+			hasTitlePlate: true,
+			hasEntities: true,
+			hasGameplay: true,
+			showStatusBar: true,
+		},
+		{
+			id: '002',
+			sceneObject: scene002,
+			hasTitlePlate: true,
+			hasEntities: true,
+			hasGameplay: true,
+			showStatusBar: true,
+		},
 	],
 	currentScene: null,
 	currentSceneBeat: null,
@@ -112,12 +136,15 @@ const story = {
 		if (c.debug.sequentialEvents)
 			console.log('story.currentScene:', story.currentScene);
 
-		const currentSceneObject = story.sceneList.find(
+		const currentSceneListObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
-		).sceneObject;
+		);
+		const currentSceneObject = currentSceneListObject.sceneObject;
 
 		if (playSceneBeat === 0) {
-			story.currentStoryEntities = currentSceneObject.entities;
+			if (currentSceneListObject.hasEntities) {
+				story.currentStoryEntities = currentSceneObject.entities;
+			}
 			story.handlers.playVolume.current = currentSceneObject.playVolume;
 			story.handlers.playVolume.recalculateSoftBoundaries();
 			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
@@ -146,7 +173,7 @@ const story = {
 			story.cleanUp();
 		}
 
-		if (playSceneBeat === 0) {
+		if (currentSceneListObject.hasTitlePlate && playSceneBeat === 0) {
 			currentSceneObject.handlers.checkBeatCompletion =
 				story.checkBeatCompletion;
 			status.add(
@@ -176,9 +203,27 @@ const story = {
 			plates.fadeOutPlate(25, 6000);
 		}
 
+		if (!currentSceneListObject.hasEntities) {
+			timing.toggleEntityMovement(false, 'story.js@advance() 7');
+		}
+
+		if (currentSceneListObject.showStatusBar) {
+			document.getElementById('game__status').style.display = 'flex';
+		} else {
+			document.getElementById('game__status').style.display = 'none';
+		}
+
 		//register new objectives
-		const objectiveUpdates = currentSceneBeatObj.registerObjectives();
-		story.updateCurrentObjectives(objectiveUpdates);
+		if (currentSceneListObject.hasGameplay) {
+			const objectiveUpdates = currentSceneBeatObj.registerObjectives();
+			story.updateCurrentObjectives(objectiveUpdates);
+		}
+
+		// set the keyboard layout
+		story.handlers.activeKeyboardLayout.current =
+			currentSceneBeatObj.keyboardLayout;
+		story.handlers.activeKeyboardLayout.currentStoryBeatLayout =
+			currentSceneBeatObj.keyboardLayout;
 
 		// scene object execution
 		currentSceneBeatObj.execute(playerId, playerShipType);
@@ -218,12 +263,28 @@ const story = {
 	},
 
 	mainMenu() {
-		console.log('story mainMenu()');
+		if (
+			confirm(
+				'Returning to the main menu will reset your progress on the current mission. Continue anyway?'
+			)
+		) {
+			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');
+			gameMenus.clearButtons();
+			story.advance('mainMenu', 0);
+		}
+	},
+
+	newGame() {
+		if (confirm('Are you sure you want to start a new game?')) {
+			gameMenus.clearButtons();
+			story.advance();
+		}
 	},
 
 	init() {
 		gameMenus.buttonFunctions.restartMission = story.restartMission;
 		gameMenus.buttonFunctions.mainMenu = story.mainMenu;
+		gameMenus.buttonFunctions.newGame = story.newGame;
 	},
 
 	updateCurrentObjectives(updates) {

@@ -15,6 +15,7 @@ const gameMenus = {
 	buttonFunctions: {
 		restartMission: null, // registered in story.js@init()
 		mainMenu: null, // registered in story.js@init()
+		newGame: null, // registered in story.js@init()
 	},
 	stageButtons: {},
 	currentFocus: null,
@@ -159,8 +160,6 @@ const gameMenus = {
 				console.log('doActivate mainMenu');
 				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
 					gameMenus.buttonFunctions.mainMenu();
-					window.pixiapp.togglePause('dontFadeMatte');
-					gameMenus.clearButtons();
 				}
 			},
 		});
@@ -211,7 +210,6 @@ const gameMenus = {
 				console.log('doActivate mainMenu');
 				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
 					gameMenus.buttonFunctions.mainMenu();
-					gameMenus.clearButtons();
 				}
 			},
 		});
@@ -220,6 +218,67 @@ const gameMenus = {
 			gameMenus.stageButtons['restartMission']
 		);
 		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['mainMenu']);
+	},
+
+	showMainMenuButtonSet() {
+		gameMenus.currentFocus = 'newGame';
+
+		const startX = 280;
+		const startY = 330;
+		gameMenus.stageButtons['newGame'] = new Button({
+			coordsAndDimensions: {
+				x: startX,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'New game',
+			isFocused: true,
+			doActivate: () => {
+				console.log('doActivate newGame');
+				gameMenus.buttonFunctions.newGame();
+			},
+		});
+
+		gameMenus.stageButtons['continueGame'] = new Button({
+			coordsAndDimensions: {
+				x: startX + 220,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Continue game',
+			isFocused: false,
+			isDisabled: true,
+			doActivate: () => {
+				console.log('doActivate continueGame');
+				// gameMenus.clearButtons();
+			},
+		});
+
+		gameMenus.stageButtons['replayMission'] = new Button({
+			coordsAndDimensions: {
+				x: startX + 440,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Replay mission',
+			isFocused: false,
+			isDisabled: true,
+			doActivate: () => {
+				console.log('doActivate replayMission');
+				// gameMenus.clearButtons();
+			},
+		});
+
+		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['newGame']);
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['continueGame']
+		);
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['replayMission']
+		);
 	},
 
 	clearButtons() {
