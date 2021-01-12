@@ -169,6 +169,8 @@ const gameMenus = {
 			gameMenus.stageButtons['restartMission']
 		);
 		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['mainMenu']);
+
+		gameMenus.fadeInButtons();
 	},
 
 	showMissionFailedButtonSet() {
@@ -218,6 +220,8 @@ const gameMenus = {
 			gameMenus.stageButtons['restartMission']
 		);
 		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['mainMenu']);
+
+		gameMenus.fadeInButtons();
 	},
 
 	showMainMenuButtonSet() {
@@ -279,9 +283,36 @@ const gameMenus = {
 		gameMenus.handlers.menuStage.addChild(
 			gameMenus.stageButtons['replayMission']
 		);
+
+		gameMenus.fadeInButtons();
+	},
+
+	fadeInButtons() {
+		gameMenus.handlers.menuStage.alpha = 0;
+		const increments = 5;
+		let fadeTiming = timing.modes.play;
+		if (timing.isPaused()) fadeTiming = timing.modes.pause;
+		timing.setTrigger(
+			'gameMenus.js@fadeInButtons()',
+			() => {
+				const currentAlpha = Math.trunc(
+					gameMenus.handlers.menuStage.alpha * 100
+				);
+				if (currentAlpha < 100) {
+					gameMenus.handlers.menuStage.alpha =
+						(currentAlpha + increments) / 100;
+				}
+			},
+			fadeTiming,
+			0,
+			true,
+			22,
+			40
+		);
 	},
 
 	clearButtons() {
+		gameMenus.handlers.menuStage.alpha = 0;
 		gameMenus.handlers.showingMissionMenu.actual = false;
 		for (const stageButtonId in gameMenus.stageButtons) {
 			gameMenus.handlers.menuStage.removeChild(

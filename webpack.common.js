@@ -46,6 +46,8 @@ module.exports = {
 						loader: 'url-loader',
 						options: {
 							limit: 8192,
+							fallback: require.resolve('file-loader'),
+							outputPath: 'assets',
 						},
 					},
 				],

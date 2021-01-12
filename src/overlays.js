@@ -112,6 +112,10 @@ export default function overlays() {
 				<div class="game__hud-right-edge"></div>
 			</div>
 		</div>
+		<div class="game__main_menu" id="game__main_menu">
+			<div class="game__main_menu_logo"></div>
+			<div class="game__main_menu_version" id="game__main_menu_version"></div>
+		</div>
 		<div class="game__plates" id="game__plates">
 			<div class="game__plates_plate" id="game__plates_plate">
 				<div class="game__plates_plate_atl" id="game__plates_plate_atl"></div>

@@ -144,13 +144,15 @@ export default class App extends PIXI.Application {
 		this.menuStage = new PIXI.Container();
 		this.Matte = new Matte();
 		this.Matte.alpha = 0;
-		this.menuStage.addChild(this.Matte);
+		// this.menuStage.addChild(this.Matte);
+		this.menuStage.alpha = 0;
 
 		this.mainStage.sortableChildren = true;
 		this.mainStage.addChild(this.playVolumeBoundaries);
 		this.stage.addChild(this.starScapeStage);
 		this.stage.addChild(this.mainStage);
 		this.stage.addChild(this.hudStage);
+		this.stage.addChild(this.Matte);
 		this.stage.addChild(this.menuStage);
 
 		plates.handlers = {

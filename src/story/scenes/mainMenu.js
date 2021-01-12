@@ -21,6 +21,14 @@ const mainMenu = {
 			// isTheFinalGameplayBeat: false,
 			execute() {
 				console.log('main menu');
+				const shortenedGameVersion =
+					c.gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';
+				document.getElementById(
+					'game__main_menu_version'
+				).innerHTML = shortenedGameVersion;
+				document
+					.getElementById('game__main_menu')
+					.classList.add('game__main_menu--shown');
 				plates.fullMatte();
 				gameMenus.showMainMenuButtonSet();
 			},

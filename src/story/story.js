@@ -277,6 +277,9 @@ const story = {
 	newGame() {
 		if (confirm('Are you sure you want to start a new game?')) {
 			gameMenus.clearButtons();
+			document
+				.getElementById('game__main_menu')
+				.classList.remove('game__main_menu--shown');
 			story.advance();
 		}
 	},
