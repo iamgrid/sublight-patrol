@@ -280,6 +280,9 @@ const story = {
 			document
 				.getElementById('game__main_menu')
 				.classList.remove('game__main_menu--shown');
+			document
+				.getElementById('header__title')
+				.classList.remove('header__title--hidden');
 			story.advance();
 		}
 	},

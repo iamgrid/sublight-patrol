@@ -29,6 +29,9 @@ const mainMenu = {
 				document
 					.getElementById('game__main_menu')
 					.classList.add('game__main_menu--shown');
+				document
+					.getElementById('header__title')
+					.classList.add('header__title--hidden');
 				plates.fullMatte();
 				gameMenus.showMainMenuButtonSet();
 			},
