@@ -19,16 +19,22 @@ const mainMenu = {
 			keyboardLayout: controlSchemes.gameMenus.id,
 			cameraMode: c.cameraModes.stationary,
 			// isTheFinalGameplayBeat: false,
-			execute() {
-				console.log('mainMenu.js@storyBeats[0].execute()');
+			execute(options) {
+				// console.log('mainMenu.js@storyBeats[0].execute()', options);
 				const shortenedGameVersion =
 					c.gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';
 				document.getElementById(
 					'game__main_menu_version'
 				).innerHTML = shortenedGameVersion;
-				document
-					.getElementById('game__main_menu')
-					.classList.add('game__main_menu--shown');
+				if (options.hurryUp) {
+					document
+						.getElementById('game__main_menu')
+						.classList.add('game__main_menu--quickshow');
+				} else {
+					document
+						.getElementById('game__main_menu')
+						.classList.add('game__main_menu--shown');
+				}
 				document
 					.getElementById('header__title')
 					.classList.add('header__title--hidden');

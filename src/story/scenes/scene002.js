@@ -71,7 +71,9 @@ const scene002 = {
 					],
 				};
 			},
-			execute(playerId, playerShipType) {
+			execute(options) {
+				const playerId = options.playerId;
+				const playerShipType = options.playerShipType;
 				entities.spawn(scene002.entities.harpax_00097, {
 					posX: 1000,
 					posY: 345,

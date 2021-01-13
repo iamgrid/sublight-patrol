@@ -130,7 +130,7 @@ const gameMenus = {
 			label: 'Resume game',
 			isFocused: true,
 			doActivate: () => {
-				console.log('doActivate resumeGame');
+				if (c.debug.menuButtons) console.log('doActivate resumeGame');
 				gameMenus.clearButtons();
 				window.pixiapp.togglePause();
 			},
@@ -146,7 +146,7 @@ const gameMenus = {
 			label: 'Restart mission',
 			isFocused: false,
 			doActivate: () => {
-				console.log('doActivate restartMission');
+				if (c.debug.menuButtons) console.log('doActivate restartMission');
 				gameMenus.buttonFunctions.restartMission();
 				window.pixiapp.togglePause('dontFadeMatte');
 			},
@@ -162,7 +162,7 @@ const gameMenus = {
 			label: 'Main menu',
 			isFocused: false,
 			doActivate: () => {
-				console.log('doActivate mainMenu');
+				if (c.debug.menuButtons) console.log('doActivate mainMenu');
 				gameMenus.buttonFunctions.mainMenu();
 			},
 		});
@@ -194,7 +194,7 @@ const gameMenus = {
 			label: 'Restart mission',
 			isFocused: true,
 			doActivate: () => {
-				console.log('doActivate restartMission');
+				if (c.debug.menuButtons) console.log('doActivate restartMission');
 				gameMenus.buttonFunctions.restartMission();
 			},
 		});
@@ -209,7 +209,7 @@ const gameMenus = {
 			label: 'Main menu',
 			isFocused: false,
 			doActivate: () => {
-				console.log('doActivate mainMenu');
+				if (c.debug.menuButtons) console.log('doActivate mainMenu');
 				gameMenus.buttonFunctions.mainMenu();
 			},
 		});
@@ -245,7 +245,7 @@ const gameMenus = {
 			label: 'New game',
 			isFocused: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
-				console.log('doActivate newGame');
+				if (c.debug.menuButtons) console.log('doActivate newGame');
 				gameMenus.buttonFunctions.newGame();
 			},
 		});
@@ -261,7 +261,7 @@ const gameMenus = {
 			isFocused: relevantPlayerProgress ? true : false,
 			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
-				console.log('doActivate continueGame');
+				if (c.debug.menuButtons) console.log('doActivate continueGame');
 				gameMenus.buttonFunctions.continueGame();
 			},
 		});
@@ -277,7 +277,7 @@ const gameMenus = {
 			isFocused: false,
 			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
-				console.log('doActivate replayScene');
+				if (c.debug.menuButtons) console.log('doActivate replayScene');
 				gameMenus.buttonFunctions.replayScene();
 			},
 		});
@@ -311,8 +311,8 @@ const gameMenus = {
 			label: 'Main menu',
 			isFocused: false,
 			doActivate: () => {
-				console.log('doActivate mainMenu');
-				gameMenus.buttonFunctions.mainMenu(false);
+				if (c.debug.menuButtons) console.log('doActivate mainMenu');
+				gameMenus.buttonFunctions.mainMenu(false, true);
 			},
 		});
 
@@ -341,7 +341,8 @@ const gameMenus = {
 				isFocused: sceneListItem.id === gameMenus.currentFocus ? true : false,
 				isDisabled: idx <= bestSceneIndex ? false : true,
 				doActivate: () => {
-					console.log('doActivate scene: ', sceneListItem.id);
+					if (c.debug.menuButtons)
+						console.log('doActivate scene: ', sceneListItem.id);
 					gameMenus.buttonFunctions.replaySceneActual(sceneListItem.id, idx);
 				},
 			});

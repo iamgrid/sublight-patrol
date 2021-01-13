@@ -204,7 +204,8 @@
 	visibility: hidden;
 }
 
-.game__main_menu--shown {
+.game__main_menu--shown,
+.game__main_menu--quickshow {
 	visibility: visible;
 }
 
@@ -221,6 +222,11 @@
 	transition: opacity 1.6s ease-in-out 1s;
 }
 
+.game__main_menu--quickshow .game__main_menu_logo {
+	opacity: 1;
+	transition: opacity 1s ease-in-out;
+}
+
 .game__main_menu_version {
 	margin-top: 59px;
 	font-size: 12px;
@@ -231,6 +237,11 @@
 .game__main_menu--shown .game__main_menu_version {
 	opacity: 1;
 	transition: opacity 1.6s ease-in-out 3s;
+}
+
+.game__main_menu--quickshow .game__main_menu_version {
+	opacity: 1;
+	transition: opacity 1s ease-in-out;
 }
 
 .game__pause {

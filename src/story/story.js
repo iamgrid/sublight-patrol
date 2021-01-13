@@ -105,7 +105,7 @@ const story = {
 		}
 	},
 
-	advance(playScene = null, playSceneBeat = 0) {
+	advance(playScene = null, playSceneBeat = 0, hurryUp = false) {
 		// call with playScene = null to auto-advance
 		// to the next scene
 		if (c.debug.sequentialEvents)
@@ -296,7 +296,7 @@ const story = {
 			currentSceneBeatObj.keyboardLayout;
 
 		// scene object execution
-		currentSceneBeatObj.execute(playerId, playerShipType);
+		currentSceneBeatObj.execute({ playerId, playerShipType, hurryUp });
 
 		if (currentSceneBeatObj.cameraMode === c.cameraModes.gameplay) {
 			story.handlers.hudShouldBeShowing.actual = true;
@@ -334,13 +334,13 @@ const story = {
 		story.handlers.frameZero.actual = true;
 	},
 
-	mainMenu(askForConfirmation = true) {
+	mainMenu(askForConfirmation = true, hurryUp = false) {
 		function mainMenuProper() {
 			plates.clearAll();
 			timing.clearAllScheduledEvents();
 			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');
 			gameMenus.clearButtons();
-			story.advance('mainMenu', 0);
+			story.advance('mainMenu', 0, hurryUp);
 		}
 
 		if (askForConfirmation) {
@@ -374,12 +374,7 @@ const story = {
 		if (goAhead) {
 			story.handlers.activeKeyboardLayout.current =
 				controlSchemes.replaySceneMenu.id;
-			document
-				.getElementById('game__main_menu')
-				.classList.remove('game__main_menu--shown');
-			document
-				.getElementById('header__title')
-				.classList.remove('header__title--hidden');
+			story.removeMainMenuTopPortion();
 			gameMenus.clearButtons();
 			gameMenus.showReplaySceneButtonSet(story.sceneList);
 		}
@@ -419,12 +414,7 @@ const story = {
 
 		function newGameProper() {
 			gameMenus.clearButtons();
-			document
-				.getElementById('game__main_menu')
-				.classList.remove('game__main_menu--shown');
-			document
-				.getElementById('header__title')
-				.classList.remove('header__title--hidden');
+			story.removeMainMenuTopPortion();
 			story.advance();
 		}
 
@@ -452,14 +442,18 @@ const story = {
 			alert(story.noProgressYetMessage);
 		} else {
 			gameMenus.clearButtons();
-			document
-				.getElementById('game__main_menu')
-				.classList.remove('game__main_menu--shown');
-			document
-				.getElementById('header__title')
-				.classList.remove('header__title--hidden');
+			story.removeMainMenuTopPortion();
 			story.advance(localStoragePlayerProgress.bestSceneId, 0);
 		}
+	},
+
+	removeMainMenuTopPortion() {
+		document
+			.getElementById('game__main_menu')
+			.classList.remove('game__main_menu--shown', 'game__main_menu--quickshow');
+		document
+			.getElementById('header__title')
+			.classList.remove('header__title--hidden');
 	},
 
 	init() {

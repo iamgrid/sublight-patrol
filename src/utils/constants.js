@@ -8,6 +8,7 @@ const c = {
 		objectives: false,
 		localStorage: false,
 		controlSchemes: false,
+		menuButtons: false,
 	},
 	actions: {
 		SET_CURRENT_SCENE: 'SET_CURRENT_SCENE',
