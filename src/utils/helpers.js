@@ -1012,6 +1012,34 @@ export const status = {
 	},
 };
 
+export function storePlayerProgress(state, currentSceneId) {
+	const currentState = state();
+	const statePlayerShips = currentState.game.playerShips;
+	const playerProgress = {
+		currentSceneId: currentSceneId,
+		playerShips: {
+			current: statePlayerShips.current,
+			currentIdSuffix: statePlayerShips.currentIdSuffix,
+			hangarBerths: statePlayerShips.hangarBerths,
+			hangarContents: [...statePlayerShips.hangarContents],
+			repairsAvailable: statePlayerShips.repairsAvailable,
+		},
+	};
+	const playerProgressStr = JSON.stringify(playerProgress);
+	localStorage.setItem('sublightPatrol', playerProgressStr);
+	console.log('helpers.js@storePlayerProgress():', playerProgress);
+}
+
+export function readPlayerProgress() {
+	console.log('helpers.js@readPlayerProgress()');
+	const playerProgressStr = localStorage.getItem('sublightPatrol');
+	if (playerProgressStr === null) {
+		return null;
+	} else {
+		return JSON.parse(playerProgressStr);
+	}
+}
+
 export function hello() {
 	let helloPadding = '\n';
 	if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {

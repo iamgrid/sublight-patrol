@@ -20,7 +20,7 @@ const mainMenu = {
 			cameraMode: c.cameraModes.stationary,
 			// isTheFinalGameplayBeat: false,
 			execute() {
-				console.log('main menu');
+				console.log('mainMenu.js@storyBeats[0].execute()');
 				const shortenedGameVersion =
 					c.gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';
 				document.getElementById(

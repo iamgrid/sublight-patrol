@@ -1,5 +1,6 @@
 import c from '../utils/constants';
 // import sc from './storyConstants';
+import intro from './scenes/intro';
 import mainMenu from './scenes/mainMenu';
 import scene001 from './scenes/scene001';
 import scene002 from './scenes/scene002';
@@ -8,7 +9,13 @@ import timing from '../utils/timing';
 import hud from '../hud';
 import entities from '../entities/entities';
 import soundEffects from '../audio/soundEffects';
-import { shields, status, makeName } from '../utils/helpers';
+import {
+	shields,
+	status,
+	makeName,
+	storePlayerProgress,
+	readPlayerProgress,
+} from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
 import gameMenus from '../gameMenus';
@@ -25,6 +32,14 @@ const story = {
 		activeKeyboardLayout: null,
 	}, // gets its values in App.js
 	sceneList: [
+		{
+			id: 'intro',
+			sceneObject: intro,
+			hasTitlePlate: false,
+			hasEntities: false,
+			hasGameplay: false,
+			showStatusBar: false,
+		},
 		{
 			id: 'mainMenu',
 			sceneObject: mainMenu,
@@ -149,6 +164,34 @@ const story = {
 			story.handlers.playVolume.recalculateSoftBoundaries();
 			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
 			story.missionFailureWasTriggered = false;
+
+			if (currentSceneListObject.id !== 'mainMenu') {
+				if (currentSceneListObject.id === 'intro') {
+					const localStoragePlayerProgress = readPlayerProgress();
+
+					if (localStoragePlayerProgress === null) {
+						// this player is a first time visitor
+						console.log(
+							'no localStorage string found, populating with the defaults from initialGameState.js'
+						);
+						storePlayerProgress(
+							story.handlers.state,
+							currentSceneListObject.id
+						);
+					} else {
+						console.log(
+							'updating player progress from localStorage:',
+							localStoragePlayerProgress
+						);
+						story.handlers.dispatch({
+							type: c.actions.UPDATE_PLAYER_PROGRESS_BASED_ON_LOCAL_STORAGE,
+							localStoragePlayerProgress: localStoragePlayerProgress,
+						});
+					}
+				} else {
+					storePlayerProgress(story.handlers.state, currentSceneListObject.id);
+				}
+			}
 		}
 
 		let currentStateScene = currentState.game.currentScene;

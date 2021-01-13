@@ -74,29 +74,6 @@ const controlSchemes = {
 		},
 	},
 
-	gameMenus: {
-		id: 'gameMenus',
-		descriptions: [
-			{ keys: 'left, right', function: 'Cycle menu buttons' },
-			{ keys: 'enter', function: 'Activate menu button' },
-		],
-		execute() {
-			controlSchemes.showLayout(controlSchemes.gameMenus.id);
-
-			if (Keyboard.isKeyPressed('ArrowRight')) {
-				gameMenus.cycleFocus('forward');
-			}
-
-			if (Keyboard.isKeyPressed('ArrowLeft')) {
-				gameMenus.cycleFocus('back');
-			}
-
-			if (Keyboard.isKeyPressed('Enter')) {
-				gameMenus.activateFocusedButton();
-			}
-		},
-	},
-
 	play: {
 		id: 'play',
 		descriptions: [
@@ -244,15 +221,52 @@ const controlSchemes = {
 		},
 	},
 
-	cutscene: {
-		id: 'cutscene',
+	gameMenus: {
+		id: 'gameMenus',
+		descriptions: [
+			{ keys: 'left, right', function: 'Cycle menu buttons' },
+			{ keys: 'enter', function: 'Activate menu button' },
+		],
+		execute() {
+			controlSchemes.showLayout(controlSchemes.gameMenus.id);
+
+			if (Keyboard.isKeyPressed('ArrowRight')) {
+				gameMenus.cycleFocus('forward');
+			}
+
+			if (Keyboard.isKeyPressed('ArrowLeft')) {
+				gameMenus.cycleFocus('back');
+			}
+
+			if (Keyboard.isKeyPressed('Enter')) {
+				gameMenus.activateFocusedButton();
+			}
+		},
+	},
+
+	intro: {
+		id: 'intro',
+		descriptions: [{ keys: 'enter', function: 'Skip to main menu' }],
+		execute() {
+			controlSchemes.showLayout(controlSchemes.intro.id);
+
+			if (Keyboard.isKeyPressed('Enter')) {
+				console.log(
+					'controlSchemes.js@intro.execute() - Skip to main menu not implemented yet'
+				);
+			}
+		},
+	},
+
+	cutscenes: {
+		id: 'cutscenes',
 		descriptions: [
 			{ keys: 'esc', function: 'Pause game' },
 			{ keys: 'space', function: 'Advance dialog' },
 			{ keys: 'enter', function: 'Skip cutscene' },
 		],
 		execute() {
-			controlSchemes.showLayout(controlSchemes.cutscene.id);
+			controlSchemes.showLayout(controlSchemes.cutscenes.id);
 
 			if (Keyboard.isKeyPressed('Escape')) {
 				window.pixiapp.togglePause();

@@ -984,6 +984,22 @@ export default function mainReducer(state, action) {
 				},
 			};
 		}
+		case c.actions.UPDATE_PLAYER_PROGRESS_BASED_ON_LOCAL_STORAGE: {
+			const localStoragePlayerProgress = action.localStoragePlayerProgress;
+			const updatedPlayerShips = { ...localStoragePlayerProgress.playerShips };
+			updatedPlayerShips.lostOnThisMission = [];
+			console.log(
+				'mainReducer.js@UPDATE_PLAYER_PROGRESS...',
+				updatedPlayerShips
+			);
+			return {
+				...state,
+				game: {
+					...state.game,
+					playerShips: updatedPlayerShips,
+				},
+			};
+		}
 		default:
 			console.error('Failed to run action:', action);
 			return state;
