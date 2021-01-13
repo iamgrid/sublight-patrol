@@ -19,6 +19,9 @@ const gameMenus = {
 		newGame: null, // registered in story.js@init()
 		continueGame: null, // registered in story.js@init()
 	},
+	scheduledEvents: {
+		fadeInButtons: null,
+	},
 	stageButtons: {},
 	currentFocus: null,
 	mattePauseOpacity: 80,
@@ -125,8 +128,8 @@ const gameMenus = {
 			isFocused: true,
 			doActivate: () => {
 				console.log('doActivate resumeGame');
-				window.pixiapp.togglePause();
 				gameMenus.clearButtons();
+				window.pixiapp.togglePause();
 			},
 		});
 
@@ -143,7 +146,6 @@ const gameMenus = {
 				console.log('doActivate restartMission');
 				gameMenus.buttonFunctions.restartMission();
 				window.pixiapp.togglePause('dontFadeMatte');
-				gameMenus.clearButtons();
 			},
 		});
 
@@ -191,7 +193,6 @@ const gameMenus = {
 			doActivate: () => {
 				console.log('doActivate restartMission');
 				gameMenus.buttonFunctions.restartMission();
-				gameMenus.clearButtons();
 			},
 		});
 
@@ -274,7 +275,6 @@ const gameMenus = {
 			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
 				console.log('doActivate replayScene');
-				// gameMenus.clearButtons();
 			},
 		});
 
@@ -294,7 +294,7 @@ const gameMenus = {
 		const increments = 5;
 		let fadeTiming = timing.modes.play;
 		if (timing.isPaused()) fadeTiming = timing.modes.pause;
-		timing.setTrigger(
+		gameMenus.scheduledEvents.fadeInButtons = timing.setTrigger(
 			'gameMenus.js@fadeInButtons()',
 			() => {
 				const currentAlpha = Math.trunc(
@@ -314,6 +314,11 @@ const gameMenus = {
 	},
 
 	clearButtons() {
+		for (const scheduledEventId in gameMenus.scheduledEvents) {
+			if (gameMenus.scheduledEvents[scheduledEventId] !== null)
+				gameMenus.scheduledEvents[scheduledEventId].clear();
+		}
+
 		gameMenus.handlers.menuStage.alpha = 0;
 		gameMenus.handlers.showingMissionMenu.actual = false;
 		for (const stageButtonId in gameMenus.stageButtons) {

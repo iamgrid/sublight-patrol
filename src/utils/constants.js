@@ -4,7 +4,7 @@ const c = {
 		reducers: false,
 		behavior: true,
 		behaviorPerTick: false,
-		sequentialEvents: false,
+		sequentialEvents: true,
 		objectives: false,
 	},
 	actions: {

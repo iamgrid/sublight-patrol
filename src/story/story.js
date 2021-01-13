@@ -309,7 +309,9 @@ const story = {
 	},
 
 	restartMission() {
-		// console.log('story restartMission()');
+		gameMenus.clearButtons();
+		plates.clearAll();
+		timing.clearAllScheduledEvents();
 		status.add('aqua', 'Mission restarted...', timing.times.play);
 		story.handlers.dispatch({ type: c.actions.RESTART_MISSION });
 		story.advance(story.currentScene, 0);
@@ -322,6 +324,8 @@ const story = {
 				'Returning to the main menu will reset your progress on the current mission. Continue anyway?'
 			)
 		) {
+			plates.clearAll();
+			timing.clearAllScheduledEvents();
 			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');
 			gameMenus.clearButtons();
 			story.advance('mainMenu', 0);

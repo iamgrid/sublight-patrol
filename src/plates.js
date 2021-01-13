@@ -9,6 +9,13 @@ const plates = {
 		matteIsBeingUsedByPlates: null,
 		hudShouldBeShowing: null,
 	}, // gets its values in App.js
+	scheduledEvents: {
+		fadeInMatte: null,
+		fadeOutMatte: null,
+		fadeOutMatteCleanUp: null,
+		fadeInPlate: null,
+		fadeOutPlate: null,
+	},
 
 	fadeInMatte(steps = 25, delayMS = 0) {
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
@@ -29,7 +36,7 @@ const plates = {
 
 		let firstRun = true;
 
-		timing.setTrigger(
+		plates.scheduledEvents.fadeInMatte = timing.setTrigger(
 			'plates.js fadeInMatte',
 			() => {
 				if (firstRun) {
@@ -66,7 +73,7 @@ const plates = {
 
 		let firstRun = true;
 
-		timing.setTrigger(
+		plates.scheduledEvents.fadeOutMatte = timing.setTrigger(
 			'plates.js fadeOutMatte',
 			() => {
 				if (firstRun) {
@@ -88,7 +95,7 @@ const plates = {
 			40
 		);
 
-		timing.setTimeout(
+		plates.scheduledEvents.fadeOutMatteCleanUp = timing.setTimeout(
 			() => {
 				plates.handlers.matteIsBeingUsedByPlates.actual = false;
 				if (plates.handlers.hudShouldBeShowing) {
@@ -107,12 +114,6 @@ const plates = {
 			console.log('plates.js@fullMatte()', plates.handlers.Matte.alpha);
 		if (hud.hudIsShowing) hud.toggle('plates.js@fullMatte()', false);
 	},
-
-	// clearMatte() {
-	// 	plates.handlers.matteIsBeingUsedByPlates.actual = false;
-	// 	plates.handlers.Matte.alpha = 0;
-	// 	console.log('plates.js@clearMatte()', plates.handlers.Matte.alpha);
-	// },
 
 	loadPlate(plateId, quoteVariant = '', mainText = '', wittyText = '') {
 		if (c.debug.sequentialEvents)
@@ -191,7 +192,7 @@ const plates = {
 
 		const opacityFraction = 1 / steps;
 
-		timing.setTrigger(
+		plates.scheduledEvents.fadeInPlate = timing.setTrigger(
 			'fadeInPlate',
 			() => {
 				const currentOpacity = Number(
@@ -216,7 +217,7 @@ const plates = {
 
 		const opacityFraction = 1 / steps;
 
-		timing.setTrigger(
+		plates.scheduledEvents.fadeOutPlate = timing.setTrigger(
 			'fadeInPlate',
 			() => {
 				const currentOpacity = Number(
@@ -240,6 +241,30 @@ const plates = {
 			steps + 3,
 			40
 		);
+	},
+
+	clearAll() {
+		// for (const scheduledEventId in plates.scheduledEvents) {
+		// 	if (plates.scheduledEvents[scheduledEventId] !== null)
+		// 		plates.scheduledEvents[scheduledEventId].clear();
+		// } -- this is now accomplished with calling timing.js@clearAllScheduledEvents()
+
+		document.getElementById('game__plates_plate').style.opacity = 0;
+		document
+			.getElementById('game__plates_plate_line')
+			.classList.remove('game__plates_plate_line--shown');
+
+		document.getElementById('game__plates_plate_atl').innerHTML = '';
+		document.getElementById('game__plates_plate_btl').innerHTML = '';
+
+		plates.handlers.Matte.alpha = 1;
+		plates.handlers.matteIsBeingUsedByPlates.actual = true;
+		if (c.debug.sequentialEvents)
+			console.log(
+				'plates.js@clearAll()',
+				plates.scheduledEvents,
+				plates.handlers.Matte.alpha
+			);
 	},
 };
 

@@ -3,23 +3,19 @@ import idCreator from './idCreator';
 
 const timing = {
 	modes: {
-		intro: 'intro',
 		play: 'play',
 		pause: 'pause',
 	},
 	times: {
-		intro: 0,
 		play: 0,
 		pause: 0,
 	},
-	tickers: {
-		intro: {},
+	tickingTimeouts: {
 		play: {},
 		pause: {},
 	},
 	triggers: {},
 	triggerTimes: {
-		intro: {},
 		play: {},
 		pause: {},
 	},
@@ -56,8 +52,8 @@ const timing = {
 		timing.times[mode] += deltaMS;
 
 		// timeouts
-		for (const tickerId in timing.tickers[mode]) {
-			timing.tickers[mode][tickerId].tick(deltaMS);
+		for (const tickerId in timing.tickingTimeouts[mode]) {
+			timing.tickingTimeouts[mode][tickerId].tick(deltaMS);
 		}
 
 		// triggers
@@ -88,8 +84,8 @@ const timing = {
 		};
 
 		const end = (fire) => {
-			// remove from tickers
-			delete timing.tickers[mode][tickerId];
+			// remove from tickingTimeouts
+			delete timing.tickingTimeouts[mode][tickerId];
 
 			// fire callback function
 			if (fire) callbackFn();
@@ -104,7 +100,7 @@ const timing = {
 		};
 
 		// start
-		timing.tickers[mode][tickerId] = { tick };
+		timing.tickingTimeouts[mode][tickerId] = { tick, clear };
 
 		return { clear, finish };
 	},
@@ -128,7 +124,7 @@ const timing = {
 		const repetitionInterval = Math.max(30, repetitionIntervalMS);
 
 		const clear = () => {
-			// remove from tickers
+			// remove from triggers
 			delete timing.triggers[triggerId];
 		};
 
@@ -139,7 +135,7 @@ const timing = {
 		};
 
 		// set
-		timing.triggers[triggerId] = { run };
+		timing.triggers[triggerId] = { run, clear };
 
 		let reps = repetitions + 1;
 		while (reps > 0) {
@@ -159,6 +155,25 @@ const timing = {
 
 	clearTrigger(triggerObj) {
 		if (triggerObj) triggerObj.clear();
+	},
+
+	clearAllScheduledEvents() {
+		for (const modeId in timing.modes) {
+			for (const tickerId in timing.tickingTimeouts[modeId]) {
+				timing.tickingTimeouts[modeId][tickerId].clear();
+			}
+		}
+
+		for (const triggerId in timing.triggers) {
+			timing.triggers[triggerId].clear();
+		}
+
+		if (c.debug.sequentialEvents)
+			console.log(
+				'Cleared all scheduled events: ',
+				timing.tickingTimeouts,
+				timing.triggers
+			);
 	},
 };
 
