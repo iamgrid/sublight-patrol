@@ -118,7 +118,7 @@ export function getStoreEntity(entityId, currentState) {
 		);
 		if (!storeEntity) {
 			// console.info(`Couldn't find ${entityId}, it probably blew up.`);
-			console.error(`Couldn't find ${entityId}, it probably blew up.`);
+			console.warn(`Couldn't find ${entityId}, it probably blew up.`);
 			return false;
 		}
 		return storeEntity;
@@ -1037,6 +1037,18 @@ export function readPlayerProgress() {
 		return null;
 	} else {
 		return JSON.parse(playerProgressStr);
+	}
+}
+
+export function hasThePlayerMadeProgress(localStoragePlayerProgress) {
+	if (
+		localStoragePlayerProgress === null ||
+		localStoragePlayerProgress.currentSceneId === 'intro' ||
+		localStoragePlayerProgress.currentSceneId === '001'
+	) {
+		return false;
+	} else {
+		return true;
 	}
 }
 

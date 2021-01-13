@@ -15,10 +15,12 @@ import {
 	makeName,
 	storePlayerProgress,
 	readPlayerProgress,
+	hasThePlayerMadeProgress,
 } from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
 import gameMenus from '../gameMenus';
+import initialGameState from '../initialGameState';
 
 const story = {
 	handlers: {
@@ -318,7 +320,9 @@ const story = {
 	},
 
 	newGame() {
-		if (confirm('Are you sure you want to start a new game?')) {
+		const localStoragePlayerProgress = readPlayerProgress();
+
+		function newGameProper() {
 			gameMenus.clearButtons();
 			document
 				.getElementById('game__main_menu')
@@ -328,12 +332,48 @@ const story = {
 				.classList.remove('header__title--hidden');
 			story.advance();
 		}
+
+		if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+			newGameProper();
+		} else {
+			if (
+				confirm(
+					'Starting a new game will revert your previous progress. Continue anyway?'
+				)
+			) {
+				story.handlers.dispatch({
+					type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
+					defaultPlayerProgress: initialGameState.game.playerShips,
+					callbackFn: newGameProper,
+				});
+			}
+		}
+	},
+
+	continueGame() {
+		const localStoragePlayerProgress = readPlayerProgress();
+
+		if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+			alert(
+				"According to your browser's storage, you haven't made any progress in this game yet, please choose 'New game' instead!"
+			);
+		} else {
+			gameMenus.clearButtons();
+			document
+				.getElementById('game__main_menu')
+				.classList.remove('game__main_menu--shown');
+			document
+				.getElementById('header__title')
+				.classList.remove('header__title--hidden');
+			story.advance(localStoragePlayerProgress.currentSceneId, 0);
+		}
 	},
 
 	init() {
 		gameMenus.buttonFunctions.restartMission = story.restartMission;
 		gameMenus.buttonFunctions.mainMenu = story.mainMenu;
 		gameMenus.buttonFunctions.newGame = story.newGame;
+		gameMenus.buttonFunctions.continueGame = story.continueGame;
 	},
 
 	updateCurrentObjectives(updates) {

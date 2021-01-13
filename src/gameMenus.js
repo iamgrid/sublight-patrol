@@ -2,6 +2,7 @@ import c from './utils/constants';
 import timing from './utils/timing';
 import Button from './components/Button';
 // import story from './story/story';
+import { readPlayerProgress, hasThePlayerMadeProgress } from './utils/helpers';
 
 const gameMenus = {
 	handlers: {
@@ -16,6 +17,7 @@ const gameMenus = {
 		restartMission: null, // registered in story.js@init()
 		mainMenu: null, // registered in story.js@init()
 		newGame: null, // registered in story.js@init()
+		continueGame: null, // registered in story.js@init()
 	},
 	stageButtons: {},
 	currentFocus: null,
@@ -139,11 +141,9 @@ const gameMenus = {
 			isFocused: false,
 			doActivate: () => {
 				console.log('doActivate restartMission');
-				if (typeof gameMenus.buttonFunctions.restartMission === 'function') {
-					gameMenus.buttonFunctions.restartMission();
-					window.pixiapp.togglePause('dontFadeMatte');
-					gameMenus.clearButtons();
-				}
+				gameMenus.buttonFunctions.restartMission();
+				window.pixiapp.togglePause('dontFadeMatte');
+				gameMenus.clearButtons();
 			},
 		});
 
@@ -158,9 +158,7 @@ const gameMenus = {
 			isFocused: false,
 			doActivate: () => {
 				console.log('doActivate mainMenu');
-				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
-					gameMenus.buttonFunctions.mainMenu();
-				}
+				gameMenus.buttonFunctions.mainMenu();
 			},
 		});
 
@@ -192,10 +190,8 @@ const gameMenus = {
 			isFocused: true,
 			doActivate: () => {
 				console.log('doActivate restartMission');
-				if (typeof gameMenus.buttonFunctions.restartMission === 'function') {
-					gameMenus.buttonFunctions.restartMission();
-					gameMenus.clearButtons();
-				}
+				gameMenus.buttonFunctions.restartMission();
+				gameMenus.clearButtons();
 			},
 		});
 
@@ -210,9 +206,7 @@ const gameMenus = {
 			isFocused: false,
 			doActivate: () => {
 				console.log('doActivate mainMenu');
-				if (typeof gameMenus.buttonFunctions.mainMenu === 'function') {
-					gameMenus.buttonFunctions.mainMenu();
-				}
+				gameMenus.buttonFunctions.mainMenu();
 			},
 		});
 
@@ -227,6 +221,14 @@ const gameMenus = {
 	showMainMenuButtonSet() {
 		gameMenus.currentFocus = 'newGame';
 
+		const localStoragePlayerProgress = readPlayerProgress();
+		let relevantPlayerProgress = false;
+		if (hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+			relevantPlayerProgress = true;
+		}
+
+		if (relevantPlayerProgress) gameMenus.currentFocus = 'continueGame';
+
 		const startX = 280;
 		const startY = 330;
 		gameMenus.stageButtons['newGame'] = new Button({
@@ -237,7 +239,7 @@ const gameMenus = {
 				height: 32,
 			},
 			label: 'New game',
-			isFocused: true,
+			isFocused: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
 				console.log('doActivate newGame');
 				gameMenus.buttonFunctions.newGame();
@@ -252,26 +254,26 @@ const gameMenus = {
 				height: 32,
 			},
 			label: 'Continue game',
-			isFocused: false,
-			isDisabled: true,
+			isFocused: relevantPlayerProgress ? true : false,
+			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
 				console.log('doActivate continueGame');
-				// gameMenus.clearButtons();
+				gameMenus.buttonFunctions.continueGame();
 			},
 		});
 
-		gameMenus.stageButtons['replayMission'] = new Button({
+		gameMenus.stageButtons['replayScene'] = new Button({
 			coordsAndDimensions: {
 				x: startX + 440,
 				y: startY,
 				width: 200,
 				height: 32,
 			},
-			label: 'Replay mission',
+			label: 'Replay scene',
 			isFocused: false,
-			isDisabled: true,
+			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
-				console.log('doActivate replayMission');
+				console.log('doActivate replayScene');
 				// gameMenus.clearButtons();
 			},
 		});
@@ -281,7 +283,7 @@ const gameMenus = {
 			gameMenus.stageButtons['continueGame']
 		);
 		gameMenus.handlers.menuStage.addChild(
-			gameMenus.stageButtons['replayMission']
+			gameMenus.stageButtons['replayScene']
 		);
 
 		gameMenus.fadeInButtons();

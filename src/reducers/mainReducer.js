@@ -1000,6 +1000,25 @@ export default function mainReducer(state, action) {
 				},
 			};
 		}
+		case c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS: {
+			const defaultPlayerProgress = action.defaultPlayerProgress;
+			const updatedPlayerShips = defaultPlayerProgress;
+			updatedPlayerShips.lostOnThisMission = [];
+			console.log(
+				'mainReducer.js@REVERT_PLAYER_PROGRESS...',
+				updatedPlayerShips
+			);
+			return [
+				() => action.callbackFn(),
+				{
+					...state,
+					game: {
+						...state.game,
+						playerShips: updatedPlayerShips,
+					},
+				},
+			];
+		}
 		default:
 			console.error('Failed to run action:', action);
 			return state;
