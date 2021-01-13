@@ -145,6 +145,15 @@ const story = {
 						1000
 					);
 
+					plates.fadeOutPlate(25, 7000);
+					timing.setTimeout(
+						() => {
+							story.advance('mainMenu', 0);
+						},
+						timing.modes.play,
+						8200
+					);
+
 					return;
 				}
 			}
