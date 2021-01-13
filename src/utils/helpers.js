@@ -1012,11 +1012,11 @@ export const status = {
 	},
 };
 
-export function storePlayerProgress(state, currentSceneId) {
+export function storePlayerProgress(state, bestSceneId) {
 	const currentState = state();
 	const statePlayerShips = currentState.game.playerShips;
 	const playerProgress = {
-		currentSceneId: currentSceneId,
+		bestSceneId: bestSceneId,
 		playerShips: {
 			current: statePlayerShips.current,
 			currentIdSuffix: statePlayerShips.currentIdSuffix,
@@ -1027,11 +1027,12 @@ export function storePlayerProgress(state, currentSceneId) {
 	};
 	const playerProgressStr = JSON.stringify(playerProgress);
 	localStorage.setItem('sublightPatrol', playerProgressStr);
-	console.log('helpers.js@storePlayerProgress():', playerProgress);
+	if (c.debug.localStorage)
+		console.log('helpers.js@storePlayerProgress():', playerProgress);
 }
 
 export function readPlayerProgress() {
-	console.log('helpers.js@readPlayerProgress()');
+	if (c.debug.localStorage) console.log('helpers.js@readPlayerProgress()');
 	const playerProgressStr = localStorage.getItem('sublightPatrol');
 	if (playerProgressStr === null) {
 		return null;
@@ -1043,8 +1044,8 @@ export function readPlayerProgress() {
 export function hasThePlayerMadeProgress(localStoragePlayerProgress) {
 	if (
 		localStoragePlayerProgress === null ||
-		localStoragePlayerProgress.currentSceneId === 'intro' ||
-		localStoragePlayerProgress.currentSceneId === '001'
+		localStoragePlayerProgress.bestSceneId === 'intro' ||
+		localStoragePlayerProgress.bestSceneId === '001'
 	) {
 		return false;
 	} else {

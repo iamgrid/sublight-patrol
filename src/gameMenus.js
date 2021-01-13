@@ -14,10 +14,13 @@ const gameMenus = {
 		hudShouldBeShowing: null,
 	}, // gets its values in App.js
 	buttonFunctions: {
-		restartMission: null, // registered in story.js@init()
-		mainMenu: null, // registered in story.js@init()
-		newGame: null, // registered in story.js@init()
-		continueGame: null, // registered in story.js@init()
+		// registered in story.js@init()
+		restartMission: null,
+		mainMenu: null,
+		newGame: null,
+		continueGame: null,
+		replayScene: null,
+		replaySceneActual: null,
 	},
 	scheduledEvents: {
 		fadeInButtons: null,
@@ -275,6 +278,7 @@ const gameMenus = {
 			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
 				console.log('doActivate replayScene');
+				gameMenus.buttonFunctions.replayScene();
 			},
 		});
 
@@ -285,6 +289,69 @@ const gameMenus = {
 		gameMenus.handlers.menuStage.addChild(
 			gameMenus.stageButtons['replayScene']
 		);
+
+		gameMenus.fadeInButtons();
+	},
+
+	showReplaySceneButtonSet(sceneList) {
+		const localStoragePlayerProgress = readPlayerProgress();
+		const bestSceneId = localStoragePlayerProgress.bestSceneId;
+		const bestSceneIndex = sceneList.findIndex((sc) => sc.id === bestSceneId);
+		gameMenus.currentFocus = bestSceneId;
+
+		let startY = 30;
+
+		gameMenus.stageButtons['mainMenu'] = new Button({
+			coordsAndDimensions: {
+				x: 500,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Main menu',
+			isFocused: false,
+			doActivate: () => {
+				console.log('doActivate mainMenu');
+				gameMenus.buttonFunctions.mainMenu(false);
+			},
+		});
+
+		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['mainMenu']);
+
+		startY += 64;
+
+		sceneList.forEach((sceneListItem, idx) => {
+			if (sceneListItem.id === 'mainMenu') return;
+
+			let sceneDisplayName = '';
+			if (sceneListItem.sceneObject.titlePlate !== undefined) {
+				sceneDisplayName = sceneListItem.sceneObject.titlePlate.mainText;
+			} else {
+				if (sceneListItem.id === 'intro') sceneDisplayName = 'Intro';
+			}
+
+			gameMenus.stageButtons[sceneListItem.id] = new Button({
+				coordsAndDimensions: {
+					x: 350,
+					y: startY,
+					width: 500,
+					height: 32,
+				},
+				label: sceneDisplayName,
+				isFocused: sceneListItem.id === gameMenus.currentFocus ? true : false,
+				isDisabled: idx <= bestSceneIndex ? false : true,
+				doActivate: () => {
+					console.log('doActivate scene: ', sceneListItem.id);
+					gameMenus.buttonFunctions.replaySceneActual(sceneListItem.id, idx);
+				},
+			});
+
+			startY += 42;
+
+			gameMenus.handlers.menuStage.addChild(
+				gameMenus.stageButtons[sceneListItem.id]
+			);
+		});
 
 		gameMenus.fadeInButtons();
 	},

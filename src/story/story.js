@@ -21,6 +21,7 @@ import formations from '../behavior/formations';
 import shots from '../shots';
 import gameMenus from '../gameMenus';
 import initialGameState from '../initialGameState';
+import controlSchemes from '../controlSchemes';
 
 const story = {
 	handlers: {
@@ -78,6 +79,8 @@ const story = {
 		advanceWhen: [],
 	},
 	currentStoryEntities: {},
+	noProgressYetMessage:
+		"According to your browser's storage, you haven't made any progress in this game yet, please choose 'New game' instead!",
 
 	assertClassification(entityId) {
 		const storyEntity = story.currentStoryEntities[entityId];
@@ -177,30 +180,43 @@ const story = {
 			story.missionFailureWasTriggered = false;
 
 			if (currentSceneListObject.id !== 'mainMenu') {
+				const localStoragePlayerProgress = readPlayerProgress();
 				if (currentSceneListObject.id === 'intro') {
-					const localStoragePlayerProgress = readPlayerProgress();
-
 					if (localStoragePlayerProgress === null) {
 						// this player is a first time visitor
-						console.log(
-							'no localStorage string found, populating with the defaults from initialGameState.js'
-						);
+						if (c.debug.localStorage)
+							console.log(
+								'no localStorage string found, populating with the defaults from initialGameState.js'
+							);
 						storePlayerProgress(
 							story.handlers.state,
 							currentSceneListObject.id
 						);
 					} else {
-						console.log(
-							'updating player progress from localStorage:',
-							localStoragePlayerProgress
-						);
+						if (c.debug.localStorage)
+							console.log(
+								'updating player progress from localStorage:',
+								localStoragePlayerProgress
+							);
 						story.handlers.dispatch({
 							type: c.actions.UPDATE_PLAYER_PROGRESS_BASED_ON_LOCAL_STORAGE,
 							localStoragePlayerProgress: localStoragePlayerProgress,
 						});
 					}
 				} else {
-					storePlayerProgress(story.handlers.state, currentSceneListObject.id);
+					const playersBestSceneId = localStoragePlayerProgress.bestSceneId;
+					const playersBestSceneIndex = story.sceneList.findIndex(
+						(sc) => sc.id === playersBestSceneId
+					);
+					const currentSceneIndex = story.sceneList.findIndex(
+						(sc2) => sc2.id === currentSceneListObject.id
+					);
+
+					let writeBestSceneId = playersBestSceneId;
+					if (currentSceneIndex > playersBestSceneIndex)
+						writeBestSceneId = currentSceneListObject.id;
+
+					storePlayerProgress(story.handlers.state, writeBestSceneId);
 				}
 			}
 		}
@@ -318,17 +334,83 @@ const story = {
 		story.handlers.frameZero.actual = true;
 	},
 
-	mainMenu() {
-		if (
-			confirm(
-				'Returning to the main menu will reset your progress on the current mission. Continue anyway?'
-			)
-		) {
+	mainMenu(askForConfirmation = true) {
+		function mainMenuProper() {
 			plates.clearAll();
 			timing.clearAllScheduledEvents();
 			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');
 			gameMenus.clearButtons();
 			story.advance('mainMenu', 0);
+		}
+
+		if (askForConfirmation) {
+			if (
+				confirm(
+					'Returning to the main menu will reset your progress on the current mission. Continue anyway?'
+				)
+			) {
+				mainMenuProper();
+			}
+		} else {
+			mainMenuProper();
+		}
+	},
+
+	replayScene() {
+		const localStoragePlayerProgress = readPlayerProgress();
+
+		let goAhead = false;
+
+		if (localStoragePlayerProgress === null) {
+			goAhead = true;
+		} else {
+			if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+				alert(story.noProgressYetMessage);
+			} else {
+				goAhead = true;
+			}
+		}
+
+		if (goAhead) {
+			story.handlers.activeKeyboardLayout.current =
+				controlSchemes.replaySceneMenu.id;
+			document
+				.getElementById('game__main_menu')
+				.classList.remove('game__main_menu--shown');
+			document
+				.getElementById('header__title')
+				.classList.remove('header__title--hidden');
+			gameMenus.clearButtons();
+			gameMenus.showReplaySceneButtonSet(story.sceneList);
+		}
+	},
+
+	replaySceneActual(sceneId, sceneIndex) {
+		const localStoragePlayerProgress = readPlayerProgress();
+		if (c.debug.sequentialEvents)
+			console.log('story.js@replaySceneActual', sceneId, sceneIndex);
+
+		let goAhead = false;
+		if (localStoragePlayerProgress === null) {
+			goAhead = true;
+		} else {
+			const bestSceneId = localStoragePlayerProgress.bestSceneId;
+			const bestSceneIndex = story.sceneList.findIndex(
+				(sc) => sc.id === bestSceneId
+			);
+
+			if (bestSceneIndex < sceneIndex) {
+				alert("I'm sorry, you haven't unlocked that scene yet.");
+			} else {
+				goAhead = true;
+			}
+		}
+
+		if (c.debug.sequentialEvents) console.log({ goAhead });
+
+		if (goAhead) {
+			gameMenus.clearButtons();
+			story.advance(sceneId, 0);
 		}
 	},
 
@@ -367,9 +449,7 @@ const story = {
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
-			alert(
-				"According to your browser's storage, you haven't made any progress in this game yet, please choose 'New game' instead!"
-			);
+			alert(story.noProgressYetMessage);
 		} else {
 			gameMenus.clearButtons();
 			document
@@ -378,7 +458,7 @@ const story = {
 			document
 				.getElementById('header__title')
 				.classList.remove('header__title--hidden');
-			story.advance(localStoragePlayerProgress.currentSceneId, 0);
+			story.advance(localStoragePlayerProgress.bestSceneId, 0);
 		}
 	},
 
@@ -387,6 +467,8 @@ const story = {
 		gameMenus.buttonFunctions.mainMenu = story.mainMenu;
 		gameMenus.buttonFunctions.newGame = story.newGame;
 		gameMenus.buttonFunctions.continueGame = story.continueGame;
+		gameMenus.buttonFunctions.replayScene = story.replayScene;
+		gameMenus.buttonFunctions.replaySceneActual = story.replaySceneActual;
 	},
 
 	updateCurrentObjectives(updates) {

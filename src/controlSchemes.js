@@ -17,7 +17,7 @@ const controlSchemes = {
 	showLayout(layout) {
 		if (controlSchemes.currentlyShowingLayout !== layout) {
 			const currentDescriptions = controlSchemes[layout].descriptions;
-			// console.log('showLayout: ', currentDescriptions);
+			if (c.debug.controlSchemes) console.log('showLayout: ', layout);
 
 			const re = [];
 
@@ -235,6 +235,29 @@ const controlSchemes = {
 			}
 
 			if (Keyboard.isKeyPressed('ArrowLeft')) {
+				gameMenus.cycleFocus('back');
+			}
+
+			if (Keyboard.isKeyPressed('Enter')) {
+				gameMenus.activateFocusedButton();
+			}
+		},
+	},
+
+	replaySceneMenu: {
+		id: 'replaySceneMenu',
+		descriptions: [
+			{ keys: 'up, down', function: 'Cycle menu buttons' },
+			{ keys: 'enter', function: 'Activate menu button' },
+		],
+		execute() {
+			controlSchemes.showLayout(controlSchemes.replaySceneMenu.id);
+
+			if (Keyboard.isKeyPressed('ArrowDown')) {
+				gameMenus.cycleFocus('forward');
+			}
+
+			if (Keyboard.isKeyPressed('ArrowUp')) {
 				gameMenus.cycleFocus('back');
 			}
 

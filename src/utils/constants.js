@@ -4,8 +4,10 @@ const c = {
 		reducers: false,
 		behavior: true,
 		behaviorPerTick: false,
-		sequentialEvents: true,
+		sequentialEvents: false,
 		objectives: false,
+		localStorage: false,
+		controlSchemes: false,
 	},
 	actions: {
 		SET_CURRENT_SCENE: 'SET_CURRENT_SCENE',

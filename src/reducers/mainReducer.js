@@ -988,10 +988,11 @@ export default function mainReducer(state, action) {
 			const localStoragePlayerProgress = action.localStoragePlayerProgress;
 			const updatedPlayerShips = { ...localStoragePlayerProgress.playerShips };
 			updatedPlayerShips.lostOnThisMission = [];
-			console.log(
-				'mainReducer.js@UPDATE_PLAYER_PROGRESS...',
-				updatedPlayerShips
-			);
+			if (c.debug.localStorage)
+				console.log(
+					'mainReducer.js@UPDATE_PLAYER_PROGRESS...',
+					updatedPlayerShips
+				);
 			return {
 				...state,
 				game: {
@@ -1004,10 +1005,11 @@ export default function mainReducer(state, action) {
 			const defaultPlayerProgress = action.defaultPlayerProgress;
 			const updatedPlayerShips = defaultPlayerProgress;
 			updatedPlayerShips.lostOnThisMission = [];
-			console.log(
-				'mainReducer.js@REVERT_PLAYER_PROGRESS...',
-				updatedPlayerShips
-			);
+			if (c.debug.localStorage)
+				console.log(
+					'mainReducer.js@REVERT_PLAYER_PROGRESS...',
+					updatedPlayerShips
+				);
 			return [
 				() => action.callbackFn(),
 				{
