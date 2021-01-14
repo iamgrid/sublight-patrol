@@ -1,7 +1,7 @@
 import c from './utils/constants';
 import timing from './utils/timing';
 import hud from './hud';
-import { alertsAndWarnings } from './utils/helpers';
+import { alertsAndWarnings, dialog } from './utils/helpers';
 import { randomNumber } from './utils/formulas';
 
 const plates = {
@@ -21,6 +21,7 @@ const plates = {
 	fadeInMatte(steps = 25, delayMS = 0) {
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
 		alertsAndWarnings.hide();
+		dialog.hide();
 
 		if (hud.hudIsShowing) hud.toggle('plates.js@fadeInMatte()', false);
 
@@ -103,6 +104,7 @@ const plates = {
 				if (plates.handlers.hudShouldBeShowing) {
 					hud.toggle('plates.js@fadeOutMatte()', true);
 					alertsAndWarnings.show();
+					dialog.show();
 				}
 			},
 			timing.modes.play,

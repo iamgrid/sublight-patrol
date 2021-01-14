@@ -748,44 +748,54 @@ export const shields = {
 	},
 };
 
-export function dialog(speaker, say, hide = false) {
-	const containerDiv = document.getElementById('game__dialog');
-	const speakerDiv = document.getElementById('game__dialog-speaker');
-	const messageDiv = document.getElementById('game__dialog-message');
+export const dialog = {
+	say(speaker, say, hide = false) {
+		const containerDiv = document.getElementById('game__dialog');
+		const speakerDiv = document.getElementById('game__dialog-speaker');
+		const messageDiv = document.getElementById('game__dialog-message');
 
-	if (hide) {
-		containerDiv.style.opacity = '0';
-		timing.setTimeout(
-			() => {
-				containerDiv.style.visibility = 'hidden';
-			},
-			timing.modes.play,
-			500
-		);
-		return;
-	}
+		if (hide) {
+			containerDiv.style.opacity = '0';
+			timing.setTimeout(
+				() => {
+					containerDiv.style.visibility = 'hidden';
+				},
+				timing.modes.play,
+				500
+			);
+			return;
+		}
 
-	containerDiv.style.visibility = 'visible';
+		containerDiv.style.visibility = 'visible';
 
-	function dialogHelper(speakerH, sayH) {
-		containerDiv.style.opacity = '0.7';
-		speakerDiv.innerHTML = speakerH + ' :';
-		messageDiv.innerHTML = sayH;
-	}
+		function sayHelper() {
+			containerDiv.style.opacity = '0.7';
+			speakerDiv.innerHTML = speaker + ' :';
+			messageDiv.innerHTML = say;
+		}
 
-	if (containerDiv.style.opacity != '0.7') {
-		dialogHelper(speaker, say);
-	} else {
-		containerDiv.style.opacity = '0';
-		timing.setTimeout(
-			() => {
-				dialogHelper(speaker, say);
-			},
-			timing.modes.play,
-			400
-		);
-	}
-}
+		if (containerDiv.style.opacity != '0.7') {
+			sayHelper();
+		} else {
+			containerDiv.style.opacity = '0';
+			timing.setTimeout(
+				() => {
+					sayHelper();
+				},
+				timing.modes.play,
+				400
+			);
+		}
+	},
+
+	hide() {
+		document.getElementById('game__dialog').style.display = 'none';
+	},
+
+	show() {
+		document.getElementById('game__dialog').style.display = 'flex';
+	},
+};
 
 export const alertsAndWarnings = {
 	prevMessageSum: 0,

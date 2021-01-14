@@ -6,6 +6,7 @@ import {
 	readPlayerProgress,
 	hasThePlayerMadeProgress,
 	alertsAndWarnings,
+	dialog,
 } from './utils/helpers';
 
 const gameMenus = {
@@ -37,6 +38,7 @@ const gameMenus = {
 
 	fadeInMatte(requestedBy = '') {
 		alertsAndWarnings.hide();
+		dialog.hide();
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
 			document.getElementById('game__plates').style.opacity = 0.2;
 			const currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
@@ -79,6 +81,7 @@ const gameMenus = {
 
 	fadeOutMatte(requestedBy = '') {
 		alertsAndWarnings.show();
+		dialog.show();
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
 			document.getElementById('game__plates').style.opacity = 1;
 			if (gameMenus.correctedToPauseOpacityFrom !== null) {

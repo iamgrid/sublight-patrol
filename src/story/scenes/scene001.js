@@ -3,7 +3,8 @@ import c from '../../utils/constants';
 import entities from '../../entities/entities';
 import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
-// import timing from '../../utils/timing';
+import timing from '../../utils/timing';
+import { dialog } from '../../utils/helpers';
 
 const scene001 = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
@@ -223,6 +224,22 @@ const scene001 = {
 					posX: 1900,
 					posY: 300,
 				});
+
+				timing.setTimeout(
+					() => {
+						dialog.say('Test Speaker', 'This is a test');
+					},
+					timing.modes.play,
+					8000
+				);
+
+				timing.setTimeout(
+					() => {
+						dialog.say('', '', true);
+					},
+					timing.modes.play,
+					12000
+				);
 			},
 		},
 		{
