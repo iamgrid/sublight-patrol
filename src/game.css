@@ -66,6 +66,7 @@
 	bottom: 0;
 	z-index: 2;
 	display: flex;
+	/* display: none; */
 	flex-direction: column;
 	gap: 1em;
 	justify-content: center;

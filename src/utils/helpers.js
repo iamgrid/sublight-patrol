@@ -847,6 +847,7 @@ export const alertsAndWarnings = {
 			alertsAndWarnings.updateDisplayProper();
 		}
 
+		document.getElementById('game__alertsAndWarnings').style.display = 'flex';
 		if (messageSum === 0) {
 			document
 				.getElementById('game__alertsAndWarnings')
@@ -891,7 +892,20 @@ export const alertsAndWarnings = {
 	clear() {
 		alertsAndWarnings.warnings = new Set();
 		alertsAndWarnings.alerts = new Set();
-		alertsAndWarnings.update();
+		alertsAndWarnings.updateDisplay();
+		console.log(
+			'helpers.js@alertsAndWarnings.clear()',
+			alertsAndWarnings.warnings,
+			alertsAndWarnings.alerts
+		);
+	},
+
+	hide() {
+		document.getElementById('game__alertsAndWarnings').style.display = 'none';
+	},
+
+	show() {
+		document.getElementById('game__alertsAndWarnings').style.display = 'flex';
 	},
 };
 

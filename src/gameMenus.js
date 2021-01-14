@@ -2,7 +2,11 @@ import c from './utils/constants';
 import timing from './utils/timing';
 import Button from './components/Button';
 // import story from './story/story';
-import { readPlayerProgress, hasThePlayerMadeProgress } from './utils/helpers';
+import {
+	readPlayerProgress,
+	hasThePlayerMadeProgress,
+	alertsAndWarnings,
+} from './utils/helpers';
 
 const gameMenus = {
 	handlers: {
@@ -32,6 +36,7 @@ const gameMenus = {
 	matteStep: 4,
 
 	fadeInMatte(requestedBy = '') {
+		alertsAndWarnings.hide();
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
 			document.getElementById('game__plates').style.opacity = 0.2;
 			const currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
@@ -73,6 +78,7 @@ const gameMenus = {
 	},
 
 	fadeOutMatte(requestedBy = '') {
+		alertsAndWarnings.show();
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
 			document.getElementById('game__plates').style.opacity = 1;
 			if (gameMenus.correctedToPauseOpacityFrom !== null) {

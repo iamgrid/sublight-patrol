@@ -16,6 +16,7 @@ import {
 	storePlayerProgress,
 	readPlayerProgress,
 	hasThePlayerMadeProgress,
+	alertsAndWarnings,
 } from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
@@ -326,6 +327,8 @@ const story = {
 
 	restartMission() {
 		gameMenus.clearButtons();
+		alertsAndWarnings.clear();
+		alertsAndWarnings.hide();
 		plates.clearAll();
 		timing.clearAllScheduledEvents();
 		status.add('aqua', 'Mission restarted...', timing.times.play);
@@ -336,6 +339,8 @@ const story = {
 
 	mainMenu(askForConfirmation = true, hurryUp = false) {
 		function mainMenuProper() {
+			alertsAndWarnings.clear();
+			alertsAndWarnings.hide();
 			plates.clearAll();
 			timing.clearAllScheduledEvents();
 			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');
