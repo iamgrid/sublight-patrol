@@ -237,7 +237,7 @@ const pieces = {
 			cannonFiringSpeed: 0.2,
 			cannonShots: 20,
 			cannonCooldown: 0.8,
-			cannonSoundEffect: audioLibrary.library.laser_type1.id,
+			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type1.id,
 			cannonPositions: [
 				{ lengthWise: 15, widthWise: 4 },
 				{ lengthWise: 15, widthWise: -4 },
@@ -290,7 +290,7 @@ const pieces = {
 			cannonFiringSpeed: 0.16,
 			cannonShots: 32,
 			cannonCooldown: 1,
-			cannonSoundEffect: audioLibrary.library.laser_type1.id,
+			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type1.id,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
@@ -321,7 +321,7 @@ const pieces = {
 			cannonFiringSpeed: 0.32,
 			cannonShots: 16,
 			cannonCooldown: 1,
-			cannonSoundEffect: audioLibrary.library.laser_type2.id,
+			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type2.id,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
@@ -350,7 +350,7 @@ const pieces = {
 			cannonFiringSpeed: 0.28,
 			cannonShots: 16,
 			cannonCooldown: 1,
-			cannonSoundEffect: audioLibrary.library.laser_type2.id,
+			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type2.id,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
@@ -381,7 +381,7 @@ const pieces = {
 			cannonFiringSpeed: 0.2,
 			cannonShots: 24,
 			cannonCooldown: 0.8,
-			cannonSoundEffect: audioLibrary.library.laser_type2.id,
+			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type2.id,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
@@ -414,7 +414,7 @@ const pieces = {
 			cannonFiringSpeed: 0.14,
 			cannonShots: 32,
 			cannonCooldown: 0.6,
-			cannonSoundEffect: audioLibrary.library.laser_type2.id,
+			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type2.id,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },

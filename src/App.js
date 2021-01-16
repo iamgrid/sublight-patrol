@@ -2,6 +2,7 @@ import * as PIXI from './pixi';
 import controlSchemes from './controlSchemes';
 import audio from './audio/audio';
 import soundEffects from './audio/soundEffects';
+import music from './audio/music';
 import c from './utils/constants';
 import overlays from './overlays';
 import timing from './utils/timing';
@@ -32,6 +33,7 @@ import HUD from './components/HUD';
 import Matte from './components/Matte';
 import gameMenus from './gameMenus';
 import plates from './plates';
+import audioLibrary from './audio/audioLibrary';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -118,6 +120,10 @@ export default class App extends PIXI.Application {
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v10.png');
 
+		for (let trackName in music.manifest) {
+			this.loader.add(trackName, './assets/music/' + music.manifest[trackName]);
+		}
+
 		for (let soundName in soundEffects.manifest) {
 			this.loader.add(
 				soundName,
@@ -125,10 +131,40 @@ export default class App extends PIXI.Application {
 			);
 		}
 
-		this.loader.load(this.init_pt2.bind(this));
+		this.loader.load(this.loading_complete.bind(this));
+	}
+
+	loading_complete() {
+		document
+			.getElementById('game__loading')
+			.classList.add('game__loading--hidden');
+		document
+			.getElementById('game__loading_done')
+			.classList.add('game__loading_done--shown');
+		document.getElementById('controls').innerHTML =
+			'<div class="controls__control"><span class="controls__key">enter</span><span class="controls__function">Launch the game</span></div>';
+		this.gameLaunched = false;
+
+		const launchFn = (event) => {
+			if (event.code === 'Enter' && !this.gameLaunched) {
+				this.gameLaunched = true;
+				soundEffects.playOnce(
+					null,
+					audioLibrary.library.soundEffects.menu_cycle.id,
+					1
+				);
+				this.init_pt2();
+			}
+		};
+
+		this.launchListener = window.addEventListener('keydown', launchFn, false);
 	}
 
 	init_pt2() {
+		window.removeEventListener('keydown', this.launchListener);
+		document
+			.getElementById('game__loading_done')
+			.classList.remove('game__loading_done--shown');
 		// plates.fullMatte();
 
 		this.spriteSheet = PIXI.Texture.from('spriteSheet');
@@ -192,6 +228,11 @@ export default class App extends PIXI.Application {
 			PIXI_sound: PIXI.sound,
 		};
 		soundEffects.init();
+
+		music.handlers = {
+			resources: this.loader.resources,
+			PIXI_sound: PIXI.sound,
+		};
 
 		this.entityWasDespawned = story.entityWasDespawned;
 
@@ -298,12 +339,23 @@ export default class App extends PIXI.Application {
 		if (this.showingMissionMenu.actual)
 			currentKeyboardLayout = controlSchemes.gameMenus.id;
 
+		const skipToMainMenu = () => {
+			timing.clearAllScheduledEvents();
+			music.stopPlaying();
+			// music.playTrack(
+			// 	audioLibrary.library.music.sublight_patrol_theme.id,
+			// 	25.0395
+			// );
+			story.advance('mainMenu');
+		};
+
 		// console.log({ currentKeyboardLayout });
 		controlSchemes[currentKeyboardLayout].execute(
 			playerId,
 			currentState,
 			this.dispatch,
-			this.camera
+			this.camera,
+			skipToMainMenu
 		);
 
 		// update entity positions based on their velocities

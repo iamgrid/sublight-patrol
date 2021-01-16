@@ -9,6 +9,7 @@ import timing from '../utils/timing';
 import hud from '../hud';
 import entities from '../entities/entities';
 import soundEffects from '../audio/soundEffects';
+import music from '../audio/music';
 import {
 	shields,
 	status,
@@ -412,6 +413,7 @@ const story = {
 		if (c.debug.sequentialEvents) console.log({ goAhead });
 
 		if (goAhead) {
+			music.stopPlaying();
 			gameMenus.clearButtons();
 			story.advance(sceneId, 0);
 		}
@@ -421,6 +423,7 @@ const story = {
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		function newGameProper() {
+			music.stopPlaying();
 			gameMenus.clearButtons();
 			story.removeMainMenuTopPortion();
 			story.advance();
@@ -449,6 +452,7 @@ const story = {
 		if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
 			alert(story.noProgressYetMessage);
 		} else {
+			music.stopPlaying();
 			gameMenus.clearButtons();
 			story.removeMainMenuTopPortion();
 			story.advance(localStoragePlayerProgress.bestSceneId, 0);

@@ -10,6 +10,7 @@ import entities from './entities/entities';
 import shots from './shots';
 import emp from './emp';
 import soundEffects from './audio/soundEffects';
+// import story from './story/story';
 
 const controlSchemes = {
 	// https://www.npmjs.com/package/pixi.js-keyboard
@@ -272,14 +273,13 @@ const controlSchemes = {
 
 	intro: {
 		id: 'intro',
-		descriptions: [{ keys: 'enter', function: 'Skip to main menu' }],
-		execute() {
+		descriptions: [{ keys: 'space', function: 'Skip to main menu' }],
+		execute(playerId, currentState, dispatch, camera, skipToMainMenu) {
 			controlSchemes.showLayout(controlSchemes.intro.id);
 
-			if (Keyboard.isKeyPressed('Enter')) {
-				console.log(
-					'controlSchemes.js@intro.execute() - Skip to main menu not implemented yet'
-				);
+			if (Keyboard.isKeyPressed('Space')) {
+				console.log('controlSchemes.js@intro.execute()');
+				skipToMainMenu();
 			}
 		},
 	},

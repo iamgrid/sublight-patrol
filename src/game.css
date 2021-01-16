@@ -15,6 +15,61 @@
 	outline: 0;
 }
 
+.game__loading_states {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 12;
+	font-size: 12px;
+	color: #909090;
+}
+
+.game__loading {
+	width: 1200px;
+	height: 450px;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+}
+
+.game__loading--hidden {
+	display: none;
+}
+
+.game__loading_text {
+	animation: 0.5s ease-in-out infinite alternate doPulse;
+	animation-fill-mode: forwards;
+}
+
+.game__loading--hidden .game__loading_text {
+	animation: none;
+}
+
+.game__loading_done {
+	width: 1200px;
+	height: 450px;
+	display: none;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+}
+
+.game__loading_done--shown {
+	display: flex;
+}
+
+.game__loading_done_text_top,
+.game__loading_done_text_middle {
+	margin-bottom: 1.5em;
+}
+
+.game__loading_done_text_bottom {
+	color: #c0c0c0;
+}
+
 .game__dialog {
 	position: absolute;
 	bottom: 0;

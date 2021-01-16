@@ -3,6 +3,8 @@ import controlSchemes from '../../controlSchemes';
 // import timing from '../../utils/timing';
 import plates from '../../plates';
 import gameMenus from '../../gameMenus';
+// import audioLibrary from '../../audio/audioLibrary';
+// import music from '../../audio/music';
 
 const mainMenu = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
@@ -20,6 +22,10 @@ const mainMenu = {
 			cameraMode: c.cameraModes.stationary,
 			// isTheFinalGameplayBeat: false,
 			execute(options) {
+				// music.playTrack(
+				// 	audioLibrary.library.music.sublight_patrol_theme.id,
+				// 	25.0395
+				// );
 				// console.log('mainMenu.js@storyBeats[0].execute()', options);
 				const shortenedGameVersion =
 					c.gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';

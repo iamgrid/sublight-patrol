@@ -3,6 +3,8 @@ import controlSchemes from '../../controlSchemes';
 import timing from '../../utils/timing';
 import plates from '../../plates';
 import story from '../story';
+import audioLibrary from '../../audio/audioLibrary';
+import music from '../../audio/music';
 
 const intro = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
@@ -21,6 +23,7 @@ const intro = {
 			// isTheFinalGameplayBeat: false,
 			execute() {
 				console.log('intro.js@storyBeats[0].execute()');
+				music.playTrack(audioLibrary.library.music.sublight_patrol_theme.id);
 				plates.fullMatte();
 				timing.setTimeout(
 					() => {
@@ -28,7 +31,7 @@ const intro = {
 						story.advance('mainMenu', 0);
 					},
 					timing.modes.play,
-					3000
+					25000
 				);
 			},
 		},

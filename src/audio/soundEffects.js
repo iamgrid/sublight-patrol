@@ -5,8 +5,8 @@ import { getPosition } from '../utils/helpers';
 
 const soundEffects = {
 	handlers: { state: null, resources: null, PIXI_sound: null }, // gets its values in App.js
-	manifest: audioLibrary.manifest,
-	library: audioLibrary.library,
+	manifest: audioLibrary.manifest.soundEffects,
+	library: audioLibrary.library.soundEffects,
 	COS_FLIP: (4 * Math.PI) / 7,
 
 	loops: {},

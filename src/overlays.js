@@ -1,5 +1,15 @@
 export default function overlays() {
 	return `
+		<div class="game__loading_states" id="game__loading_states">
+			<div class="game__loading" id="game__loading">
+				<div class="game__loading_text" id="game__loading_text">Loading assets, please wait...</div>
+			</div>
+			<div class="game__loading_done" id="game__loading_done">
+				<div class="game__loading_done_text_top">Ready to launch.</div>
+				<div class="game__loading_done_text_middle">Volume controls are on the top right, you might need them.</div>
+				<div class="game__loading_done_text_bottom">Hit [ENTER] to start</div>
+			</div>
+		</div>
 		<div class="game__dialog" id="game__dialog">
 			<div class="game__dialog-speaker" id="game__dialog-speaker"></div>
 			<div class="game__dialog-message" id="game__dialog-message"></div>
