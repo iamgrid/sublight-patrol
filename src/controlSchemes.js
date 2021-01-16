@@ -9,6 +9,7 @@ import gameMenus from './gameMenus';
 import entities from './entities/entities';
 import shots from './shots';
 import emp from './emp';
+import soundEffects from './audio/soundEffects';
 
 const controlSchemes = {
 	// https://www.npmjs.com/package/pixi.js-keyboard
@@ -46,6 +47,7 @@ const controlSchemes = {
 			controlSchemes.showLayout(controlSchemes.pause.id);
 
 			if (Keyboard.isKeyPressed('Escape')) {
+				soundEffects.playOnce(null, soundEffects.library.menu_activate.id);
 				window.pixiapp.togglePause();
 			}
 
@@ -103,6 +105,7 @@ const controlSchemes = {
 			}
 
 			if (Keyboard.isKeyPressed('Escape')) {
+				soundEffects.playOnce(null, soundEffects.library.menu_activate.id);
 				window.pixiapp.togglePause();
 			}
 
