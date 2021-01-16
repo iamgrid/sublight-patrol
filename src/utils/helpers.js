@@ -903,11 +903,11 @@ export const alertsAndWarnings = {
 		alertsAndWarnings.warnings = new Set();
 		alertsAndWarnings.alerts = new Set();
 		alertsAndWarnings.updateDisplay();
-		console.log(
-			'helpers.js@alertsAndWarnings.clear()',
-			alertsAndWarnings.warnings,
-			alertsAndWarnings.alerts
-		);
+		// console.log(
+		// 	'helpers.js@alertsAndWarnings.clear()',
+		// 	alertsAndWarnings.warnings,
+		// 	alertsAndWarnings.alerts
+		// );
 	},
 
 	hide() {

@@ -40,7 +40,8 @@ const audioLibrary = {
 		'side_thruster': 'side_thruster.mp3',
 		'menu_cycle_1': 'menu_cycle_1.mp3',
 		'menu_cycle_2': 'menu_cycle_2.mp3',
-		'menu_activate': 'menu_activate.mp3',
+		'menu_activate_1': 'menu_activate_1.mp3',
+		'menu_activate_2': 'menu_activate_2.mp3',
 	},
 	// prettier-ignore
 	library: {
@@ -59,7 +60,7 @@ const audioLibrary = {
 		main_thruster: { id: 'main_thruster', variants: 1 },
 		side_thruster: { id: 'side_thruster', variants: 1 },
 		menu_cycle: { id: 'menu_cycle', variants: 2 },
-		menu_activate: { id: 'menu_activate', variants: 1 },
+		menu_activate: { id: 'menu_activate', variants: 2 },
 	},
 };
 
