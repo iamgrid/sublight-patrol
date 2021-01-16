@@ -1,13 +1,13 @@
 import c from './utils/constants';
 import timing from './utils/timing';
 import Button from './components/Button';
-// import story from './story/story';
 import {
 	readPlayerProgress,
 	hasThePlayerMadeProgress,
 	alertsAndWarnings,
 	dialog,
 } from './utils/helpers';
+import soundEffects from './audio/soundEffects';
 
 const gameMenus = {
 	handlers: {
@@ -428,6 +428,9 @@ const gameMenus = {
 			gameMenus.stageButtons[buttonId].doBlur();
 		}
 		gameMenus.stageButtons[gameMenus.currentFocus].doFocus();
+
+		if (noOfButtons > 1)
+			soundEffects.playOnce(null, soundEffects.library.menu_cycle.id);
 
 		// console.log({ dir, noOfButtons, currentFocusIdx, newIdx }, keys[newIdx]);
 	},

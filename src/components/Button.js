@@ -1,4 +1,5 @@
 import * as PIXI from '../pixi';
+import soundEffects from '../audio/soundEffects';
 
 export default class Button extends PIXI.Container {
 	constructor(props) {
@@ -22,7 +23,7 @@ export default class Button extends PIXI.Container {
 		this.isFocused = props.isFocused;
 		this.isDisabled = false;
 		if (props.isDisabled !== undefined) this.isDisabled = props.isDisabled;
-		this.doActivate = props.doActivate;
+		this.activateFn = props.doActivate;
 		this.sprites = {};
 		this.blurredBorderAlpha = 0.5;
 		this.focusedBorderAlpha = 1;
@@ -84,5 +85,10 @@ export default class Button extends PIXI.Container {
 	doBlur() {
 		this.isFocused = false;
 		this.sprites['border'].alpha = this.blurredBorderAlpha;
+	}
+
+	doActivate() {
+		soundEffects.playOnce(null, soundEffects.library.menu_activate.id);
+		this.activateFn();
 	}
 }

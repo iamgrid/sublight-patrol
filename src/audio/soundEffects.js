@@ -37,11 +37,15 @@ const soundEffects = {
 
 		const currentState = soundEffects.handlers.state();
 		const playerId = currentState.entities.player.id;
-		const [newVolume, newPan] = soundEffects.volumeBasedOnEntityDistance(
-			entityId,
-			playerId,
-			currentState.positions
-		);
+		let newVolume = 1;
+		let newPan = 0;
+		if (entityId !== null) {
+			[newVolume, newPan] = soundEffects.volumeBasedOnEntityDistance(
+				entityId,
+				playerId,
+				currentState.positions
+			);
+		}
 		// console.log(libraryItemId, newVolume);
 
 		soundEffects.handlers.resources[effectId].sound.filters[0].pan = newPan;
