@@ -11,7 +11,7 @@ const scene001 = {
 	id: '001',
 	titlePlate: {
 		wittyText: "it's time to put your big boy pants on",
-		mainText: 'Mission 1 of 8: Welcome to vacuum',
+		mainText: 'Mission 1 of 2: Welcome to vacuum',
 	},
 	playVolume: {
 		minX: -2000,

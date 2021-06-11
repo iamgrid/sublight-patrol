@@ -777,7 +777,10 @@ const story = {
 		// next story beat
 		let allComplete = true;
 		story.currentObjectives.advanceWhen.forEach((obj) => {
-			if (obj.currentPercentage < obj.requiredPercentage || obj.failed)
+			if (
+				Math.ceil(obj.currentPercentage) < obj.requiredPercentage ||
+				obj.failed
+			)
 				allComplete = false;
 		});
 

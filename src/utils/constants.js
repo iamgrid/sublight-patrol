@@ -5,7 +5,7 @@ const c = {
 		behavior: true,
 		behaviorPerTick: false,
 		sequentialEvents: false,
-		objectives: false,
+		objectives: true,
 		localStorage: false,
 		controlSchemes: false,
 		menuButtons: false,
@@ -146,8 +146,7 @@ const c = {
 		},
 		hasDespawned: {
 			id: 'hasDespawned',
-			desc:
-				'!!! This objective only exists for program logic, do not use it in your scenes!',
+			desc: '!!! This objective only exists for program logic, do not use it in your scenes!',
 			completed_desc: '???',
 			failsIfEventIs: [],
 		},
