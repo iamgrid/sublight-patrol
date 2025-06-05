@@ -518,13 +518,9 @@ const story = {
 		eventId,
 		wasPreviouslyInspected = false
 	) {
+		const functionSignature = 'story.js@checkAgainstCurrentObjectives()';
 		if (c.debug.objectives)
-			console.log(
-				'checkAgainstCurrentObjectives',
-				entityId,
-				eventId,
-				wasPreviouslyInspected
-			);
+			console.log(functionSignature, entityId, eventId, wasPreviouslyInspected);
 
 		if (typeof eventId !== 'string') {
 			console.error(
@@ -549,6 +545,14 @@ const story = {
 				}
 			}
 		}
+
+		if (c.debug.objectives)
+			console.log(functionSignature, {
+				currentStoryEntities: story.currentStoryEntities,
+				entityId,
+				entityGroup,
+				entitiesInGroup,
+			});
 
 		let entityClassification = story.assertClassification(entityId);
 
@@ -576,6 +580,9 @@ const story = {
 				}
 			});
 		}
+
+		if (c.debug.objectives)
+			console.log(functionSignature, { entityInvolvedIn });
 
 		// walk through the collected objectives and update them
 		// based on this event
@@ -614,14 +621,30 @@ const story = {
 						}
 					}
 
+					if (c.debug.objectives)
+						console.log(functionSignature, {
+							remainingPercentage,
+							requiredPercentage: el.objectiveObj.requiredPercentage,
+						});
+
 					if (remainingPercentage < el.objectiveObj.requiredPercentage) {
+						if (c.debug.objectives)
+							console.log(
+								functionSignature,
+								'remainingPercentage < requiredPercentage, setting objective to failed'
+							);
 						failState = true;
 						el.objectiveObj.failed = true;
 						hasUpdated = true;
 					}
 				}
 			} else {
-				if (eventId === objectiveType) {
+				if (
+					eventId === objectiveType ||
+					(objectiveType === c.objectiveTypes.forcedToFleeOrDestroyed.id &&
+						(eventId === c.objectiveTypes.forcedToFlee.id ||
+							eventId === c.objectiveTypes.destroyed.id))
+				) {
 					meansProgress = true;
 					hasUpdated = true;
 					if (el.objectiveObj.groupId === undefined) {

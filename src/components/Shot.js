@@ -1,4 +1,5 @@
 import * as PIXI from '../pixi';
+import c from '../utils/constants';
 
 export default class Shot extends PIXI.Graphics {
 	constructor(props) {
@@ -26,7 +27,7 @@ export default class Shot extends PIXI.Graphics {
 
 	onUpdate(delta) {
 		if (!this.hasBeenDestroyed) {
-			const travel = delta * 12;
+			const travel = delta * c.shotSpeed;
 			this.traveled += travel;
 
 			if (this.traveled > 1000) {

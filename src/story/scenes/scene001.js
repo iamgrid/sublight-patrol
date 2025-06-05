@@ -82,8 +82,8 @@ const scene001 = {
 			id: 'b2508_012',
 			groupId: 'b2508',
 			type: 'container',
-			contents: 'Tranquilizers',
-			contentClassification: c.entityContentClassifications.illicit,
+			contents: 'Steel rolls',
+			contentClassification: c.entityContentClassifications.irrelevant,
 		},
 		b2508_013: {
 			id: 'b2508_013',
@@ -96,7 +96,7 @@ const scene001 = {
 			groupId: 'b2508',
 			type: 'container',
 			contents: 'Medicine',
-			contentClassification: c.entityContentClassifications.missionObjective,
+			contentClassification: c.entityContentClassifications.irrelevant,
 		},
 		htran_091: {
 			id: 'htran_091',
@@ -121,20 +121,20 @@ const scene001 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene001.entities.mylok_1.groupId,
 							requiredPercentage: 100,
 						},
 						{
-							type: c.objectiveTypes.inspected.id,
-							groupId: scene001.entities.b2508_012.groupId,
+							type: c.objectiveTypes.mustHaveSurvived.id,
+							groupId: scene001.entities.b2508_013.groupId,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: c.objectiveTypes.inspected.id,
-							entityId: scene001.entities.b2508_014.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: scene001.entities.mylok_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
@@ -250,16 +250,6 @@ const scene001 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.destroyed.id,
-							entityId: scene001.entities.b2508_012.id,
-							requiredPercentage: 100,
-						},
-						{
-							type: c.objectiveTypes.mustHaveSurvived.id,
-							entityId: scene001.entities.b2508_014.id,
-							requiredPercentage: 100,
-						},
-						{
 							type: c.objectiveTypes.mustHaveArrived.id,
 							entityId: scene001.entities.htran_091.id,
 							requiredPercentage: 100,
@@ -276,11 +266,6 @@ const scene001 = {
 						},
 					],
 					advanceWhen: [
-						{
-							type: c.objectiveTypes.destroyed.id,
-							entityId: scene001.entities.b2508_012.id,
-							requiredPercentage: 100,
-						},
 						{
 							type: c.objectiveTypes.destroyed.id,
 							groupId: scene001.entities.habeen_1.groupId,

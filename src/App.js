@@ -508,7 +508,7 @@ export default class App extends PIXI.Application {
 			console.info(currentState);
 			console.info('currentFormations:', behavior.currentFormations);
 			console.info('stageEntities:', entities.stageEntities);
-			// console.info('stageShots:', shots.stageShots);
+			console.info('stageShots:', shots.stageShots);
 			console.info('timing:', timing);
 			// console.info('playVolume:', this.playVolume);
 			this.shownStateOnPause = true;

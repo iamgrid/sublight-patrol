@@ -132,6 +132,12 @@ const c = {
 			completed_desc: 'was destroyed',
 			failsIfEventIs: ['hasDespawned'],
 		},
+		forcedToFleeOrDestroyed: {
+			id: 'forcedToFleeOrDestroyed',
+			desc: 'must be forced to flee or destroyed',
+			completed_desc: 'was forced to flee or destroyed',
+			failsIfEventIs: [],
+		},
 		mustHaveSurvived: {
 			id: 'mustHaveSurvived',
 			desc: 'must have survived until other objectives completed',
@@ -152,6 +158,7 @@ const c = {
 		},
 	},
 	empReach: 120,
+	shotSpeed: 20,
 	playerIdPartial: 'red_1',
 	cameraModes: {
 		gameplay: 'gameplay',
