@@ -1047,6 +1047,7 @@ export function storePlayerProgress(state, bestSceneId) {
 			hangarContents: [...statePlayerShips.hangarContents],
 		},
 		playerHasCompletedTheGame: currentState.game.playerHasCompletedTheGame,
+		dataTS: Date.now(),
 	};
 	const playerProgressStr = JSON.stringify(playerProgress);
 	localStorage.setItem('sublightPatrol', playerProgressStr);

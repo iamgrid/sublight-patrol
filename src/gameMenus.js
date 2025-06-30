@@ -219,7 +219,7 @@ const gameMenus = {
 			isFocused: false,
 			doActivate: () => {
 				if (c.debug.menuButtons) console.log('doActivate mainMenu');
-				gameMenus.buttonFunctions.mainMenu();
+				gameMenus.buttonFunctions.mainMenu(false, false, true);
 			},
 		});
 

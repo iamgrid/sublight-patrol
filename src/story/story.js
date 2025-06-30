@@ -345,13 +345,25 @@ const story = {
 		plates.clearAll();
 		timing.clearAllScheduledEvents();
 		status.add('aqua', 'Mission restarted...', timing.times.play);
-		story.handlers.dispatch({ type: c.actions.RESTART_MISSION });
+		story.handlers.dispatch({
+			type: c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION,
+		});
 		story.advance(story.currentScene, 0);
 		story.handlers.frameZero.actual = true;
 	},
 
-	mainMenu(askForConfirmation = true, hurryUp = false) {
+	mainMenu(
+		askForConfirmation = true,
+		hurryUp = false,
+		restorePlayerShipsLostOnThisMission = false
+	) {
 		function mainMenuProper() {
+			if (restorePlayerShipsLostOnThisMission) {
+				story.handlers.dispatch({
+					type: c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION,
+				});
+			}
+
 			alertsAndWarnings.clear();
 			alertsAndWarnings.hide();
 			dialog.hide();

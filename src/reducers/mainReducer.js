@@ -955,7 +955,7 @@ export default function mainReducer(state, action) {
 				},
 			};
 		}
-		case c.actions.RESTART_MISSION: {
+		case c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION: {
 			const updatedHangarContents = [
 				...state.game.playerShips.lostOnThisMission,
 				state.game.playerShips.current,
