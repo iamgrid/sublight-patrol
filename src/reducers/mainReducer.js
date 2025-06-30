@@ -10,6 +10,7 @@ import {
 	getVelocity,
 	getStoreEntity,
 } from '../utils/helpers';
+import initialGameState from '../initialGameState';
 
 function assignWPrototype(sourceObj, modifications = {}) {
 	let re = Object.assign({}, sourceObj, modifications);
@@ -1002,24 +1003,10 @@ export default function mainReducer(state, action) {
 			};
 		}
 		case c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS: {
-			const defaultPlayerProgress = action.defaultPlayerProgress;
-			const updatedPlayerShips = defaultPlayerProgress;
-			updatedPlayerShips.lostOnThisMission = [];
-			if (c.debug.localStorage)
-				console.log(
-					'mainReducer.js@REVERT_PLAYER_PROGRESS...',
-					updatedPlayerShips
-				);
-			return [
-				() => action.callbackFn(),
-				{
-					...state,
-					game: {
-						...state.game,
-						playerShips: updatedPlayerShips,
-					},
-				},
-			];
+			const initialGameStateCopy = JSON.parse(JSON.stringify(initialGameState));
+			return {
+				...initialGameStateCopy,
+			};
 		}
 		default:
 			console.error('Failed to run action:', action);

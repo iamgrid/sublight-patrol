@@ -40,7 +40,7 @@ const scene002 = {
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		nazaar_1: {
@@ -48,7 +48,7 @@ const scene002 = {
 			groupId: 'nazaar',
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		nazaar_2: {
@@ -56,7 +56,7 @@ const scene002 = {
 			groupId: 'nazaar',
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		nazaar_3: {
@@ -72,7 +72,7 @@ const scene002 = {
 			groupId: 'pakuuni',
 			type: 'zangari_fighter_type_4',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		hurcha_1: {
@@ -80,15 +80,15 @@ const scene002 = {
 			groupId: 'hurcha',
 			type: 'zangari_fighter_type_4',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		hurcha_2: {
 			id: 'hurcha_2',
 			groupId: 'hurcha',
-			type: 'zangari_fighter_type_4',
+			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 	},
@@ -107,14 +107,14 @@ const scene002 = {
 							requiredPercentage: 100,
 						},
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							entityId: scene002.entities.mylok_1.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							entityId: scene002.entities.mylok_1.id,
 							requiredPercentage: 100,
 						},
@@ -172,14 +172,14 @@ const scene002 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene002.entities.nazaar_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene002.entities.nazaar_1.groupId,
 							requiredPercentage: 100,
 						},
@@ -235,14 +235,14 @@ const scene002 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							entityId: scene002.entities.pakuuni_1.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							entityId: scene002.entities.pakuuni_1.id,
 							requiredPercentage: 100,
 						},
@@ -275,14 +275,14 @@ const scene002 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene002.entities.hurcha_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene002.entities.hurcha_1.groupId,
 							requiredPercentage: 100,
 						},

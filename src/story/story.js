@@ -109,10 +109,13 @@ const story = {
 	},
 
 	advance(playScene = null, playSceneBeat = 0, hurryUp = false) {
+		const functionSignature = 'story.js@advance()';
+
 		// call with playScene = null to auto-advance
 		// to the next scene
+
 		if (c.debug.sequentialEvents)
-			console.log('advance()', playScene, playSceneBeat);
+			console.log(functionSignature, { playScene, playSceneBeat, hurryUp });
 		const currentState = story.handlers.state();
 
 		let cleanUpNeeded = false;
@@ -122,12 +125,14 @@ const story = {
 		const playerShipType = currentState.game.playerShips.current;
 
 		if (story.currentScene === null) {
-			story.currentScene = story.sceneList[0].id;
+			story.currentScene = story.sceneList[0].id; // set scene to the intro
 		} else {
 			if (playSceneBeat === 0) cleanUpNeeded = true;
 			if (playScene !== null) {
+				// playScene attribute is not null, so we need to set the current scene
 				story.currentScene = playScene;
 			} else {
+				// playScene attribute is null, so we need to advance to the next scene
 				let index = story.sceneList.findIndex(
 					(el) => el.id === story.currentScene
 				);
@@ -158,6 +163,11 @@ const story = {
 						},
 						timing.modes.play,
 						8200
+					);
+					currentState.game.playerHasCompletedTheGame = true;
+					storePlayerProgress(
+						story.handlers.state,
+						currentState.game.currentScene
 					);
 
 					return;
@@ -365,7 +375,7 @@ const story = {
 		}
 	},
 
-	replayScene() {
+	replaySceneMenu() {
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		let goAhead = false;
@@ -390,9 +400,18 @@ const story = {
 	},
 
 	replaySceneActual(sceneId, sceneIndex) {
+		const functionSignature = 'story.js@replaySceneActual()';
 		const localStoragePlayerProgress = readPlayerProgress();
-		if (c.debug.sequentialEvents)
-			console.log('story.js@replaySceneActual', sceneId, sceneIndex);
+
+		if (c.debug.sequentialEvents || c.debug.menuButtons) {
+			console.log(
+				functionSignature,
+				`called with sceneId: ${sceneId}, sceneIndex: ${sceneIndex}`
+			);
+			console.log(functionSignature, {
+				localStoragePlayerProgress,
+			});
+		}
 
 		let goAhead = false;
 		if (localStoragePlayerProgress === null) {
@@ -410,7 +429,8 @@ const story = {
 			}
 		}
 
-		if (c.debug.sequentialEvents) console.log({ goAhead });
+		if (c.debug.sequentialEvents || c.debug.menuButtons)
+			console.log(functionSignature, { goAhead });
 
 		if (goAhead) {
 			music.stopPlaying();
@@ -420,12 +440,30 @@ const story = {
 	},
 
 	newGame() {
+		const functionSignature = 'story.js@newGame()';
+		console.log(functionSignature, 'called');
+
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		function newGameProper() {
+			const functionSignature = 'story.js@newGameProper()';
+			const initialGameStateCopy = JSON.parse(JSON.stringify(initialGameState));
+
+			console.log(functionSignature, { initialGameStateCopy });
+
+			story.handlers.dispatch({
+				type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
+			});
+
 			music.stopPlaying();
 			gameMenus.clearButtons();
 			story.removeMainMenuTopPortion();
+
+			storePlayerProgress(
+				story.handlers.state,
+				initialGameStateCopy.game.currentScene
+			);
+
 			story.advance();
 		}
 
@@ -437,11 +475,7 @@ const story = {
 					'Starting a new game will revert your previous progress. Continue anyway?'
 				)
 			) {
-				story.handlers.dispatch({
-					type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
-					defaultPlayerProgress: initialGameState.game.playerShips,
-					callbackFn: newGameProper,
-				});
+				newGameProper();
 			}
 		}
 	},
@@ -473,7 +507,7 @@ const story = {
 		gameMenus.buttonFunctions.mainMenu = story.mainMenu;
 		gameMenus.buttonFunctions.newGame = story.newGame;
 		gameMenus.buttonFunctions.continueGame = story.continueGame;
-		gameMenus.buttonFunctions.replayScene = story.replayScene;
+		gameMenus.buttonFunctions.replaySceneMenu = story.replaySceneMenu;
 		gameMenus.buttonFunctions.replaySceneActual = story.replaySceneActual;
 	},
 

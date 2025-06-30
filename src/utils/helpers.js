@@ -512,9 +512,8 @@ export function fireThrusters() {
 				this.thrusterAlphas.required[orientation] ===
 				this.thrusterAlphas.current[orientation]
 			)
-				this.thrusterAlphas.current[orientation] = this.thrusterAlphas.required[
-					orientation
-				];
+				this.thrusterAlphas.current[orientation] =
+					this.thrusterAlphas.required[orientation];
 		}
 	}
 }
@@ -1023,9 +1022,8 @@ export const status = {
 	},
 
 	init() {
-		document.getElementById(
-			'game__status'
-		).onclick = status.toggleStatusExpansion.bind(status);
+		document.getElementById('game__status').onclick =
+			status.toggleStatusExpansion.bind(status);
 	},
 
 	clear() {
@@ -1037,6 +1035,7 @@ export const status = {
 };
 
 export function storePlayerProgress(state, bestSceneId) {
+	const functionSignature = 'helpers.js@storePlayerProgress()';
 	const currentState = state();
 	const statePlayerShips = currentState.game.playerShips;
 	const playerProgress = {
@@ -1046,17 +1045,17 @@ export function storePlayerProgress(state, bestSceneId) {
 			currentIdSuffix: statePlayerShips.currentIdSuffix,
 			hangarBerths: statePlayerShips.hangarBerths,
 			hangarContents: [...statePlayerShips.hangarContents],
-			repairsAvailable: statePlayerShips.repairsAvailable,
 		},
+		playerHasCompletedTheGame: currentState.game.playerHasCompletedTheGame,
 	};
 	const playerProgressStr = JSON.stringify(playerProgress);
 	localStorage.setItem('sublightPatrol', playerProgressStr);
-	if (c.debug.localStorage)
-		console.log('helpers.js@storePlayerProgress():', playerProgress);
+	if (c.debug.localStorage) console.log(functionSignature, playerProgress);
 }
 
 export function readPlayerProgress() {
-	if (c.debug.localStorage) console.log('helpers.js@readPlayerProgress()');
+	const functionSignature = 'helpers.js@readPlayerProgress()';
+	if (c.debug.localStorage) console.log(functionSignature);
 	const playerProgressStr = localStorage.getItem('sublightPatrol');
 	if (playerProgressStr === null) {
 		return null;

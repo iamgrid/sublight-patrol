@@ -4,7 +4,6 @@ const initialGameState = {
 		targeting: null,
 		targetHasBeenScanned: false,
 		playerShips: {
-			repairsAvailable: false,
 			hangarBerths: 5,
 			current: 'fenrir',
 			currentIdSuffix: 'a',
@@ -15,6 +14,7 @@ const initialGameState = {
 			],
 			lostOnThisMission: [],
 		},
+		playerHasCompletedTheGame: false,
 	},
 	entities: {
 		player: {},

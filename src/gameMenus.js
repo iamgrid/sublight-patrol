@@ -24,7 +24,7 @@ const gameMenus = {
 		mainMenu: null,
 		newGame: null,
 		continueGame: null,
-		replayScene: null,
+		replaySceneMenu: null,
 		replaySceneActual: null,
 	},
 	scheduledEvents: {
@@ -287,7 +287,7 @@ const gameMenus = {
 			isDisabled: !relevantPlayerProgress ? true : false,
 			doActivate: () => {
 				if (c.debug.menuButtons) console.log('doActivate replayScene');
-				gameMenus.buttonFunctions.replayScene();
+				gameMenus.buttonFunctions.replaySceneMenu();
 			},
 		});
 

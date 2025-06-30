@@ -77,7 +77,10 @@ export default class App extends PIXI.Application {
 			this.playVolume
 		);
 
-		const [state, dispatch] = useReducer(mainReducer, initialGameState);
+		const [state, dispatch] = useReducer(
+			mainReducer,
+			JSON.parse(JSON.stringify(initialGameState))
+		);
 		this.gameState = state;
 		this.dispatch = dispatch;
 
@@ -146,7 +149,10 @@ export default class App extends PIXI.Application {
 		this.gameLaunched = false;
 
 		const launchFn = (event) => {
-			if (event.code === 'Enter' && !this.gameLaunched) {
+			if (
+				(event.code === 'Enter' || event.code === 'NumpadEnter') &&
+				!this.gameLaunched
+			) {
 				this.gameLaunched = true;
 				soundEffects.playOnce(
 					null,

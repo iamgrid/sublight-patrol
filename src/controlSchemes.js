@@ -60,7 +60,7 @@ const controlSchemes = {
 				gameMenus.cycleFocus('back');
 			}
 
-			if (Keyboard.isKeyPressed('Enter')) {
+			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
 				gameMenus.activateFocusedButton();
 			}
 
@@ -242,7 +242,7 @@ const controlSchemes = {
 				gameMenus.cycleFocus('back');
 			}
 
-			if (Keyboard.isKeyPressed('Enter')) {
+			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
 				gameMenus.activateFocusedButton();
 			}
 		},
@@ -265,7 +265,7 @@ const controlSchemes = {
 				gameMenus.cycleFocus('back');
 			}
 
-			if (Keyboard.isKeyPressed('Enter')) {
+			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
 				gameMenus.activateFocusedButton();
 			}
 		},

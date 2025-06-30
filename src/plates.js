@@ -19,11 +19,13 @@ const plates = {
 	},
 
 	fadeInMatte(steps = 25, delayMS = 0) {
+		const functionSignature = 'plates.js@fadeInMatte()';
+
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
 		alertsAndWarnings.hide();
 		dialog.hide();
 
-		if (hud.hudIsShowing) hud.toggle('plates.js@fadeInMatte()', false);
+		if (hud.hudIsShowing) hud.toggle(functionSignature, false);
 
 		plates.handlers.matteIsBeingUsedByPlates.actual = true;
 
@@ -31,7 +33,7 @@ const plates = {
 
 		if (c.debug.sequentialEvents)
 			console.log(
-				'plates.js@fadeInMatte()',
+				functionSignature,
 				steps,
 				delayMS,
 				plates.handlers.Matte.alpha
@@ -40,7 +42,7 @@ const plates = {
 		let firstRun = true;
 
 		plates.scheduledEvents.fadeInMatte = timing.setTrigger(
-			'plates.js fadeInMatte',
+			functionSignature,
 			() => {
 				if (firstRun) {
 					plates.handlers.Matte.alpha = 0;
@@ -48,7 +50,7 @@ const plates = {
 					return;
 				}
 				const currentOpacity = Math.trunc(plates.handlers.Matte.alpha * 100);
-				if (c.debug.sequentialEvents) console.log(currentOpacity);
+				if (c.debug.plateFading) console.log(currentOpacity);
 
 				if (currentOpacity < 100) {
 					plates.handlers.Matte.alpha =
@@ -64,11 +66,13 @@ const plates = {
 	},
 
 	fadeOutMatte(steps = 25, delayMS = 0) {
+		const functionSignature = 'plates.js@fadeOutMatte()';
+
 		const opacityFraction = 100 / steps;
 
 		if (c.debug.sequentialEvents)
 			console.log(
-				'plates.js@fadeOutMatte()',
+				functionSignature,
 				steps,
 				delayMS,
 				plates.handlers.Matte.alpha
@@ -77,7 +81,7 @@ const plates = {
 		let firstRun = true;
 
 		plates.scheduledEvents.fadeOutMatte = timing.setTrigger(
-			'plates.js fadeOutMatte',
+			functionSignature,
 			() => {
 				if (firstRun) {
 					plates.handlers.Matte.alpha = 1;
@@ -85,7 +89,7 @@ const plates = {
 					return;
 				}
 				const currentOpacity = Math.trunc(plates.handlers.Matte.alpha * 100);
-				if (c.debug.sequentialEvents) console.log(currentOpacity);
+				if (c.debug.plateFading) console.log(currentOpacity);
 
 				if (currentOpacity > 0)
 					plates.handlers.Matte.alpha =
@@ -102,7 +106,7 @@ const plates = {
 			() => {
 				plates.handlers.matteIsBeingUsedByPlates.actual = false;
 				if (plates.handlers.hudShouldBeShowing) {
-					hud.toggle('plates.js@fadeOutMatte()', true);
+					hud.toggle(functionSignature, true);
 					alertsAndWarnings.show();
 					dialog.show();
 				}
@@ -113,16 +117,26 @@ const plates = {
 	},
 
 	fullMatte() {
+		const functionSignature = 'plates.js@fullMatte()';
+
 		plates.handlers.Matte.alpha = 1;
 		plates.handlers.matteIsBeingUsedByPlates.actual = true;
 		if (c.debug.sequentialEvents)
-			console.log('plates.js@fullMatte()', plates.handlers.Matte.alpha);
-		if (hud.hudIsShowing) hud.toggle('plates.js@fullMatte()', false);
+			console.log(functionSignature, plates.handlers.Matte.alpha);
+		if (hud.hudIsShowing) hud.toggle(functionSignature, false);
 	},
 
 	loadPlate(plateId, quoteVariant = '', mainText = '', wittyText = '') {
+		const functionSignature = 'plates.js@loadPlate()';
+
 		if (c.debug.sequentialEvents)
-			console.log('loadPlate', plateId, quoteVariant, mainText, wittyText);
+			console.log(
+				functionSignature,
+				plateId,
+				quoteVariant,
+				mainText,
+				wittyText
+			);
 		let atlText = '';
 		let btlText = '';
 
@@ -189,6 +203,8 @@ const plates = {
 	},
 
 	fadeInPlate(steps = 25, delayMS = 0) {
+		const functionSignature = 'plates.js@fadeInPlate()';
+
 		// console.log('fadeInPlate', steps);
 
 		document
@@ -198,7 +214,7 @@ const plates = {
 		const opacityFraction = 1 / steps;
 
 		plates.scheduledEvents.fadeInPlate = timing.setTrigger(
-			'fadeInPlate',
+			functionSignature,
 			() => {
 				const currentOpacity = Number(
 					document.getElementById('game__plates_plate').style.opacity
@@ -218,12 +234,14 @@ const plates = {
 	},
 
 	fadeOutPlate(steps = 25, delayMS = 0) {
+		const functionSignature = 'plates.js@fadeOutPlate()';
+
 		// console.log('fadeOutPlate', steps);
 
 		const opacityFraction = 1 / steps;
 
 		plates.scheduledEvents.fadeOutPlate = timing.setTrigger(
-			'fadeInPlate',
+			functionSignature,
 			() => {
 				const currentOpacity = Number(
 					document.getElementById('game__plates_plate').style.opacity
@@ -249,6 +267,8 @@ const plates = {
 	},
 
 	clearAll() {
+		const functionSignature = 'plates.js@clearAll()';
+
 		// for (const scheduledEventId in plates.scheduledEvents) {
 		// 	if (plates.scheduledEvents[scheduledEventId] !== null)
 		// 		plates.scheduledEvents[scheduledEventId].clear();
@@ -266,7 +286,7 @@ const plates = {
 		plates.handlers.matteIsBeingUsedByPlates.actual = true;
 		if (c.debug.sequentialEvents)
 			console.log(
-				'plates.js@clearAll()',
+				functionSignature,
 				plates.scheduledEvents,
 				plates.handlers.Matte.alpha
 			);
