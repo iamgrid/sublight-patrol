@@ -203,20 +203,27 @@ input[type='range']::-ms-thumb {
 	margin-right: 72px;
 	display: flex;
 	align-items: center;
+	opacity: 0;
+	transition: opacity 0.3s;
 }
 
 .header__volume_control_button {
 	background: transparent;
 	border: 0;
-	font-size: 22px;
 	cursor: pointer;
-	margin-right: 0px;
-	transform: translateY(-1px);
-	width: 32px;
-	text-align: left;
 	padding-left: 0;
-	color: transparent;
-	text-shadow: 0 0 0 #606060;
+}
+
+.header__volume_control_button__icon {
+	transform: translateY(1px);
+}
+
+#header__volume_control_button__icon--muted {
+	display: none;
+}
+
+.header__volume_control_button svg {
+	display: block;
 }
 
 .header__volume_control_button:hover {

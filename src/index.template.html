@@ -13,13 +13,44 @@
 		<div class="container">
 			<header class="header">
 				<h1 class="header__title" id="header__title">sublight patrol</h1>
-				<div class="header__volume_control">
+				<div class="header__volume_control" id="header__volume_control">
 					<button
 						id="header__volume_control_button"
 						class="header__volume_control_button"
 						alt="mute/unmute"
 					>
-						🔊
+						<div
+							id="header__volume_control_button__icon--unmuted"
+							class="header__volume_control_button__icon"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								height="24px"
+								viewBox="0 -960 960 960"
+								width="24px"
+								fill="#606060"
+							>
+								<path
+									d="M560-131v-82q90-26 145-100t55-168q0-94-55-168T560-749v-82q124 28 202 125.5T840-481q0 127-78 224.5T560-131ZM120-360v-240h160l200-200v640L280-360H120Zm440 40v-322q47 22 73.5 66t26.5 96q0 51-26.5 94.5T560-320Z"
+								/>
+							</svg>
+						</div>
+						<div
+							id="header__volume_control_button__icon--muted"
+							class="header__volume_control_button__icon"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								height="24px"
+								viewBox="0 -960 960 960"
+								width="24px"
+								fill="#606060"
+							>
+								<path
+									d="m616-320-56-56 104-104-104-104 56-56 104 104 104-104 56 56-104 104 104 104-56 56-104-104-104 104Zm-496-40v-240h160l200-200v640L280-360H120Z"
+								/>
+							</svg>
+						</div>
 					</button>
 					<input
 						id="header__volume_control_input"

@@ -4,13 +4,21 @@ const audio = {
 	muted: false,
 	prevVolume: 0.4,
 	domNodes: {
+		audioControls: document.getElementById('header__volume_control'),
 		slider: document.getElementById('header__volume_control_input'),
 		muter: document.getElementById('header__volume_control_button'),
+		muterIconUnmuted: document.getElementById(
+			'header__volume_control_button__icon--unmuted'
+		),
+		muterIconMuted: document.getElementById(
+			'header__volume_control_button__icon--muted'
+		),
 	},
-	unmutedEmoji: '&#x1F50A;',
-	mutedEmoji: '&#x1F508;',
 
 	init() {
+		const functionSignature = 'audio.js@init()';
+		console.log(functionSignature);
+		audio.domNodes.audioControls.style.opacity = 1;
 		audio.domNodes.slider.oninput = audio.setVolume;
 		audio.domNodes.slider.onchange = audio.setVolume;
 		audio.domNodes.muter.onclick = audio.setVolume;
@@ -20,9 +28,13 @@ const audio = {
 	},
 
 	setVolume(event) {
+		const functionSignature = 'audio.js@setVolume()';
+
 		let mode = 'adjust';
-		if (event.target.id === 'header__volume_control_button')
+		if (event.currentTarget.id === 'header__volume_control_button') {
 			mode = 'mute-unmute';
+			console.log(functionSignature, 'mute-unmute mode');
+		}
 
 		let setTo = 1;
 		if (mode === 'adjust') {
@@ -56,15 +68,11 @@ const audio = {
 
 	switchMuterIcon(mode = true) {
 		if (mode) {
-			audio.domNodes.muter.innerHTML = audio.unmutedEmoji;
-			audio.domNodes.muter.classList.remove(
-				'header__volume_control_button--muted'
-			);
+			audio.domNodes.muterIconMuted.style.display = 'none';
+			audio.domNodes.muterIconUnmuted.style.display = 'block';
 		} else {
-			audio.domNodes.muter.innerHTML = audio.mutedEmoji;
-			audio.domNodes.muter.classList.add(
-				'header__volume_control_button--muted'
-			);
+			audio.domNodes.muterIconMuted.style.display = 'block';
+			audio.domNodes.muterIconUnmuted.style.display = 'none';
 		}
 	},
 };
