@@ -1164,7 +1164,7 @@ export function readPlayerProgress() {
 
 		if (
 			typeof parsedPlayerProgress.playerShips.current !== 'string' ||
-			!c.playableFighterTypeIds.includes(
+			!Object.keys(c.playableFighterTypeIds).includes(
 				parsedPlayerProgress.playerShips.current
 			)
 		) {
@@ -1184,7 +1184,7 @@ export function readPlayerProgress() {
 		for (const ship of parsedPlayerProgress.playerShips.hangarContents) {
 			if (
 				typeof ship !== 'string' ||
-				!c.playableFighterTypeIds.includes(ship)
+				!Object.keys(c.playableFighterTypeIds).includes(ship)
 			) {
 				console.error(
 					`${functionSignature} - playerShips.hangarContents contains an invalid fighter type ID: ${ship}`
