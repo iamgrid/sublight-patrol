@@ -1,3 +1,5 @@
+import c from './utils/constants.js';
+
 const initialGameState = {
 	game: {
 		currentScene: null,
@@ -5,12 +7,12 @@ const initialGameState = {
 		targetHasBeenScanned: false,
 		playerShips: {
 			hangarBerths: 5,
-			current: 'fenrir',
+			current: c.playableFighterTypeIds.fenrir,
 			currentIdSuffix: 'a',
 			hangarContents: [
-				'fenrir_dominator',
-				'valkyrie',
-				'zangari_fighter_type_4',
+				c.playableFighterTypeIds.fenrir_dominator,
+				c.playableFighterTypeIds.valkyrie,
+				c.playableFighterTypeIds.zangari_fighter_type_4,
 			],
 			lostOnThisMission: [],
 		},

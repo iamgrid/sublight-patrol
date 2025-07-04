@@ -1,5 +1,5 @@
 import c from '../utils/constants';
-// import sc from './storyConstants';
+import storyConstants from './storyConstants';
 import intro from './scenes/intro';
 import mainMenu from './scenes/mainMenu';
 import scene001 from './scenes/scene001';
@@ -23,7 +23,6 @@ import {
 import formations from '../behavior/formations';
 import shots from '../shots';
 import gameMenus from '../gameMenus';
-import initialGameState from '../initialGameState';
 import controlSchemes from '../controlSchemes';
 
 const story = {
@@ -39,7 +38,7 @@ const story = {
 	}, // gets its values in App.js
 	sceneList: [
 		{
-			id: 'intro',
+			id: storyConstants.scenes.intro,
 			sceneObject: intro,
 			hasTitlePlate: false,
 			hasEntities: false,
@@ -47,7 +46,7 @@ const story = {
 			showStatusBar: false,
 		},
 		{
-			id: 'mainMenu',
+			id: storyConstants.scenes.mainMenu,
 			sceneObject: mainMenu,
 			hasTitlePlate: false,
 			hasEntities: false,
@@ -55,7 +54,7 @@ const story = {
 			showStatusBar: false,
 		},
 		{
-			id: '001',
+			id: storyConstants.scenes['001'],
 			sceneObject: scene001,
 			hasTitlePlate: true,
 			hasEntities: true,
@@ -63,7 +62,7 @@ const story = {
 			showStatusBar: true,
 		},
 		{
-			id: '002',
+			id: storyConstants.scenes['002'],
 			sceneObject: scene002,
 			hasTitlePlate: true,
 			hasEntities: true,
@@ -166,6 +165,7 @@ const story = {
 					);
 					currentState.game.playerHasCompletedTheGame = true;
 					storePlayerProgress(
+						`${functionSignature} - end of game`,
 						story.handlers.state,
 						currentState.game.currentScene
 					);
@@ -192,9 +192,10 @@ const story = {
 			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
 			story.missionFailureWasTriggered = false;
 
-			if (currentSceneListObject.id !== 'mainMenu') {
+			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
 				const localStoragePlayerProgress = readPlayerProgress();
-				if (currentSceneListObject.id === 'intro') {
+				if (currentSceneListObject.id === storyConstants.scenes.intro) {
+					// intro scene
 					if (localStoragePlayerProgress === null) {
 						// this player is a first time visitor
 						if (c.debug.localStorage)
@@ -202,8 +203,9 @@ const story = {
 								'no localStorage string found, populating with the defaults from initialGameState.js'
 							);
 						storePlayerProgress(
+							`${functionSignature} - intro scene, first time visitor`,
 							story.handlers.state,
-							currentSceneListObject.id
+							storyConstants.scenes.intro
 						);
 					} else {
 						if (c.debug.localStorage)
@@ -217,6 +219,7 @@ const story = {
 						});
 					}
 				} else {
+					// gameplay scenes
 					const playersBestSceneId = localStoragePlayerProgress.bestSceneId;
 					const playersBestSceneIndex = story.sceneList.findIndex(
 						(sc) => sc.id === playersBestSceneId
@@ -226,10 +229,15 @@ const story = {
 					);
 
 					let writeBestSceneId = playersBestSceneId;
-					if (currentSceneIndex > playersBestSceneIndex)
+					if (currentSceneIndex > playersBestSceneIndex) {
 						writeBestSceneId = currentSceneListObject.id;
+					}
 
-					storePlayerProgress(story.handlers.state, writeBestSceneId);
+					storePlayerProgress(
+						`${functionSignature} - gameplay scene`,
+						story.handlers.state,
+						writeBestSceneId
+					);
 				}
 			}
 		}
@@ -459,9 +467,8 @@ const story = {
 
 		function newGameProper() {
 			const functionSignature = 'story.js@newGameProper()';
-			const initialGameStateCopy = JSON.parse(JSON.stringify(initialGameState));
 
-			console.log(functionSignature, { initialGameStateCopy });
+			console.log(functionSignature);
 
 			story.handlers.dispatch({
 				type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
@@ -472,8 +479,9 @@ const story = {
 			story.removeMainMenuTopPortion();
 
 			storePlayerProgress(
+				`${functionSignature}`,
 				story.handlers.state,
-				initialGameStateCopy.game.currentScene
+				storyConstants.scenes['001']
 			);
 
 			story.advance();

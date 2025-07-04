@@ -4,6 +4,7 @@ import { fadeHexColor, easing, decreaseNumberBy } from './formulas';
 import timing from './timing';
 import entities from '../entities/entities';
 import soundEffects from '../audio/soundEffects';
+import storyConstants from '../story/storyConstants';
 
 export function isEmptyObject(obj) {
 	return Object.keys(obj).length < 1;
@@ -1034,8 +1035,20 @@ export const status = {
 	},
 };
 
-export function storePlayerProgress(state, bestSceneId) {
+export function storePlayerProgress(calledBy, state, bestSceneId) {
 	const functionSignature = 'helpers.js@storePlayerProgress()';
+
+	if (c.debug.localStorage) console.log(functionSignature, { calledBy });
+
+	if (bestSceneId === null) {
+		console.warn(
+			functionSignature,
+			{ calledBy },
+			`bestSceneId is null, returning early.`
+		);
+		return;
+	}
+
 	const currentState = state();
 	const statePlayerShips = currentState.game.playerShips;
 	const playerProgress = {
@@ -1051,9 +1064,14 @@ export function storePlayerProgress(state, bestSceneId) {
 	};
 	const playerProgressStr = JSON.stringify(playerProgress);
 	localStorage.setItem('sublightPatrol', playerProgressStr);
-	if (c.debug.localStorage) console.log(functionSignature, playerProgress);
+	if (c.debug.localStorage)
+		console.log(functionSignature, { calledBy, playerProgress });
 }
 
+/**
+ *
+ * @returns {Object|null} Returns the player progress from localStorage as an object, or null if no value was found or the found object is invalid.
+ */
 export function readPlayerProgress() {
 	const functionSignature = 'helpers.js@readPlayerProgress()';
 	if (c.debug.localStorage) console.log(functionSignature);
@@ -1061,7 +1079,122 @@ export function readPlayerProgress() {
 	if (playerProgressStr === null) {
 		return null;
 	} else {
-		return JSON.parse(playerProgressStr);
+		let parsedPlayerProgress = null;
+
+		try {
+			parsedPlayerProgress = JSON.parse(playerProgressStr);
+		} catch (e) {
+			console.error(`${functionSignature} - Error parsing player progress:`, e);
+			return null;
+		}
+
+		// Validate the parsed data
+		if (!(parsedPlayerProgress instanceof Object)) {
+			console.error(
+				`${functionSignature} - Parsed player progress is not an object.`
+			);
+			return null;
+		}
+
+		if (
+			!('bestSceneId' in parsedPlayerProgress) ||
+			!('playerShips' in parsedPlayerProgress) ||
+			!('dataTS' in parsedPlayerProgress) ||
+			!('playerHasCompletedTheGame' in parsedPlayerProgress)
+		) {
+			console.error(
+				`${functionSignature} - Parsed player progress does not contain the required keys.`
+			);
+			return null;
+		}
+
+		if (typeof parsedPlayerProgress.playerHasCompletedTheGame !== 'boolean') {
+			console.error(
+				`${functionSignature} - playerHasCompletedTheGame is not a boolean.`
+			);
+			return null;
+		}
+
+		if (typeof parsedPlayerProgress.dataTS !== 'number') {
+			console.error(`${functionSignature} - dataTS is not a number.`);
+			return null;
+		}
+
+		if (typeof parsedPlayerProgress.bestSceneId !== 'string') {
+			console.error(`${functionSignature} - bestSceneId is not a string.`);
+			return null;
+		}
+
+		let bestSceneIsValid = false;
+		for (const scene in storyConstants.scenes) {
+			if (scene === parsedPlayerProgress.bestSceneId) {
+				bestSceneIsValid = true;
+				break;
+			}
+		}
+
+		if (!bestSceneIsValid) {
+			console.error(
+				`${functionSignature} - bestSceneId is not a valid scene ID.`
+			);
+			return null;
+		}
+
+		if (!(parsedPlayerProgress.playerShips instanceof Object)) {
+			console.error(`${functionSignature} - playerShips is not an object.`);
+			return null;
+		}
+
+		if (typeof parsedPlayerProgress.playerShips.hangarBerths !== 'number') {
+			console.error(
+				`${functionSignature} - playerShips.hangarBerths is not a number.`
+			);
+			return null;
+		}
+
+		if (
+			typeof parsedPlayerProgress.playerShips.currentIdSuffix !== 'string' ||
+			parsedPlayerProgress.playerShips.currentIdSuffix.length !== 1
+		) {
+			console.error(
+				`${functionSignature} - playerShips.currentIdSuffix is not a valid string.`
+			);
+			return null;
+		}
+
+		if (
+			typeof parsedPlayerProgress.playerShips.current !== 'string' ||
+			!c.playableFighterTypeIds.includes(
+				parsedPlayerProgress.playerShips.current
+			)
+		) {
+			console.error(
+				`${functionSignature} - playerShips.current is not a valid fighter type ID.`
+			);
+			return null;
+		}
+
+		if (!Array.isArray(parsedPlayerProgress.playerShips.hangarContents)) {
+			console.error(
+				`${functionSignature} - playerShips.hangarContents is not an array.`
+			);
+			return null;
+		}
+
+		for (const ship of parsedPlayerProgress.playerShips.hangarContents) {
+			if (
+				typeof ship !== 'string' ||
+				!c.playableFighterTypeIds.includes(ship)
+			) {
+				console.error(
+					`${functionSignature} - playerShips.hangarContents contains an invalid fighter type ID: ${ship}`
+				);
+				return null;
+			}
+		}
+
+		// Parsed data is valid
+		return parsedPlayerProgress;
 	}
 }
 

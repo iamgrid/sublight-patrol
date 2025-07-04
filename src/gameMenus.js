@@ -303,7 +303,17 @@ const gameMenus = {
 	},
 
 	showReplaySceneButtonSet(sceneList) {
+		const functionSignature = 'gameMenus.js@showReplaySceneButtonSet()';
 		const localStoragePlayerProgress = readPlayerProgress();
+
+		if (localStoragePlayerProgress === null) {
+			console.error(
+				functionSignature,
+				'No player progress found in localStorage'
+			);
+			return;
+		}
+
 		const bestSceneId = localStoragePlayerProgress.bestSceneId;
 		const bestSceneIndex = sceneList.findIndex((sc) => sc.id === bestSceneId);
 		gameMenus.currentFocus = bestSceneId;

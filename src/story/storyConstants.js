@@ -1,4 +1,4 @@
-const sc = {
+const storyConstants = {
 	characters: {
 		player: {
 			firstName: 'Marshal',
@@ -6,6 +6,7 @@ const sc = {
 			title: '',
 		},
 	},
+	scenes: { intro: 'intro', mainMenu: 'mainMenu', '001': '001', '002': '002' },
 };
 
-export default sc;
+export default storyConstants;

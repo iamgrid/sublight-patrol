@@ -324,6 +324,10 @@ const entities = {
 	playerShipDestruction() {
 		let currentState = entities.handlers.state();
 		const shipsInHangar = currentState.game.playerShips.hangarContents.length;
+
+		// when playerShipDestruction runs, the mainReducer REMOVE_ENTITY action has already
+		// taken care of updating the players hangar and assigning the next fighter to the player
+		// if one was available
 		const nextShip = currentState.game.playerShips.current;
 		const nextSuffix = currentState.game.playerShips.currentIdSuffix;
 

@@ -167,6 +167,12 @@ const c = {
 		centeredEntity: 'centeredEntity',
 		stationary: 'stationary',
 	},
+	playableFighterTypeIds: {
+		fenrir: 'fenrir',
+		fenrir_dominator: 'fenrir_dominator',
+		valkyrie: 'valkyrie',
+		zangari_fighter_type_4: 'zangari_fighter_type_4',
+	},
 
 	init() {
 		for (let key in this.alertsAndWarnings.warnings) {
