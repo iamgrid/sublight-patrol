@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const path = require('path');
 const { merge } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -13,7 +14,7 @@ module.exports = merge(common, {
 	output: {
 		filename: '[name]-[contenthash].bundle.js',
 		chunkFilename: '[name]-[contenthash].chunk.js',
-		path: path.resolve(__dirname, 'build'),
+		path: path.resolve(__dirname, 'dist'),
 	},
 	mode: 'production',
 });
