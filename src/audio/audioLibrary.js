@@ -2,7 +2,7 @@ const audioLibrary = {
 	// prettier-ignore
 	manifest: {
 		music: {
-			'sublight_patrol_theme': 'sublight-patrol-theme.mp3'
+			'sublight_patrol_theme': 'i_am_grid_-_sublight-patrol-theme-2025-3a.mp3'
 		},
 		soundEffects: {
 			'laser_type1_1': 'laser_type1_1.mp3',

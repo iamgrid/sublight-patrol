@@ -266,11 +266,14 @@
 }
 
 .game__main_menu_logo {
-	width: 478px;
-	height: 132px;
-	background: url('assets/logo_main_menu.png');
-	margin-top: 82px;
+	width: 365px;
+	height: 175px;
+	margin-top: 75px;
 	opacity: 0;
+}
+
+.game__main_menu_logo svg {
+	display: block;
 }
 
 .game__main_menu--shown .game__main_menu_logo {
@@ -284,9 +287,9 @@
 }
 
 .game__main_menu_version {
-	margin-top: 50px;
+	margin-top: 26px;
 	font-size: 12px;
-	color: #ffffff30;
+	color: #ffffff50;
 	opacity: 0;
 }
 
