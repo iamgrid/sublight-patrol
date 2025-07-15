@@ -55,6 +55,7 @@ body {
 
 input[type='range'] {
 	-webkit-appearance: none;
+	appearance: none;
 	margin: 6px 0;
 	/* width: 100%; */
 	background: transparent;
@@ -242,37 +243,42 @@ input[type='range']::-ms-thumb {
 	width: 104px;
 }
 
-.controls {
+.footer__controls {
 	width: 100%;
 	padding: 0.5em 0 0.7em 0;
 	margin-bottom: 0.5em;
 	text-align: center;
 	border-bottom: 1px dotted #ffffff20;
 	color: #ffffff30;
+	display: block;
 }
 
-.controls__control {
+.footer__controls--no-bottom-border {
+	border-bottom: 0;
+}
+
+.footer__controls__control {
 	display: inline-block;
 	margin: 0 1em;
 	font-size: 0.7em;
 	line-height: 1em;
 }
 
-.controls__key {
+.footer__controls__key {
 	color: #ffffff90;
 	text-transform: uppercase;
 }
 
-.controls__function {
+.footer__controls__function {
 	padding-left: 0.3em;
 	color: #ffffff60;
 }
 
-.controls__key:before {
+.footer__controls__key:before {
 	content: '[';
 }
 
-.controls__key:after {
+.footer__controls__key:after {
 	content: ']';
 }
 
@@ -386,7 +392,7 @@ footer {
 	cursor: pointer;
 	display: grid;
 	grid-template-rows: auto auto;
-	width: 20em;
+	width: 35em;
 	margin: 0 auto;
 	justify-items: center;
 	padding-top: 0.1em;
@@ -398,7 +404,7 @@ footer {
 
 .toggle-footer__text {
 	display: block;
-	width: 20em;
+	width: 35em;
 	height: 1em;
 	text-align: center;
 	margin: 0.5em 0;

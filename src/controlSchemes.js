@@ -24,13 +24,13 @@ const controlSchemes = {
 			const re = [];
 
 			currentDescriptions.forEach((desc) => {
-				re.push(`<div class="controls__control">
-					<span class="controls__key">${desc.keys}</span
-					><span class="controls__function">${desc.function}</span>
+				re.push(`<div class="footer__controls__control">
+					<span class="footer__controls__key">${desc.keys}</span
+					><span class="footer__controls__function">${desc.function}</span>
 				</div>`);
 			});
 
-			document.getElementById('controls').innerHTML = re.join('\n');
+			document.getElementById('footer__controls').innerHTML = re.join('\n');
 
 			controlSchemes.currentlyShowingLayout = layout;
 		}

@@ -144,8 +144,8 @@ export default class App extends PIXI.Application {
 		document
 			.getElementById('game__loading_done')
 			.classList.add('game__loading_done--shown');
-		document.getElementById('controls').innerHTML =
-			'<div class="controls__control"><span class="controls__key">enter</span><span class="controls__function">Launch the game</span></div>';
+		document.getElementById('footer__controls').innerHTML =
+			'<div class="footer__controls__control"><span class="footer__controls__key">enter</span><span class="footer__controls__function">Launch the game</span></div>';
 		this.gameLaunched = false;
 
 		const launchFn = (event) => {
