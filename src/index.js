@@ -14,7 +14,7 @@ const footerStates = {
 let footerState = footerStates.all_visible;
 
 function toggleFooter() {
-	const controlsDiv = document.getElementById('footer');
+	const controlsDiv = document.getElementById('footer__controls');
 	const footerBottomDiv = document.getElementById('footer__bottom');
 	const toggler_chevron = document.getElementById('toggle-footer__chevron');
 	const toggler_text = document.getElementById('toggle-footer__text');
@@ -31,19 +31,19 @@ function toggleFooter() {
 	if (newState === footerStates.footer_hidden) {
 		footerBottomDiv.style.display = 'none';
 		controlsDiv.style.display = 'block';
-		controlsDiv.classList.add('footer__controls--no-bottom-border');
+		controlsDiv.classList.add('footer__controls--bottom-footer-hidden');
 		toggler_text.innerHTML = 'Hide Keyboard Mapping';
 		toggler_chevron.style.transform = 'rotate(0deg)';
 	} else if (newState === footerStates.all_hidden) {
 		footerBottomDiv.style.display = 'none';
 		controlsDiv.style.display = 'none';
-		controlsDiv.classList.remove('footer__controls--no-bottom-border');
+		controlsDiv.classList.remove('footer__controls--bottom-footer-hidden');
 		toggler_text.innerHTML = 'Show Footer & Keyboard Mapping';
 		toggler_chevron.style.transform = 'rotate(180deg)';
 	} else if (newState === footerStates.all_visible) {
 		footerBottomDiv.style.display = 'flex';
 		controlsDiv.style.display = 'block';
-		controlsDiv.classList.remove('footer__controls--no-bottom-border');
+		controlsDiv.classList.remove('footer__controls--bottom-footer-hidden');
 		toggler_text.innerHTML = 'Hide Footer';
 		toggler_chevron.style.transform = 'rotate(0deg)';
 	}

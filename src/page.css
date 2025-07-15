@@ -253,8 +253,9 @@ input[type='range']::-ms-thumb {
 	display: block;
 }
 
-.footer__controls--no-bottom-border {
+.footer__controls--bottom-footer-hidden {
 	border-bottom: 0;
+	margin-bottom: 0;
 }
 
 .footer__controls__control {
