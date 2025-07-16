@@ -347,7 +347,7 @@ export default class App extends PIXI.Application {
 
 		const skipToMainMenu = () => {
 			timing.clearAllScheduledEvents();
-			music.stopPlaying();
+			// music.stopPlaying();
 			// music.playTrack(
 			// 	audioLibrary.library.music.sublight_patrol_theme.id,
 			// 	25.0395

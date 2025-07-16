@@ -4,20 +4,10 @@ const music = {
 	handlers: { resources: null, PIXI_sound: null }, // gets its values in App.js
 	manifest: audioLibrary.manifest.music,
 	library: audioLibrary.library.music,
-	themeIsPlaying: false,
 	playingTrack: null,
 
 	playTrack(libraryItemId, startAt = 0) {
 		if (music.handlers.resources === null) return;
-
-		if (libraryItemId === audioLibrary.library.music.sublight_patrol_theme.id) {
-			if (music.themeIsPlaying) {
-				console.log('@playTrack(): theme is already playing');
-				return;
-			} else {
-				music.themeIsPlaying = true;
-			}
-		}
 
 		if (music.playingTrack !== null) {
 			console.log(
@@ -33,6 +23,12 @@ const music = {
 			singleInstance: false,
 			volume: 0.5,
 			start: startAt,
+			complete: () => {
+				console.log(
+					'music@playTrack() -> sound.play() -> complete(): track playback completed'
+				);
+				music.playingTrack = null;
+			},
 		});
 	},
 
@@ -42,7 +38,6 @@ const music = {
 
 		music.handlers.resources[music.playingTrack].sound.stop();
 		music.playingTrack = null;
-		music.themeIsPlaying = false;
 	},
 };
 

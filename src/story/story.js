@@ -24,6 +24,7 @@ import formations from '../behavior/formations';
 import shots from '../shots';
 import gameMenus from '../gameMenus';
 import controlSchemes from '../controlSchemes';
+import audioLibrary from '../audio/audioLibrary';
 
 const story = {
 	handlers: {
@@ -36,6 +37,7 @@ const story = {
 		hudShouldBeShowing: null,
 		activeKeyboardLayout: null,
 	}, // gets its values in App.js
+	themeMusicInterval: null,
 	sceneList: [
 		{
 			id: storyConstants.scenes.intro,
@@ -315,6 +317,23 @@ const story = {
 			currentSceneBeatObj.keyboardLayout;
 		story.handlers.activeKeyboardLayout.currentStoryBeatLayout =
 			currentSceneBeatObj.keyboardLayout;
+
+		if (currentSceneListObject.id === storyConstants.scenes.mainMenu) {
+			setTimeout(() => {
+				if (
+					story.currentScene === storyConstants.scenes.mainMenu &&
+					music.playingTrack === null
+				) {
+					console.log(
+						'story.js@advance timeout fn() -> mainMenu scene, playing theme music'
+					);
+					music.playTrack(audioLibrary.library.music.sublight_patrol_theme.id);
+				}
+			}, 5000);
+			story.registerThemeMusicInterval();
+		} else {
+			story.clearThemeMusicInterval();
+		}
 
 		// scene object execution
 		currentSceneBeatObj.execute({ playerId, playerShipType, hurryUp });
@@ -1025,6 +1044,36 @@ const story = {
 		shields.cleanUp();
 		formations.cleanUp();
 		hud.cleanUp();
+	},
+
+	registerThemeMusicInterval() {
+		if (c.debug.sequentialEvents)
+			console.log('story.js@registerThemeMusicInterval() called');
+		if (story.themeMusicInterval !== null) {
+			clearInterval(story.themeMusicInterval);
+		}
+		story.themeMusicInterval = setInterval(() => {
+			const functionSignature =
+				'story.js@registerThemeMusicInterval() - intervalFn()';
+			if (c.debug.sequentialEvents)
+				if (music.playingTrack !== null) {
+					console.log(
+						functionSignature,
+						'music.playingTrack is not null, returning'
+					);
+				} else {
+					console.log(functionSignature, 'playing theme music');
+					music.playTrack(audioLibrary.library.music.sublight_patrol_theme.id);
+				}
+		}, c.repeatMainMenuMusicEveryXSecs * 1000);
+	},
+
+	clearThemeMusicInterval() {
+		if (c.debug.sequentialEvents)
+			console.log('story.js@clearThemeMusicInterval() called');
+
+		clearInterval(story.themeMusicInterval);
+		story.themeMusicInterval = null;
 	},
 };
 

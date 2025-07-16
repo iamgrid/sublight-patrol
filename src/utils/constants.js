@@ -34,6 +34,7 @@ const c = {
 			'UPDATE_PLAYER_PROGRESS_BASED_ON_LOCAL_STORAGE',
 		REVERT_PLAYER_PROGRESS_TO_DEFAULTS: 'REVERT_PLAYER_PROGRESS_TO_DEFAULTS',
 	},
+	repeatMainMenuMusicEveryXSecs: 150,
 	gameCanvas: {
 		width: 1200,
 		height: 450,
