@@ -1,5 +1,6 @@
 const c = {
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
+	latestLocalStorageVersionDate: '16 Jul 2025 16:40:00 GMT',
 	debug: {
 		reducers: false,
 		behavior: true,

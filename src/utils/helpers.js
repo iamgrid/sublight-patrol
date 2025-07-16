@@ -1072,7 +1072,7 @@ export function storePlayerProgress(calledBy, state, bestSceneId) {
  *
  * @returns {Object|null} Returns the player progress from localStorage as an object, or null if no value was found or the found object is invalid.
  */
-export function readPlayerProgress() {
+export function readPlayerProgress(validate = false) {
 	const functionSignature = 'helpers.js@readPlayerProgress()';
 	if (c.debug.localStorage) console.log(functionSignature);
 	const playerProgressStr = localStorage.getItem('sublightPatrol');
@@ -1089,11 +1089,17 @@ export function readPlayerProgress() {
 		}
 
 		// Validate the parsed data
+
+		let playerProgressIsValid = true;
 		if (!(parsedPlayerProgress instanceof Object)) {
 			console.error(
 				`${functionSignature} - Parsed player progress is not an object.`
 			);
-			return null;
+			playerProgressIsValid = false;
+		}
+
+		if (!validate && playerProgressIsValid) {
+			return parsedPlayerProgress;
 		}
 
 		if (
@@ -1105,24 +1111,43 @@ export function readPlayerProgress() {
 			console.error(
 				`${functionSignature} - Parsed player progress does not contain the required keys.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (typeof parsedPlayerProgress.playerHasCompletedTheGame !== 'boolean') {
 			console.error(
 				`${functionSignature} - playerHasCompletedTheGame is not a boolean.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (typeof parsedPlayerProgress.dataTS !== 'number') {
 			console.error(`${functionSignature} - dataTS is not a number.`);
-			return null;
+			playerProgressIsValid = false;
+		}
+
+		const latestLocalStorageVersionDateObj = new Date(
+			c.latestLocalStorageVersionDate
+		);
+		const dataTSDateObj = new Date(parsedPlayerProgress.dataTS);
+		console.log(
+			functionSignature,
+			'dataTS value:',
+			dataTSDateObj.toUTCString(),
+			'latestLocalStorageVersionDate:',
+			latestLocalStorageVersionDateObj.toUTCString()
+		);
+
+		if (dataTSDateObj < latestLocalStorageVersionDateObj) {
+			console.error(
+				`${functionSignature} - dataTS is older than the latest local storage version date.`
+			);
+			playerProgressIsValid = false;
 		}
 
 		if (typeof parsedPlayerProgress.bestSceneId !== 'string') {
 			console.error(`${functionSignature} - bestSceneId is not a string.`);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		let bestSceneIsValid = false;
@@ -1137,19 +1162,19 @@ export function readPlayerProgress() {
 			console.error(
 				`${functionSignature} - bestSceneId is not a valid scene ID.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (!(parsedPlayerProgress.playerShips instanceof Object)) {
 			console.error(`${functionSignature} - playerShips is not an object.`);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (typeof parsedPlayerProgress.playerShips.hangarBerths !== 'number') {
 			console.error(
 				`${functionSignature} - playerShips.hangarBerths is not a number.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (
@@ -1159,7 +1184,7 @@ export function readPlayerProgress() {
 			console.error(
 				`${functionSignature} - playerShips.currentIdSuffix is not a valid string.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (
@@ -1171,14 +1196,14 @@ export function readPlayerProgress() {
 			console.error(
 				`${functionSignature} - playerShips.current is not a valid fighter type ID.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		if (!Array.isArray(parsedPlayerProgress.playerShips.hangarContents)) {
 			console.error(
 				`${functionSignature} - playerShips.hangarContents is not an array.`
 			);
-			return null;
+			playerProgressIsValid = false;
 		}
 
 		for (const ship of parsedPlayerProgress.playerShips.hangarContents) {
@@ -1189,12 +1214,23 @@ export function readPlayerProgress() {
 				console.error(
 					`${functionSignature} - playerShips.hangarContents contains an invalid fighter type ID: ${ship}`
 				);
-				return null;
+				playerProgressIsValid = false;
 			}
 		}
 
-		// Parsed data is valid
-		return parsedPlayerProgress;
+		if (!playerProgressIsValid) {
+			console.error(
+				`${functionSignature} - Local storage player progress is invalid our out of date, alerting player and returning null.`
+			);
+
+			alert(
+				"According to your browser's storage, you have played Sublight Patrol before, but your progress can not be taken into account as it happened in an outdated version of the game. I apologize for making you start over!"
+			);
+
+			return null;
+		} else {
+			return parsedPlayerProgress;
+		}
 	}
 }
 

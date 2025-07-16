@@ -195,14 +195,14 @@ const story = {
 			story.missionFailureWasTriggered = false;
 
 			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
-				const localStoragePlayerProgress = readPlayerProgress();
+				const localStoragePlayerProgress = readPlayerProgress(true);
 				if (currentSceneListObject.id === storyConstants.scenes.intro) {
 					// intro scene
 					if (localStoragePlayerProgress === null) {
 						// this player is a first time visitor
 						if (c.debug.localStorage)
 							console.log(
-								'no localStorage string found, populating with the defaults from initialGameState.js'
+								'localStorage value is either missing or invalid, populating with the defaults from initialGameState.js'
 							);
 						storePlayerProgress(
 							`${functionSignature} - intro scene, first time visitor`,
