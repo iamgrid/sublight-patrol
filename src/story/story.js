@@ -16,9 +16,10 @@ import {
 	makeName,
 	storePlayerProgress,
 	readPlayerProgress,
-	hasThePlayerMadeProgress,
+	getHasThePlayerMadeProgress,
 	alertsAndWarnings,
 	dialog,
+	getHasThePlayerCompletedTheGame,
 } from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
@@ -84,7 +85,9 @@ const story = {
 	},
 	currentStoryEntities: {},
 	noProgressYetMessage:
-		"According to your browser's storage, you haven't made any progress in this game yet, please choose 'New game' instead!",
+		"According to your browser's storage, you haven't made any progress in this game yet, please choose 'New game' instead.",
+	playerAlreadyCompletedGameMessage:
+		"You have already completed the game, please choose 'New game' to start over or 'Replay Scene' to replay a particular level.",
 
 	assertClassification(entityId) {
 		const storyEntity = story.currentStoryEntities[entityId];
@@ -142,9 +145,9 @@ const story = {
 					// more scenes exist
 					story.currentScene = story.sceneList[index].id;
 				} else {
-					// no more scenes, end of the game
+					// no more scenes, player has completed all levels of the game
 					if (c.debug.sequentialEvents)
-						console.log('THIS IS THE END OF THE GAME');
+						console.log('PLAYER HAS COMPLETED ALL LEVELS OF THE GAME');
 					plates.fullMatte();
 					plates.loadPlate('the_end');
 					plates.fadeInPlate(25);
@@ -165,12 +168,19 @@ const story = {
 						timing.modes.play,
 						8200
 					);
-					currentState.game.playerHasCompletedTheGame = true;
-					storePlayerProgress(
-						`${functionSignature} - end of game`,
-						story.handlers.state,
-						currentState.game.currentScene
-					);
+					story.handlers.dispatch({
+						type: c.actions.GAME_COMPLETED,
+						callbackFn: () => {
+							const functionSignature =
+								'story.js@advance() -> GAME_COMPLETED callbackFn()';
+							console.log(functionSignature);
+							storePlayerProgress(
+								`${functionSignature} - player has completed all levels of the game`,
+								story.handlers.state,
+								currentState.game.currentScene
+							);
+						},
+					});
 
 					return;
 				}
@@ -246,9 +256,25 @@ const story = {
 
 		let currentStateScene = currentState.game.currentScene;
 		if (currentStateScene !== story.currentScene) {
+			let newCurrentScenePlayerStartingPositionX = null;
+			let newCurrentScenePlayerStartingPositionY = null;
+
+			if (
+				'playerStartingPosition' in currentSceneObject &&
+				'posX' in currentSceneObject.playerStartingPosition &&
+				'posY' in currentSceneObject.playerStartingPosition
+			) {
+				newCurrentScenePlayerStartingPositionX =
+					currentSceneObject.playerStartingPosition.posX;
+				newCurrentScenePlayerStartingPositionY =
+					currentSceneObject.playerStartingPosition.posY;
+			}
+
 			story.handlers.dispatch({
 				type: c.actions.SET_CURRENT_SCENE,
 				newCurrentScene: story.currentScene,
+				newCurrentScenePlayerStartingPositionX,
+				newCurrentScenePlayerStartingPositionY,
 			});
 		}
 
@@ -332,7 +358,9 @@ const story = {
 			}, 5000);
 			story.registerThemeMusicInterval();
 		} else {
-			story.clearThemeMusicInterval();
+			if (story.themeMusicInterval !== null) {
+				story.clearThemeMusicInterval();
+			}
 		}
 
 		// scene object execution
@@ -422,7 +450,7 @@ const story = {
 		if (localStoragePlayerProgress === null) {
 			goAhead = true;
 		} else {
-			if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+			if (!getHasThePlayerMadeProgress(localStoragePlayerProgress)) {
 				alert(story.noProgressYetMessage);
 			} else {
 				goAhead = true;
@@ -506,7 +534,7 @@ const story = {
 			story.advance();
 		}
 
-		if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+		if (!getHasThePlayerMadeProgress(localStoragePlayerProgress)) {
 			newGameProper();
 		} else {
 			if (
@@ -522,8 +550,17 @@ const story = {
 	continueGame() {
 		const localStoragePlayerProgress = readPlayerProgress();
 
-		if (!hasThePlayerMadeProgress(localStoragePlayerProgress)) {
+		const relevantPlayerProgress = getHasThePlayerMadeProgress(
+			localStoragePlayerProgress
+		);
+		const hasThePlayerCompletedTheGame = getHasThePlayerCompletedTheGame(
+			localStoragePlayerProgress
+		);
+
+		if (!relevantPlayerProgress && !hasThePlayerCompletedTheGame) {
 			alert(story.noProgressYetMessage);
+		} else if (hasThePlayerCompletedTheGame) {
+			alert(story.playerAlreadyCompletedGameMessage);
 		} else {
 			music.stopPlaying();
 			gameMenus.clearButtons();

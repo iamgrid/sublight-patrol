@@ -16,6 +16,7 @@ import {
 	status,
 	hello,
 	getPosition,
+	getCameraTLBasedOnPlayerPosition,
 } from './utils/helpers';
 import hud from './hud';
 import initialGameState from './initialGameState';
@@ -248,6 +249,7 @@ export default class App extends PIXI.Application {
 			stage: this.mainStage,
 			pixiHUD: this.pixiHUD,
 			entityWasDespawned: this.entityWasDespawned,
+			refocusCameraOnTL: this.refocusCameraOnTL.bind(this),
 		};
 
 		this.checkAgainstCurrentObjectives = story.checkAgainstCurrentObjectives;
@@ -423,13 +425,17 @@ export default class App extends PIXI.Application {
 			}
 
 			// camera position
+
+			const cameraTL = getCameraTLBasedOnPlayerPosition(
+				playerX,
+				playerY,
+				currentState.entities.player.facing
+			);
+
 			let cameraTLX;
 			if (!this.camera.isFlipping) {
 				// static camera
-				cameraTLX = 0 - playerX + 100;
-				if (currentState.entities.player.facing === -1) {
-					cameraTLX = 0 - playerX + (c.gameCanvas.width - 100);
-				}
+				cameraTLX = cameraTL[0];
 			} else {
 				// animated camera
 				const cFMultiplier = this.camera.flipTimer / this.camera.maxFlipTimer;
@@ -451,13 +457,15 @@ export default class App extends PIXI.Application {
 				}
 			}
 
-			const cameraTLY = 0 - playerY + 225;
-			this.mainStage.position.set(cameraTLX, cameraTLY);
+			const cameraTLY = cameraTL[1];
+			// this.mainStage.position.set(cameraTLX, cameraTLY);
 
-			// starscape movement
-			this.starScapeLayers.forEach((el) =>
-				el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
-			);
+			// // starscape movement
+			// this.starScapeLayers.forEach((el) =>
+			// 	el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
+			// );
+
+			this.refocusCameraOnTL(cameraTLX, cameraTLY, delta, this.inSlipStream);
 
 			repositionHasRun = true;
 		};
@@ -499,6 +507,15 @@ export default class App extends PIXI.Application {
 
 		// timing tick
 		timing.tick(timing.modes.play, this.ticker.deltaMS);
+	}
+
+	refocusCameraOnTL(cameraTLX, cameraTLY, delta, inSlipStream) {
+		this.mainStage.position.set(cameraTLX, cameraTLY);
+
+		// starscape movement
+		this.starScapeLayers.forEach((el) =>
+			el.onUpdate(delta, inSlipStream, cameraTLX, cameraTLY)
+		);
 	}
 
 	pause() {

@@ -19,6 +19,10 @@ const scene002 = {
 		maxY: 2500,
 		softBoundary: 300,
 	},
+	playerStartingPosition: {
+		posX: 100,
+		posY: 225,
+	},
 	entities: {
 		htran_091: {
 			id: 'htran_091',
@@ -132,8 +136,8 @@ const scene002 = {
 				entities.spawn(
 					playerShipType,
 					{
-						posX: 100,
-						posY: 225,
+						posX: scene002.playerStartingPosition.posX,
+						posY: scene002.playerStartingPosition.posY,
 						latVelocity: 0,
 						longVelocity: 0,
 					},

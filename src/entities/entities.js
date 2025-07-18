@@ -3,7 +3,13 @@ import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
-import { getPosition, shields, makeName, status } from '../utils/helpers';
+import {
+	getPosition,
+	shields,
+	makeName,
+	status,
+	getCameraTLBasedOnPlayerPosition,
+} from '../utils/helpers';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
 import timing from '../utils/timing';
@@ -20,6 +26,7 @@ const entities = {
 		stage: null,
 		pixiHUD: null,
 		entityWasDespawned: null,
+		refocusCameraOnTL: null,
 	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
@@ -322,6 +329,7 @@ const entities = {
 	},
 
 	playerShipDestruction() {
+		const functionSignature = 'entities.js@playerShipDestruction()';
 		let currentState = entities.handlers.state();
 		const shipsInHangar = currentState.game.playerShips.hangarContents.length;
 
@@ -335,17 +343,10 @@ const entities = {
 			console.log('Game over');
 
 			plates.fadeInMatte(25, 0);
-			timing.toggleEntityMovement(
-				false,
-				'entities.js@playerShipDestruction() 1',
-				1000
-			);
+			timing.toggleEntityMovement(false, `${functionSignature} 1`, 1000);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(
-						'entities.js@playerShipDestruction() 2',
-						true
-					);
+					soundEffects.muteUnmuteAllLoops(`${functionSignature} 2`, true);
 				},
 				timing.modes.play,
 				1000
@@ -366,23 +367,30 @@ const entities = {
 			const newPlayerId = c.playerIdPartial + nextSuffix;
 			const newPlayerShipType = nextShip;
 
-			let [newPlayerShipX, newPlayerShipY] = getPosition(
-				'destroyed_player',
-				currentState.positions
-			);
+			let newPlayerShipX = null;
+			let newPlayerShipY = null;
+
+			if (
+				currentState.game.currentScenePlayerStartingPositionX !== null &&
+				currentState.game.currentScenePlayerStartingPositionY !== null
+			) {
+				// if the current scene has a player starting position, use it
+				newPlayerShipX = currentState.game.currentScenePlayerStartingPositionX;
+				newPlayerShipY = currentState.game.currentScenePlayerStartingPositionY;
+			} else {
+				const destroyedPlayerPosition = getPosition(
+					'destroyed_player',
+					currentState.positions
+				);
+				newPlayerShipX = destroyedPlayerPosition[0];
+				newPlayerShipY = destroyedPlayerPosition[1];
+			}
 
 			plates.fadeInMatte(25, 0);
-			timing.toggleEntityMovement(
-				false,
-				'entities.js@playerShipDestruction() 3',
-				1000
-			);
+			timing.toggleEntityMovement(false, `${functionSignature} 3`, 1000);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(
-						'entities.js@playerShipDestruction() 4',
-						true
-					);
+					soundEffects.muteUnmuteAllLoops(`${functionSignature} 4`, true);
 				},
 				timing.modes.play,
 				1000
@@ -412,18 +420,20 @@ const entities = {
 				1100,
 				true
 			);
-			plates.fadeOutMatte(25, 5000);
-			timing.toggleEntityMovement(
-				true,
-				'entities.js@playerShipDestruction() 5',
-				4300
+
+			// camera needs to be repositioned to the new player ship
+			const cameraTL = getCameraTLBasedOnPlayerPosition(
+				newPlayerShipX,
+				newPlayerShipY,
+				1
 			);
+			entities.handlers.refocusCameraOnTL(cameraTL[0], cameraTL[1], 0, false);
+
+			plates.fadeOutMatte(25, 5000);
+			timing.toggleEntityMovement(true, `${functionSignature} 5`, 4300);
 			timing.setTimeout(
 				() => {
-					soundEffects.muteUnmuteAllLoops(
-						'entities.js@playerShipDestruction() 6',
-						false
-					);
+					soundEffects.muteUnmuteAllLoops(`${functionSignature} 6`, false);
 				},
 				timing.modes.play,
 				4300

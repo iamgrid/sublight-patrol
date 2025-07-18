@@ -23,6 +23,13 @@ export function makeName(input) {
 		.join(' ');
 }
 
+/**
+ *
+ * @param {*} entityId
+ * @param {*} positions
+ * @returns an array containing position of the entity like so: [x, y]
+ */
+
 export function getPosition(entityId, positions) {
 	if (positions.canMove[`${entityId}--posX`] !== undefined) {
 		const reX = positions.canMove[`${entityId}--posX`];
@@ -55,6 +62,25 @@ export function getVelocity(entityId, velocities) {
 	}
 
 	console.error(`Unable to ascertain velocity for ${entityId}`);
+}
+
+/**
+ *
+ * @returns an array like this: [cameraTLX, cameraTLY]
+ */
+export function getCameraTLBasedOnPlayerPosition(
+	playerX,
+	playerY,
+	playerFacing
+) {
+	let cameraTLX = 0 - playerX + 100;
+	if (playerFacing === -1) {
+		cameraTLX = 0 - playerX + (c.gameCanvas.width - 100);
+	}
+
+	const cameraTLY = 0 - playerY + 225;
+
+	return [cameraTLX, cameraTLY];
 }
 
 export function repositionMovedEntities(
@@ -1234,11 +1260,22 @@ export function readPlayerProgress(validate = false) {
 	}
 }
 
-export function hasThePlayerMadeProgress(localStoragePlayerProgress) {
+export function getHasThePlayerMadeProgress(localStoragePlayerProgress) {
 	if (
 		localStoragePlayerProgress === null ||
 		localStoragePlayerProgress.bestSceneId === 'intro' ||
 		localStoragePlayerProgress.bestSceneId === '001'
+	) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+export function getHasThePlayerCompletedTheGame(localStoragePlayerProgress) {
+	if (
+		localStoragePlayerProgress === null ||
+		!localStoragePlayerProgress.playerHasCompletedTheGame
 	) {
 		return false;
 	} else {

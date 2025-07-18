@@ -3,9 +3,10 @@ import timing from './utils/timing';
 import Button from './components/Button';
 import {
 	readPlayerProgress,
-	hasThePlayerMadeProgress,
+	getHasThePlayerMadeProgress,
 	alertsAndWarnings,
 	dialog,
+	getHasThePlayerCompletedTheGame,
 } from './utils/helpers';
 import soundEffects from './audio/soundEffects';
 
@@ -235,12 +236,19 @@ const gameMenus = {
 		gameMenus.currentFocus = 'newGame';
 
 		const localStoragePlayerProgress = readPlayerProgress();
-		let relevantPlayerProgress = false;
-		if (hasThePlayerMadeProgress(localStoragePlayerProgress)) {
-			relevantPlayerProgress = true;
-		}
+		let relevantPlayerProgress = getHasThePlayerMadeProgress(
+			localStoragePlayerProgress
+		);
 
-		if (relevantPlayerProgress) gameMenus.currentFocus = 'continueGame';
+		let hasThePlayerCompletedTheGame = getHasThePlayerCompletedTheGame(
+			localStoragePlayerProgress
+		);
+
+		if (relevantPlayerProgress && !hasThePlayerCompletedTheGame) {
+			gameMenus.currentFocus = 'continueGame';
+		} else if (hasThePlayerCompletedTheGame) {
+			gameMenus.currentFocus = 'replayScene';
+		}
 
 		const startX = 280;
 		const startY = 330;
@@ -252,7 +260,7 @@ const gameMenus = {
 				height: 32,
 			},
 			label: 'New game',
-			isFocused: !relevantPlayerProgress ? true : false,
+			isFocused: gameMenus.currentFocus === 'newGame',
 			doActivate: () => {
 				if (c.debug.menuButtons) console.log('doActivate newGame');
 				gameMenus.buttonFunctions.newGame();
@@ -267,8 +275,8 @@ const gameMenus = {
 				height: 32,
 			},
 			label: 'Continue game',
-			isFocused: relevantPlayerProgress ? true : false,
-			isDisabled: !relevantPlayerProgress ? true : false,
+			isFocused: gameMenus.currentFocus === 'continueGame',
+			isDisabled: !relevantPlayerProgress || hasThePlayerCompletedTheGame,
 			doActivate: () => {
 				if (c.debug.menuButtons) console.log('doActivate continueGame');
 				gameMenus.buttonFunctions.continueGame();
@@ -283,8 +291,8 @@ const gameMenus = {
 				height: 32,
 			},
 			label: 'Replay scene',
-			isFocused: false,
-			isDisabled: !relevantPlayerProgress ? true : false,
+			isFocused: gameMenus.currentFocus === 'replayScene',
+			isDisabled: !relevantPlayerProgress,
 			doActivate: () => {
 				if (c.debug.menuButtons) console.log('doActivate replayScene');
 				gameMenus.buttonFunctions.replaySceneMenu();

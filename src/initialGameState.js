@@ -3,6 +3,8 @@ import c from './utils/constants.js';
 const initialGameState = {
 	game: {
 		currentScene: null,
+		currentScenePlayerStartingPositionX: null,
+		currentScenePlayerStartingPositionY: null,
 		targeting: null,
 		targetHasBeenScanned: false,
 		playerShips: {

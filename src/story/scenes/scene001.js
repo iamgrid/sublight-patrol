@@ -20,9 +20,22 @@ const scene001 = {
 		maxY: 2500,
 		softBoundary: 300,
 	},
+	playerStartingPosition: {
+		posX: 100,
+		posY: 225,
+	},
 	entities: {
 		crg_15496e: {
 			id: 'crg_15496e',
+			groupId: 'crg',
+			type: 'freighter_l1',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
+			contents: 'Empty',
+			hasBeenScanned: false,
+		},
+		crg_15497e: {
+			id: 'crg_15497e',
 			groupId: 'crg',
 			type: 'freighter_l1',
 			playerRelation: 'neutral',
@@ -51,7 +64,7 @@ const scene001 = {
 			groupId: 'argoon',
 			type: 'zangari_fighter_type_2',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		mylok_1: {
@@ -64,14 +77,6 @@ const scene001 = {
 		},
 		mylok_2: {
 			id: 'mylok_2',
-			groupId: 'mylok',
-			type: 'zangari_fighter_type_1',
-			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
-			behaviorAssignedGoal: c.possibleGoals.holdStation,
-		},
-		mylok_3: {
-			id: 'mylok_3',
 			groupId: 'mylok',
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
@@ -151,8 +156,8 @@ const scene001 = {
 				entities.spawn(
 					playerShipType,
 					{
-						posX: 100,
-						posY: 225,
+						posX: scene001.playerStartingPosition.posX,
+						posY: scene001.playerStartingPosition.posY,
 						latVelocity: 0,
 						longVelocity: 0,
 					},
@@ -177,14 +182,26 @@ const scene001 = {
 				);
 
 				entities.spawn(
+					scene001.entities.crg_15497e,
+					{
+						posX: 3900,
+						posY: 90,
+						latVelocity: 0,
+						longVelocity: -4,
+						facing: -1,
+					},
+					{}
+				);
+
+				entities.spawn(
 					scene001.entities.mylok_1,
 					{
-						posX: 2900,
+						posX: 2900, // where the enemy fighter spawns
 						posY: 500,
 					},
 					{
-						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 225,
+						behaviorAssignedStationX: 980, // where the enemy fighter will move to hold station
+						behaviorAssignedStationY: 275,
 					}
 				);
 				entities.spawn(
@@ -195,18 +212,7 @@ const scene001 = {
 					},
 					{
 						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 100,
-					}
-				);
-				entities.spawn(
-					scene001.entities.mylok_3,
-					{
-						posX: 2900,
-						posY: 100,
-					},
-					{
-						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 350,
+						behaviorAssignedStationY: 175,
 					}
 				);
 
@@ -255,24 +261,24 @@ const scene001 = {
 							requiredPercentage: 100,
 						},
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene001.entities.habeen_1.groupId,
 							requiredPercentage: 100,
 						},
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							entityId: scene001.entities.argoon_1.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene001.entities.habeen_1.groupId,
 							requiredPercentage: 100,
 						},
 						{
-							type: c.objectiveTypes.destroyed.id,
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							entityId: scene001.entities.argoon_1.id,
 							requiredPercentage: 100,
 						},
@@ -281,10 +287,10 @@ const scene001 = {
 			},
 			execute() {
 				entities.spawn(
-					scene001.entities.habeen_1,
+					scene001.entities.argoon_1,
 					{
 						posX: 3900,
-						posY: 500,
+						posY: 170,
 					},
 					{
 						behaviorAssignedStationX: 1980,
@@ -293,26 +299,26 @@ const scene001 = {
 				);
 
 				entities.spawn(
-					scene001.entities.habeen_2,
+					scene001.entities.habeen_1,
 					{
 						posX: 3900,
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 1980,
-						behaviorAssignedStationY: 100,
+						behaviorAssignedStationX: 2030,
+						behaviorAssignedStationY: 120,
 					}
 				);
 
 				entities.spawn(
-					scene001.entities.argoon_1,
+					scene001.entities.habeen_2,
 					{
 						posX: 3900,
-						posY: -500,
+						posY: 220,
 					},
 					{
-						behaviorAssignedStationX: 1980,
-						behaviorAssignedStationY: 30,
+						behaviorAssignedStationX: 2030,
+						behaviorAssignedStationY: 220,
 					}
 				);
 			},

@@ -152,13 +152,15 @@ function cycleTargets(current, direction, targetableStore) {
 export default function mainReducer(state, action) {
 	switch (action.type) {
 		case c.actions.SET_CURRENT_SCENE: {
-			const newCurrentScene = action.newCurrentScene;
-
 			return {
 				...state,
 				game: {
 					...state.game,
-					currentScene: newCurrentScene,
+					currentScene: action.newCurrentScene,
+					currentScenePlayerStartingPositionX:
+						action.newCurrentScenePlayerStartingPositionX,
+					currentScenePlayerStartingPositionY:
+						action.newCurrentScenePlayerStartingPositionY,
 				},
 			};
 		}
@@ -487,6 +489,7 @@ export default function mainReducer(state, action) {
 			}
 
 			if (entityStore === 'player') {
+				// removed entity is the player's fighter
 				const updatedHangarContents = [
 					...state.game.playerShips.hangarContents,
 				];
@@ -531,6 +534,7 @@ export default function mainReducer(state, action) {
 						},
 					];
 			} else {
+				// removed entity is not the player's fighter
 				return {
 					...state,
 					game: {
@@ -998,6 +1002,8 @@ export default function mainReducer(state, action) {
 				...state,
 				game: {
 					...state.game,
+					playerHasCompletedTheGame:
+						localStoragePlayerProgress.playerHasCompletedTheGame,
 					playerShips: updatedPlayerShips,
 				},
 			};
@@ -1007,6 +1013,22 @@ export default function mainReducer(state, action) {
 			return {
 				...initialGameStateCopy,
 			};
+		}
+		case c.actions.GAME_COMPLETED: {
+			return [
+				() => action.callbackFn(),
+				{
+					...state,
+					game: {
+						...state.game,
+						playerHasCompletedTheGame: true,
+						playerShips: {
+							...state.game.playerShips,
+							lostOnThisMission: [],
+						},
+					},
+				},
+			];
 		}
 		default:
 			console.error('Failed to run action:', action);
