@@ -6,7 +6,12 @@ const storyConstants = {
 			title: '',
 		},
 	},
-	scenes: { intro: 'intro', mainMenu: 'mainMenu', '001': '001', '002': '002' },
+	scenes: {
+		intro: 'intro',
+		mainMenu: 'mainMenu',
+		scene001: 'scene001',
+		scene002: 'scene002',
+	},
 };
 
 export default storyConstants;

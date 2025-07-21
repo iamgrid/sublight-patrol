@@ -7,7 +7,7 @@ import controlSchemes from '../../controlSchemes';
 
 const scene002 = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
-	id: '002',
+	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
 		wittyText: 'Out of the frying pan into the fire',
 		mainText: "Mission 2 of 2: Baby's first meatgrinder",

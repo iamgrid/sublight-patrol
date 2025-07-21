@@ -8,7 +8,7 @@ import { dialog } from '../../utils/helpers';
 
 const scene001 = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
-	id: '001',
+	id: 'scene001', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
 		wittyText: "it's time to put your big boy pants on",
 		mainText: 'Mission 1 of 2: Welcome to vacuum',

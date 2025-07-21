@@ -57,7 +57,7 @@ const story = {
 			showStatusBar: false,
 		},
 		{
-			id: storyConstants.scenes['001'],
+			id: storyConstants.scenes.scene001,
 			sceneObject: scene001,
 			hasTitlePlate: true,
 			hasEntities: true,
@@ -65,7 +65,7 @@ const story = {
 			showStatusBar: true,
 		},
 		{
-			id: storyConstants.scenes['002'],
+			id: storyConstants.scenes.scene002,
 			sceneObject: scene002,
 			hasTitlePlate: true,
 			hasEntities: true,
@@ -127,7 +127,24 @@ const story = {
 				playSceneBeat,
 				hurryUp,
 			});
+
 		const currentState = story.handlers.state();
+
+		if (story.currentScene !== null && story.currentScene.startsWith('scene')) {
+			console.log(functionSignature, 'Current scene is a gameplay scene.');
+
+			if (
+				currentState.game.playerShips.current === null &&
+				playScene !== 'mainMenu' &&
+				playScene !== story.currentScene
+			) {
+				console.log(
+					functionSignature,
+					"The player has no fighters left, so the story shouldn't be advancing, returning early..."
+				);
+				return;
+			}
+		}
 
 		let cleanUpNeeded = false;
 
@@ -539,7 +556,7 @@ const story = {
 			storePlayerProgress(
 				`${functionSignature}`,
 				story.handlers.state,
-				storyConstants.scenes['001']
+				storyConstants.scenes.scene001
 			);
 
 			story.advance(functionSignature);
