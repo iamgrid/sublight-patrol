@@ -11,7 +11,7 @@ const formations = {
 		latOffset: 0,
 		longOffset: 0,
 	},
-	latOffsetGap: 10,
+	latOffsetGap: 45,
 	longOffsetGap: 15,
 
 	createFormation(leadEntityId, flankingEntityId, currentState) {

@@ -25,7 +25,7 @@ const behavior = {
 	enemyFighterDetectionRange: 600,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
-	widthOfWidestEntityInTheGame: 49,
+	yOffsetToleranceForFiring: 110, // the widest entity currently in the game is 49px wide, so this tolerance should be at least half of that, e.g. 25px
 	overcorrectingEntities: {},
 
 	tick() {
@@ -584,6 +584,7 @@ const behavior = {
 		entityX,
 		entityY
 	) {
+		const functionSignature = 'behavior.js@destroyEntity()';
 		const entityId = entity.id;
 		const entityStoreUpdates = {};
 
@@ -792,6 +793,7 @@ const behavior = {
 
 			if (longDistance < behavior.maxShotTravelDistance) {
 				const entitiesInShotRange = behavior._returnEntitiesInShotRange(
+					functionSignature,
 					entityId,
 					entityX,
 					entityY,
@@ -920,6 +922,7 @@ const behavior = {
 		flankTwoLatMultiplier,
 		longMultiplier
 	) {
+		const functionSignature = 'behavior.js@attackInFormation()';
 		const entityId = entity.id;
 
 		const currentFacing = entity.facing;
@@ -936,7 +939,7 @@ const behavior = {
 		}
 
 		// if (c.debug.behavior)
-		// 	console.log('attackInFormation():', entityId, {
+		// 	console.log(functionSignature, entityId, {
 		// 		formationFacing,
 		// 		currentFacing,
 		// 		newFacing,
@@ -962,7 +965,7 @@ const behavior = {
 		const latDifference = entityY - correctY;
 		const longDifference = entityX - correctX;
 
-		// console.log('attackInFormation', {
+		// console.log(functionSignature, {
 		// 	entityId,
 		// 	latDifference,
 		// 	longDifference,
@@ -1006,8 +1009,11 @@ const behavior = {
 
 		let doShoot = false;
 
-		if (longDistance < behavior.maxShotTravelDistance && newLatVelocity === 0) {
+		if (
+			longDistance < behavior.maxShotTravelDistance /* && newLatVelocity === 0*/
+		) {
 			const entitiesInShotRange = behavior._returnEntitiesInShotRange(
+				functionSignature,
 				entityId,
 				entityX,
 				entityY,
@@ -1016,6 +1022,16 @@ const behavior = {
 				enemyX,
 				currentState
 			);
+
+			// console.log(
+			// 	functionSignature,
+			// 	'entityId:',
+			// 	entityId,
+			// 	'enemyId:',
+			// 	enemyId,
+			// 	'entitiesInShotRange:',
+			// 	entitiesInShotRange.toString()
+			// );
 
 			if (entitiesInShotRange.length === 1) {
 				// clear shot to hit the enemy
@@ -1127,6 +1143,7 @@ const behavior = {
 	},
 
 	_returnEntitiesInShotRange(
+		calledBy,
 		entityId,
 		entityX,
 		entityY,
@@ -1135,6 +1152,7 @@ const behavior = {
 		enemyX,
 		currentState
 	) {
+		// const functionSignature = "behavior.js@_returnEntitiesInShotRange()";
 		let xRangeMin = entityX - behavior.maxShotTravelDistance;
 		let xRangeMax = entityX;
 		if (facing === 1) {
@@ -1142,9 +1160,8 @@ const behavior = {
 			xRangeMax = entityX + behavior.maxShotTravelDistance;
 		}
 
-		let yTolerance = Math.ceil(behavior.widthOfWidestEntityInTheGame / 2);
-		let yRangeMin = entityY - yTolerance;
-		let yRangeMax = entityY + yTolerance;
+		let yRangeMin = entityY - behavior.yOffsetToleranceForFiring;
+		let yRangeMax = entityY + behavior.yOffsetToleranceForFiring;
 
 		let candidates = {};
 		for (const store in currentState.positions) {
