@@ -5,9 +5,30 @@ export default function overlays() {
 				<div class="game__loading_text" id="game__loading_text">Loading assets, please wait...</div>
 			</div>
 			<div class="game__loading_done" id="game__loading_done">
-				<div class="game__loading_done_text_top">Ready to launch.</div>
-				<div class="game__loading_done_text_middle">Volume controls are on the top right, you might need them.</div>
-				<div class="game__loading_done_text_bottom">Hit [ENTER] to start</div>
+				<div class="game__loading_done__ready">Ready to launch.</div>
+				<div class="game__loading_done__hit-enter">Hit [ENTER] to start</div>
+				<div class="game__loading_done__callout game__loading_done__callout--audio" id="game__loading_done__callout--audio">
+					<div class="game__loading_done__callout-proper">
+						<div class="game__loading_done__callout-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M340-520ZM146-160q-27.67 0-46.83-19.58Q80-199.17 80-226.67v-586.66q0-27.5 19.17-47.09Q118.33-880 146-880h387.33q27.5 0 47.09 19.58Q600-840.83 600-813.33v189q-17.67 2.33-34.28 6.48t-32.39 10.18v-205.66H146v586.66h187.33V-160H146Zm187.33-120.33V-320q0-7.1.5-13.89.5-6.78 1.17-13.78-28.33-1.66-48.67-22.66Q266-391.33 266-420q0-30.56 21.39-51.94 21.39-21.39 51.94-21.39 11 0 20.67 3.33 9.67 3.33 18.67 9.33 8.66-14.66 18.83-27.83 10.17-13.17 22.17-25.5-17-12.33-37.17-19.17-20.17-6.83-43.17-6.83-58 0-99 41t-41 99q0 56.47 39.17 96.74 39.17 40.26 94.83 42.93ZM340-620q25 0 42.5-17.5T400-680q0-25-17.5-42.5T340-740q-25 0-42.5 17.5T280-680q0 25 17.5 42.5T340-620ZM546.67-80h-73.4Q443-80 421.5-101.54 400-123.08 400-153.33V-320q0-100 70-170t170-70q100 0 170 70t70 170v166.67q0 30.25-21.54 51.79T806.67-80h-73.34v-186.67h100V-320q0-80.56-56.34-136.94-56.34-56.39-136.83-56.39-80.49 0-136.99 56.39-56.5 56.38-56.5 136.94v53.33h100V-80Z"/></svg>
+						</div>
+						<div class="game__loading_done__callout-text">Volume controls will show up on the top right,<br/>you might need them in a second.</div>
+					</div>
+					<div class="game__loading_done__callout-arrow">
+						<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M689.74-180v-397.44h-413.9l156.77 156.77-35.79 36L180-601.49 397.03-820l35.99 36-156.51 156.31H740V-180h-50.26Z"/></svg>
+					</div>
+				</div>
+				<div class="game__loading_done__callout game__loading_done__callout--keyboard" id="game__loading_done__callout--keyboard">
+					<div class="game__loading_done__callout-proper">
+						<div class="game__loading_done__callout-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M146.67-200q-27 0-46.84-20.17Q80-240.33 80-266.67v-426.66q0-27 19.83-46.84Q119.67-760 146.67-760h666.66q27 0 46.84 19.83Q880-720.33 880-693.33v426.66q0 26.34-19.83 46.5Q840.33-200 813.33-200H146.67Zm0-66.67h666.66v-426.66H146.67v426.66Zm160-56.66h346.66V-390H306.67v66.67ZM202-446.67h66.67v-66.66H202v66.66Zm122.67 0h66.66v-66.66h-66.66v66.66Zm122 0h66.66v-66.66h-66.66v66.66Zm122.66 0H636v-66.66h-66.67v66.66Zm122 0H758v-66.66h-66.67v66.66ZM202-570h66.67v-66.67H202V-570Zm122.67 0h66.66v-66.67h-66.66V-570Zm122 0h66.66v-66.67h-66.66V-570Zm122.66 0H636v-66.67h-66.67V-570Zm122 0H758v-66.67h-66.67V-570ZM146.67-266.67v-426.66 426.66Z"/></svg>
+						</div>
+						<div class="game__loading_done__callout-text">This game is 100% keyboard controlled. The current keyboard mapping is always displayed below.</div>
+					</div>
+					<div class="game__loading_done__callout-arrow">
+						<svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3"><path d="M220-180v-447.69h463.49L526.98-784l35.99-36L780-601.49 563.18-384.67l-35.79-36 156.77-156.77h-413.9V-180H220Z"/></svg>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="game__dialog" id="game__dialog">

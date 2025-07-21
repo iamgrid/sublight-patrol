@@ -145,6 +145,14 @@ export default class App extends PIXI.Application {
 		document
 			.getElementById('game__loading_done')
 			.classList.add('game__loading_done--shown');
+		setTimeout(() => {
+			document
+				.getElementById('game__loading_done__callout--audio')
+				.classList.add('game__loading_done__callout--shown');
+			document
+				.getElementById('game__loading_done__callout--keyboard')
+				.classList.add('game__loading_done__callout--shown');
+		}, 500);
 		document.getElementById('footer__controls').innerHTML =
 			'<div class="footer__controls__control"><span class="footer__controls__key">enter</span><span class="footer__controls__function">Launch the game</span></div>';
 		this.gameLaunched = false;
