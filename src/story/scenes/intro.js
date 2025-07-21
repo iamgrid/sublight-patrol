@@ -22,13 +22,14 @@ const intro = {
 			cameraMode: c.cameraModes.stationary,
 			// isTheFinalGameplayBeat: false,
 			execute() {
-				console.log('intro.js@storyBeats[0].execute()');
+				const functionSignature = 'intro.js@storyBeats[0].execute()';
+				console.log(functionSignature);
 				music.playTrack(audioLibrary.library.music.sublight_patrol_theme.id);
 				plates.fullMatte();
 				timing.setTimeout(
 					() => {
 						console.log('Advancing to main menu.');
-						story.advance('mainMenu', 0);
+						story.advance(functionSignature, 'mainMenu', 0);
 					},
 					timing.modes.play,
 					25000

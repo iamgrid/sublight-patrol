@@ -22,6 +22,7 @@ const behavior = {
 		playVolume: null,
 	}, // gets its values in App.js
 	currentFormations: formations.currentFormations,
+	enemyFighterDetectionRange: 600,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
 	widthOfWidestEntityInTheGame: 49,
@@ -103,7 +104,7 @@ const behavior = {
 
 						if (
 							entity.playerRelation === 'hostile' &&
-							distance < behavior.maxShotTravelDistance - 200 &&
+							distance < behavior.enemyFighterDetectionRange &&
 							playerId !== 'destroyed_player'
 						) {
 							itsGoTimeBuddy = true;
@@ -852,9 +853,8 @@ const behavior = {
 						// 	partnerId
 						// );
 
-						const partnerAlreadyInFormationWId = formations.isInFormation(
-							partnerId
-						);
+						const partnerAlreadyInFormationWId =
+							formations.isInFormation(partnerId);
 						if (partnerAlreadyInFormationWId) {
 							formations.addEntityToFormation(
 								partnerAlreadyInFormationWId,
@@ -862,9 +862,8 @@ const behavior = {
 								currentState
 							);
 						} else {
-							const entityAlreadyInFormationWId = formations.isInFormation(
-								entityId
-							);
+							const entityAlreadyInFormationWId =
+								formations.isInFormation(entityId);
 							if (entityAlreadyInFormationWId) {
 								// our partner isn't in a formation, but we are,
 								// so we'll tell them to become our new leader

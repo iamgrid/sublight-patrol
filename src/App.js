@@ -168,6 +168,7 @@ export default class App extends PIXI.Application {
 	}
 
 	init_pt2() {
+		const functionSignature = 'App.js@init_pt2()';
 		window.removeEventListener('keydown', this.launchListener);
 		document
 			.getElementById('game__loading_done')
@@ -293,7 +294,7 @@ export default class App extends PIXI.Application {
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
 
 		story.init();
-		story.advance();
+		story.advance(functionSignature);
 
 		console.log(this.gameState());
 
@@ -348,13 +349,14 @@ export default class App extends PIXI.Application {
 			currentKeyboardLayout = controlSchemes.gameMenus.id;
 
 		const skipToMainMenu = () => {
+			const functionSignature = 'App.js@skipToMainMenu()';
 			timing.clearAllScheduledEvents();
 			// music.stopPlaying();
 			// music.playTrack(
 			// 	audioLibrary.library.music.sublight_patrol_theme.id,
 			// 	25.0395
 			// );
-			story.advance('mainMenu');
+			story.advance(functionSignature, 'mainMenu');
 		};
 
 		// console.log({ currentKeyboardLayout });

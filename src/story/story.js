@@ -112,14 +112,21 @@ const story = {
 		}
 	},
 
-	advance(playScene = null, playSceneBeat = 0, hurryUp = false) {
+	/**
+	 *
+	 * Call with playScene = null to auto-advance to the next scene
+	 */
+
+	advance(calledBy, playScene = null, playSceneBeat = 0, hurryUp = false) {
 		const functionSignature = 'story.js@advance()';
 
-		// call with playScene = null to auto-advance
-		// to the next scene
-
-		if (c.debug.sequentialEvents)
-			console.log(functionSignature, { playScene, playSceneBeat, hurryUp });
+		if (c.debug.sequentialEvents || c.debug.objectives)
+			console.log(functionSignature, {
+				calledBy,
+				playScene,
+				playSceneBeat,
+				hurryUp,
+			});
 		const currentState = story.handlers.state();
 
 		let cleanUpNeeded = false;
@@ -163,7 +170,9 @@ const story = {
 					plates.fadeOutPlate(25, 7000);
 					timing.setTimeout(
 						() => {
-							story.advance('mainMenu', 0);
+							const functionSignature =
+								'story.js@advance() -> GAME_COMPLETED setTimeoutFn()';
+							story.advance(functionSignature, 'mainMenu', 0);
 						},
 						timing.modes.play,
 						8200
@@ -393,6 +402,7 @@ const story = {
 	},
 
 	restartMission() {
+		const functionSignature = 'story.js@restartMission()';
 		gameMenus.clearButtons();
 		alertsAndWarnings.clear();
 		alertsAndWarnings.hide();
@@ -403,7 +413,7 @@ const story = {
 		story.handlers.dispatch({
 			type: c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION,
 		});
-		story.advance(story.currentScene, 0);
+		story.advance(functionSignature, story.currentScene, 0);
 		story.handlers.frameZero.actual = true;
 	},
 
@@ -413,6 +423,7 @@ const story = {
 		restorePlayerShipsLostOnThisMission = false
 	) {
 		function mainMenuProper() {
+			const functionSignature = 'story.js@mainMenu() -> mainMenuProper()';
 			if (restorePlayerShipsLostOnThisMission) {
 				story.handlers.dispatch({
 					type: c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION,
@@ -426,7 +437,7 @@ const story = {
 			timing.clearAllScheduledEvents();
 			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');
 			gameMenus.clearButtons();
-			story.advance('mainMenu', 0, hurryUp);
+			story.advance(functionSignature, 'mainMenu', 0, hurryUp);
 		}
 
 		if (askForConfirmation) {
@@ -502,7 +513,7 @@ const story = {
 		if (goAhead) {
 			music.stopPlaying();
 			gameMenus.clearButtons();
-			story.advance(sceneId, 0);
+			story.advance(functionSignature, sceneId, 0);
 		}
 	},
 
@@ -531,7 +542,7 @@ const story = {
 				storyConstants.scenes['001']
 			);
 
-			story.advance();
+			story.advance(functionSignature);
 		}
 
 		if (!getHasThePlayerMadeProgress(localStoragePlayerProgress)) {
@@ -548,6 +559,7 @@ const story = {
 	},
 
 	continueGame() {
+		const functionSignature = 'story.js@continueGame()';
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		const relevantPlayerProgress = getHasThePlayerMadeProgress(
@@ -565,7 +577,11 @@ const story = {
 			music.stopPlaying();
 			gameMenus.clearButtons();
 			story.removeMainMenuTopPortion();
-			story.advance(localStoragePlayerProgress.bestSceneId, 0);
+			story.advance(
+				functionSignature,
+				localStoragePlayerProgress.bestSceneId,
+				0
+			);
 		}
 	},
 
@@ -855,6 +871,8 @@ const story = {
 	},
 
 	checkBeatCompletion() {
+		const functionSignature = 'story.js@checkBeatCompletion()';
+		console.log(functionSignature);
 		let updatedObjectiveMessages = [];
 
 		const currentSceneObject = story.sceneList.find(
@@ -940,7 +958,11 @@ const story = {
 
 			if (story.currentSceneBeat < currentSceneObject.storyBeats.length - 1) {
 				// there are more beats in this scene
-				story.advance(story.currentScene, story.currentSceneBeat + 1);
+				story.advance(
+					functionSignature,
+					story.currentScene,
+					story.currentSceneBeat + 1
+				);
 			} else {
 				// advance to the next scene
 				plates.loadPlate('mission_success', 1000);
@@ -964,7 +986,9 @@ const story = {
 				plates.fadeOutPlate(50, 5000);
 				timing.setTimeout(
 					() => {
-						story.advance(null, 0);
+						const functionSignature =
+							'story.js@checkBeatCompletion() -> setTimeoutFn()';
+						story.advance(functionSignature, null, 0);
 					},
 					timing.modes.play,
 					8500

@@ -176,7 +176,7 @@ const plates = {
 				break;
 			case 'the_end':
 				atlText = "I'm proud of you.";
-				btlText = 'Congratulations, you have finished the game!';
+				btlText = 'Congratulations, you have completed the game!';
 				break;
 			case 'mission_failed':
 				atlText =
