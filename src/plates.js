@@ -141,42 +141,39 @@ const plates = {
 		let btlText = '';
 
 		const respawnQuoteVariants = {
-			fenrir_dominator: "With a lil' help from my friends",
-			valkyrie: 'Mess with the bull, get the horns',
-			zangari_fighter_type_4: "It's jackhammer o'clock",
+			fenrir_dominator: 'This calls for a bit more oomph.',
+			valkyrie: 'Mess with the bull, get the horns!',
+			zangari_fighter_type_4: "It's jackhammer o'clock.",
 		};
 
 		const missionSuccessQuoteVariants = [
-			'Yeah baby!',
-			'Easy-peasy',
-			'This was worth getting out of bed for',
-			"Ya boy 's got some moves",
-			"Kickin' butt, takin' names",
+			'Easy-peasy.',
+			'This was worth getting out of bed for.',
+			"Ya boy 's got some moves!",
+			'You did it! You really did it!',
+			"Kickin' butt, takin' names.",
 			"That's what I do. I drink and I green objectives.",
 		];
 
 		const missionFailedQuoteVariants = [
-			'Dagnabbit',
-			'Gosh darnit',
-			'Darn it all to heck!',
-			'Fork.',
+			'Dagnabbit.',
 			'You forgot to work the thingamabob.',
+			"Don't feel bad, this game was made to be challenging.",
 		];
 
 		switch (plateId) {
 			case 'respawning':
 				atlText = '';
 				if (quoteVariant !== '') atlText = respawnQuoteVariants[quoteVariant];
-				btlText =
-					'Returning to the scene with a another craft from your hangar';
+				btlText = 'Returning to the scene...';
 				break;
 			case 'game_over':
-				atlText = 'Tis but a scratch';
+				atlText = 'Tis but a scratch!';
 				btlText = 'Game Over';
 				break;
 			case 'the_end':
-				atlText = "I'm proud of you.";
-				btlText = 'Congratulations, you have completed the game!';
+				atlText = "You're something else, aren't you?";
+				btlText = "Congratulations, you've completed the game!";
 				break;
 			case 'mission_failed':
 				atlText =

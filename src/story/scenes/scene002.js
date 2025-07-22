@@ -9,8 +9,8 @@ const scene002 = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
 	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
-		wittyText: 'Out of the frying pan into the fire',
-		mainText: "Mission 2 of 2: Baby's first meatgrinder",
+		wittyText: "What, like it's hard?",
+		mainText: 'Mission 2 of 2: The Kitchen Sink',
 	},
 	playVolume: {
 		minX: -2000,
