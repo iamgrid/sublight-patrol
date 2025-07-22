@@ -75,7 +75,10 @@
 }
 
 .game__loading_done__hit-enter {
-	color: #c0c0c0;
+	color: #00e3ff9c;
+	font-weight: bold;
+	font-size: 12px;
+	letter-spacing: normal;
 }
 
 .game__loading_done__callout {
