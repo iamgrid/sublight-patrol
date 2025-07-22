@@ -31,9 +31,14 @@ export default function overlays() {
 				</div>
 			</div>
 		</div>
-		<div class="game__dialog" id="game__dialog">
-			<div class="game__dialog-speaker" id="game__dialog-speaker"></div>
-			<div class="game__dialog-message" id="game__dialog-message"></div>
+		<div class="game__messagelayer" id="game__messagelayer">
+			<div class="game__messagelayer-proper" id="game__messagelayer-proper">
+				<div class="game__messagelayer-speaker" id="game__messagelayer-speaker"></div>
+				<div class="game__messagelayer-message">
+					<div class="game__messagelayer-message-text" id="game__messagelayer-message-text"></div>
+					<div class="game__messagelayer-key">Hit [SPACE] to hide this message</div>
+				</div>
+			</div>
 		</div>
 		<div class="game__alertsAndWarnings" id="game__alertsAndWarnings">
 			<div 

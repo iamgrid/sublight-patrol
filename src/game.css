@@ -164,20 +164,24 @@
 	transform: translateY(23px);
 }
 
-.game__dialog {
+.game__messagelayer {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	opacity: 0;
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
-	visibility: hidden;
+}
+
+.game__messagelayer-proper {
+	display: flex;
+	flex-direction: column;
+	opacity: 0;
 	transition: opacity 0.4s;
 }
 
-.game__dialog-speaker {
+.game__messagelayer-speaker {
 	flex-shrink: 0;
 	flex-grow: 0;
 	background-color: #606060;
@@ -193,18 +197,29 @@
 	cursor: default;
 }
 
-.game__dialog-message {
+.game__messagelayer-message {
 	flex-grow: 1;
 	background-color: #303030;
-	padding: 27px 8em 0.9em;
-	text-align: justify;
+	padding: 27px 8em 0.5em;
 	margin: 0 1em 2.6em;
 	border: 1px solid #909090;
 	border-radius: 10px;
-	font-size: 1.1em;
-	line-height: 1.6em;
 	box-shadow: 0 0 10px #ffffff90;
 	cursor: default;
+}
+
+.game__messagelayer-message-text {
+	font-size: 1.1em;
+	line-height: 1.6em;
+	text-align: justify;
+}
+
+.game__messagelayer-key {
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	color: #00e3ff9c;
+	padding-top: 0.4em;
 }
 
 .game__alertsAndWarnings {

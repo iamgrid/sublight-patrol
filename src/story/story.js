@@ -18,7 +18,7 @@ import {
 	readPlayerProgress,
 	getHasThePlayerMadeProgress,
 	alertsAndWarnings,
-	dialog,
+	messageLayer,
 	getHasThePlayerCompletedTheGame,
 } from '../utils/helpers';
 import formations from '../behavior/formations';
@@ -423,7 +423,7 @@ const story = {
 		gameMenus.clearButtons();
 		alertsAndWarnings.clear();
 		alertsAndWarnings.hide();
-		dialog.hide();
+		messageLayer.hide();
 		plates.clearAll();
 		timing.clearAllScheduledEvents();
 		status.add('aqua', 'Mission restarted...', timing.times.play);
@@ -449,7 +449,7 @@ const story = {
 
 			alertsAndWarnings.clear();
 			alertsAndWarnings.hide();
-			dialog.hide();
+			messageLayer.hide();
 			plates.clearAll();
 			timing.clearAllScheduledEvents();
 			if (timing.isPaused()) window.pixiapp.togglePause('dontFadeMatte');

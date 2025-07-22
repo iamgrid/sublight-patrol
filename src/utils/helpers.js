@@ -774,52 +774,28 @@ export const shields = {
 	},
 };
 
-export const dialog = {
-	say(speaker, say, hide = false) {
-		const containerDiv = document.getElementById('game__dialog');
-		const speakerDiv = document.getElementById('game__dialog-speaker');
-		const messageDiv = document.getElementById('game__dialog-message');
+export const messageLayer = {
+	messageIsVisible: false,
+	showMessage(speaker, message) {
+		document.getElementById('game__messagelayer-speaker').innerHTML =
+			speaker + ' :';
+		document.getElementById('game__messagelayer-message-text').innerHTML =
+			message;
+		document.getElementById('game__messagelayer-proper').style.opacity = '0.7';
+		messageLayer.messageIsVisible = true;
+	},
 
-		if (hide) {
-			containerDiv.style.opacity = '0';
-			timing.setTimeout(
-				() => {
-					containerDiv.style.visibility = 'hidden';
-				},
-				timing.modes.play,
-				500
-			);
-			return;
-		}
-
-		containerDiv.style.visibility = 'visible';
-
-		function sayHelper() {
-			containerDiv.style.opacity = '0.7';
-			speakerDiv.innerHTML = speaker + ' :';
-			messageDiv.innerHTML = say;
-		}
-
-		if (containerDiv.style.opacity != '0.7') {
-			sayHelper();
-		} else {
-			containerDiv.style.opacity = '0';
-			timing.setTimeout(
-				() => {
-					sayHelper();
-				},
-				timing.modes.play,
-				400
-			);
-		}
+	fadeOutMessage() {
+		document.getElementById('game__messagelayer-proper').style.opacity = '0';
+		messageLayer.messageIsVisible = false;
 	},
 
 	hide() {
-		document.getElementById('game__dialog').style.display = 'none';
+		document.getElementById('game__messagelayer').style.display = 'none';
 	},
 
 	show() {
-		document.getElementById('game__dialog').style.display = 'flex';
+		document.getElementById('game__messagelayer').style.display = 'flex';
 	},
 };
 

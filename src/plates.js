@@ -1,7 +1,7 @@
 import c from './utils/constants';
 import timing from './utils/timing';
 import hud from './hud';
-import { alertsAndWarnings, dialog } from './utils/helpers';
+import { alertsAndWarnings, messageLayer } from './utils/helpers';
 import { randomNumber } from './utils/formulas';
 
 const plates = {
@@ -23,7 +23,7 @@ const plates = {
 
 		// 1 seconds is 25 steps because 25*40 = 1000 milliseconds
 		alertsAndWarnings.hide();
-		dialog.hide();
+		messageLayer.hide();
 
 		if (hud.hudIsShowing) hud.toggle(functionSignature, false);
 
@@ -108,7 +108,6 @@ const plates = {
 				if (plates.handlers.hudShouldBeShowing) {
 					hud.toggle(functionSignature, true);
 					alertsAndWarnings.show();
-					dialog.show();
 				}
 			},
 			timing.modes.play,

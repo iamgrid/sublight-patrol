@@ -3,6 +3,7 @@ import {
 	updateStageEntityVelocities,
 	moveTargetingReticule,
 	status,
+	messageLayer,
 } from './utils/helpers';
 import Keyboard from 'pixi.js-keyboard';
 import gameMenus from './gameMenus';
@@ -134,7 +135,11 @@ const controlSchemes = {
 				});
 
 				if (Keyboard.isKeyPressed('Space')) {
-					shots.startShooting(playerId);
+					if (messageLayer.messageIsVisible) {
+						messageLayer.fadeOutMessage();
+					} else {
+						shots.startShooting(playerId);
+					}
 				}
 
 				if (Keyboard.isKeyReleased('Space')) {

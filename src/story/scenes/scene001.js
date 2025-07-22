@@ -4,7 +4,7 @@ import entities from '../../entities/entities';
 import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
 import timing from '../../utils/timing';
-import { dialog } from '../../utils/helpers';
+import { messageLayer } from '../../utils/helpers';
 
 const scene001 = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
@@ -233,19 +233,23 @@ const scene001 = {
 
 				timing.setTimeout(
 					() => {
-						dialog.say('Test Speaker', 'This is a test');
+						messageLayer.show();
+						messageLayer.showMessage(
+							'Help',
+							'Use the pause menu ([ESC] key) to see your current objectives.<br>The list of objectives will update and expand as you progress through a mission, so remember to check back on the pause menu any time you are unsure what to do next!'
+						);
 					},
 					timing.modes.play,
 					8000
 				);
 
-				timing.setTimeout(
-					() => {
-						dialog.say('', '', true);
-					},
-					timing.modes.play,
-					12000
-				);
+				// timing.setTimeout(
+				// 	() => {
+				// 		messageLayer.fadeOutMessage();
+				// 	},
+				// 	timing.modes.play,
+				// 	12000
+				// );
 			},
 		},
 		{

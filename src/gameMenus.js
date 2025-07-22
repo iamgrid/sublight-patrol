@@ -5,7 +5,7 @@ import {
 	readPlayerProgress,
 	getHasThePlayerMadeProgress,
 	alertsAndWarnings,
-	dialog,
+	messageLayer,
 	getHasThePlayerCompletedTheGame,
 } from './utils/helpers';
 import soundEffects from './audio/soundEffects';
@@ -39,7 +39,7 @@ const gameMenus = {
 
 	fadeInMatte(requestedBy = '') {
 		alertsAndWarnings.hide();
-		dialog.hide();
+		messageLayer.hide();
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
 			document.getElementById('game__plates').style.opacity = 0.2;
 			const currentOpacity = Math.trunc(gameMenus.handlers.Matte.alpha * 100);
@@ -82,7 +82,7 @@ const gameMenus = {
 
 	fadeOutMatte(requestedBy = '') {
 		alertsAndWarnings.show();
-		dialog.show();
+		messageLayer.show();
 		if (gameMenus.handlers.matteIsBeingUsedByPlates.actual) {
 			document.getElementById('game__plates').style.opacity = 1;
 			if (gameMenus.correctedToPauseOpacityFrom !== null) {
