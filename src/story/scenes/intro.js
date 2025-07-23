@@ -152,7 +152,7 @@ const intro = {
 				);
 
 				// PLATE 3
-				timingIterator += 2.2; // in seconds
+				timingIterator += 2.5; // in seconds
 
 				timing.setTimeout(
 					() => {
@@ -181,7 +181,7 @@ const intro = {
 					timingIterator * 1000
 				);
 
-				timingIterator += 2.1;
+				timingIterator += 1.8;
 
 				timing.setTimeout(
 					() => {
