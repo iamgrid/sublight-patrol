@@ -18,7 +18,10 @@ const audio = {
 	init() {
 		const functionSignature = 'audio.js@init()';
 		console.log(functionSignature);
-		audio.domNodes.audioControls.style.opacity = 1;
+		audio.domNodes.audioControls.style.display = 'flex';
+		setTimeout(() => {
+			audio.domNodes.audioControls.style.opacity = 1;
+		}, 200);
 		audio.domNodes.slider.oninput = audio.setVolume;
 		audio.domNodes.slider.onchange = audio.setVolume;
 		audio.domNodes.muter.onclick = audio.setVolume;
