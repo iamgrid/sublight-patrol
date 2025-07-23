@@ -22,6 +22,8 @@ const mainMenu = {
 			cameraMode: c.cameraModes.stationary,
 			// isTheFinalGameplayBeat: false,
 			execute(options) {
+				document.getElementById('game__intro').style.display = 'none';
+
 				// music.playTrack(
 				// 	audioLibrary.library.music.sublight_patrol_theme.id,
 				// 	25.0395

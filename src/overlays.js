@@ -267,6 +267,22 @@ export default function overlays() {
 				<div class="game__plates_plate_btl" id="game__plates_plate_btl"></div>
 			</div>
 		</div>
+		<div class="game__intro" id="game__intro">
+			<div class="game__intro-plate" id="game__intro-plate-1">
+				<div class="game__intro-plate__big-text" id="game__intro-plate-1__big-text">i_am_grid</div>
+				<div class="game__intro-plate__small-text" id="game__intro-plate-1__small-text">presents</div>
+			</div>
+			<div class="game__intro-plate" id="game__intro-plate-2">
+				<div class="game__intro-plate__small-text" id="game__intro-plate-2__small-text">a</div>
+				<div class="game__intro-plate__big-text" id="game__intro-plate-2__big-text">side-scrolling<br>space shooter<br>browser game</div>
+			</div>
+			<div class="game__intro-plate" id="game__intro-plate-3">
+				<div class="game__intro-plate__small-text" id="game__intro-plate-3__small-text-1">built in</div>
+				<div class="game__intro-plate__big-text" id="game__intro-plate-3__big-text-1">JavaScript, HTML, CSS</div>
+				<div class="game__intro-plate__small-text" id="game__intro-plate-3__small-text-2">and</div>
+				<div class="game__intro-plate__big-text" id="game__intro-plate-3__big-text-2">WebGL (via PixiJS)</div>
+			</div>
+		</div>
 		<div class="game__pause" id="game__pause">
 			<div class="game__pause-text">[Paused]</div>
 			<div class="game__pause-objectives" id="game__pause-objectives"></div>

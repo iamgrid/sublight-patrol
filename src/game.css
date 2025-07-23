@@ -359,6 +359,50 @@
 	opacity: 0;
 }
 
+.game__intro {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 9;
+	display: none;
+}
+
+.game__intro-plate {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	display: none;
+	justify-content: center;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.game__intro-plate--visible {
+	display: flex;
+}
+
+.game__intro-plate__big-text {
+	text-transform: uppercase;
+	font-size: 22px;
+	color: white;
+	letter-spacing: 3px;
+	opacity: 0;
+	transition: opacity ease-in-out 1s;
+}
+
+.game__intro-plate__small-text {
+	text-transform: uppercase;
+	font-size: 12px;
+	color: #909090;
+	letter-spacing: 3px;
+	opacity: 0;
+	transition: opacity ease-in-out 1s;
+}
+
 .game__main_menu {
 	position: absolute;
 	bottom: 0;
