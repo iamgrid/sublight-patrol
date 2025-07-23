@@ -152,7 +152,7 @@ const intro = {
 				);
 
 				// PLATE 3
-				timingIterator += 1.2; // in seconds
+				timingIterator += 2.2; // in seconds
 
 				timing.setTimeout(
 					() => {
@@ -181,7 +181,7 @@ const intro = {
 					timingIterator * 1000
 				);
 
-				timingIterator += 0.9;
+				timingIterator += 2.1;
 
 				timing.setTimeout(
 					() => {
@@ -193,7 +193,7 @@ const intro = {
 					timingIterator * 1000
 				);
 
-				timingIterator += 0.9;
+				timingIterator += 1.1;
 
 				timing.setTimeout(
 					() => {
@@ -205,7 +205,7 @@ const intro = {
 					timingIterator * 1000
 				);
 
-				timingIterator += 0.9;
+				timingIterator += 1.3;
 
 				timing.setTimeout(
 					() => {
@@ -247,7 +247,7 @@ const intro = {
 						story.advance(functionSignature, 'mainMenu', 0);
 					},
 					timing.modes.play,
-					27000
+					27500
 				);
 			},
 		},
