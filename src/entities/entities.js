@@ -47,6 +47,16 @@ const entities = {
 		this.assembleType(['zangari_fighter_type_2', 'ship']);
 		this.assembleType(['zangari_fighter_type_3', 'ship']);
 		this.assembleType(['zangari_fighter_type_4', 'ship']);
+		this.assembleType([
+			'zangari_fighter_type_4a',
+			'zangari_fighter_type_4',
+			'ship',
+		]);
+		this.assembleType([
+			'zangari_fighter_type_4b',
+			'zangari_fighter_type_4',
+			'ship',
+		]);
 	},
 
 	assembleType(fromPiecesReversed) {

@@ -272,7 +272,7 @@ const pieces = {
 		immutable: {
 			typeShorthand: 'V/E',
 			model: '/ships/Valkyrie',
-			maxHullStrength: 75,
+			maxHullStrength: 125,
 			hasShields: true,
 			maxShieldStrength: 150,
 			shieldRechargeRate: 6,
@@ -407,7 +407,8 @@ const pieces = {
 				side: 7,
 				front: 7,
 			},
-			hasEMP: false,
+			hasEMP: true,
+			eMPStrength: 5,
 			hasCannons: true,
 			colors: c.groups.zangari.groupId,
 			cannonPower: 6,
@@ -423,6 +424,26 @@ const pieces = {
 			],
 			width: 52,
 			length: 44,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_4a: {
+		immutable: {
+			typeShorthand: 'Z/4A',
+			hasShields: false,
+			maxShieldStrength: 0,
+			shieldRechargeRate: 0,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_4b: {
+		immutable: {
+			typeShorthand: 'Z/4B',
+			cannonShots: 16,
+			cannonPositions: [
+				{ lengthWise: 17, widthWise: 4 },
+				{ lengthWise: 17, widthWise: -4 },
+			],
 		},
 		mutable: {},
 	},

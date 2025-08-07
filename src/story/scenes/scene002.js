@@ -42,7 +42,7 @@ const scene002 = {
 		mylok_1: {
 			id: 'mylok_1',
 			groupId: 'mylok',
-			type: 'zangari_fighter_type_3',
+			type: 'zangari_fighter_type_4a',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
