@@ -567,7 +567,7 @@ const story = {
 		} else {
 			if (
 				confirm(
-					'Starting a new game will revert your previous progress. Continue anyway?'
+					'Starting a new game will erase your previous progress. Continue anyway?'
 				)
 			) {
 				newGameProper();

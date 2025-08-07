@@ -1,6 +1,6 @@
 import c from './utils/constants';
 import timing from './utils/timing';
-import Button from './components/Button';
+import Button, { BUTTON_STYLES } from './components/Button';
 import {
 	readPlayerProgress,
 	getHasThePlayerMadeProgress,
@@ -367,6 +367,7 @@ const gameMenus = {
 				label: sceneDisplayName,
 				isFocused: sceneListItem.id === gameMenus.currentFocus ? true : false,
 				isDisabled: idx <= bestSceneIndex ? false : true,
+				style: BUTTON_STYLES.B,
 				doActivate: () => {
 					if (c.debug.menuButtons)
 						console.log('doActivate scene: ', sceneListItem.id);
@@ -380,6 +381,26 @@ const gameMenus = {
 				gameMenus.stageButtons[sceneListItem.id]
 			);
 		});
+
+		startY += 22;
+
+		gameMenus.stageButtons['newGame'] = new Button({
+			coordsAndDimensions: {
+				x: 430,
+				y: startY,
+				width: 340,
+				height: 64,
+			},
+			label:
+				'New game\n(Erases your game progress and\nrestores your level 1 hangar complement)',
+			isFocused: false,
+			doActivate: () => {
+				if (c.debug.menuButtons) console.log('doActivate newGame');
+				gameMenus.buttonFunctions.newGame();
+			},
+		});
+
+		gameMenus.handlers.menuStage.addChild(gameMenus.stageButtons['newGame']);
 
 		gameMenus.fadeInButtons();
 	},

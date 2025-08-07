@@ -1,6 +1,11 @@
 import * as PIXI from '../pixi';
 import soundEffects from '../audio/soundEffects';
 
+export const BUTTON_STYLES = {
+	A: 'A',
+	B: 'B',
+};
+
 export default class Button extends PIXI.Container {
 	constructor(props) {
 		/*
@@ -23,6 +28,11 @@ export default class Button extends PIXI.Container {
 		this.isFocused = props.isFocused;
 		this.isDisabled = false;
 		if (props.isDisabled !== undefined) this.isDisabled = props.isDisabled;
+		if (props.style !== undefined) {
+			this.style = props.style;
+		} else {
+			this.style = BUTTON_STYLES.A;
+		}
 		this.activateFn = props.doActivate;
 		this.sprites = {};
 		this.blurredBorderAlpha = 0.5;
@@ -31,7 +41,11 @@ export default class Button extends PIXI.Container {
 		this.sprites['bg'] = new PIXI.Graphics();
 
 		this.sprites['bg'].lineStyle(0);
-		this.bgColor = 0x606060;
+		if (this.style === BUTTON_STYLES.A) {
+			this.bgColor = 0x606060;
+		} else if (this.style === BUTTON_STYLES.B) {
+			this.bgColor = 0x003a50;
+		}
 		if (this.isDisabled) this.bgColor = 0xa0a0a0;
 		this.sprites['bg'].beginFill(this.bgColor, 1);
 		this.sprites['bg'].drawRoundedRect(
