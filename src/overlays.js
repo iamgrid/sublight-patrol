@@ -54,7 +54,7 @@ export default function overlays() {
 			<div class="game__hud-proper">
 				<div class="game__hud-coords-and-lives">
 					<div class="game__hud-lives" id="game__hud-lives"></div>
-					<div class="game__hud-coords" id="game__hud-coords"></div>
+					<div class="game__hud-coords" id="game__hud-coords" title="Your current coordinates"></div>
 				</div>
 				<div class="game__hud-left-edge"></div>
 				<div class="game__hud-player-desc">
@@ -62,16 +62,17 @@ export default function overlays() {
 						class="game__hud-player-desc-proper"
 						id="game__hud-player-desc-proper"
 					>
-						<div class="game__hud-id-text" id="game__hud-player-id"></div>
+						<div class="game__hud-id-text" id="game__hud-player-id" title="Your current designation"></div>
 						<div
 							class="game__hud-contents-text"
 							id="game__hud-player-contents"
+							title="The cargo/contents of your current vessel"
 						></div>
 					</div>
 				</div>
 				<div id="game__hud-meters" class="game__hud-meters">
 					<div id="game__hud-meters-proper" class="game__hud-meters-proper">
-						<div class="game__hud-meter" id="game__hud-meter-player-shield">
+						<div class="game__hud-meter" id="game__hud-meter-player-shield" title="Your current shield strength">
 							<div
 								class="meter-text"
 								id="game__hud-meter-player-shield-text"
@@ -81,7 +82,7 @@ export default function overlays() {
 								id="game__hud-meter-player-shield-bar"
 							></div>
 						</div>
-						<div class="game__hud-meter" id="game__hud-meter-player-hull">
+						<div class="game__hud-meter" id="game__hud-meter-player-hull" title="Your current hull strength">
 							<div
 								class="meter-text"
 								id="game__hud-meter-player-hull-text"
@@ -91,7 +92,7 @@ export default function overlays() {
 								id="game__hud-meter-player-hull-bar"
 							></div>
 						</div>
-						<div class="game__hud-meter" id="game__hud-meter-player-system">
+						<div class="game__hud-meter" id="game__hud-meter-player-system" title="Your vessel's current system health">
 							<div
 								class="meter-text meter-text--disabled"
 								id="game__hud-meter-player-system-text"
@@ -101,7 +102,7 @@ export default function overlays() {
 								id="game__hud-meter-player-system-bar"
 							></div>
 						</div>
-						<div class="game__hud-meter" id="game__hud-meter-target-shield">
+						<div class="game__hud-meter" id="game__hud-meter-target-shield" title="Target's current shield strength">
 							<div
 								class="meter-text"
 								id="game__hud-meter-target-shield-text"
@@ -111,7 +112,7 @@ export default function overlays() {
 								id="game__hud-meter-target-shield-bar"
 							></div>
 						</div>
-						<div class="game__hud-meter" id="game__hud-meter-target-hull">
+						<div class="game__hud-meter" id="game__hud-meter-target-hull" title="Target's current hull strength">
 							<div
 								class="meter-text"
 								id="game__hud-meter-target-hull-text"
@@ -121,7 +122,7 @@ export default function overlays() {
 								id="game__hud-meter-target-hull-bar"
 							></div>
 						</div>
-						<div class="game__hud-meter" id="game__hud-meter-target-system">
+						<div class="game__hud-meter" id="game__hud-meter-target-system" title="Target vessel's current system health">
 							<div
 								class="meter-text"
 								id="game__hud-meter-target-system-text"
@@ -138,10 +139,11 @@ export default function overlays() {
 						class="game__hud-target-desc-proper"
 						id="game__hud-target-desc-proper"
 					>
-						<div class="game__hud-id-text" id="game__hud-target-id"></div>
+						<div class="game__hud-id-text" id="game__hud-target-id" title="The designation of your current target"></div>
 						<div
 							class="game__hud-contents-text"
 							id="game__hud-target-contents"
+							title="The cargo/contents of your current target"
 						></div>
 					</div>
 				</div>

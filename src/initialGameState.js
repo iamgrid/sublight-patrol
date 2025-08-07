@@ -14,7 +14,7 @@ const initialGameState = {
 			hangarContents: [
 				c.playableFighterTypeIds.fenrir_dominator,
 				c.playableFighterTypeIds.valkyrie,
-				c.playableFighterTypeIds.zangari_fighter_type_4,
+				// c.playableFighterTypeIds.zangari_fighter_type_4,
 			],
 			lostOnThisMission: [],
 		},

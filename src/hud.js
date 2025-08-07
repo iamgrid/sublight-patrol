@@ -78,19 +78,30 @@ const hud = {
 	},
 
 	update(targeting, playerShips, allEntities, positions, playerId) {
+		// const functionSignature = 'hud.js@update()';
+
 		// player ships
-		// const heartEmoji = '&#10084;';
+
 		const rocketEmoji = '&#x1F680';
 		const shipsLostOnMission = playerShips.lostOnThisMission.length;
+
+		// console.log(functionSignature, {
+		// 	shipsLostOnMission,
+		// 	currentLostPlayerShips: hud.currentLostPlayerShips,
+		// 	hangarContents: playerShips.hangarContents,
+		// });
+
 		if (shipsLostOnMission !== hud.currentLostPlayerShips) {
 			let newStr = [];
 			const shipsInHangar = playerShips.hangarContents.length;
-			for (let i = 0; i < playerShips.hangarBerths; i++) {
-				let add = `<span class='game__hud-lives-life--unused'>${rocketEmoji}</span>`;
-				if (shipsInHangar + 1 > i) {
-					add = `<span class='game__hud-lives-life--available'>${rocketEmoji}</span>`;
-				} else if (shipsInHangar + 1 + shipsLostOnMission > i) {
-					add = `<span class='game__hud-lives-life--lost'>${rocketEmoji}</span>`;
+			for (let i = 1; i <= playerShips.hangarBerths; i++) {
+				let add = `<span class='game__hud-lives-life--unused' title='An empty berth in your hangar'>${rocketEmoji}</span>`;
+				if (i === shipsInHangar + 1) {
+					add = `<span class='game__hud-lives-life--available' title='Your current fighter craft'>${rocketEmoji}</span>`;
+				} else if (i <= shipsInHangar) {
+					add = `<span class='game__hud-lives-life--available' title='A spare fighter craft in your hangar'>${rocketEmoji}</span>`;
+				} else if (i <= shipsInHangar + 1 + shipsLostOnMission) {
+					add = `<span class='game__hud-lives-life--lost' title="A fighter craft you've lost on this mission">${rocketEmoji}</span>`;
 				}
 				newStr.push(add);
 			}
@@ -98,10 +109,6 @@ const hud = {
 			document.getElementById('game__hud-lives').innerHTML = newStr.join('');
 
 			hud.currentLostPlayerShips = shipsLostOnMission;
-
-			if (shipsInHangar < 1) {
-				// GAME OVER
-			}
 		}
 
 		// off-screen entity pointers
@@ -260,9 +267,8 @@ const hud = {
 				if (entity === 'player' || completeDisplayObj.targetHasBeenScanned)
 					contentsDisp = completeDisplayObj[`${entity}Contents`];
 
-				document.getElementById(
-					`game__hud-${entity}-contents`
-				).innerText = contentsDisp;
+				document.getElementById(`game__hud-${entity}-contents`).innerText =
+					contentsDisp;
 				break;
 			}
 			case entity + 'Shield':

@@ -24,6 +24,7 @@
 	z-index: 12;
 	font-size: 12px;
 	color: #909090;
+	pointer-events: none;
 }
 
 .game__loading {
@@ -175,6 +176,7 @@
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
+	pointer-events: none;
 }
 
 .game__messagelayer-proper {
@@ -240,6 +242,7 @@
 	align-items: center;
 	opacity: 0;
 	transition: opacity ease-in-out 1s;
+	pointer-events: none;
 }
 
 .game__alertsAndWarnings--shown {
@@ -293,6 +296,7 @@
 	left: 0;
 	right: 0;
 	z-index: 8;
+	pointer-events: none;
 }
 
 .game__plates_plate {
@@ -694,6 +698,7 @@
 	padding-top: 12px;
 	color: transparent;
 	/* text-shadow: 0 0 0 #ffffff60; */
+	cursor: default;
 }
 
 .game__hud-lives-life--unused {
@@ -712,6 +717,7 @@
 	font-size: 10px;
 	padding-top: 8px;
 	opacity: 0.7;
+	cursor: default;
 }
 
 .game__hud-left-edge {
