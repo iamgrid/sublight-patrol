@@ -713,6 +713,10 @@
 	text-shadow: 0 0 0 #ffffffff;
 }
 
+.game__hud-lives-life--current {
+	text-shadow: 0 0 0 rgb(104, 242, 255);
+}
+
 .game__hud-coords {
 	font-size: 10px;
 	padding-top: 8px;

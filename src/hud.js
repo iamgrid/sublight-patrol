@@ -29,6 +29,7 @@ const hud = {
 	healthBarsYOffset: -50,
 	edgeAngles: null,
 	targetBlinker: 0,
+	requestFullReRender: false,
 
 	toggle(requestedBy = '', show = false) {
 		if (c.debug.sequentialEvents)
@@ -91,13 +92,16 @@ const hud = {
 		// 	hangarContents: playerShips.hangarContents,
 		// });
 
-		if (shipsLostOnMission !== hud.currentLostPlayerShips) {
+		if (
+			shipsLostOnMission !== hud.currentLostPlayerShips ||
+			hud.requestFullReRender
+		) {
 			let newStr = [];
 			const shipsInHangar = playerShips.hangarContents.length;
 			for (let i = 1; i <= playerShips.hangarBerths; i++) {
 				let add = `<span class='game__hud-lives-life--unused' title='An empty berth in your hangar'>${rocketEmoji}</span>`;
 				if (i === shipsInHangar + 1) {
-					add = `<span class='game__hud-lives-life--available' title='Your current fighter craft'>${rocketEmoji}</span>`;
+					add = `<span class='game__hud-lives-life--current' title='Your current fighter craft'>${rocketEmoji}</span>`;
 				} else if (i <= shipsInHangar) {
 					add = `<span class='game__hud-lives-life--available' title='A spare fighter craft in your hangar'>${rocketEmoji}</span>`;
 				} else if (i <= shipsInHangar + 1 + shipsLostOnMission) {
@@ -109,6 +113,10 @@ const hud = {
 			document.getElementById('game__hud-lives').innerHTML = newStr.join('');
 
 			hud.currentLostPlayerShips = shipsLostOnMission;
+
+			if (hud.requestFullReRender) {
+				hud.requestFullReRender = false;
+			}
 		}
 
 		// off-screen entity pointers

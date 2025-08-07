@@ -37,6 +37,7 @@ const story = {
 		frameZero: null,
 		hudShouldBeShowing: null,
 		activeKeyboardLayout: null,
+		hud: null,
 	}, // gets its values in App.js
 	themeMusicInterval: null,
 	sceneList: [
@@ -530,6 +531,7 @@ const story = {
 		if (goAhead) {
 			music.stopPlaying();
 			gameMenus.clearButtons();
+			hud.requestFullReRender = true;
 			story.advance(functionSignature, sceneId, 0);
 		}
 	},
@@ -558,6 +560,8 @@ const story = {
 				story.handlers.state,
 				storyConstants.scenes.scene001
 			);
+
+			hud.requestFullReRender = true;
 
 			story.advance(functionSignature);
 		}
@@ -593,6 +597,7 @@ const story = {
 		} else {
 			music.stopPlaying();
 			gameMenus.clearButtons();
+			hud.requestFullReRender = true;
 			story.removeMainMenuTopPortion();
 			story.advance(
 				functionSignature,

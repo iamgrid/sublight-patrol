@@ -231,6 +231,7 @@ export default class App extends PIXI.Application {
 			frameZero: this.frameZero,
 			hudShouldBeShowing: this.hudShouldBeShowing,
 			activeKeyboardLayout: this.activeKeyboardLayout,
+			hud: this.hud,
 		};
 
 		audio.handlers = {
