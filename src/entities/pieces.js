@@ -439,7 +439,7 @@ const pieces = {
 	zangari_fighter_type_4b: {
 		immutable: {
 			typeShorthand: 'Z/4B',
-			cannonShots: 16,
+			cannonShots: 24,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
