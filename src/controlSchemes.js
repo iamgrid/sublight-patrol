@@ -43,7 +43,7 @@ const controlSchemes = {
 			{ keys: 'esc', function: 'Resume game' },
 			{ keys: 'left, right', function: 'Cycle menu buttons' },
 			{ keys: 'enter', function: 'Activate menu button' },
-			{ keys: 'up, down', function: 'Scroll messages' },
+			{ keys: 'up, down', function: 'Scroll combat log' },
 		],
 		execute() {
 			controlSchemes.showLayout(controlSchemes.pause.id);

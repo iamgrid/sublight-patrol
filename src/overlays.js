@@ -33,7 +33,10 @@ export default function overlays() {
 		</div>
 		<div class="game__messagelayer" id="game__messagelayer">
 			<div class="game__messagelayer-proper" id="game__messagelayer-proper">
-				<div class="game__messagelayer-speaker" id="game__messagelayer-speaker"></div>
+				<div class="game__messagelayer-top">
+					<div class="game__messagelayer-speaker" id="game__messagelayer-speaker"></div>
+					<div class="game__messagelayer-where-and-when" id="game__messagelayer-where-and-when"></div>
+				</div>
 				<div class="game__messagelayer-message">
 					<div class="game__messagelayer-message-text" id="game__messagelayer-message-text"></div>
 					<div class="game__messagelayer-key">Hit [SPACE] to hide this message</div>
@@ -289,7 +292,7 @@ export default function overlays() {
 			<div class="game__pause-text">[Paused]</div>
 			<div class="game__pause-objectives" id="game__pause-objectives"></div>
 		</div>
-		<div class="game__status game__status--hidden" id="game__status">
+		<div class="game__status game__status--hidden" id="game__status" title="Combat log">
 			<div class="game__status-expand" id="game__status-expand">
 				<svg
 					class="game__status-expand-chevron"

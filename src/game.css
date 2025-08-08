@@ -186,20 +186,32 @@
 	transition: opacity 0.4s;
 }
 
-.game__messagelayer-speaker {
+.game__messagelayer-top {
 	flex-shrink: 0;
 	flex-grow: 0;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	transform: translateY(18px);
+	padding: 0 3em;
+}
+
+.game__messagelayer-speaker {
 	background-color: #606060;
 	border: 1px solid #909090;
 	border-radius: 20px;
 	padding: 0.3em 1em 0.3em 1.2em;
-	margin-left: 3em;
-	margin-right: auto;
-	transform: translateY(18px);
 	color: #ffffffb0;
 	font-weight: 700;
 	letter-spacing: 0.2em;
 	cursor: default;
+}
+
+.game__messagelayer-where-and-when {
+	text-align: right;
+	font-style: italic;
+	font-size: 13px;
+	transform: translateY(22px);
+	color: #ffffff87;
 }
 
 .game__messagelayer-proper--dialog .game__messagelayer-speaker {

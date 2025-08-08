@@ -781,9 +781,12 @@ export const messageLayer = {
 		dialog: 'dialog',
 	},
 	queuedMessages: [],
-	showMessage(speaker, message, messageType = 'dialog') {
+	showMessage(speaker, message, whereAndWhen, messageType) {
 		document.getElementById('game__messagelayer-speaker').innerHTML =
 			speaker + ' :';
+		document.getElementById(
+			'game__messagelayer-where-and-when'
+		).innerHTML = `(${whereAndWhen})`;
 		document.getElementById('game__messagelayer-message-text').innerHTML =
 			message.replace(/\t/g, '');
 
@@ -821,6 +824,7 @@ export const messageLayer = {
 						messageLayer.showMessage(
 							messageLayer.queuedMessages[0].speaker,
 							messageLayer.queuedMessages[0].message,
+							messageLayer.queuedMessages[0].whereAndWhen,
 							messageLayer.queuedMessages[0].messageType
 						);
 					},
@@ -837,6 +841,7 @@ export const messageLayer = {
 		messageLayer.showMessage(
 			messageLayer.queuedMessages[0].speaker,
 			messageLayer.queuedMessages[0].message,
+			messageLayer.queuedMessages[0].whereAndWhen,
 			messageLayer.queuedMessages[0].messageType
 		);
 	},

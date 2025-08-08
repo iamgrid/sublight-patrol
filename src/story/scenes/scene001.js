@@ -234,26 +234,24 @@ const scene001 = {
 				timing.setTimeout(
 					() => {
 						messageLayer.show();
-						// messageLayer.showMessage(
-						// 	'Game Help',
-						// 	'Use the pause menu ([ESC] key) to see your current objectives.<br>The list of objectives will update and expand as you progress through a mission, so remember to check back on the pause menu any time you are unsure what to do next!',
-						// 	messageLayer.MESSAGE_TYPE_IDS.system
-						// );
 						messageLayer.queueMessages([
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
 								speaker: 'Commander Harris',
+								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
 								message: 'Hello? Is this thing on?',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
 								speaker: 'Commander Harris',
+								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
 								message: 'Can you hear me lieutenant?',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,
 								speaker: 'Game Help',
-								message: `Use the pause menu ([ESC] key) to see your current objectives.
+								whereAndWhen: 'now',
+								message: `Use the pause menu ([ESC] key) to see your current objectives and your combat log.
 									The list of objectives will update and expand as you progress through a mission, so remember to check back on the pause menu any time you are unsure what to do next!`,
 							},
 						]);
