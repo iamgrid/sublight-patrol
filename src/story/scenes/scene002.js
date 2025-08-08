@@ -6,7 +6,7 @@ import controlSchemes from '../../controlSchemes';
 // import timing from '../../utils/timing';
 
 const scene002 = {
-	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
+	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
 		wittyText: "What, like it's hard?",
@@ -126,6 +126,11 @@ const scene002 = {
 				};
 			},
 			execute(options) {
+				scene002.handlers.storyStateFns.addFighterToPlayerHangar(
+					c.playableFighterTypeIds.zangari_fighter_type_4,
+					true
+				);
+
 				const playerId = options.playerId;
 				const playerShipType = options.playerShipType;
 				entities.spawn(scene002.entities.harpax_00097, {

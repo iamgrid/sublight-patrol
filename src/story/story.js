@@ -112,6 +112,28 @@ const story = {
 			}
 		}
 	},
+	storyStateFns: {
+		addFighterToPlayerHangar(fighterTypeId, preventDuplicates) {
+			const currentState = story.handlers.state();
+
+			story.handlers.dispatch({
+				type: c.actions.ADD_FIGHTER_TO_PLAYER_HANGAR,
+				fighterTypeId,
+				preventDuplicates,
+				callbackFn: () => {
+					const functionSignature =
+						'story.js@addFighterToPlayerHangar() -> callbackFn()';
+					console.log(functionSignature);
+					hud.requestFullReRender = true;
+					storePlayerProgress(
+						`${functionSignature} - add fighter to player hangar`,
+						story.handlers.state,
+						currentState.game.currentScene
+					);
+				},
+			});
+		},
+	},
 
 	/**
 	 *
@@ -322,6 +344,8 @@ const story = {
 		if (currentSceneListObject.hasTitlePlate && playSceneBeat === 0) {
 			currentSceneObject.handlers.checkBeatCompletion =
 				story.checkBeatCompletion;
+			currentSceneObject.handlers.storyStateFns = story.storyStateFns;
+
 			status.add(
 				'aqua',
 				`---&nbsp;&nbsp;&nbsp;${currentSceneObject.titlePlate.mainText}&nbsp;&nbsp;&nbsp;---`,

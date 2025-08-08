@@ -7,7 +7,7 @@ import timing from '../../utils/timing';
 import { messageLayer } from '../../utils/helpers';
 
 const scene001 = {
-	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
+	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene001', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
 		wittyText: "It's time to put your big boy pants on",

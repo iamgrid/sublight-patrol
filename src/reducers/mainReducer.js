@@ -931,6 +931,33 @@ export default function mainReducer(state, action) {
 				entities: newEntities,
 			};
 		}
+		case c.actions.ADD_FIGHTER_TO_PLAYER_HANGAR: {
+			const newHangarContents = [...state.game.playerShips.hangarContents];
+
+			if (newHangarContents.length < state.game.playerShips.hangarBerths) {
+				if (
+					(action.preventDuplicates &&
+						!newHangarContents.includes(action.fighterTypeId)) ||
+					!action.preventDuplicates
+				) {
+					newHangarContents.push(action.fighterTypeId);
+				}
+			}
+
+			return [
+				() => action.callbackFn(),
+				{
+					...state,
+					game: {
+						...state.game,
+						playerShips: {
+							...state.game.playerShips,
+							hangarContents: [...newHangarContents],
+						},
+					},
+				},
+			];
+		}
 		case c.actions.CLEANUP: {
 			return {
 				...state,
