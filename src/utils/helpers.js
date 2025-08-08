@@ -776,18 +776,69 @@ export const shields = {
 
 export const messageLayer = {
 	messageIsVisible: false,
-	showMessage(speaker, message) {
+	MESSAGE_TYPE_IDS: {
+		system: 'system',
+		dialog: 'dialog',
+	},
+	queuedMessages: [],
+	showMessage(speaker, message, messageType = 'dialog') {
 		document.getElementById('game__messagelayer-speaker').innerHTML =
 			speaker + ' :';
 		document.getElementById('game__messagelayer-message-text').innerHTML =
-			message;
+			message.replace(/\t/g, '');
+
+		if (messageType === messageLayer.MESSAGE_TYPE_IDS.system) {
+			document
+				.getElementById('game__messagelayer-proper')
+				.classList.add('game__messagelayer-proper--system');
+			document
+				.getElementById('game__messagelayer-proper')
+				.classList.remove('game__messagelayer-proper--dialog');
+		} else if (messageType === messageLayer.MESSAGE_TYPE_IDS.dialog) {
+			document
+				.getElementById('game__messagelayer-proper')
+				.classList.add('game__messagelayer-proper--dialog');
+			document
+				.getElementById('game__messagelayer-proper')
+				.classList.remove('game__messagelayer-proper--system');
+		}
+
 		document.getElementById('game__messagelayer-proper').style.opacity = '0.7';
 		messageLayer.messageIsVisible = true;
 	},
 
 	fadeOutMessage() {
+		// fade current message
 		document.getElementById('game__messagelayer-proper').style.opacity = '0';
 		messageLayer.messageIsVisible = false;
+
+		if (messageLayer.queuedMessages.length > 0) {
+			messageLayer.queuedMessages.shift();
+			if (messageLayer.queuedMessages.length > 0) {
+				// Show the next queued message
+				timing.setTimeout(
+					() => {
+						messageLayer.showMessage(
+							messageLayer.queuedMessages[0].speaker,
+							messageLayer.queuedMessages[0].message,
+							messageLayer.queuedMessages[0].messageType
+						);
+					},
+					timing.modes.play,
+					800
+				);
+			}
+		}
+	},
+
+	queueMessages(messages) {
+		messageLayer.queuedMessages = [...messages];
+
+		messageLayer.showMessage(
+			messageLayer.queuedMessages[0].speaker,
+			messageLayer.queuedMessages[0].message,
+			messageLayer.queuedMessages[0].messageType
+		);
 	},
 
 	hide() {

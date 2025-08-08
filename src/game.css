@@ -202,6 +202,12 @@
 	cursor: default;
 }
 
+.game__messagelayer-proper--dialog .game__messagelayer-speaker {
+	background-color: #407684;
+	border-color: #4c93a4;
+	color: rgb(0, 225, 255);
+}
+
 .game__messagelayer-message {
 	flex-grow: 1;
 	background-color: #303030;
@@ -213,10 +219,16 @@
 	cursor: default;
 }
 
+.game__messagelayer-proper--dialog .game__messagelayer-message {
+	background-color: #2b4349;
+	border-color: #4c93a4;
+}
+
 .game__messagelayer-message-text {
 	font-size: 1.1em;
 	line-height: 1.6em;
 	text-align: justify;
+	white-space: pre-wrap;
 }
 
 .game__messagelayer-key {
