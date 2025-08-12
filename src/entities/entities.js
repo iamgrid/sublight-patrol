@@ -35,6 +35,7 @@ const entities = {
 	init() {
 		this.assembleType(['container']);
 		this.assembleType(['buoy']);
+		this.assembleType(['fuel_depot']);
 		this.assembleType(['shuttle', 'ship']);
 		this.assembleType(['freighter_l1', 'ship']);
 		this.assembleType(['freighter_l2', 'freighter_l1', 'ship']);

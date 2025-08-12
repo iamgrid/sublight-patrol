@@ -79,6 +79,16 @@ const pieces = {
 		mutable: {},
 	},
 
+	fuel_depot: {
+		immutable: {
+			typeShorthand: 'DEP',
+			model: '/other/FuelDepot',
+			width: 404,
+			length: 272,
+		},
+		mutable: {},
+	},
+
 	hasHull: {
 		immutable: {
 			maxHullStrength: null,

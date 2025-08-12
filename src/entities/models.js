@@ -12,6 +12,7 @@ import FreighterL2 from './ships/FreighterL2';
 import FreighterL3 from './ships/FreighterL3';
 import GContainer from './other/GContainer';
 import Buoy from './other/Buoy';
+import FuelDepot from './other/FuelDepot';
 
 // prettier-ignore
 const models = {
@@ -29,6 +30,7 @@ const models = {
 	'/ships/FreighterL3': FreighterL3,
 	'/other/GContainer': GContainer,
 	'/other/Buoy': Buoy,
+	'/other/FuelDepot': FuelDepot,
 };
 
 export default models;

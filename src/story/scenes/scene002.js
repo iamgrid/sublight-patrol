@@ -39,6 +39,10 @@ const scene002 = {
 			id: 'harpax_00097',
 			type: 'buoy',
 		},
+		fuel_depot_39_617_e: {
+			id: 'fuel_depot_39_617_e',
+			type: 'fuel_depot',
+		},
 		mylok_1: {
 			id: 'mylok_1',
 			groupId: 'mylok',
@@ -133,9 +137,15 @@ const scene002 = {
 
 				const playerId = options.playerId;
 				const playerShipType = options.playerShipType;
+
 				entities.spawn(scene002.entities.harpax_00097, {
 					posX: 1000,
 					posY: 345,
+				});
+
+				entities.spawn(scene002.entities.fuel_depot_39_617_e, {
+					posX: 4000,
+					posY: 0,
 				});
 
 				entities.spawn(
