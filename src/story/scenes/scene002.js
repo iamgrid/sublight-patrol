@@ -144,7 +144,7 @@ const scene002 = {
 				});
 
 				entities.spawn(scene002.entities.fuel_depot_39_617_e, {
-					posX: 4000,
+					posX: -1000,
 					posY: 0,
 				});
 

@@ -122,7 +122,7 @@ export default class App extends PIXI.Application {
 		status.init();
 		shields.init();
 
-		this.loader.add('spriteSheet', './assets/sprite_sheet_v12.png');
+		this.loader.add('spriteSheet', './assets/sprite_sheet_v13.png');
 
 		for (let trackName in music.manifest) {
 			this.loader.add(trackName, './assets/music/' + music.manifest[trackName]);

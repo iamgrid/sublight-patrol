@@ -83,7 +83,7 @@ const pieces = {
 		immutable: {
 			typeShorthand: 'DEP',
 			model: '/other/FuelDepot',
-			width: 404,
+			width: 1128,
 			length: 272,
 		},
 		mutable: {},
