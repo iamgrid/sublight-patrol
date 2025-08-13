@@ -3,14 +3,15 @@ import c from '../../utils/constants';
 import entities from '../../entities/entities';
 import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
-// import timing from '../../utils/timing';
+import timing from '../../utils/timing';
+import { messageLayer } from '../../utils/helpers';
 
 const scene002 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
-		wittyText: "What, like it's hard?",
-		mainText: 'Mission 2 of 2: The Kitchen Sink',
+		wittyText: 'Wait, the Zee were after the meds?',
+		mainText: 'Mission 2 of 4: Escaping the Hunting Party',
 	},
 	playVolume: {
 		minX: -2000,
@@ -179,6 +180,23 @@ const scene002 = {
 						behaviorAssignedStationX: 980,
 						behaviorAssignedStationY: 170,
 					}
+				);
+
+				timing.setTimeout(
+					() => {
+						messageLayer.show();
+						messageLayer.queueMessages([
+							{
+								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
+								speaker: 'Ensign Devon (Shuttle pilot)',
+								whereAndWhen: 'here and now',
+								message:
+									'<p>Drat, I guess the Zee are much more interested in these medical supplies than we assumed.</p><p>Get ready for a fight Lieutenant!</p>',
+							},
+						]);
+					},
+					timing.modes.play,
+					11000
 				);
 			},
 		},

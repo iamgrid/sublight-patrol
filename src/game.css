@@ -211,7 +211,7 @@
 	font-style: italic;
 	font-size: 13px;
 	transform: translateY(22px);
-	color: #ffffff87;
+	/* color: #ffffff87; */
 }
 
 .game__messagelayer-proper--dialog .game__messagelayer-speaker {
@@ -240,7 +240,16 @@
 	font-size: 1.1em;
 	line-height: 1.6em;
 	text-align: justify;
-	white-space: pre-wrap;
+}
+
+.game__messagelayer-message-text p {
+	margin: 0;
+	padding: 0;
+	padding-top: 9px;
+}
+
+.game__messagelayer-message-text p:first-child {
+	padding-top: 0;
 }
 
 .game__messagelayer-key {

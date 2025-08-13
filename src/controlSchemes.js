@@ -82,10 +82,11 @@ const controlSchemes = {
 		id: 'play',
 		descriptions: [
 			{ keys: 'esc', function: 'Pause game' },
+			{ keys: 'm', function: 'Advance dialog' },
 			{ keys: 'up, down, left, right', function: 'Thrusters' },
 			{ keys: 'f', function: 'Flip 180°' },
 			{ keys: 'a, s', function: 'Cycle targets' },
-			{ keys: 'd', function: 'Target pointed / closest entity' },
+			{ keys: 'd', function: 'Target pointed entity' },
 			{ keys: 'c', function: 'Clear target' },
 			{ keys: 'space', function: 'Fire' },
 			{ keys: 'e', function: 'EMP' },
@@ -135,11 +136,11 @@ const controlSchemes = {
 				});
 
 				if (Keyboard.isKeyPressed('Space')) {
-					if (messageLayer.messageIsVisible) {
-						messageLayer.fadeOutMessage();
-					} else {
-						shots.startShooting(playerId);
-					}
+					shots.startShooting(playerId);
+				}
+
+				if (Keyboard.isKeyPressed('KeyM')) {
+					messageLayer.fadeOutMessage();
 				}
 
 				if (Keyboard.isKeyReleased('Space')) {

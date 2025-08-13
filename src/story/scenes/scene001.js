@@ -10,8 +10,8 @@ const scene001 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene001', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
-		wittyText: "It's time to put your big boy pants on",
-		mainText: 'Mission 1 of 2: Welcome to Space!',
+		wittyText: "Welcome to space. It's time to put your big boy pants on!",
+		mainText: 'Mission 1 of 4: Looters on Aisle 3',
 	},
 	playVolume: {
 		minX: -2000,
@@ -37,7 +37,7 @@ const scene001 = {
 		crg_15497e: {
 			id: 'crg_15497e',
 			groupId: 'crg',
-			type: 'freighter_l1',
+			type: 'freighter_l3',
 			playerRelation: 'neutral',
 			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
 			contents: 'Empty',
@@ -83,24 +83,66 @@ const scene001 = {
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		b2508_012: {
-			id: 'b2508_012',
+		b2508_001: {
+			id: 'b2508_001',
 			groupId: 'b2508',
 			type: 'container',
 			contents: 'Steel rolls',
 			contentClassification: c.entityContentClassifications.irrelevant,
 		},
-		b2508_013: {
-			id: 'b2508_013',
+		b2508_002: {
+			id: 'b2508_002',
 			groupId: 'b2508',
 			type: 'container',
 			contents: 'Smithing tools',
+			contentClassification: c.entityContentClassifications.irrelevant,
 		},
-		b2508_014: {
-			id: 'b2508_014',
+		b2508_003: {
+			id: 'b2508_003',
 			groupId: 'b2508',
 			type: 'container',
 			contents: 'Medicine',
+		},
+		b2508_004: {
+			id: 'b2508_004',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Smithing tools',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
+		b2508_006: {
+			id: 'b2508_006',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Furnace components',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
+		b2508_007: {
+			id: 'b2508_007',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Furnace components',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
+		b2508_008: {
+			id: 'b2508_008',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Furnace components',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
+		b2508_009: {
+			id: 'b2508_009',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Steel rolls',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
+		b2508_010: {
+			id: 'b2508_010',
+			groupId: 'b2508',
+			type: 'container',
+			contents: 'Steel rolls',
 			contentClassification: c.entityContentClassifications.irrelevant,
 		},
 		htran_091: {
@@ -132,7 +174,7 @@ const scene001 = {
 						},
 						{
 							type: c.objectiveTypes.mustHaveSurvived.id,
-							groupId: scene001.entities.b2508_013.groupId,
+							groupId: scene001.entities.b2508_001.groupId,
 							requiredPercentage: 100,
 						},
 					],
@@ -216,19 +258,49 @@ const scene001 = {
 					}
 				);
 
-				entities.spawn(scene001.entities.b2508_012, {
-					posX: 1900,
-					posY: 225,
-				});
-
-				entities.spawn(scene001.entities.b2508_013, {
+				entities.spawn(scene001.entities.b2508_001, {
 					posX: 1900,
 					posY: 150,
 				});
 
-				entities.spawn(scene001.entities.b2508_014, {
+				entities.spawn(scene001.entities.b2508_002, {
+					posX: 1900,
+					posY: 225,
+				});
+
+				entities.spawn(scene001.entities.b2508_003, {
 					posX: 1900,
 					posY: 300,
+				});
+
+				entities.spawn(scene001.entities.b2508_004, {
+					posX: 2000,
+					posY: 75,
+				});
+
+				entities.spawn(scene001.entities.b2508_006, {
+					posX: 2000,
+					posY: 225,
+				});
+
+				entities.spawn(scene001.entities.b2508_007, {
+					posX: 2000,
+					posY: 300,
+				});
+
+				entities.spawn(scene001.entities.b2508_008, {
+					posX: 2000,
+					posY: 375,
+				});
+
+				entities.spawn(scene001.entities.b2508_009, {
+					posX: 2100,
+					posY: 150,
+				});
+
+				entities.spawn(scene001.entities.b2508_010, {
+					posX: 2100,
+					posY: 225,
 				});
 
 				timing.setTimeout(
@@ -239,25 +311,27 @@ const scene001 = {
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
-								message: 'Hello? Is this thing on?',
+								message:
+									'<p>Good morning Lieutenant!</p><p>The Harpax Ministry of Health has tasked us with recovering a case of high value medicine from Container Yard H17 which has recently been overrun by the Zangari.</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
-								message: 'Can you hear me lieutenant?',
+								message:
+									'<p>Your job is to chase off the enemy fighters present while making sure the remaining containers stay in one piece until our shuttle can arrive to pick up the goods.</p><p>Good hunting!</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,
 								speaker: 'Game Help',
-								whereAndWhen: 'now',
-								message: `Use the pause menu ([ESC] key) to see your current objectives and your combat log.
-									The list of objectives will update and expand as you progress through a mission, so remember to check back on the pause menu any time you are unsure what to do next!`,
+								whereAndWhen: 'here and now',
+								message:
+									'<p>Use the pause menu ([ESC] key) to see your current objectives and your combat log.</p><p>The list of objectives will update and expand as you progress through a mission, so remember to check back on the pause menu any time you are unsure what to do next!</p>',
 							},
 						]);
 					},
 					timing.modes.play,
-					6000
+					11000
 				);
 
 				// timing.setTimeout(
@@ -314,8 +388,8 @@ const scene001 = {
 						posY: 170,
 					},
 					{
-						behaviorAssignedStationX: 1980,
-						behaviorAssignedStationY: 170,
+						behaviorAssignedStationX: 2180,
+						behaviorAssignedStationY: 230,
 					}
 				);
 
@@ -326,8 +400,8 @@ const scene001 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 2030,
-						behaviorAssignedStationY: 120,
+						behaviorAssignedStationX: 2240,
+						behaviorAssignedStationY: 130,
 					}
 				);
 
@@ -338,8 +412,8 @@ const scene001 = {
 						posY: 220,
 					},
 					{
-						behaviorAssignedStationX: 2030,
-						behaviorAssignedStationY: 220,
+						behaviorAssignedStationX: 2240,
+						behaviorAssignedStationY: 320,
 					}
 				);
 			},

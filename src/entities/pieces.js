@@ -205,9 +205,9 @@ const pieces = {
 		immutable: {
 			model: '/ships/FreighterL2',
 			thrusters: {
-				main: 3,
-				side: 2,
-				front: 2,
+				main: 4,
+				side: 3,
+				front: 3,
 			},
 			width: 34,
 			length: 130,
@@ -218,9 +218,9 @@ const pieces = {
 		immutable: {
 			model: '/ships/FreighterL3',
 			thrusters: {
-				main: 2,
-				side: 1,
-				front: 1,
+				main: 4,
+				side: 3,
+				front: 3,
 			},
 			width: 34,
 			length: 172,
@@ -348,7 +348,7 @@ const pieces = {
 		immutable: {
 			typeShorthand: 'Z/2',
 			model: '/ships/ZangariFighterType2',
-			maxHullStrength: 125,
+			maxHullStrength: 150,
 			hasShields: false,
 			maxSystemStrength: 250,
 			thrusters: {
@@ -360,7 +360,7 @@ const pieces = {
 			hasCannons: true,
 			colors: c.groups.zangari.groupId,
 			cannonPower: 4,
-			cannonFiringSpeed: 0.28,
+			cannonFiringSpeed: 0.25,
 			cannonShots: 16,
 			cannonCooldown: 1,
 			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type2.id,

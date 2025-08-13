@@ -361,16 +361,16 @@ const story = {
 			timing.toggleEntityMovement(false, 'story.js@advance() 3');
 			soundEffects.muteUnmuteAllLoops('story.js@advance() 4', true);
 			plates.fadeInPlate(25);
-			plates.fadeOutMatte(50, 4000);
-			timing.toggleEntityMovement(true, 'story.js@advance() 5', 4000);
+			plates.fadeOutMatte(50, 6000);
+			timing.toggleEntityMovement(true, 'story.js@advance() 5', 6000);
 			timing.setTimeout(
 				() => {
 					soundEffects.muteUnmuteAllLoops('story.js@advance() 6', false);
 				},
 				timing.modes.play,
-				4000
+				6000
 			);
-			plates.fadeOutPlate(25, 6000);
+			plates.fadeOutPlate(25, 9000);
 		}
 
 		if (!currentSceneListObject.hasEntities) {

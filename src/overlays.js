@@ -39,7 +39,7 @@ export default function overlays() {
 				</div>
 				<div class="game__messagelayer-message">
 					<div class="game__messagelayer-message-text" id="game__messagelayer-message-text"></div>
-					<div class="game__messagelayer-key">Hit [SPACE] to hide this message</div>
+					<div class="game__messagelayer-key">Hit [M] to advance this dialog</div>
 				</div>
 			</div>
 		</div>

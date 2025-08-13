@@ -18,6 +18,10 @@ const plates = {
 		fadeOutPlate: null,
 	},
 
+	/**
+	 *
+	 * @param {*} steps must be multiples of 25
+	 */
 	fadeInMatte(steps = 25, delayMS = 0) {
 		const functionSignature = 'plates.js@fadeInMatte()';
 
@@ -65,6 +69,10 @@ const plates = {
 		);
 	},
 
+	/**
+	 *
+	 * @param {*} steps must be multiples of 25
+	 */
 	fadeOutMatte(steps = 25, delayMS = 0) {
 		const functionSignature = 'plates.js@fadeOutMatte()';
 
@@ -198,6 +206,10 @@ const plates = {
 		document.getElementById('game__plates_plate_btl').innerHTML = btlText;
 	},
 
+	/**
+	 *
+	 * @param {*} steps must be multiples of 25
+	 */
 	fadeInPlate(steps = 25, delayMS = 0) {
 		const functionSignature = 'plates.js@fadeInPlate()';
 
@@ -229,6 +241,10 @@ const plates = {
 		);
 	},
 
+	/**
+	 *
+	 * @param {*} steps must be multiples of 25
+	 */
 	fadeOutPlate(steps = 25, delayMS = 0) {
 		const functionSignature = 'plates.js@fadeOutPlate()';
 
