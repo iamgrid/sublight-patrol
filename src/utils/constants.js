@@ -43,9 +43,9 @@ const c = {
 		height: 450,
 	},
 	zIndices: {
-		environmental: 0,
+		background: 0, // buoys, stations and other non-shootable entities
 		shots: 100000,
-		entities: 200000,
+		foreground: 200000, // ships, containers and other shootable entities
 		healthBars: 300000,
 	},
 	starScapeLayers: [

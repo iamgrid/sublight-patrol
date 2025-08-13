@@ -30,7 +30,8 @@ const entities = {
 	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
-	zIndexIterator: c.zIndices.entities,
+	backgroundEntityZIndexIterator: c.zIndices.background,
+	foregroundEntityZIndexIterator: c.zIndices.foreground,
 
 	init() {
 		this.assembleType(['container']);
@@ -250,7 +251,14 @@ const entities = {
 		} else {
 			console.error('spawn was called with a weird pos object:', pos);
 		}
-		stageEntity.zIndex = this.zIndexIterator;
+
+		if (!newEntity.immutable.isBackgroundEntity) {
+			stageEntity.zIndex = this.foregroundEntityZIndexIterator;
+			this.foregroundEntityZIndexIterator++;
+		} else {
+			stageEntity.zIndex = this.backgroundEntityZIndexIterator;
+			this.backgroundEntityZIndexIterator++;
+		}
 
 		this.stageEntities[newEntity.id] = stageEntity;
 
@@ -281,8 +289,6 @@ const entities = {
 				timing.times.play
 			);
 		}
-
-		this.zIndexIterator++;
 	},
 
 	shieldCallback(hasShields, entityId) {
@@ -471,7 +477,7 @@ const entities = {
 		}
 
 		entities.stageEntities = {};
-		entities.zIndexIterator = c.zIndices.entities;
+		entities.foregroundEntityZIndexIterator = c.zIndices.entities;
 	},
 };
 

@@ -13,6 +13,7 @@ const pieces = {
 			fancyEffects: false,
 			hasShields: false,
 			isTargetable: false,
+			isBackgroundEntity: false, // set to true for buoys, stations and other non-shootable entities
 			targetingPriority: 10,
 			colors: c.groups.general.groupId,
 		},
@@ -75,6 +76,7 @@ const pieces = {
 			model: '/other/Buoy',
 			width: 10,
 			length: 10,
+			isBackgroundEntity: true,
 		},
 		mutable: {},
 	},
@@ -85,6 +87,7 @@ const pieces = {
 			model: '/other/FuelDepot',
 			width: 1128,
 			length: 272,
+			isBackgroundEntity: true,
 		},
 		mutable: {},
 	},
