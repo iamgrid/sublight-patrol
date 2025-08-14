@@ -775,13 +775,19 @@ export const shields = {
 };
 
 export const messageLayer = {
-	messageIsVisible: false,
+	messageIsShowing: false,
 	MESSAGE_TYPE_IDS: {
 		system: 'system',
 		dialog: 'dialog',
 	},
 	queuedMessages: [],
-	showMessage(speaker, message, whereAndWhen, messageType) {
+	_showMessage(queueIndex) {
+		const { speaker, message, whereAndWhen, messageType } =
+			messageLayer.queuedMessages[queueIndex];
+
+		document.getElementById(
+			'game__messagelayer-message-queue-readout'
+		).innerHTML = `${queueIndex + 1} / ${messageLayer.queuedMessages.length}`;
 		document.getElementById('game__messagelayer-speaker').innerHTML =
 			speaker + ' :';
 		document.getElementById(
@@ -806,27 +812,25 @@ export const messageLayer = {
 				.classList.remove('game__messagelayer-proper--system');
 		}
 
-		document.getElementById('game__messagelayer-proper').style.opacity = '0.7';
-		messageLayer.messageIsVisible = true;
+		document.getElementById('game__messagelayer-proper').style.opacity = '1';
+		messageLayer.messageIsShowing = true;
+		messageLayer.queuedMessages[queueIndex].messageWasShown = true;
 	},
 
-	fadeOutMessage() {
+	advance() {
 		// fade current message
 		document.getElementById('game__messagelayer-proper').style.opacity = '0';
-		messageLayer.messageIsVisible = false;
+		messageLayer.messageIsShowing = false;
 
 		if (messageLayer.queuedMessages.length > 0) {
-			messageLayer.queuedMessages.shift();
-			if (messageLayer.queuedMessages.length > 0) {
+			const nextMessageIndex = messageLayer.queuedMessages.findIndex(
+				(el) => !el.messageWasShown
+			);
+			if (nextMessageIndex !== -1) {
 				// Show the next queued message
 				timing.setTimeout(
 					() => {
-						messageLayer.showMessage(
-							messageLayer.queuedMessages[0].speaker,
-							messageLayer.queuedMessages[0].message,
-							messageLayer.queuedMessages[0].whereAndWhen,
-							messageLayer.queuedMessages[0].messageType
-						);
+						messageLayer._showMessage(nextMessageIndex);
 					},
 					timing.modes.play,
 					800
@@ -837,13 +841,9 @@ export const messageLayer = {
 
 	queueMessages(messages) {
 		messageLayer.queuedMessages = [...messages];
+		messageLayer.queuedMessages.forEach((el) => (el.messageWasShown = false));
 
-		messageLayer.showMessage(
-			messageLayer.queuedMessages[0].speaker,
-			messageLayer.queuedMessages[0].message,
-			messageLayer.queuedMessages[0].whereAndWhen,
-			messageLayer.queuedMessages[0].messageType
-		);
+		messageLayer._showMessage(0);
 	},
 
 	hide() {

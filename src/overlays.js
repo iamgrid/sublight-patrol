@@ -33,14 +33,16 @@ export default function overlays() {
 		</div>
 		<div class="game__messagelayer" id="game__messagelayer">
 			<div class="game__messagelayer-proper" id="game__messagelayer-proper">
-				<div class="game__messagelayer-top">
-					<div class="game__messagelayer-speaker" id="game__messagelayer-speaker"></div>
-					<div class="game__messagelayer-where-and-when" id="game__messagelayer-where-and-when"></div>
-				</div>
 				<div class="game__messagelayer-message">
+					<div class="game__messagelayer-where-and-when" id="game__messagelayer-where-and-when"></div>
 					<div class="game__messagelayer-message-text" id="game__messagelayer-message-text"></div>
 					<div class="game__messagelayer-key">Hit [M] to advance this dialog</div>
 				</div>
+				<div class="game__messagelayer-top">
+					<div class="game__messagelayer-speaker" id="game__messagelayer-speaker"></div>
+					<div></div>
+				</div>
+				<div class="game__messagelayer-message-queue-readout" id="game__messagelayer-message-queue-readout"></div>
 			</div>
 		</div>
 		<div class="game__alertsAndWarnings" id="game__alertsAndWarnings">

@@ -140,7 +140,9 @@ const controlSchemes = {
 				}
 
 				if (Keyboard.isKeyPressed('KeyM')) {
-					messageLayer.fadeOutMessage();
+					if (messageLayer.messageIsShowing) {
+						messageLayer.advance();
+					}
 				}
 
 				if (Keyboard.isKeyReleased('Space')) {

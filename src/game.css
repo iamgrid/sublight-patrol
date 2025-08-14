@@ -184,14 +184,14 @@
 	flex-direction: column;
 	opacity: 0;
 	transition: opacity 0.4s;
+	position: relative;
 }
 
 .game__messagelayer-top {
-	flex-shrink: 0;
-	flex-grow: 0;
+	position: absolute;
+	transform: translateY(-18px);
 	display: grid;
 	grid-template-columns: auto 1fr;
-	transform: translateY(18px);
 	padding: 0 3em;
 }
 
@@ -206,12 +206,16 @@
 	cursor: default;
 }
 
-.game__messagelayer-where-and-when {
-	text-align: right;
-	font-style: italic;
-	font-size: 13px;
-	transform: translateY(22px);
-	/* color: #ffffff87; */
+.game__messagelayer-message-queue-readout {
+	font-size: 12px;
+	font-weight: bold;
+	position: absolute;
+	bottom: 51px;
+	padding-left: 17px;
+	width: 146px;
+	text-align: center;
+	color: #ffffff87;
+	opacity: 0.7;
 }
 
 .game__messagelayer-proper--dialog .game__messagelayer-speaker {
@@ -229,11 +233,20 @@
 	border-radius: 10px;
 	box-shadow: 0 0 10px #ffffff90;
 	cursor: default;
+	opacity: 0.7;
 }
 
 .game__messagelayer-proper--dialog .game__messagelayer-message {
 	background-color: #2b4349;
 	border-color: #4c93a4;
+}
+
+.game__messagelayer-where-and-when {
+	font-style: italic;
+	font-size: 13px;
+	text-align: left;
+	color: #ffffff87;
+	padding-bottom: 3px;
 }
 
 .game__messagelayer-message-text {

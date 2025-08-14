@@ -145,6 +145,20 @@ const scene001 = {
 			contents: 'Steel rolls',
 			contentClassification: c.entityContentClassifications.irrelevant,
 		},
+		b2507_007: {
+			id: 'b2507_007',
+			groupId: 'b2507',
+			type: 'container',
+			contents: 'Titanium billets',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
+		b2507_008: {
+			id: 'b2507_008',
+			groupId: 'b2507',
+			type: 'container',
+			contents: 'Aluminum billets',
+			contentClassification: c.entityContentClassifications.irrelevant,
+		},
 		htran_091: {
 			id: 'htran_091',
 			groupId: 'red',
@@ -303,6 +317,16 @@ const scene001 = {
 					posY: 225,
 				});
 
+				entities.spawn(scene001.entities.b2507_007, {
+					posX: 2800,
+					posY: 300,
+				});
+
+				entities.spawn(scene001.entities.b2507_008, {
+					posX: 2800,
+					posY: 375,
+				});
+
 				timing.setTimeout(
 					() => {
 						messageLayer.show();
@@ -312,7 +336,7 @@ const scene001 = {
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
 								message:
-									'<p>Good morning Lieutenant!</p><p>The Harpax Ministry of Health has tasked us with recovering a case of high value medicine from Container Yard H17 which has recently been overrun by the Zangari.</p>',
+									'<p>Good morning Lieutenant!</p><p>The Harpax Ministry of Health has tasked us with recovering a case of indispensable medicine from Container Yard H17 which has recently been overrun by the Zangari.</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
@@ -333,14 +357,6 @@ const scene001 = {
 					timing.modes.play,
 					11000
 				);
-
-				// timing.setTimeout(
-				// 	() => {
-				// 		messageLayer.fadeOutMessage();
-				// 	},
-				// 	timing.modes.play,
-				// 	12000
-				// );
 			},
 		},
 		{
