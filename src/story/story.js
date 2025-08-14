@@ -12,7 +12,7 @@ import soundEffects from '../audio/soundEffects';
 import music from '../audio/music';
 import {
 	shields,
-	status,
+	gameLog,
 	makeName,
 	storePlayerProgress,
 	readPlayerProgress,
@@ -346,8 +346,8 @@ const story = {
 				story.checkBeatCompletion;
 			currentSceneObject.handlers.storyStateFns = story.storyStateFns;
 
-			status.add(
-				'aqua',
+			gameLog.add(
+				gameLog.ENTRY_COLORS.white,
 				`---&nbsp;&nbsp;&nbsp;${currentSceneObject.titlePlate.mainText}&nbsp;&nbsp;&nbsp;---`,
 				timing.times.play
 			);
@@ -378,9 +378,9 @@ const story = {
 		}
 
 		if (currentSceneListObject.showStatusBar) {
-			document.getElementById('game__status').style.display = 'flex';
+			document.getElementById('game__log').style.display = 'flex';
 		} else {
-			document.getElementById('game__status').style.display = 'none';
+			document.getElementById('game__log').style.display = 'none';
 		}
 
 		//register new objectives
@@ -451,7 +451,11 @@ const story = {
 		messageLayer.hide();
 		plates.clearAll();
 		timing.clearAllScheduledEvents();
-		status.add('aqua', 'Mission restarted...', timing.times.play);
+		gameLog.add(
+			gameLog.ENTRY_COLORS.white,
+			'Mission restarted...',
+			timing.times.play
+		);
 		story.handlers.dispatch({
 			type: c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION,
 		});
@@ -675,8 +679,8 @@ const story = {
 				escAddendum = story.escAddendum;
 				story.noOfTimesHitEscMessageWasAppended++;
 			}
-			status.add(
-				'yellow',
+			gameLog.add(
+				gameLog.ENTRY_COLORS.yellow,
 				'Mission objectives updated.' + escAddendum,
 				timing.times.play
 			);
@@ -849,10 +853,10 @@ const story = {
 
 		if (updatedObjectiveMessages.length < 1) {
 			// this event didnt cause any progress with the objectives
-			// so we'll print a yellow status message
+			// so we'll print a yellow gameLog message
 			let printStatus = true;
-			let statusColor = 'yellow';
-			let statusMessage = `${entityClassification}[${makeName(entityId)}] ${
+			let gameLogColor = gameLog.ENTRY_COLORS.yellow;
+			let gameLogMessage = `${entityClassification}[${makeName(entityId)}] ${
 				c.objectiveTypes[eventId].completed_desc
 			}`;
 
@@ -865,7 +869,7 @@ const story = {
 			}
 
 			if (printStatus) {
-				status.add(statusColor, statusMessage, timing.times.play);
+				gameLog.add(gameLogColor, gameLogMessage, timing.times.play);
 			}
 		} else {
 			updatedObjectiveMessages.forEach((el) => {
@@ -876,7 +880,7 @@ const story = {
 				}
 
 				if (printThisStatus) {
-					status.add(el.color, el.message, timing.times.play);
+					gameLog.add(el.color, el.message, timing.times.play);
 				}
 			});
 		}
@@ -1073,8 +1077,8 @@ const story = {
 	},
 
 	returnObjectiveText(objectiveObj, meansProgress = false) {
-		let itemColor = 'yellow';
-		if (meansProgress) itemColor = 'dark_green';
+		let itemColor = gameLog.ENTRY_COLORS.yellow;
+		if (meansProgress) itemColor = gameLog.ENTRY_COLORS.dark_green;
 		let objectiveText = '';
 		let completed = false;
 
@@ -1082,11 +1086,11 @@ const story = {
 			objectiveObj.requiredPercentage <=
 			Math.ceil(objectiveObj.currentPercentage)
 		) {
-			itemColor = 'green';
+			itemColor = gameLog.ENTRY_COLORS.green;
 			completed = true;
 		}
 
-		if (objectiveObj.failed) itemColor = 'red';
+		if (objectiveObj.failed) itemColor = gameLog.ENTRY_COLORS.red;
 		if (objectiveObj.groupId === undefined) {
 			let entityClassification = story.assertClassification(
 				objectiveObj.entityId

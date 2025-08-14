@@ -347,7 +347,7 @@ const scene001 = {
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,
-								speaker: 'Game Help',
+								speaker: 'Help System',
 								whereAndWhen: 'here and now',
 								message:
 									'<p>Use the pause menu ([ESC] key) to see your current objectives and your combat log.</p><p>The list of objectives will update and expand as you progress through a mission, so remember to check back on the pause menu any time you are unsure what to do next!</p>',

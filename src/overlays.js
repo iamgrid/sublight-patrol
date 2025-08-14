@@ -294,18 +294,18 @@ export default function overlays() {
 			<div class="game__pause-text">[Paused]</div>
 			<div class="game__pause-objectives" id="game__pause-objectives"></div>
 		</div>
-		<div class="game__status game__status--hidden" id="game__status" title="Combat log">
-			<div class="game__status-expand" id="game__status-expand">
+		<div class="game__log game__log--hidden" id="game__log" title="Combat log">
+			<div class="game__log-expand" id="game__log-expand">
 				<svg
-					class="game__status-expand-chevron"
-					id="game__status-expand-chevron"
+					class="game__log-expand-chevron"
+					id="game__log-expand-chevron"
 					width="16"
 					height="10"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
 				>
 					<path
-						class="game__status-expand-chevron-path"
+						class="game__log-expand-chevron-path"
 						d="M1 9L8 2L15 9"
 						stroke="white"
 						stroke-width="1.5"
@@ -313,8 +313,8 @@ export default function overlays() {
 				</svg>
 			</div>
 			<div
-				class="game__status-proper customScroll"
-				id="game__status-proper"
+				class="game__log-proper customScroll"
+				id="game__log-proper"
 			></div>
 		</div>
 		`;

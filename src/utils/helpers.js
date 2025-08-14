@@ -774,6 +774,10 @@ export const shields = {
 	},
 };
 
+function stripTags(str) {
+	return str.replace(/<\/?[^>]+(>|$)/g, '');
+}
+
 export const messageLayer = {
 	messageIsShowing: false,
 	MESSAGE_TYPE_IDS: {
@@ -815,6 +819,21 @@ export const messageLayer = {
 		document.getElementById('game__messagelayer-proper').style.opacity = '1';
 		messageLayer.messageIsShowing = true;
 		messageLayer.queuedMessages[queueIndex].messageWasShown = true;
+
+		let gameLogColor = gameLog.ENTRY_COLORS.aqua;
+		if (messageType === messageLayer.MESSAGE_TYPE_IDS.system) {
+			gameLogColor = gameLog.ENTRY_COLORS.gray;
+		}
+
+		const messageParagraphs = message.split('</p><p>');
+
+		messageParagraphs.forEach((paragraph) => {
+			gameLog.add(
+				gameLogColor,
+				`[${speaker}]: ${stripTags(paragraph)}`,
+				timing.times.play
+			);
+		});
 	},
 
 	advance() {
@@ -989,7 +1008,16 @@ export function formatElapsedTime(seconds) {
 	return `${doPad(hours)}:${doPad(minutes)}:${doPad(secondsDisp)}`;
 }
 
-export const status = {
+export const gameLog = {
+	ENTRY_COLORS: {
+		white: 'white',
+		aqua: 'aqua',
+		gray: 'gray',
+		red: 'red',
+		yellow: 'yellow',
+		green: 'green',
+		dark_green: 'dark_green',
+	},
 	store: [],
 	isHidden: true,
 	isExpanded: false,
@@ -1013,10 +1041,10 @@ export const status = {
 	},
 
 	update() {
-		const properDiv = document.getElementById('game__status-proper');
+		const properDiv = document.getElementById('game__log-proper');
 
 		if (this.store.length > 4) {
-			properDiv.classList.add('game__status-proper--with-scrollbar');
+			properDiv.classList.add('game__log-proper--with-scrollbar');
 		}
 
 		const disp = [...this.store].map(
@@ -1026,36 +1054,36 @@ export const status = {
 
 		properDiv.innerHTML = disp.join('<br />');
 
-		status.scrollToBottom();
+		gameLog.scrollToBottom();
 
 		if (this.isHidden) {
 			this.toggleHide('show');
 		}
 
-		window.clearTimeout(status.hiderTimeout);
-		this.hiderTimeout = window.setTimeout(status.toggleHide, 10000);
+		window.clearTimeout(gameLog.hiderTimeout);
+		this.hiderTimeout = window.setTimeout(gameLog.toggleHide, 10000);
 	},
 
 	scrollToBottom() {
-		const domElement = document.getElementById('game__status-proper');
-		document.getElementById('game__status-proper').scrollTop =
+		const domElement = document.getElementById('game__log-proper');
+		document.getElementById('game__log-proper').scrollTop =
 			domElement.scrollHeight - domElement.clientHeight;
 	},
 
 	toggleHide(toggle = 'hide') {
-		const mainDivClasses = document.getElementById('game__status').classList;
+		const mainDivClasses = document.getElementById('game__log').classList;
 		if (toggle === 'hide') {
-			mainDivClasses.add('game__status--hidden');
-			status.isHidden = true;
-			window.clearTimeout(status.hiderTimeout);
+			mainDivClasses.add('game__log--hidden');
+			gameLog.isHidden = true;
+			window.clearTimeout(gameLog.hiderTimeout);
 		} else {
-			mainDivClasses.remove('game__status--hidden');
-			status.isHidden = false;
+			mainDivClasses.remove('game__log--hidden');
+			gameLog.isHidden = false;
 		}
 	},
 
 	toggleStatusExpansion(event, toggle) {
-		const mainDivClasses = document.getElementById('game__status').classList;
+		const mainDivClasses = document.getElementById('game__log').classList;
 
 		let doExpand = !this.isExpanded;
 		switch (toggle) {
@@ -1068,27 +1096,27 @@ export const status = {
 		}
 
 		if (doExpand) {
-			mainDivClasses.add('game__status--expanded');
+			mainDivClasses.add('game__log--expanded');
 			this.isExpanded = true;
-			status.scrollToBottom();
+			gameLog.scrollToBottom();
 		} else {
 			this.isExpanded = false;
 			window.setTimeout(() => {
-				mainDivClasses.remove('game__status--expanded');
-				status.scrollToBottom();
+				mainDivClasses.remove('game__log--expanded');
+				gameLog.scrollToBottom();
 			}, 50);
 		}
 	},
 
 	init() {
-		document.getElementById('game__status').onclick =
-			status.toggleStatusExpansion.bind(status);
+		document.getElementById('game__log').onclick =
+			gameLog.toggleStatusExpansion.bind(gameLog);
 	},
 
 	clear() {
 		this.store = [];
 
-		document.getElementById('game__status-proper').innerHTML = '';
+		document.getElementById('game__log-proper').innerHTML = '';
 		this.toggleHide();
 	},
 };

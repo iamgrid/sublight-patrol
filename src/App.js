@@ -13,7 +13,7 @@ import {
 	repositionMovedEntities,
 	shields,
 	alertsAndWarnings,
-	status,
+	gameLog,
 	hello,
 	getPosition,
 	getCameraTLBasedOnPlayerPosition,
@@ -119,7 +119,7 @@ export default class App extends PIXI.Application {
 	init() {
 		entities.init();
 		c.init();
-		status.init();
+		gameLog.init();
 		shields.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v13.png');
@@ -558,7 +558,7 @@ export default class App extends PIXI.Application {
 	togglePause(dontFadeMatte = '') {
 		const pauseDiv = document.getElementById('game__pause');
 		if (!timing.isPaused()) {
-			status.toggleStatusExpansion.bind(status, '', 'show')();
+			gameLog.toggleStatusExpansion.bind(gameLog, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
 			soundEffects.muteUnmuteAllLoops('App.js@togglePause 1', true);
@@ -566,7 +566,7 @@ export default class App extends PIXI.Application {
 			if (dontFadeMatte === '') gameMenus.fadeInMatte('App.js@togglePause 2');
 			gameMenus.showPauseButtonSet();
 		} else {
-			status.toggleStatusExpansion.bind(status, '', 'hide')();
+			gameLog.toggleStatusExpansion.bind(gameLog, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			timing.currentMode = timing.modes.play;
 			soundEffects.muteUnmuteAllLoops('App.js@togglePause 3', false);

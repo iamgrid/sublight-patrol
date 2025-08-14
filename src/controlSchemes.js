@@ -2,7 +2,7 @@ import c from './utils/constants';
 import {
 	updateStageEntityVelocities,
 	moveTargetingReticule,
-	status,
+	gameLog,
 	messageLayer,
 } from './utils/helpers';
 import Keyboard from 'pixi.js-keyboard';
@@ -65,14 +65,14 @@ const controlSchemes = {
 				gameMenus.activateFocusedButton();
 			}
 
-			const statusProperDiv = document.getElementById('game__status-proper');
+			const gameLogProperDiv = document.getElementById('game__log-proper');
 
-			if (status.store.length > 4) {
+			if (gameLog.store.length > 4) {
 				if (Keyboard.isKeyDown('ArrowUp')) {
-					statusProperDiv.scrollBy(0, -4);
+					gameLogProperDiv.scrollBy(0, -4);
 				}
 				if (Keyboard.isKeyDown('ArrowDown')) {
-					statusProperDiv.scrollBy(0, 4);
+					gameLogProperDiv.scrollBy(0, 4);
 				}
 			}
 		},

@@ -7,7 +7,7 @@ import {
 	getPosition,
 	shields,
 	makeName,
-	status,
+	gameLog,
 	getCameraTLBasedOnPlayerPosition,
 } from '../utils/helpers';
 import soundEffects from '../audio/soundEffects';
@@ -276,14 +276,14 @@ const entities = {
 
 		// new craft alert
 		if (doStoreIn !== 'player' && positionStore === 'canMove') {
-			let updateColor = 'green';
+			let updateColor = gameLog.ENTRY_COLORS.green;
 			if (newEntity.playerRelation === 'neutral') {
-				updateColor = 'yellow';
+				updateColor = gameLog.ENTRY_COLORS.yellow;
 			} else if (newEntity.playerRelation === 'hostile') {
-				updateColor = 'red';
+				updateColor = gameLog.ENTRY_COLORS.red;
 			}
 
-			status.add(
+			gameLog.add(
 				updateColor,
 				`New craft alert: ${makeName(type)} at [${pos.posX}, ${pos.posY}]`,
 				timing.times.play
