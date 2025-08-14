@@ -78,8 +78,6 @@ const story = {
 	currentSceneBeat: null,
 	missionFailureWasTriggered: false,
 	noOfTimesHitEscMessageWasAppended: 0,
-	escAddendum:
-		'&nbsp;&nbsp;&nbsp;&lt;&nbsp;&nbsp;&nbsp;Hit [ESC] to see your current objectives',
 	currentObjectives: {
 		show: [],
 		advanceWhen: [],
@@ -674,14 +672,9 @@ const story = {
 		});
 
 		if (updates.show.length > 0) {
-			let escAddendum = '';
-			if (story.noOfTimesHitEscMessageWasAppended < 4) {
-				escAddendum = story.escAddendum;
-				story.noOfTimesHitEscMessageWasAppended++;
-			}
 			gameLog.add(
 				gameLog.ENTRY_COLORS.yellow,
-				'Mission objectives updated.' + escAddendum,
+				'Mission objectives updated.',
 				timing.times.play
 			);
 		}
@@ -837,14 +830,9 @@ const story = {
 					el.objectiveObj,
 					meansProgress
 				);
-				let escAddendum = '';
-				if (story.noOfTimesHitEscMessageWasAppended < 4) {
-					escAddendum = story.escAddendum;
-					story.noOfTimesHitEscMessageWasAppended++;
-				}
 				updatedObjectiveMessages.push({
 					color: itemColor,
-					message: 'Objectives: ' + objectiveText + escAddendum,
+					message: 'Objectives: ' + objectiveText,
 				});
 			}
 		});
