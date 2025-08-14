@@ -827,10 +827,12 @@ export const messageLayer = {
 
 		const messageParagraphs = message.split('</p><p>');
 
-		messageParagraphs.forEach((paragraph) => {
+		messageParagraphs.forEach((paragraph, ix) => {
 			gameLog.add(
 				gameLogColor,
-				`[${speaker}]: ${stripTags(paragraph)}`,
+				`[${speaker}]:${
+					ix === 0 ? ` <i>(${whereAndWhen})</i> ` : ''
+				} ${stripTags(paragraph)}`,
 				timing.times.play
 			);
 		});
