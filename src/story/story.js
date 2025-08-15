@@ -958,7 +958,7 @@ const story = {
 
 		if (updatedObjectiveMessages.length > 0) {
 			updatedObjectiveMessages.forEach((el) => {
-				status.add(el.color, el.message, timing.times.play);
+				gameLog.add(el.color, el.message, timing.times.play);
 			});
 		}
 
