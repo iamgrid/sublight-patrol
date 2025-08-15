@@ -396,9 +396,7 @@ const scene002 = {
 				if (typeof scene002.handlers.checkBeatCompletion === 'function') {
 					scene002.handlers.checkBeatCompletion();
 				} else {
-					console.error(
-						'failed to set the checkBeatCompletion handler in story.js'
-					);
+					console.error('failed to use the checkBeatCompletion handler');
 				}
 			},
 		},
