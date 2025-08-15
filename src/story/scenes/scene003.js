@@ -16,8 +16,8 @@ const scene003 = {
 	playVolume: {
 		minX: -2000,
 		maxX: 6000,
-		minY: -5000,
-		maxY: 5000,
+		minY: -2500,
+		maxY: 2500,
 		softBoundary: 300,
 	},
 	playerStartingPosition: {
@@ -32,6 +32,14 @@ const scene003 = {
 		fuel_depot_39_617_e: {
 			id: 'fuel_depot_39_617_e',
 			type: 'fuel_depot',
+		},
+		pakuuni_1: {
+			id: 'pakuuni_1',
+			groupId: sc.zangariGroupNames.pakuuni,
+			type: 'zangari_fighter_type_4b',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		argoon_1: {
 			id: 'argoon_1',
@@ -65,10 +73,10 @@ const scene003 = {
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		pakuuni_1: {
-			id: 'pakuuni_1',
-			groupId: sc.zangariGroupNames.pakuuni,
-			type: 'zangari_fighter_type_4b',
+		argoon_5: {
+			id: 'argoon_5',
+			groupId: sc.zangariGroupNames.argoon,
+			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
@@ -156,8 +164,8 @@ const scene003 = {
 				const playerShipType = options.playerShipType;
 
 				entities.spawn(scene003.entities.harpax_37188, {
-					posX: 1000,
-					posY: 345,
+					posX: 200,
+					posY: 20,
 				});
 
 				entities.spawn(
@@ -184,24 +192,75 @@ const scene003 = {
 				entities.spawn(
 					scene003.entities.pakuuni_1,
 					{
-						posX: 2900,
-						posY: -100,
+						posX: 2860,
+						posY: -135,
 					},
 					{
-						behaviorAssignedStationX: 2900,
-						behaviorAssignedStationY: -100,
+						behaviorAssignedStationX: 2860,
+						behaviorAssignedStationY: -135,
 					}
 				);
 
 				entities.spawn(
 					scene003.entities.argoon_1,
 					{
-						posX: 2700,
+						posX: 2680,
 						posY: 0,
+						facing: -1,
+					},
+					{
+						behaviorAssignedStationX: 2680,
+						behaviorAssignedStationY: 0,
+					}
+				);
+
+				entities.spawn(
+					scene003.entities.argoon_2,
+					{
+						posX: 2700,
+						posY: -160,
+						facing: -1,
 					},
 					{
 						behaviorAssignedStationX: 2700,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationY: -160,
+					}
+				);
+
+				entities.spawn(
+					scene003.entities.argoon_3,
+					{
+						posX: 2700,
+						posY: 160,
+						facing: -1,
+					},
+					{
+						behaviorAssignedStationX: 2700,
+						behaviorAssignedStationY: 160,
+					}
+				);
+
+				entities.spawn(
+					scene003.entities.argoon_4,
+					{
+						posX: 3320,
+						posY: -120,
+					},
+					{
+						behaviorAssignedStationX: 3320,
+						behaviorAssignedStationY: -120,
+					}
+				);
+
+				entities.spawn(
+					scene003.entities.argoon_5,
+					{
+						posX: 3320,
+						posY: 120,
+					},
+					{
+						behaviorAssignedStationX: 3320,
+						behaviorAssignedStationY: 120,
 					}
 				);
 
@@ -214,7 +273,7 @@ const scene003 = {
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 1 hour and 27 minutes ago',
 								message:
-									'<p>Have a seat Lieutenant. The recording of your debrief regarding your encounter with the Type 4 Zangari fighter prototype has been making quite the splash with Command.</p><p>Let me tell you, if the Zee figure out the right power distribution to get the shields and all four cannons working in tandem on that kitten... Our whole operation here might be in serious jeopardy.</p>',
+									'<p>Have a seat Lieutenant.</p><p>The recording of your debrief regarding your encounter with the Type 4 Zangari fighter prototype has been making quite the splash with Command.</p><p>Let me tell you, if the Zee figure out the right power distribution to get the shields and all four cannons working in tandem on that kitten... Our whole operation here might be in serious jeopardy.</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
@@ -227,8 +286,7 @@ const scene003 = {
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,
 								speaker: 'Help System',
 								whereAndWhen: 'here and now',
-								message:
-									"<p>Use your EMP at close range to disable the Zangari Type 4 prototype fighter. The EMP will only have an effect while the fighter's shields are drained to below 40%.</p>",
+								message: `<p>Use your EMP at close range to disable the Zangari Type 4 prototype fighter. The EMP will only have an effect while the vessel's shields are drained to below ${c.shieldEMPProtectionThreshold} units.</p>`,
 							},
 						]);
 					},
@@ -380,11 +438,34 @@ const scene003 = {
 				};
 			},
 			execute() {
-				if (typeof scene003.handlers.checkBeatCompletion === 'function') {
-					scene003.handlers.checkBeatCompletion();
-				} else {
-					console.error('failed to use the checkBeatCompletion handler');
-				}
+				timing.setTimeout(
+					() => {
+						messageLayer.show();
+						messageLayer.queueMessages([
+							{
+								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
+								speaker: 'Ensign Devon (Shuttle pilot)',
+								whereAndWhen: 'here and now',
+								message:
+									"<p>Excellent job clearing the hostiles and disabling the T4B Lieutenant, we'll take it from here!</p><p>My pilot friend here says he'll race you back to base with the prototype. Are you up for a friendly wager?</p>",
+							},
+						]);
+					},
+					timing.modes.play,
+					5000
+				);
+
+				timing.setTimeout(
+					() => {
+						if (typeof scene003.handlers.checkBeatCompletion === 'function') {
+							scene003.handlers.checkBeatCompletion();
+						} else {
+							console.error('failed to use the checkBeatCompletion handler');
+						}
+					},
+					timing.modes.play,
+					10000
+				);
 			},
 		},
 	],

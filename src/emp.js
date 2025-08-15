@@ -56,7 +56,7 @@ const emp = {
 			if (entity.isDisabled) return;
 
 			if (entity.immutable.hasShields) {
-				if (entity.shieldStrength > 30) return;
+				if (entity.shieldStrength > c.shieldEMPProtectionThreshold) return;
 			}
 
 			const [entityX, entityY] = getPosition(entity.id, currentState.positions);

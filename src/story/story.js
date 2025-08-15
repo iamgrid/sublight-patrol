@@ -670,7 +670,8 @@ const story = {
 	},
 
 	updateCurrentObjectives(updates) {
-		if (c.debug.objectives) console.log('updateCurrentObjectives()', updates);
+		const functionSignature = 'story.js@updateCurrentObjectives()';
+		if (c.debug.objectives) console.log(functionSignature, updates);
 		story.currentObjectives.show = [
 			...story.currentObjectives.show,
 			...updates.show,
@@ -686,6 +687,33 @@ const story = {
 			if (awitem.currentPercentage === undefined) {
 				awitem.currentPercentage = 0;
 				awitem.failed = false;
+			}
+
+			if (awitem.type === c.objectiveTypes.disabled.id) {
+				const equivalentShowObjectiveIdx =
+					story.currentObjectives.show.findIndex(
+						(el) =>
+							el.type === c.objectiveTypes.disabled.id &&
+							el.entityId === awitem.entityId
+					);
+
+				if (equivalentShowObjectiveIdx === -1) {
+					console.error(
+						functionSignature,
+						'the "advanceWhen" in the update has a disabled-type objective but no equivalent "show" objective could be located:',
+						{ updates, 'story.currentObjectives': story.currentObjectives }
+					);
+				}
+
+				if (
+					story.currentObjectives.show[equivalentShowObjectiveIdx]
+						.currentPercentage > 0
+				) {
+					awitem.currentPercentage =
+						story.currentObjectives.show[
+							equivalentShowObjectiveIdx
+						].currentPercentage;
+				}
 			}
 		});
 

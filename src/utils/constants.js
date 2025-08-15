@@ -121,6 +121,7 @@ const c = {
 			failsIfEventIs: [],
 		},
 		disabled: {
+			// only implemented for single entities
 			id: 'disabled',
 			desc: 'must be disabled',
 			completed_desc: 'was disabled',
@@ -164,6 +165,7 @@ const c = {
 		},
 	},
 	empReach: 120,
+	shieldEMPProtectionThreshold: 30, // if an entity's shields fall below this value the craft will be affected by EMP
 	shotSpeed: 20,
 	playerIdPartial: 'red_1',
 	cameraModes: {

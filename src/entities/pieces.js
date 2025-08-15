@@ -384,7 +384,7 @@ const pieces = {
 			maxSystemStrength: 500,
 			thrusters: {
 				main: 8,
-				side: 5,
+				side: 6,
 				front: 5,
 			},
 			hasEMP: false,

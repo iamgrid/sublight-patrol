@@ -131,10 +131,10 @@ const scene004 = {
 				};
 			},
 			execute(options) {
-				scene004.handlers.storyStateFns.addFighterToPlayerHangar(
-					c.playableFighterTypeIds.zangari_fighter_type_4,
-					true
-				);
+				// scene004.handlers.storyStateFns.addFighterToPlayerHangar(
+				// 	c.playableFighterTypeIds.zangari_fighter_type_4,
+				// 	true
+				// );
 
 				const playerId = options.playerId;
 				const playerShipType = options.playerShipType;
