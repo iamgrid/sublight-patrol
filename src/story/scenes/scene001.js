@@ -1,5 +1,5 @@
 import c from '../../utils/constants';
-// import sc from '../storyConstants';
+import sc from '../storyConstants';
 import entities from '../../entities/entities';
 import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
@@ -45,7 +45,7 @@ const scene001 = {
 		},
 		habeen_1: {
 			id: 'habeen_1',
-			groupId: 'habeen',
+			groupId: sc.zangariGroupNames.habeen,
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: false,
@@ -53,7 +53,7 @@ const scene001 = {
 		},
 		habeen_2: {
 			id: 'habeen_2',
-			groupId: 'habeen',
+			groupId: sc.zangariGroupNames.habeen,
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: false,
@@ -61,23 +61,23 @@ const scene001 = {
 		},
 		argoon_1: {
 			id: 'argoon_1',
-			groupId: 'argoon',
+			groupId: sc.zangariGroupNames.argoon,
 			type: 'zangari_fighter_type_2',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		mylok_1: {
-			id: 'mylok_1',
-			groupId: 'mylok',
+		argoon_2: {
+			id: 'argoon_2',
+			groupId: sc.zangariGroupNames.argoon,
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		mylok_2: {
-			id: 'mylok_2',
-			groupId: 'mylok',
+		argoon_3: {
+			id: 'argoon_3',
+			groupId: sc.zangariGroupNames.argoon,
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
@@ -183,7 +183,7 @@ const scene001 = {
 					show: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene001.entities.mylok_1.groupId,
+							groupId: scene001.entities.habeen_1.groupId,
 							requiredPercentage: 100,
 						},
 						{
@@ -195,7 +195,7 @@ const scene001 = {
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene001.entities.mylok_1.groupId,
+							groupId: scene001.entities.habeen_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
@@ -250,7 +250,7 @@ const scene001 = {
 				);
 
 				entities.spawn(
-					scene001.entities.mylok_1,
+					scene001.entities.habeen_1,
 					{
 						posX: 2900, // where the enemy fighter spawns
 						posY: 500,
@@ -261,7 +261,7 @@ const scene001 = {
 					}
 				);
 				entities.spawn(
-					scene001.entities.mylok_2,
+					scene001.entities.habeen_2,
 					{
 						posX: 2900,
 						posY: 300,
@@ -373,24 +373,14 @@ const scene001 = {
 						},
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene001.entities.habeen_1.groupId,
-							requiredPercentage: 100,
-						},
-						{
-							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene001.entities.argoon_1.id,
+							groupId: scene001.entities.argoon_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene001.entities.habeen_1.groupId,
-							requiredPercentage: 100,
-						},
-						{
-							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene001.entities.argoon_1.id,
+							groupId: scene001.entities.argoon_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
@@ -410,7 +400,7 @@ const scene001 = {
 				);
 
 				entities.spawn(
-					scene001.entities.habeen_1,
+					scene001.entities.argoon_2,
 					{
 						posX: 3900,
 						posY: 0,
@@ -422,7 +412,7 @@ const scene001 = {
 				);
 
 				entities.spawn(
-					scene001.entities.habeen_2,
+					scene001.entities.argoon_3,
 					{
 						posX: 3900,
 						posY: 220,

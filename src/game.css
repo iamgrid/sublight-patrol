@@ -569,7 +569,7 @@
 }
 
 .game__pause-objective--red {
-	color: #ff6666;
+	color: #ff7676;
 }
 
 .game__pause-objective--green {
@@ -654,7 +654,7 @@
 }
 
 .game__log-proper .red {
-	color: #ff6161;
+	color: #ff7676;
 }
 
 .game__log-proper .yellow {
@@ -666,7 +666,7 @@
 }
 
 .game__log-proper .dark_green {
-	color: #1f851f;
+	color: #29a829;
 }
 
 .game__log-expand {
