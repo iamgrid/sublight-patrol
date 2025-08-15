@@ -839,31 +839,37 @@ export const messageLayer = {
 	},
 
 	advance() {
+		const functionSignature = 'helpers.js@messageLayer.advance()';
+
 		// fade current message
 		document.getElementById('game__messagelayer-proper').style.opacity = '0';
 		messageLayer.messageIsShowing = false;
 
-		if (messageLayer.queuedMessages.length > 0) {
-			const nextMessageIndex = messageLayer.queuedMessages.findIndex(
-				(el) => !el.messageWasShown
+		// if (messageLayer.queuedMessages.length > 0) {
+		const nextMessageIndex = messageLayer.queuedMessages.findIndex(
+			(el) => !el.messageWasShown
+		);
+		if (nextMessageIndex !== -1) {
+			// Show the next queued message
+			timing.setTimeout(
+				() => {
+					messageLayer._showMessage(nextMessageIndex);
+				},
+				timing.modes.play,
+				800
 			);
-			if (nextMessageIndex !== -1) {
-				// Show the next queued message
-				timing.setTimeout(
-					() => {
-						messageLayer._showMessage(nextMessageIndex);
-					},
-					timing.modes.play,
-					800
-				);
-			}
+		} else {
+			timing.toggleEntityMovement(true, functionSignature);
 		}
+		// }
 	},
 
 	queueMessages(messages) {
+		const functionSignature = 'helpers.js@messageLayer.queueMessages()';
 		messageLayer.queuedMessages = [...messages];
 		messageLayer.queuedMessages.forEach((el) => (el.messageWasShown = false));
 
+		timing.toggleEntityMovement(false, functionSignature);
 		messageLayer._showMessage(0);
 	},
 
