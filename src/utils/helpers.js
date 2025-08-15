@@ -712,6 +712,7 @@ export const shields = {
 
 	shieldRegenTick() {
 		if (timing.isPaused()) return;
+		if (!timing.isEntityMovementEnabled()) return;
 
 		if (typeof shields.handlers.state !== 'function') return;
 
