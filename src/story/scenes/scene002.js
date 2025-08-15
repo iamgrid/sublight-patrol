@@ -76,6 +76,14 @@ const scene002 = {
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
+		nazaar_4: {
+			id: 'nazaar_4',
+			groupId: sc.zangariGroupNames.nazaar,
+			type: 'zangari_fighter_type_2',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
 		hurcha_1: {
 			id: 'hurcha_1',
 			groupId: sc.zangariGroupNames.hurcha,
@@ -233,7 +241,7 @@ const scene002 = {
 					scene002.entities.nazaar_2,
 					{
 						posX: 2900,
-						posY: 600,
+						posY: 550,
 					},
 					{
 						behaviorAssignedStationX: 1060,
@@ -249,6 +257,17 @@ const scene002 = {
 					{
 						behaviorAssignedStationX: 1060,
 						behaviorAssignedStationY: 0,
+					}
+				);
+				entities.spawn(
+					scene002.entities.nazaar_4,
+					{
+						posX: 2900,
+						posY: 650,
+					},
+					{
+						behaviorAssignedStationX: 1140,
+						behaviorAssignedStationY: 125,
 					}
 				);
 			},
@@ -353,7 +372,7 @@ const scene002 = {
 								speaker: 'Ensign Devon (Shuttle pilot)',
 								whereAndWhen: 'here and now',
 								message:
-									'<p>Wait, is that some new kind of Zee fighter? Type 4?! ... Hm, even though the emitters are clearly in place it looks to be lacking shields.</p><p>Regardless, I do not like the look of that thing one bit Lieutenant, be careful!</p>',
+									'<p>Wait, is that some new kind of Zee fighter? Type 4?! ... Hmm, even though the emitters are clearly in place it looks to be lacking shields.</p><p>Regardless, I do not like the look of that thing one bit Lieutenant, be careful!</p>',
 							},
 						]);
 					},
