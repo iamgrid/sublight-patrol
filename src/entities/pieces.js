@@ -444,8 +444,14 @@ const pieces = {
 		immutable: {
 			typeShorthand: 'Z/4A',
 			hasShields: false,
+			maxHullStrength: 175,
 			maxShieldStrength: 0,
 			shieldRechargeRate: 0,
+			thrusters: {
+				main: 8,
+				side: 6,
+				front: 6,
+			},
 		},
 		mutable: {},
 	},

@@ -4,6 +4,8 @@ import intro from './scenes/intro';
 import mainMenu from './scenes/mainMenu';
 import scene001 from './scenes/scene001';
 import scene002 from './scenes/scene002';
+import scene003 from './scenes/scene003';
+import scene004 from './scenes/scene004';
 import plates from '../plates';
 import timing from '../utils/timing';
 import hud from '../hud';
@@ -68,6 +70,22 @@ const story = {
 		{
 			id: storyConstants.scenes.scene002,
 			sceneObject: scene002,
+			hasTitlePlate: true,
+			hasEntities: true,
+			hasGameplay: true,
+			showStatusBar: true,
+		},
+		{
+			id: storyConstants.scenes.scene003,
+			sceneObject: scene003,
+			hasTitlePlate: true,
+			hasEntities: true,
+			hasGameplay: true,
+			showStatusBar: true,
+		},
+		{
+			id: storyConstants.scenes.scene004,
+			sceneObject: scene004,
 			hasTitlePlate: true,
 			hasEntities: true,
 			hasGameplay: true,

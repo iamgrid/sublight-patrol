@@ -36,8 +36,8 @@ const scene003 = {
 			contentClassification: c.entityContentClassifications.missionObjective,
 			hasBeenScanned: true,
 		},
-		harpax_00097: {
-			id: 'harpax_00097',
+		harpax_37188: {
+			id: 'harpax_37188',
 			type: 'buoy',
 		},
 		fuel_depot_39_617_e: {
@@ -139,7 +139,7 @@ const scene003 = {
 				const playerId = options.playerId;
 				const playerShipType = options.playerShipType;
 
-				entities.spawn(scene003.entities.harpax_00097, {
+				entities.spawn(scene003.entities.harpax_37188, {
 					posX: 1000,
 					posY: 345,
 				});

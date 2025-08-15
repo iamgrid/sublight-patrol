@@ -11,6 +11,8 @@ const storyConstants = {
 		mainMenu: 'mainMenu',
 		scene001: 'scene001',
 		scene002: 'scene002',
+		scene003: 'scene003',
+		scene004: 'scene004',
 	},
 	zangariGroupNames: {
 		argoon: 'argoon',

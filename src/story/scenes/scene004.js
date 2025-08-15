@@ -1,17 +1,17 @@
 import c from '../../utils/constants';
-import sc from '../storyConstants';
+// import sc from '../storyConstants';
 import entities from '../../entities/entities';
 import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
 import timing from '../../utils/timing';
 import { messageLayer } from '../../utils/helpers';
 
-const scene002 = {
+const scene004 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
-	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
+	id: 'scene004', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
-		wittyText: 'Wait, the Zee were after the meds?',
-		mainText: 'Mission 2 of 4: Escaping the Hunting Party',
+		wittyText: 'Meow or Never',
+		mainText: 'Mission 4 of 4: Save the Princess, Save the System',
 	},
 	playVolume: {
 		minX: -2000,
@@ -36,8 +36,8 @@ const scene002 = {
 			contentClassification: c.entityContentClassifications.missionObjective,
 			hasBeenScanned: true,
 		},
-		harpax_00097: {
-			id: 'harpax_00097',
+		harpax_80946: {
+			id: 'harpax_80946',
 			type: 'buoy',
 		},
 		fuel_depot_39_617_e: {
@@ -46,56 +46,56 @@ const scene002 = {
 		},
 		mylok_1: {
 			id: 'mylok_1',
-			groupId: sc.zangariGroupNames.mylok,
-			type: 'zangari_fighter_type_3',
+			groupId: 'mylok',
+			type: 'zangari_fighter_type_4a',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		nazaar_1: {
 			id: 'nazaar_1',
-			groupId: sc.zangariGroupNames.nazaar,
-			type: 'zangari_fighter_type_2',
+			groupId: 'nazaar',
+			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		nazaar_2: {
 			id: 'nazaar_2',
-			groupId: sc.zangariGroupNames.nazaar,
-			type: 'zangari_fighter_type_2',
+			groupId: 'nazaar',
+			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		nazaar_3: {
 			id: 'nazaar_3',
-			groupId: sc.zangariGroupNames.nazaar,
-			type: 'zangari_fighter_type_2',
+			groupId: 'nazaar',
+			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
+		pakuuni_1: {
+			id: 'pakuuni_1',
+			groupId: 'pakuuni',
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
 		hurcha_1: {
 			id: 'hurcha_1',
-			groupId: sc.zangariGroupNames.hurcha,
-			type: 'zangari_fighter_type_3',
+			groupId: 'hurcha',
+			type: 'zangari_fighter_type_4',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		hurcha_2: {
 			id: 'hurcha_2',
-			groupId: sc.zangariGroupNames.hurcha,
+			groupId: 'hurcha',
 			type: 'zangari_fighter_type_3',
-			playerRelation: 'hostile',
-			behaviorAllowedToFlee: true,
-			behaviorAssignedGoal: c.possibleGoals.holdStation,
-		},
-		pakuuni_1: {
-			id: 'pakuuni_1',
-			groupId: sc.zangariGroupNames.pakuuni,
-			type: 'zangari_fighter_type_4a',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
@@ -112,38 +112,48 @@ const scene002 = {
 					show: [
 						{
 							type: c.objectiveTypes.mustHaveSurvived.id,
-							entityId: scene002.entities.htran_091.id,
+							entityId: scene004.entities.htran_091.id,
 							requiredPercentage: 100,
 						},
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene002.entities.mylok_1.id,
+							entityId: scene004.entities.mylok_1.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene002.entities.mylok_1.id,
+							entityId: scene004.entities.mylok_1.id,
 							requiredPercentage: 100,
 						},
 					],
 				};
 			},
 			execute(options) {
+				scene004.handlers.storyStateFns.addFighterToPlayerHangar(
+					c.playableFighterTypeIds.zangari_fighter_type_4,
+					true
+				);
+
 				const playerId = options.playerId;
 				const playerShipType = options.playerShipType;
 
-				entities.spawn(scene002.entities.harpax_00097, {
+				entities.spawn(scene004.entities.harpax_80946, {
 					posX: 1000,
 					posY: 345,
+				});
+
+				entities.spawn(scene004.entities.fuel_depot_39_617_e, {
+					posX: -1000,
+					posY: 0,
 				});
 
 				entities.spawn(
 					playerShipType,
 					{
-						posX: scene002.playerStartingPosition.posX,
-						posY: scene002.playerStartingPosition.posY,
+						posX: scene004.playerStartingPosition.posX,
+						posY: scene004.playerStartingPosition.posY,
 						latVelocity: 0,
 						longVelocity: 0,
 					},
@@ -155,13 +165,13 @@ const scene002 = {
 					'player'
 				);
 
-				entities.spawn(scene002.entities.htran_091, {
+				entities.spawn(scene004.entities.htran_091, {
 					posX: 100,
 					posY: 150,
 				});
 
 				entities.spawn(
-					scene002.entities.mylok_1,
+					scene004.entities.mylok_1,
 					{
 						posX: 2900,
 						posY: 500,
@@ -181,7 +191,7 @@ const scene002 = {
 								speaker: 'Ensign Devon (Shuttle pilot)',
 								whereAndWhen: 'here and now',
 								message:
-									"<p>I guess the Zee are much more interested in these medical supplies than we assumed. That's their top-of-the-line Type 3 fighter too, isn't it Lieutenant?</p><p>Get ready for a challenging fight!</p>",
+									'<p>Drat, I guess the Zee are much more interested in these medical supplies than we assumed.</p><p>Get ready for a fight Lieutenant!</p>',
 							},
 						]);
 					},
@@ -200,14 +210,14 @@ const scene002 = {
 					show: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene002.entities.nazaar_1.groupId,
+							groupId: scene004.entities.nazaar_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene002.entities.nazaar_1.groupId,
+							groupId: scene004.entities.nazaar_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
@@ -218,36 +228,36 @@ const scene002 = {
 				// const playerShipType = options.playerShipType;
 
 				entities.spawn(
-					scene002.entities.nazaar_1,
+					scene004.entities.nazaar_1,
 					{
 						posX: 2900,
 						posY: 500,
 					},
 					{
-						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 125,
+						behaviorAssignedStationX: 700,
+						behaviorAssignedStationY: 170,
 					}
 				);
 
 				entities.spawn(
-					scene002.entities.nazaar_2,
+					scene004.entities.nazaar_2,
 					{
 						posX: 2900,
 						posY: 600,
 					},
 					{
-						behaviorAssignedStationX: 1060,
+						behaviorAssignedStationX: 620,
 						behaviorAssignedStationY: 250,
 					}
 				);
 				entities.spawn(
-					scene002.entities.nazaar_3,
+					scene004.entities.nazaar_3,
 					{
 						posX: 2900,
 						posY: 600,
 					},
 					{
-						behaviorAssignedStationX: 1060,
+						behaviorAssignedStationX: 400,
 						behaviorAssignedStationY: 0,
 					}
 				);
@@ -263,14 +273,14 @@ const scene002 = {
 					show: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene002.entities.hurcha_1.groupId,
+							entityId: scene004.entities.pakuuni_1.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene002.entities.hurcha_1.groupId,
+							entityId: scene004.entities.pakuuni_1.id,
 							requiredPercentage: 100,
 						},
 					],
@@ -281,26 +291,14 @@ const scene002 = {
 				// const playerShipType = options.playerShipType;
 
 				entities.spawn(
-					scene002.entities.hurcha_1,
+					scene004.entities.pakuuni_1,
 					{
 						posX: 2900,
 						posY: 500,
 					},
 					{
-						behaviorAssignedStationX: 700,
-						behaviorAssignedStationY: 170,
-					}
-				);
-
-				entities.spawn(
-					scene002.entities.hurcha_2,
-					{
-						posX: 2900,
-						posY: 600,
-					},
-					{
-						behaviorAssignedStationX: 620,
-						behaviorAssignedStationY: 250,
+						behaviorAssignedStationX: 500,
+						behaviorAssignedStationY: 0,
 					}
 				);
 			},
@@ -315,14 +313,14 @@ const scene002 = {
 					show: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene002.entities.pakuuni_1.id,
+							groupId: scene004.entities.hurcha_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene002.entities.pakuuni_1.id,
+							groupId: scene004.entities.hurcha_1.groupId,
 							requiredPercentage: 100,
 						},
 					],
@@ -333,32 +331,27 @@ const scene002 = {
 				// const playerShipType = options.playerShipType;
 
 				entities.spawn(
-					scene002.entities.pakuuni_1,
+					scene004.entities.hurcha_1,
 					{
 						posX: 2900,
 						posY: 500,
 					},
 					{
-						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: 700,
+						behaviorAssignedStationY: 170,
 					}
 				);
 
-				timing.setTimeout(
-					() => {
-						messageLayer.show();
-						messageLayer.queueMessages([
-							{
-								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
-								speaker: 'Ensign Devon (Shuttle pilot)',
-								whereAndWhen: 'here and now',
-								message:
-									'<p>Wait, is that some new kind of Zee fighter? Type 4?! ... Hm, even though the emitters are clearly in place it looks to be lacking shields.</p><p>Regardless, I do not like the look of that thing one bit Lieutenant, be careful!</p>',
-							},
-						]);
+				entities.spawn(
+					scene004.entities.hurcha_2,
+					{
+						posX: 2900,
+						posY: 600,
 					},
-					timing.modes.play,
-					2000
+					{
+						behaviorAssignedStationX: 620,
+						behaviorAssignedStationY: 250,
+					}
 				);
 			},
 		},
@@ -374,8 +367,9 @@ const scene002 = {
 				};
 			},
 			execute() {
-				if (typeof scene002.handlers.checkBeatCompletion === 'function') {
-					scene002.handlers.checkBeatCompletion();
+				console.log('this is the new ending and stuff');
+				if (typeof scene004.handlers.checkBeatCompletion === 'function') {
+					scene004.handlers.checkBeatCompletion();
 				} else {
 					console.error(
 						'failed to set the checkBeatCompletion handler in story.js'
@@ -386,4 +380,4 @@ const scene002 = {
 	],
 };
 
-export default scene002;
+export default scene004;
