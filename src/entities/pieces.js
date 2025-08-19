@@ -317,7 +317,7 @@ const pieces = {
 	},
 	zangari_fighter_type_1: {
 		immutable: {
-			typeShorthand: 'Z/1',
+			typeShorthand: 'Z1',
 			model: '/ships/ZangariFighterType1',
 			maxHullStrength: 75,
 			hasShields: false,
@@ -346,7 +346,7 @@ const pieces = {
 	},
 	zangari_fighter_type_2: {
 		immutable: {
-			typeShorthand: 'Z/2',
+			typeShorthand: 'Z2',
 			model: '/ships/ZangariFighterType2',
 			maxHullStrength: 150,
 			hasShields: false,
@@ -375,7 +375,7 @@ const pieces = {
 	},
 	zangari_fighter_type_3: {
 		immutable: {
-			typeShorthand: 'Z/3',
+			typeShorthand: 'Z3',
 			model: '/ships/ZangariFighterType3',
 			maxHullStrength: 75,
 			hasShields: true,
@@ -408,7 +408,7 @@ const pieces = {
 	},
 	zangari_fighter_type_4: {
 		immutable: {
-			typeShorthand: 'Z/4',
+			typeShorthand: 'Z4',
 			model: '/ships/ZangariFighterType4',
 			maxHullStrength: 125,
 			hasShields: true,
@@ -442,7 +442,7 @@ const pieces = {
 	},
 	zangari_fighter_type_4a: {
 		immutable: {
-			typeShorthand: 'Z/4A',
+			typeShorthand: 'Z4A',
 			hasShields: false,
 			maxHullStrength: 175,
 			maxShieldStrength: 0,
@@ -457,7 +457,7 @@ const pieces = {
 	},
 	zangari_fighter_type_4b: {
 		immutable: {
-			typeShorthand: 'Z/4B',
+			typeShorthand: 'Z4B',
 			cannonShots: 24,
 			cannonPositions: [
 				{ lengthWise: 17, widthWise: 4 },

@@ -128,7 +128,8 @@ const entities = {
 	},
 
 	spawn(typeOrEntityObject, pos, incomingProps = {}, storeIn = 'targetable') {
-		// console.log('spawn()', typeOrEntityObject, pos, incomingProps, storeIn);
+		const functionSignature = 'entities.js@spawn()';
+		// console.log(functionSignature, typeOrEntityObject, pos, incomingProps, storeIn);
 		let type, props;
 		if (typeof typeOrEntityObject === 'object') {
 			type = typeOrEntityObject.type;
@@ -213,6 +214,7 @@ const entities = {
 		// model availability
 		if (!models[newEntity.immutable.model]) {
 			console.error(
+				functionSignature,
 				`Unable to find model for [${type}]. (Have you updated /entities/models.js?)`
 			);
 			return null;
@@ -249,15 +251,38 @@ const entities = {
 		if (Number.isInteger(pos.posX) && Number.isInteger(pos.posY)) {
 			stageEntity.position.set(pos.posX, pos.posY);
 		} else {
-			console.error('spawn was called with a weird pos object:', pos);
+			console.error(
+				functionSignature,
+				'function was called with a weird pos object:',
+				pos
+			);
 		}
 
-		if (!newEntity.immutable.isBackgroundEntity) {
-			stageEntity.zIndex = this.foregroundEntityZIndexIterator;
-			this.foregroundEntityZIndexIterator++;
+		if (doStoreIn === 'player') {
+			stageEntity.zIndex = c.zIndices.playerCraft;
+			console.log(
+				functionSignature,
+				'Player detected, spawning with zIndex:',
+				c.zIndices.playerCraft
+			);
 		} else {
-			stageEntity.zIndex = this.backgroundEntityZIndexIterator;
-			this.backgroundEntityZIndexIterator++;
+			if (!newEntity.immutable.isBackgroundEntity) {
+				stageEntity.zIndex = this.foregroundEntityZIndexIterator;
+				console.log(
+					functionSignature,
+					'Not a background entity, spawning with zIndex:',
+					this.foregroundEntityZIndexIterator
+				);
+				this.foregroundEntityZIndexIterator++;
+			} else {
+				stageEntity.zIndex = this.backgroundEntityZIndexIterator;
+				console.log(
+					functionSignature,
+					'Background entity detected, spawning with zIndex:',
+					this.backgroundEntityZIndexIterator
+				);
+				this.backgroundEntityZIndexIterator++;
+			}
 		}
 
 		this.stageEntities[newEntity.id] = stageEntity;
@@ -402,6 +427,7 @@ const entities = {
 				newPlayerShipX = destroyedPlayerPosition[0];
 				newPlayerShipY = destroyedPlayerPosition[1];
 			}
+			3;
 
 			plates.fadeInMatte(25, 0);
 			timing.toggleEntityMovement(false, `${functionSignature} 3`, 1000);
@@ -477,7 +503,8 @@ const entities = {
 		}
 
 		entities.stageEntities = {};
-		entities.foregroundEntityZIndexIterator = c.zIndices.entities;
+		entities.foregroundEntityZIndexIterator = c.zIndices.foreground;
+		entities.backgroundEntityZIndexIterator = c.zIndices.background;
 	},
 };
 

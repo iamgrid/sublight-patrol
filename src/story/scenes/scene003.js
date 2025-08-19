@@ -21,8 +21,8 @@ const scene003 = {
 		softBoundary: 300,
 	},
 	playerStartingPosition: {
-		posX: 0,
-		posY: 0,
+		posX: 100,
+		posY: 30,
 	},
 	entities: {
 		harpax_37188: {
@@ -40,6 +40,16 @@ const scene003 = {
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		crg_15496e: {
+			id: 'crg_15496e',
+			groupId: 'crg',
+			type: 'freighter_l1',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+			behaviorAllowedToFlee: true,
+			contents: 'Titanium billets',
+			hasBeenScanned: false,
 		},
 		argoon_1: {
 			id: 'argoon_1',
@@ -198,6 +208,18 @@ const scene003 = {
 					{
 						behaviorAssignedStationX: 2860,
 						behaviorAssignedStationY: -135,
+					}
+				);
+
+				entities.spawn(
+					scene003.entities.crg_15496e,
+					{
+						posX: 2822,
+						posY: 70,
+					},
+					{
+						behaviorAssignedStationX: 2822,
+						behaviorAssignedStationY: 70,
 					}
 				);
 
@@ -444,10 +466,10 @@ const scene003 = {
 						messageLayer.queueMessages([
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
-								speaker: 'Ensign Devon (Shuttle pilot)',
+								speaker: 'Ensign Durrell (piloting shuttle HTran 088)',
 								whereAndWhen: 'here and now',
 								message:
-									"<p>Excellent job clearing the hostiles and disabling the T4B Lieutenant, we'll take it from here!</p><p>My pilot friend here says he'll race you back to base with the prototype. Are you up for a friendly wager?</p>",
+									"<p>Excellent job clearing the hostiles and disabling the T4B Lieutenant, we'll take it from here!</p><p>Devon here says he'll race you back to base with the prototype. You up for a friendly wager?</p>",
 							},
 						]);
 					},

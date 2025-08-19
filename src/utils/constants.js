@@ -45,7 +45,8 @@ const c = {
 	zIndices: {
 		background: 0, // buoys, stations and other non-shootable entities
 		shots: 100000,
-		foreground: 200000, // ships, containers and other shootable entities
+		playerCraft: 200000, // player ship
+		foreground: 200001, // ships, containers and other shootable entities
 		healthBars: 300000,
 	},
 	starScapeLayers: [

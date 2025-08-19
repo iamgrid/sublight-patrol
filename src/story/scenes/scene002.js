@@ -186,7 +186,7 @@ const scene002 = {
 						messageLayer.queueMessages([
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
-								speaker: 'Ensign Devon (Shuttle pilot)',
+								speaker: 'Ensign Devon (piloting shuttle HTran 091)',
 								whereAndWhen: 'here and now',
 								message:
 									"<p>I guess the Zee are much more interested in these medical supplies than we assumed. That's their top-of-the-line Type 3 fighter too, isn't it Lieutenant?</p><p>Get ready for a challenging fight!</p>",
@@ -369,7 +369,7 @@ const scene002 = {
 						messageLayer.queueMessages([
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
-								speaker: 'Ensign Devon (Shuttle pilot)',
+								speaker: 'Ensign Devon',
 								whereAndWhen: 'here and now',
 								message:
 									'<p>Wait, is that some new kind of Zee fighter? Type 4?! ... Hmm, even though the emitters are clearly in place it looks to be lacking shields.</p><p>Regardless, I do not like the look of that thing one bit Lieutenant, be careful!</p>',
