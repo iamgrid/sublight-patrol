@@ -1,7 +1,7 @@
 {
 	"name": "sublight-patrol",
 	"version": "0.8.12",
-	"description": "A side-scrolling shooter game built with PixiJS and Webpack.",
+	"description": "A side-scrolling space shooter browser game built with JavaScript and WebGL (using PixiJS)",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
