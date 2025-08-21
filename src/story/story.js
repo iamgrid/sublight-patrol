@@ -97,7 +97,7 @@ const story = {
 	sceneTransitionIsInProgress: false,
 	missionFailureWasTriggered: false,
 	playerIsReplayingScenes: false,
-	playerReachedTheLastStoryBeatOfTheLastGameplayScene: false,
+	playerReachedTheFinalStoryBeatOfTheFinalGameplayScene: false,
 	currentObjectives: {
 		show: [],
 		advanceWhen: [],
