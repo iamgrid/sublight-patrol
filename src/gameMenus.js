@@ -220,7 +220,7 @@ const gameMenus = {
 			isFocused: false,
 			doActivate: () => {
 				if (c.debug.menuButtons) console.log('doActivate mainMenu');
-				gameMenus.buttonFunctions.mainMenu(false, false, true);
+				gameMenus.buttonFunctions.mainMenu();
 			},
 		});
 
@@ -352,7 +352,7 @@ const gameMenus = {
 
 			let sceneDisplayName = '';
 			if (sceneListItem.sceneObject.titlePlate !== undefined) {
-				sceneDisplayName = sceneListItem.sceneObject.titlePlate.mainText;
+				sceneDisplayName = sceneListItem.sceneObject.titlePlate.title;
 			} else {
 				if (sceneListItem.id === 'intro') sceneDisplayName = 'Intro';
 			}
@@ -478,6 +478,11 @@ const gameMenus = {
 		const currentFocus = gameMenus.currentFocus;
 		gameMenus.stageButtons[currentFocus].doActivate();
 		// console.log('activateFocusedButton: ', currentFocus);
+	},
+
+	returnToMainMenu() {
+		// This function is called when the player presses Escape in the replay scene menu
+		gameMenus.buttonFunctions.mainMenu(false, true, false);
 	},
 };
 

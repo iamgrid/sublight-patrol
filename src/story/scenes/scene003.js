@@ -10,8 +10,8 @@ const scene003 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene003', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
-		wittyText: 'Dock and Awe',
-		mainText: 'Mission 3 of 4: Capturing the Prototype',
+		subTitle: 'Dock and Awe',
+		title: 'Mission 3 of 4: Capturing the Prototype',
 	},
 	playVolume: {
 		minX: -2000,

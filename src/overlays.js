@@ -31,6 +31,16 @@ export default function overlays() {
 				</div>
 			</div>
 		</div>
+		<div class="game__alertsAndWarnings" id="game__alertsAndWarnings">
+			<div 
+				class="game__alertsAndWarnings-alerts" 
+				id="game__alertsAndWarnings-alerts"
+			></div>
+			<div 
+				class="game__alertsAndWarnings-warnings" 
+				id="game__alertsAndWarnings-warnings"
+			></div>
+		</div>
 		<div class="game__messagelayer" id="game__messagelayer">
 			<div class="game__messagelayer-proper" id="game__messagelayer-proper">
 				<div class="game__messagelayer-message">
@@ -44,16 +54,6 @@ export default function overlays() {
 				</div>
 				<div class="game__messagelayer-message-queue-readout" id="game__messagelayer-message-queue-readout"></div>
 			</div>
-		</div>
-		<div class="game__alertsAndWarnings" id="game__alertsAndWarnings">
-			<div 
-				class="game__alertsAndWarnings-alerts" 
-				id="game__alertsAndWarnings-alerts"
-			></div>
-			<div 
-				class="game__alertsAndWarnings-warnings" 
-				id="game__alertsAndWarnings-warnings"
-			></div>
 		</div>
 		<div id="game__hud" class="game__hud">
 			<div class="game__hud-proper">

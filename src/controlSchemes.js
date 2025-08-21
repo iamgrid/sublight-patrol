@@ -261,6 +261,7 @@ const controlSchemes = {
 		descriptions: [
 			{ keys: 'up, down', function: 'Cycle menu buttons' },
 			{ keys: 'enter', function: 'Activate menu button' },
+			{ keys: 'esc', function: 'Return to main menu' },
 		],
 		execute() {
 			controlSchemes.showLayout(controlSchemes.replaySceneMenu.id);
@@ -271,6 +272,10 @@ const controlSchemes = {
 
 			if (Keyboard.isKeyPressed('ArrowUp')) {
 				gameMenus.cycleFocus('back');
+			}
+
+			if (Keyboard.isKeyPressed('Escape')) {
+				gameMenus.returnToMainMenu();
 			}
 
 			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {

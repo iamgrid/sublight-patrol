@@ -10,8 +10,8 @@ const scene002 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
 	titlePlate: {
-		wittyText: 'Wait, the Zee were after the meds?',
-		mainText: 'Mission 2 of 4: Escaping the Hunting Party',
+		subTitle: 'Wait, the Zee were after the meds?',
+		title: 'Mission 2 of 4: Escaping the Hunting Party',
 	},
 	playVolume: {
 		minX: -2000,

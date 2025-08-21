@@ -364,15 +364,15 @@ const story = {
 
 			gameLog.add(
 				gameLog.ENTRY_COLORS.white,
-				`---&nbsp;&nbsp;&nbsp;${currentSceneObject.titlePlate.mainText}&nbsp;&nbsp;&nbsp;---`,
+				`---&nbsp;&nbsp;&nbsp;${currentSceneObject.titlePlate.title}&nbsp;&nbsp;&nbsp;---`,
 				timing.times.play
 			);
 			plates.fullMatte();
 			plates.loadPlate(
 				'mission_title',
 				-1,
-				currentSceneObject.titlePlate.mainText,
-				currentSceneObject.titlePlate.wittyText
+				currentSceneObject.titlePlate.title,
+				currentSceneObject.titlePlate.subTitle
 			);
 			timing.toggleEntityMovement(false, 'story.js@advance() 3');
 			soundEffects.muteUnmuteAllLoops('story.js@advance() 4', true);

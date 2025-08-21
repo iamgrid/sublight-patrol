@@ -133,17 +133,11 @@ const plates = {
 		if (hud.hudIsShowing) hud.toggle(functionSignature, false);
 	},
 
-	loadPlate(plateId, quoteVariant = '', mainText = '', wittyText = '') {
+	loadPlate(plateId, quoteVariant = '', title = '', subTitle = '') {
 		const functionSignature = 'plates.js@loadPlate()';
 
 		if (c.debug.sequentialEvents)
-			console.log(
-				functionSignature,
-				plateId,
-				quoteVariant,
-				mainText,
-				wittyText
-			);
+			console.log(functionSignature, plateId, quoteVariant, title, subTitle);
 		let atlText = '';
 		let btlText = '';
 
@@ -187,7 +181,7 @@ const plates = {
 					missionFailedQuoteVariants[
 						randomNumber(0, missionFailedQuoteVariants.length - 1)
 					];
-				btlText = mainText;
+				btlText = title;
 				break;
 			case 'mission_success':
 				atlText =
@@ -197,8 +191,8 @@ const plates = {
 				btlText = 'Mission success';
 				break;
 			case 'mission_title':
-				atlText = wittyText;
-				btlText = mainText;
+				atlText = subTitle;
+				btlText = title;
 				break;
 		}
 
