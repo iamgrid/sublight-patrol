@@ -21,8 +21,8 @@ const scene003 = {
 		softBoundary: 300,
 	},
 	playerStartingPosition: {
-		posX: 100,
-		posY: 30,
+		posX: 120,
+		posY: 120,
 	},
 	entities: {
 		harpax_37188: {
@@ -32,6 +32,15 @@ const scene003 = {
 		fuel_depot_39_617_e: {
 			id: 'fuel_depot_39_617_e',
 			type: 'fuel_depot',
+		},
+		htran_088: {
+			id: 'htran_088',
+			groupId: 'red',
+			type: 'shuttle',
+			playerRelation: 'friendly',
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+			contents: 'Ensign Devon',
+			hasBeenScanned: true,
 		},
 		pakuuni_1: {
 			id: 'pakuuni_1',
@@ -393,6 +402,11 @@ const scene003 = {
 							groupId: scene003.entities.hurcha_1.groupId,
 							requiredPercentage: 100,
 						},
+						{
+							type: c.objectiveTypes.mustHaveArrived.id,
+							entityId: scene003.entities.htran_088.id,
+							requiredPercentage: 100,
+						},
 					],
 					advanceWhen: [
 						{
@@ -460,6 +474,18 @@ const scene003 = {
 				};
 			},
 			execute() {
+				entities.spawn(
+					scene003.entities.htran_088,
+					{
+						posX: -1800,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: 2500,
+						behaviorAssignedStationY: 0,
+					}
+				);
+
 				timing.setTimeout(
 					() => {
 						messageLayer.show();
@@ -477,17 +503,17 @@ const scene003 = {
 					5000
 				);
 
-				timing.setTimeout(
-					() => {
-						if (typeof scene003.handlers.checkBeatCompletion === 'function') {
-							scene003.handlers.checkBeatCompletion();
-						} else {
-							console.error('failed to use the checkBeatCompletion handler');
-						}
-					},
-					timing.modes.play,
-					10000
-				);
+				// timing.setTimeout(
+				// 	() => {
+				// 		if (typeof scene003.handlers.checkBeatCompletion === 'function') {
+				// 			scene003.handlers.checkBeatCompletion();
+				// 		} else {
+				// 			console.error('failed to use the checkBeatCompletion handler');
+				// 		}
+				// 	},
+				// 	timing.modes.play,
+				// 	10000
+				// );
 			},
 		},
 	],

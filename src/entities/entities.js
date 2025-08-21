@@ -260,27 +260,27 @@ const entities = {
 
 		if (doStoreIn === 'player') {
 			stageEntity.zIndex = c.zIndices.playerCraft;
-			console.log(
-				functionSignature,
-				'Player detected, spawning with zIndex:',
-				c.zIndices.playerCraft
-			);
+			// console.log(
+			// 	functionSignature,
+			// 	'Player detected, spawning with zIndex:',
+			// 	c.zIndices.playerCraft
+			// );
 		} else {
 			if (!newEntity.immutable.isBackgroundEntity) {
 				stageEntity.zIndex = this.foregroundEntityZIndexIterator;
-				console.log(
-					functionSignature,
-					'Not a background entity, spawning with zIndex:',
-					this.foregroundEntityZIndexIterator
-				);
+				// console.log(
+				// 	functionSignature,
+				// 	'Not a background entity, spawning with zIndex:',
+				// 	this.foregroundEntityZIndexIterator
+				// );
 				this.foregroundEntityZIndexIterator++;
 			} else {
 				stageEntity.zIndex = this.backgroundEntityZIndexIterator;
-				console.log(
-					functionSignature,
-					'Background entity detected, spawning with zIndex:',
-					this.backgroundEntityZIndexIterator
-				);
+				// console.log(
+				// 	functionSignature,
+				// 	'Background entity detected, spawning with zIndex:',
+				// 	this.backgroundEntityZIndexIterator
+				// );
 				this.backgroundEntityZIndexIterator++;
 			}
 		}
