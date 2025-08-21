@@ -1079,9 +1079,9 @@ export const gameLog = {
 			domElement.scrollHeight - domElement.clientHeight;
 	},
 
-	toggleHide(toggle = 'hide') {
+	toggleHide(mode = 'hide') {
 		const mainDivClasses = document.getElementById('game__log').classList;
-		if (toggle === 'hide') {
+		if (mode === 'hide') {
 			mainDivClasses.add('game__log--hidden');
 			gameLog.isHidden = true;
 			window.clearTimeout(gameLog.hiderTimeout);
@@ -1091,11 +1091,11 @@ export const gameLog = {
 		}
 	},
 
-	toggleStatusExpansion(event, toggle) {
+	toggleStatusExpansion(event, mode) {
 		const mainDivClasses = document.getElementById('game__log').classList;
 
 		let doExpand = !this.isExpanded;
-		switch (toggle) {
+		switch (mode) {
 			case 'show':
 				doExpand = true;
 				break;
@@ -1126,7 +1126,6 @@ export const gameLog = {
 		this.store = [];
 
 		document.getElementById('game__log-proper').innerHTML = '';
-		this.toggleHide();
 	},
 };
 

@@ -94,8 +94,8 @@ const story = {
 	],
 	currentScene: null,
 	currentSceneBeat: null,
+	sceneTransitionIsInProgress: false,
 	missionFailureWasTriggered: false,
-	noOfTimesHitEscMessageWasAppended: 0,
 	currentObjectives: {
 		show: [],
 		advanceWhen: [],
@@ -267,6 +267,7 @@ const story = {
 			story.handlers.playVolume.current = currentSceneObject.playVolume;
 			story.handlers.playVolume.recalculateSoftBoundaries();
 			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
+			story.sceneTransitionIsInProgress = false;
 			story.missionFailureWasTriggered = false;
 
 			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
@@ -352,6 +353,10 @@ const story = {
 			currentSceneObject.storyBeats[story.currentSceneBeat];
 
 		if (c.debug.sequentialEvents) console.log(currentSceneObject);
+
+		if (!currentSceneBeatObj.isTheFinalGameplayBeat) {
+			story.sceneTransitionIsInProgress = false;
+		}
 
 		if (cleanUpNeeded) {
 			story.cleanUp();
@@ -576,6 +581,7 @@ const story = {
 			music.stopPlaying();
 			gameMenus.clearButtons();
 			hud.requestFullReRender = true;
+			gameLog.clear();
 			story.advance(functionSignature, sceneId, 0);
 		}
 	},
@@ -606,6 +612,8 @@ const story = {
 			);
 
 			hud.requestFullReRender = true;
+
+			gameLog.clear();
 
 			story.advance(functionSignature);
 		}
@@ -1049,6 +1057,17 @@ const story = {
 				);
 			} else {
 				// advance to the next scene
+
+				if (story.sceneTransitionIsInProgress) {
+					console.warn(
+						functionSignature,
+						'gameplay scene transition is already in progress, returning early'
+					);
+					return;
+				}
+
+				story.sceneTransitionIsInProgress = true;
+
 				plates.loadPlate('mission_success', 1000);
 				plates.fadeInPlate(25, 1000);
 				timing.toggleEntityMovement(
