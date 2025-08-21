@@ -404,7 +404,7 @@ const entities = {
 				8500
 			);
 		} else {
-			console.log('Spawn player with their next ship');
+			console.log(functionSignature, 'Spawn player with their next ship');
 
 			const newPlayerId = c.playerIdPartial + nextSuffix;
 			const newPlayerShipType = nextShip;
@@ -464,12 +464,21 @@ const entities = {
 				true
 			);
 
-			// camera needs to be repositioned to the new player ship
+			// camera needs to be repositioned to the new player craft
+
+			console.log(
+				functionSignature,
+				"Repositioning camera to the player's new craft"
+			);
+
 			const cameraTL = getCameraTLBasedOnPlayerPosition(
 				newPlayerShipX,
 				newPlayerShipY,
 				1
 			);
+
+			console.log(functionSignature, 'cameraTL:', cameraTL);
+
 			entities.handlers.refocusCameraOnTL(cameraTL[0], cameraTL[1], 0, false);
 
 			plates.fadeOutMatte(25, 5000);

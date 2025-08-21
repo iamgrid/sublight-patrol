@@ -96,6 +96,8 @@ const story = {
 	currentSceneBeat: null,
 	sceneTransitionIsInProgress: false,
 	missionFailureWasTriggered: false,
+	playerIsReplayingScenes: false,
+	playerReachedTheLastStoryBeatOfTheLastGameplayScene: false,
 	currentObjectives: {
 		show: [],
 		advanceWhen: [],
@@ -208,9 +210,25 @@ const story = {
 					// more scenes exist
 					story.currentScene = story.sceneList[index].id;
 				} else {
-					// no more scenes, player has completed all levels of the game
+					// no more scenes exist
+
+					if (story.playerIsReplayingScenes) {
+						// player is replaying scenes, so we just return to the main menu
+						if (c.debug.sequentialEvents)
+							console.log(
+								functionSignature,
+								'player is replaying scenes, returning to the main menu'
+							);
+						story.mainMenu(false, false, false);
+						return;
+					}
+
+					// player has completed all levels of the game
 					if (c.debug.sequentialEvents)
-						console.log('PLAYER HAS COMPLETED ALL LEVELS OF THE GAME');
+						console.log(
+							functionSignature,
+							'PLAYER HAS COMPLETED ALL LEVELS OF THE GAME'
+						);
 					plates.fullMatte();
 					plates.loadPlate('the_end');
 					plates.fadeInPlate(25);
@@ -253,7 +271,7 @@ const story = {
 		}
 
 		if (c.debug.sequentialEvents)
-			console.log('story.currentScene:', story.currentScene);
+			console.log(functionSignature, 'story.currentScene:', story.currentScene);
 
 		const currentSceneListObject = story.sceneList.find(
 			(el) => el.id === story.currentScene
@@ -278,6 +296,7 @@ const story = {
 						// this player is a first time visitor
 						if (c.debug.localStorage)
 							console.log(
+								functionSignature,
 								'localStorage value is either missing or invalid, populating with the defaults from initialGameState.js'
 							);
 						storePlayerProgress(
@@ -578,6 +597,7 @@ const story = {
 			console.log(functionSignature, { goAhead });
 
 		if (goAhead) {
+			story.playerIsReplayingScenes = true;
 			music.stopPlaying();
 			gameMenus.clearButtons();
 			hud.requestFullReRender = true;
@@ -600,6 +620,8 @@ const story = {
 			story.handlers.dispatch({
 				type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
 			});
+
+			story.playerIsReplayingScenes = false;
 
 			music.stopPlaying();
 			gameMenus.clearButtons();
@@ -647,6 +669,8 @@ const story = {
 		} else if (hasThePlayerCompletedTheGame) {
 			alert(story.playerAlreadyCompletedGameMessage);
 		} else {
+			story.playerIsReplayingScenes = false;
+
 			music.stopPlaying();
 			gameMenus.clearButtons();
 			hud.requestFullReRender = true;
