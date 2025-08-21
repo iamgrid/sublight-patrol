@@ -27,6 +27,7 @@ import StarscapeLayer from './components/StarscapeLayer';
 import PlayVolumeBoundaries from './components/PlayVolumeBoundaries';
 import entities from './entities/entities';
 import behavior from './behavior/behavior';
+import formations from './behavior/formations';
 import shots from './shots';
 import story from './story/story';
 import emp from './emp';
@@ -540,7 +541,7 @@ export default class App extends PIXI.Application {
 				'padding-top: 10px; color: yellow'
 			);
 			console.info(currentState);
-			console.info('currentFormations:', behavior.currentFormations);
+			console.info('currentFormations:', formations.currentFormations);
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
 			console.info('timing:', timing);

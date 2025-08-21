@@ -3,6 +3,9 @@ import idCreator from '../utils/idCreator';
 import { getStoreEntity, getPosition } from '../utils/helpers';
 
 const formations = {
+	// handlers: {
+	// 	currentFormations: null,
+	// }, // gets its values in behavior.js@init()
 	currentFormations: {},
 	entityTemplate: {
 		id: null,
@@ -15,8 +18,10 @@ const formations = {
 	longOffsetGap: 15,
 
 	createFormation(leadEntityId, flankingEntityId, currentState) {
+		const functionSignature = 'formations.js@createFormation()';
 		if (c.debug.behavior)
 			console.log(
+				functionSignature,
 				'creating new formation with',
 				leadEntityId,
 				'as lead and',
@@ -26,6 +31,7 @@ const formations = {
 		if (formations.isInFormation(leadEntityId)) {
 			if (c.debug.behavior)
 				console.log(
+					functionSignature,
 					'attempt to add',
 					leadEntityId,
 					'as lead to a new formation prevented, its already part of another one'
@@ -36,6 +42,7 @@ const formations = {
 		if (formations.isInFormation(flankingEntityId)) {
 			if (c.debug.behavior)
 				console.log(
+					functionSignature,
 					'attempt to add',
 					flankingEntityId,
 					'as follower to a new formation prevented, its already part of another one'
@@ -75,12 +82,23 @@ const formations = {
 		currentState,
 		promoteToNewLeader = false
 	) {
+		const functionSignature = 'formations.js@addEntityToFormation()';
+
+		if (c.debug.behavior) {
+			console.log(functionSignature, {
+				formationId,
+				idOfEntityToAdd,
+				promoteToNewLeader,
+			});
+		}
+
 		let currentFormation = formations.currentFormations[formationId];
 		const existingFormationId = formations.isInFormation(idOfEntityToAdd);
 
 		if (existingFormationId === formationId) {
 			if (c.debug.behavior)
 				console.log(
+					functionSignature,
 					idOfEntityToAdd,
 					'is already in the formation that its now trying to join -> canceling operation.'
 				);
@@ -94,6 +112,7 @@ const formations = {
 			currentFormation = currentFormation.concat(existingFormation);
 			if (c.debug.behavior)
 				console.log(
+					functionSignature,
 					idOfEntityToAdd,
 					'is already in another formation, merging it with this one'
 				);
@@ -137,13 +156,19 @@ const formations = {
 	},
 
 	removeEntityFromFormation(formationId, idOfEntityToRemove) {
+		const functionSignature = 'formations.js@removeEntityFromFormation()';
 		let currentFormation = formations.currentFormations[formationId];
 
 		if (!currentFormation.some((el) => el.id === idOfEntityToRemove))
 			return false;
 
 		if (c.debug.behavior)
-			console.log('removing', idOfEntityToRemove, 'from formation');
+			console.log(
+				functionSignature,
+				'removing',
+				idOfEntityToRemove,
+				'from formation'
+			);
 
 		currentFormation = currentFormation.filter(
 			(el) => el.id !== idOfEntityToRemove
@@ -217,7 +242,9 @@ const formations = {
 	},
 
 	dissolveFormation(formationId) {
-		if (c.debug.behavior) console.log('dissolving formation', formationId);
+		const functionSignature = 'formations.js@dissolveFormation()';
+		if (c.debug.behavior)
+			console.log(functionSignature, 'dissolving formation', formationId);
 
 		delete formations.currentFormations[formationId];
 	},

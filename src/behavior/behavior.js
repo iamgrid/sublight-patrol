@@ -21,7 +21,6 @@ const behavior = {
 		checkAgainstCurrentObjectives: null,
 		playVolume: null,
 	}, // gets its values in App.js
-	currentFormations: formations.currentFormations,
 	enemyFighterDetectionRange: 600,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
@@ -29,6 +28,7 @@ const behavior = {
 	overcorrectingEntities: {},
 
 	tick() {
+		// const functionSignature = 'behavior.js@tick()';
 		const currentState = this.handlers.state();
 
 		const playerId = currentState.entities.player.id;
@@ -44,6 +44,15 @@ const behavior = {
 		// aren't in a formation at all,
 		// or fell below the hullHealth threshold for fleeing
 		currentState.entities.targetable.forEach((entity) => {
+			// console.log(
+			// 	functionSignature,
+			// 	'entity:',
+			// 	entity.id,
+			// 	'entity immutable:',
+			// 	entity.immutable,
+			// 	'entity isDisabled:',
+			// 	entity.isDisabled
+			// );
 			if (!entity.immutable.hasBehavior || entity.isDisabled) return;
 
 			// this entity is allowed to make a decision right now
@@ -603,14 +612,19 @@ const behavior = {
 		// attackers in the vicinity to make a formation with.
 
 		let foundAFormationToJoin = false;
-		if (!formations.isLeadInAFormation(entityId)) {
+		if (
+			!formations.isLeadInAFormation(
+				entityId
+			) /* && !entity.mutable.isDisabled*/
+		) {
 			currentState.entities.targetable.forEach((buddy) => {
 				if (foundAFormationToJoin) return;
 				if (buddy.id === entityId) return;
 				if (
 					buddy.playerRelation === 'hostile' &&
 					buddy.immutable.hasCannons &&
-					buddy.behaviorAttacking === enemyId
+					buddy.behaviorAttacking === enemyId &&
+					!buddy.isDisabled
 				) {
 					const [buddyX, buddyY] = getPosition(
 						buddy.id,
@@ -827,7 +841,9 @@ const behavior = {
 							) {
 								cumulativeObstructionType =
 									c.obstructionTypes.entityAttackingThePlayer;
-								partnerId = currentEntity.id;
+								if (!currentEntity.isDisabled) {
+									partnerId = currentEntity.id;
+								}
 								break;
 							} else {
 								if (closestObstruction === null)
@@ -846,7 +862,7 @@ const behavior = {
 						// );
 
 						newLongVelocity = newFacing * entity.immutable.thrusters.main;
-					} else {
+					} else if (partnerId !== null) {
 						// get into formation with another attacking entity
 
 						// console.log(

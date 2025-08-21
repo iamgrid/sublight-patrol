@@ -495,7 +495,7 @@ const scene003 = {
 								speaker: 'Ensign Durrell (piloting shuttle HTran 088)',
 								whereAndWhen: 'here and now',
 								message:
-									"<p>Excellent job clearing the hostiles and disabling the T4B Lieutenant, we'll take it from here!</p><p>Devon here says he'll race you back to base with the prototype. You up for a friendly wager?</p>",
+									"<p>Excellent job clearing the hostiles and disabling the T4B Lieutenant. Me and Devon will take care of things from here!</p><p>... Devon says he'll race you back to base with the prototype. You up for a friendly wager?</p>",
 							},
 						]);
 					},

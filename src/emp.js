@@ -76,10 +76,12 @@ const emp = {
 	},
 
 	disableStageEntities(newlyDisabledEntities) {
+		const functionSignature = 'emp.js@disableStageEntities()';
 		if (newlyDisabledEntities.length < 1) return;
 
 		console.log(
-			'disableStageEntities - newly disabled entities:',
+			functionSignature,
+			'newly disabled entities:',
 			newlyDisabledEntities
 		);
 
@@ -97,8 +99,17 @@ const emp = {
 			soundEffects.playOnce(entityId, soundEffects.library.emp_sys_dropout.id);
 
 			const formationId = formations.isInFormation(entityId);
-			if (formationId)
+			if (formationId) {
+				console.log(
+					functionSignature,
+					'entity',
+					entityId,
+					'is in formation',
+					formationId,
+					'attempting to remove...'
+				);
 				formations.removeEntityFromFormation(formationId, entityId);
+			}
 
 			if (typeof emp.handlers.checkAgainstCurrentObjectives === 'function') {
 				emp.handlers.checkAgainstCurrentObjectives(entityId, 'disabled');
