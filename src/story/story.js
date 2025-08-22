@@ -151,6 +151,20 @@ const story = {
 				},
 			});
 		},
+		getMomentaryEntityPosition(entityId) {
+			const currentState = story.handlers.state();
+			let posX = null;
+			let posY = null;
+			if ('positions' in currentState && 'canMove' in currentState.positions) {
+				if (`${entityId}--posX` in currentState.positions.canMove) {
+					posX = currentState.positions.canMove[`${entityId}--posX`];
+				}
+				if (`${entityId}--posY` in currentState.positions.canMove) {
+					posY = currentState.positions.canMove[`${entityId}--posY`];
+				}
+			}
+			return { posX, posY };
+		},
 	},
 
 	/**

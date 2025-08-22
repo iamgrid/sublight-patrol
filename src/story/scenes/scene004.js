@@ -219,6 +219,11 @@ const scene004 = {
 					],
 					advanceWhen: [
 						{
+							type: c.objectiveTypes.disabled.id,
+							entityId: scene004.entities.crg_11811e.id,
+							requiredPercentage: 100,
+						},
+						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: sc.zangariGroupNames.nazaar,
 							requiredPercentage: 100,
@@ -396,10 +401,22 @@ const scene004 = {
 				};
 			},
 			execute() {
-				const functionSignature = 'scene004.js@beat2 execute()';
+				let holdZeroX = -1600;
+				let holdZeroY = 0;
+
 				const cargoShipId = scene004.entities.crg_11811e.id;
-				let cargoShipPosX = 0;
-				console.log(functionSignature, { cargoShipId, cargoShipPosX });
+				const cargoShipPosition =
+					scene004.handlers.storyStateFns.getMomentaryEntityPosition(
+						cargoShipId
+					);
+
+				if (
+					cargoShipPosition.posX !== null &&
+					cargoShipPosition.posY !== null
+				) {
+					holdZeroX = cargoShipPosition.posX;
+					holdZeroY = cargoShipPosition.posY;
+				}
 
 				entities.spawn(
 					scene004.entities.argoon_1,
@@ -408,8 +425,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -1600,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: holdZeroX - 120,
+						behaviorAssignedStationY: holdZeroY,
 					}
 				);
 
@@ -420,8 +437,8 @@ const scene004 = {
 						posY: 80,
 					},
 					{
-						behaviorAssignedStationX: -1680,
-						behaviorAssignedStationY: 80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY + 100,
 					}
 				);
 
@@ -432,8 +449,8 @@ const scene004 = {
 						posY: -80,
 					},
 					{
-						behaviorAssignedStationX: -1680,
-						behaviorAssignedStationY: -80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY - 100,
 					}
 				);
 			},
@@ -473,15 +490,27 @@ const scene004 = {
 							groupId: sc.zangariGroupNames.mylok,
 							requiredPercentage: 100,
 						},
-						{
-							type: c.objectiveTypes.disabled.id,
-							entityId: scene004.entities.crg_11811e.id,
-							requiredPercentage: 100,
-						},
 					],
 				};
 			},
 			execute() {
+				let holdZeroX = -600;
+				let holdZeroY = 0;
+
+				const cargoShipId = scene004.entities.crg_11811e.id;
+				const cargoShipPosition =
+					scene004.handlers.storyStateFns.getMomentaryEntityPosition(
+						cargoShipId
+					);
+
+				if (
+					cargoShipPosition.posX !== null &&
+					cargoShipPosition.posY !== null
+				) {
+					holdZeroX = cargoShipPosition.posX;
+					holdZeroY = cargoShipPosition.posY;
+				}
+
 				entities.spawn(
 					scene004.entities.habeen_1,
 					{
@@ -489,8 +518,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -600,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: holdZeroX - 100,
+						behaviorAssignedStationY: holdZeroY,
 					}
 				);
 
@@ -501,8 +530,8 @@ const scene004 = {
 						posY: 80,
 					},
 					{
-						behaviorAssignedStationX: -680,
-						behaviorAssignedStationY: 80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY + 100,
 					}
 				);
 
@@ -513,8 +542,8 @@ const scene004 = {
 						posY: -80,
 					},
 					{
-						behaviorAssignedStationX: -680,
-						behaviorAssignedStationY: -80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY - 100,
 					}
 				);
 
@@ -525,8 +554,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -700,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: holdZeroX - 200,
+						behaviorAssignedStationY: holdZeroY,
 					}
 				);
 
@@ -537,8 +566,8 @@ const scene004 = {
 						posY: 80,
 					},
 					{
-						behaviorAssignedStationX: -780,
-						behaviorAssignedStationY: 80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY + 200,
 					}
 				);
 			},
@@ -555,6 +584,23 @@ const scene004 = {
 				};
 			},
 			execute() {
+				let holdZeroX = -900;
+				let holdZeroY = 0;
+
+				const cargoShipId = scene004.entities.crg_11811e.id;
+				const cargoShipPosition =
+					scene004.handlers.storyStateFns.getMomentaryEntityPosition(
+						cargoShipId
+					);
+
+				if (
+					cargoShipPosition.posX !== null &&
+					cargoShipPosition.posY !== null
+				) {
+					holdZeroX = cargoShipPosition.posX;
+					holdZeroY = cargoShipPosition.posY;
+				}
+
 				entities.spawn(
 					scene004.entities.htran_091,
 					{
@@ -562,8 +608,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -9000,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: holdZeroX - 180,
+						behaviorAssignedStationY: holdZeroY,
 					}
 				);
 
@@ -574,8 +620,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -8920,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: holdZeroX - 280,
+						behaviorAssignedStationY: holdZeroY,
 					}
 				);
 				entities.spawn(
@@ -585,8 +631,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -9000,
-						behaviorAssignedStationY: -80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY - 100,
 					}
 				);
 				entities.spawn(
@@ -596,8 +642,8 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: -9000,
-						behaviorAssignedStationY: 80,
+						behaviorAssignedStationX: holdZeroX - 20,
+						behaviorAssignedStationY: holdZeroY + 100,
 					}
 				);
 

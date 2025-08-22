@@ -474,6 +474,23 @@ const scene003 = {
 				};
 			},
 			execute() {
+				let holdZeroX = 2500;
+				let holdZeroY = 0;
+
+				const prototypeId = scene003.entities.pakuuni_1.id;
+				const prototypePosition =
+					scene003.handlers.storyStateFns.getMomentaryEntityPosition(
+						prototypeId
+					);
+
+				if (
+					prototypePosition.posX !== null &&
+					prototypePosition.posY !== null
+				) {
+					holdZeroX = prototypePosition.posX;
+					holdZeroY = prototypePosition.posY;
+				}
+
 				entities.spawn(
 					scene003.entities.htran_088,
 					{
@@ -481,8 +498,8 @@ const scene003 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 2500,
-						behaviorAssignedStationY: 0,
+						behaviorAssignedStationX: holdZeroX - 180,
+						behaviorAssignedStationY: holdZeroY,
 					}
 				);
 
@@ -500,7 +517,7 @@ const scene003 = {
 						]);
 					},
 					timing.modes.play,
-					5000
+					1500
 				);
 
 				// timing.setTimeout(
