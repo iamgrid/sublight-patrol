@@ -31,7 +31,7 @@ const scene001 = {
 			type: 'freighter_l1',
 			playerRelation: 'neutral',
 			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
-			contents: 'Empty',
+			contents: 'Aluminium billets',
 			hasBeenScanned: false,
 		},
 		crg_15497e: {
@@ -40,7 +40,7 @@ const scene001 = {
 			type: 'freighter_l3',
 			playerRelation: 'neutral',
 			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
-			contents: 'Empty',
+			contents: 'Titanium billets',
 			hasBeenScanned: false,
 		},
 		habeen_1: {

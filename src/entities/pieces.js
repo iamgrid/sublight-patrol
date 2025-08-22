@@ -214,6 +214,17 @@ const pieces = {
 		},
 		mutable: {},
 	},
+	freighter_l2a: {
+		immutable: {
+			maxSystemStrength: 1500,
+			thrusters: {
+				main: 3,
+				side: 2,
+				front: 2,
+			},
+		},
+		mutable: {},
+	},
 	freighter_l3: {
 		immutable: {
 			model: '/ships/FreighterL3',

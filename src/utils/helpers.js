@@ -16,6 +16,8 @@ export function makeName(input) {
 		.map((el) => {
 			if (el === 'htran') {
 				return 'HTran';
+			} else if (el === 'lsb') {
+				return 'LsB';
 			} else {
 				return `${el.substr(0, 1).toUpperCase()}${el.substr(1)}`;
 			}

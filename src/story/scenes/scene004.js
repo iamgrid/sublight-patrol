@@ -1,5 +1,5 @@
 import c from '../../utils/constants';
-// import sc from '../storyConstants';
+import sc from '../storyConstants';
 import entities from '../../entities/entities';
 import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
@@ -14,15 +14,15 @@ const scene004 = {
 		title: 'Mission 4 of 4: Save the Princess, Save the System',
 	},
 	playVolume: {
-		minX: -2000,
-		maxX: 6000,
+		minX: -12000,
+		maxX: 12000,
 		minY: -2500,
 		maxY: 2500,
 		softBoundary: 300,
 	},
 	playerStartingPosition: {
-		posX: 100,
-		posY: 225,
+		posX: -11000,
+		posY: 100,
 	},
 	entities: {
 		htran_091: {
@@ -32,29 +32,64 @@ const scene004 = {
 			playerRelation: 'friendly',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: 'Medicine',
+			contents: '',
 			contentClassification: c.entityContentClassifications.missionObjective,
+			hasBeenScanned: true,
+		},
+		gold_1: {
+			id: 'gold_1',
+			groupId: 'gold',
+			type: 'valkyrie',
+			playerRelation: 'friendly',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+			contents: '',
+			contentClassification: c.entityContentClassifications.irrelevant,
+			hasBeenScanned: true,
+		},
+		gold_2: {
+			id: 'gold_2',
+			groupId: 'gold',
+			type: 'fenrir_dominator',
+			playerRelation: 'friendly',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+			contents: '',
+			contentClassification: c.entityContentClassifications.irrelevant,
+			hasBeenScanned: true,
+		},
+		gold_3: {
+			id: 'gold_3',
+			groupId: 'gold',
+			type: 'fenrir_dominator',
+			playerRelation: 'friendly',
+			behaviorAllowedToFlee: false,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+			contents: '',
+			contentClassification: c.entityContentClassifications.irrelevant,
 			hasBeenScanned: true,
 		},
 		harpax_80946: {
 			id: 'harpax_80946',
 			type: 'buoy',
 		},
-		fuel_depot_39_617_e: {
-			id: 'fuel_depot_39_617_e',
-			type: 'fuel_depot',
+		lsb_1901235789: {
+			id: 'lsb_1901235789',
+			type: 'buoy',
 		},
-		mylok_1: {
-			id: 'mylok_1',
-			groupId: 'mylok',
-			type: 'zangari_fighter_type_4a',
-			playerRelation: 'hostile',
-			behaviorAllowedToFlee: true,
-			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		crg_11811e: {
+			id: 'crg_11811e',
+			groupId: 'crg',
+			type: 'freighter_l2a',
+			playerRelation: 'neutral',
+			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
+			behaviorAllowedToFlee: false,
+			contents: 'Princess Nia & retinue',
+			hasBeenScanned: false,
 		},
 		nazaar_1: {
 			id: 'nazaar_1',
-			groupId: 'nazaar',
+			groupId: sc.zangariGroupNames.nazaar,
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
@@ -62,7 +97,7 @@ const scene004 = {
 		},
 		nazaar_2: {
 			id: 'nazaar_2',
-			groupId: 'nazaar',
+			groupId: sc.zangariGroupNames.nazaar,
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
@@ -70,31 +105,87 @@ const scene004 = {
 		},
 		nazaar_3: {
 			id: 'nazaar_3',
-			groupId: 'nazaar',
+			groupId: sc.zangariGroupNames.nazaar,
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		pakuuni_1: {
 			id: 'pakuuni_1',
-			groupId: 'pakuuni',
+			groupId: sc.zangariGroupNames.pakuuni,
 			type: 'zangari_fighter_type_4',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		hurcha_1: {
-			id: 'hurcha_1',
-			groupId: 'hurcha',
+		pakuuni_2: {
+			id: 'pakuuni_2',
+			groupId: sc.zangariGroupNames.pakuuni,
 			type: 'zangari_fighter_type_4',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
-		hurcha_2: {
-			id: 'hurcha_2',
-			groupId: 'hurcha',
+		argoon_1: {
+			id: 'argoon_1',
+			groupId: sc.zangariGroupNames.argoon,
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		argoon_2: {
+			id: 'argoon_2',
+			groupId: sc.zangariGroupNames.argoon,
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		argoon_3: {
+			id: 'argoon_3',
+			groupId: sc.zangariGroupNames.argoon,
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		habeen_1: {
+			id: 'habeen_1',
+			groupId: sc.zangariGroupNames.habeen,
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		habeen_2: {
+			id: 'habeen_2',
+			groupId: sc.zangariGroupNames.habeen,
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		habeen_3: {
+			id: 'habeen_3',
+			groupId: sc.zangariGroupNames.habeen,
+			type: 'zangari_fighter_type_4',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		mylok_1: {
+			id: 'mylok_1',
+			groupId: sc.zangariGroupNames.mylok,
+			type: 'zangari_fighter_type_3',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		mylok_2: {
+			id: 'mylok_2',
+			groupId: sc.zangariGroupNames.mylok,
 			type: 'zangari_fighter_type_3',
 			playerRelation: 'hostile',
 			behaviorAllowedToFlee: true,
@@ -111,42 +202,52 @@ const scene004 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.mustHaveSurvived.id,
-							entityId: scene004.entities.htran_091.id,
+							type: c.objectiveTypes.disabled.id,
+							entityId: scene004.entities.crg_11811e.id,
 							requiredPercentage: 100,
 						},
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene004.entities.mylok_1.id,
+							groupId: sc.zangariGroupNames.nazaar,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: sc.zangariGroupNames.pakuuni,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene004.entities.mylok_1.id,
+							groupId: sc.zangariGroupNames.nazaar,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: sc.zangariGroupNames.pakuuni,
 							requiredPercentage: 100,
 						},
 					],
 				};
 			},
 			execute(options) {
-				// scene004.handlers.storyStateFns.addFighterToPlayerHangar(
-				// 	c.playableFighterTypeIds.zangari_fighter_type_4,
-				// 	true
-				// );
+				scene004.handlers.storyStateFns.addFighterToPlayerHangar(
+					c.playableFighterTypeIds.zangari_fighter_type_4,
+					true
+				);
 
 				const playerId = options.playerId;
 				const playerShipType = options.playerShipType;
 
 				entities.spawn(scene004.entities.harpax_80946, {
-					posX: 1000,
-					posY: 345,
+					posX: -10000,
+					posY: 160,
 				});
 
-				entities.spawn(scene004.entities.fuel_depot_39_617_e, {
-					posX: -1000,
-					posY: 0,
+				entities.spawn(scene004.entities.lsb_1901235789, {
+					posX: 11500,
+					posY: 160,
 				});
 
 				entities.spawn(
@@ -165,20 +266,70 @@ const scene004 = {
 					'player'
 				);
 
-				entities.spawn(scene004.entities.htran_091, {
-					posX: 100,
-					posY: 150,
+				entities.spawn(scene004.entities.crg_11811e, {
+					posX: -8000,
+					posY: 0,
+					latVelocity: 0,
+					longVelocity: 3,
 				});
 
 				entities.spawn(
-					scene004.entities.mylok_1,
+					scene004.entities.nazaar_1,
 					{
-						posX: 2900,
-						posY: 500,
+						posX: -9600,
+						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 980,
-						behaviorAssignedStationY: 170,
+						behaviorAssignedStationX: -10600,
+						behaviorAssignedStationY: 0,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.nazaar_2,
+					{
+						posX: -9600,
+						posY: 80,
+					},
+					{
+						behaviorAssignedStationX: -10680,
+						behaviorAssignedStationY: 80,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.nazaar_3,
+					{
+						posX: -9600,
+						posY: -80,
+					},
+					{
+						behaviorAssignedStationX: -10680,
+						behaviorAssignedStationY: -80,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.pakuuni_1,
+					{
+						posX: 8000,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: 4000,
+						behaviorAssignedStationY: 0,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.pakuuni_2,
+					{
+						posX: 8000,
+						posY: 80,
+					},
+					{
+						behaviorAssignedStationX: 4080,
+						behaviorAssignedStationY: 80,
 					}
 				);
 
@@ -188,15 +339,36 @@ const scene004 = {
 						messageLayer.queueMessages([
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
-								speaker: 'Ensign Devon (Shuttle pilot)',
-								whereAndWhen: 'here and now',
+								speaker: 'Commander Harris',
+								whereAndWhen: '(briefing delivered en route, 17 minutes ago)',
 								message:
-									'<p>Drat, I guess the Zee are much more interested in these medical supplies than we assumed.</p><p>Get ready for a fight Lieutenant!</p>',
+									"<p>Captain, I apologize for cutting your shore leave short and making you dash back out there like this. We've scrambled Gold group as well, but it looks like they are too far behind you to make a difference.</p>",
+							},
+							{
+								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
+								speaker: 'Commander Harris',
+								whereAndWhen: '(briefing delivered en route, 17 minutes ago)',
+								message:
+									"<p>Here's the rundown of what you're in for:<br/>The Harpax Palace was trying to see Princess Nia and her retinue safe by sneaking them to the Nim system in an unmarked freighter. Turns out the Zangari have a spy in the palace... Or had a spy there I should say. Long story short the freighter is now under their control, burning away from our system at full thrust.</p><p>It's not looking good son. The Zee have their best and brightest covering that vessel. Chasing all of them off solo and disabling the freighter before it reaches the edge of the gravity well and jumps to lightspeed would be too tall an order for most - but maybe not for you.</p>",
+							},
+							{
+								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
+								speaker: 'Commander Harris',
+								whereAndWhen: '(briefing delivered en route, 17 minutes ago)',
+								message:
+									"<p>One bit of good news: to give you an edge Command made the call to temporarily add the Zangari T4 you helped pilfer to your mobile hangar complement.</p><p>Engineering made quick work of the power systems issue, but as you can imagine, they're also quite protective of their shiny new green murder kitten... Could turn our understanding of starship design on its head and all that nonsense... As I told the Head of Engineering, fretting about a piece of machinery when the life of a future head of state is on the line...<br/>Ok, I really ought to get out of your ear right now.</p>",
+							},
+							{
+								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
+								speaker: 'Commander Harris',
+								whereAndWhen: '(briefing delivered en route, 17 minutes ago)',
+								message:
+									"<p>Ahem, Godspeed Captain! I don't have to tell you how much the princess means to people around here. I trust that you'll see her home safe! Harris out.</p>",
 							},
 						]);
 					},
 					timing.modes.play,
-					11000
+					9500
 				);
 			},
 		},
@@ -210,55 +382,58 @@ const scene004 = {
 					show: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene004.entities.nazaar_1.groupId,
+							groupId: sc.zangariGroupNames.argoon,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene004.entities.nazaar_1.groupId,
+							groupId: sc.zangariGroupNames.argoon,
 							requiredPercentage: 100,
 						},
 					],
 				};
 			},
 			execute() {
-				// const playerId = options.playerId;
-				// const playerShipType = options.playerShipType;
+				const functionSignature = 'scene004.js@beat2 execute()';
+				const cargoShipId = scene004.entities.crg_11811e.id;
+				let cargoShipPosX = 0;
+				console.log(functionSignature, { cargoShipId, cargoShipPosX });
 
 				entities.spawn(
-					scene004.entities.nazaar_1,
+					scene004.entities.argoon_1,
 					{
-						posX: 2900,
-						posY: 500,
+						posX: 11900,
+						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 700,
-						behaviorAssignedStationY: 170,
-					}
-				);
-
-				entities.spawn(
-					scene004.entities.nazaar_2,
-					{
-						posX: 2900,
-						posY: 600,
-					},
-					{
-						behaviorAssignedStationX: 620,
-						behaviorAssignedStationY: 250,
-					}
-				);
-				entities.spawn(
-					scene004.entities.nazaar_3,
-					{
-						posX: 2900,
-						posY: 600,
-					},
-					{
-						behaviorAssignedStationX: 400,
+						behaviorAssignedStationX: -1600,
 						behaviorAssignedStationY: 0,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.argoon_2,
+					{
+						posX: 11900,
+						posY: 80,
+					},
+					{
+						behaviorAssignedStationX: -1680,
+						behaviorAssignedStationY: 80,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.argoon_3,
+					{
+						posX: 11900,
+						posY: -80,
+					},
+					{
+						behaviorAssignedStationX: -1680,
+						behaviorAssignedStationY: -80,
 					}
 				);
 			},
@@ -273,84 +448,97 @@ const scene004 = {
 					show: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene004.entities.pakuuni_1.id,
+							groupId: sc.zangariGroupNames.habeen,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: sc.zangariGroupNames.mylok,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.mustHaveArrived.id,
+							entityId: scene004.entities.htran_091.id,
 							requiredPercentage: 100,
 						},
 					],
 					advanceWhen: [
 						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							entityId: scene004.entities.pakuuni_1.id,
+							groupId: sc.zangariGroupNames.habeen,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: sc.zangariGroupNames.mylok,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.disabled.id,
+							entityId: scene004.entities.crg_11811e.id,
 							requiredPercentage: 100,
 						},
 					],
 				};
 			},
 			execute() {
-				// const playerId = options.playerId;
-				// const playerShipType = options.playerShipType;
-
 				entities.spawn(
-					scene004.entities.pakuuni_1,
+					scene004.entities.habeen_1,
 					{
-						posX: 2900,
-						posY: 500,
+						posX: 11900,
+						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: 500,
+						behaviorAssignedStationX: -600,
 						behaviorAssignedStationY: 0,
 					}
 				);
-			},
-		},
-		{
-			// Beat 4
-			keyboardLayout: controlSchemes.play.id,
-			cameraMode: c.cameraModes.gameplay,
-			isTheFinalGameplayBeat: false,
-			registerObjectives() {
-				return {
-					show: [
-						{
-							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene004.entities.hurcha_1.groupId,
-							requiredPercentage: 100,
-						},
-					],
-					advanceWhen: [
-						{
-							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
-							groupId: scene004.entities.hurcha_1.groupId,
-							requiredPercentage: 100,
-						},
-					],
-				};
-			},
-			execute() {
-				// const playerId = options.playerId;
-				// const playerShipType = options.playerShipType;
 
 				entities.spawn(
-					scene004.entities.hurcha_1,
+					scene004.entities.habeen_2,
 					{
-						posX: 2900,
-						posY: 500,
+						posX: 11900,
+						posY: 80,
 					},
 					{
-						behaviorAssignedStationX: 700,
-						behaviorAssignedStationY: 170,
+						behaviorAssignedStationX: -680,
+						behaviorAssignedStationY: 80,
 					}
 				);
 
 				entities.spawn(
-					scene004.entities.hurcha_2,
+					scene004.entities.habeen_3,
 					{
-						posX: 2900,
-						posY: 600,
+						posX: 11900,
+						posY: -80,
 					},
 					{
-						behaviorAssignedStationX: 620,
-						behaviorAssignedStationY: 250,
+						behaviorAssignedStationX: -680,
+						behaviorAssignedStationY: -80,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.mylok_1,
+					{
+						posX: 11900,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: -700,
+						behaviorAssignedStationY: 0,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.mylok_2,
+					{
+						posX: 11900,
+						posY: 80,
+					},
+					{
+						behaviorAssignedStationX: -780,
+						behaviorAssignedStationY: 80,
 					}
 				);
 			},
@@ -367,14 +555,68 @@ const scene004 = {
 				};
 			},
 			execute() {
-				console.log('this is the new ending and stuff');
-				if (typeof scene004.handlers.checkBeatCompletion === 'function') {
-					scene004.handlers.checkBeatCompletion();
-				} else {
-					console.error(
-						'failed to set the checkBeatCompletion handler in story.js'
-					);
-				}
+				entities.spawn(
+					scene004.entities.htran_091,
+					{
+						posX: -11000,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: -9000,
+						behaviorAssignedStationY: 0,
+					}
+				);
+
+				entities.spawn(
+					scene004.entities.gold_1,
+					{
+						posX: -11000,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: -8920,
+						behaviorAssignedStationY: 0,
+					}
+				);
+				entities.spawn(
+					scene004.entities.gold_2,
+					{
+						posX: -11000,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: -9000,
+						behaviorAssignedStationY: -80,
+					}
+				);
+				entities.spawn(
+					scene004.entities.gold_3,
+					{
+						posX: -11000,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: -9000,
+						behaviorAssignedStationY: 80,
+					}
+				);
+
+				timing.setTimeout(
+					() => {
+						messageLayer.show();
+						messageLayer.queueMessages([
+							{
+								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
+								speaker: 'Ensign Devon (piloting shuttle HTran 091)',
+								whereAndWhen: 'here and now',
+								message:
+									"<p>That was quite a show Captain!</p><p>Gold group made it here just now, they sound quite disappointed to have missed out on all the action! Still, I'm glad they're here to make sure all of us get home safe.</p><p>Wanna take point on the escort?</p>",
+							},
+						]);
+					},
+					timing.modes.play,
+					5000
+				);
 			},
 		},
 	],

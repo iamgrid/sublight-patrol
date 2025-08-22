@@ -40,6 +40,12 @@ const entities = {
 		this.assembleType(['shuttle', 'ship']);
 		this.assembleType(['freighter_l1', 'ship']);
 		this.assembleType(['freighter_l2', 'freighter_l1', 'ship']);
+		this.assembleType([
+			'freighter_l2a',
+			'freighter_l2',
+			'freighter_l1',
+			'ship',
+		]);
 		this.assembleType(['freighter_l3', 'freighter_l1', 'ship']);
 		this.assembleType(['zangari_shuttle', 'shuttle', 'ship']);
 		this.assembleType(['fenrir', 'ship']);
@@ -130,6 +136,21 @@ const entities = {
 	spawn(typeOrEntityObject, pos, incomingProps = {}, storeIn = 'targetable') {
 		const functionSignature = 'entities.js@spawn()';
 		// console.log(functionSignature, typeOrEntityObject, pos, incomingProps, storeIn);
+
+		if (typeOrEntityObject === undefined || pos === undefined) {
+			console.error(
+				functionSignature,
+				'typeOrEntityObject and pos must not be undefined!',
+				{
+					typeOrEntityObject,
+					pos,
+					incomingProps,
+					storeIn,
+				}
+			);
+			return null;
+		}
+
 		let type, props;
 		if (typeof typeOrEntityObject === 'object') {
 			type = typeOrEntityObject.type;
@@ -140,7 +161,12 @@ const entities = {
 			props.type = type;
 		}
 		if (!this.types[type]) {
-			console.error(`Unable to find type [${type}].`);
+			console.error(functionSignature, `Unable to find type [${type}].`, {
+				typeOrEntityObject,
+				pos,
+				incomingProps,
+				storeIn,
+			});
 			return null;
 		}
 
