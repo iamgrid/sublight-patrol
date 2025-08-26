@@ -577,14 +577,14 @@ const story = {
 		}
 	},
 
-	replaySceneActual(sceneId, sceneIndex) {
+	replaySceneActual(sceneId, sceneIndex, replayDisabled) {
 		const functionSignature = 'story.js@replaySceneActual()';
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		if (c.debug.sequentialEvents || c.debug.menuButtons) {
 			console.log(
 				functionSignature,
-				`called with sceneId: ${sceneId}, sceneIndex: ${sceneIndex}`
+				`called with sceneId: ${sceneId}, sceneIndex: ${sceneIndex}, replayDisabled: ${replayDisabled}`
 			);
 			console.log(functionSignature, {
 				localStoragePlayerProgress,
@@ -595,12 +595,7 @@ const story = {
 		if (localStoragePlayerProgress === null) {
 			goAhead = true;
 		} else {
-			const bestSceneId = localStoragePlayerProgress.bestSceneId;
-			const bestSceneIndex = story.sceneList.findIndex(
-				(sc) => sc.id === bestSceneId
-			);
-
-			if (bestSceneIndex < sceneIndex) {
+			if (replayDisabled) {
 				alert("I'm sorry, you haven't unlocked that scene yet.");
 			} else {
 				goAhead = true;

@@ -322,8 +322,19 @@ const gameMenus = {
 			return;
 		}
 
-		const bestSceneId = localStoragePlayerProgress.bestSceneId;
-		const bestSceneIndex = sceneList.findIndex((sc) => sc.id === bestSceneId);
+		let bestSceneId = localStoragePlayerProgress.bestSceneId;
+		let bestSceneIndex = sceneList.findIndex((sc) => sc.id === bestSceneId);
+
+		const lastGameplaySceneId = sceneList[sceneList.length - 1].id;
+
+		if (
+			!localStoragePlayerProgress.playerHasCompletedTheGame &&
+			lastGameplaySceneId === bestSceneId
+		) {
+			bestSceneId = sceneList[bestSceneIndex - 1].id;
+			bestSceneIndex = bestSceneIndex - 1;
+		}
+
 		gameMenus.currentFocus = bestSceneId;
 
 		let startY = 30;
@@ -357,6 +368,11 @@ const gameMenus = {
 				if (sceneListItem.id === 'intro') sceneDisplayName = 'Intro';
 			}
 
+			let replayDisabled = true;
+			if (idx <= bestSceneIndex) {
+				replayDisabled = false;
+			}
+
 			gameMenus.stageButtons[sceneListItem.id] = new Button({
 				coordsAndDimensions: {
 					x: 350,
@@ -366,12 +382,16 @@ const gameMenus = {
 				},
 				label: sceneDisplayName,
 				isFocused: sceneListItem.id === gameMenus.currentFocus ? true : false,
-				isDisabled: idx <= bestSceneIndex ? false : true,
+				isDisabled: replayDisabled,
 				style: BUTTON_STYLES.B,
 				doActivate: () => {
 					if (c.debug.menuButtons)
 						console.log('doActivate scene: ', sceneListItem.id);
-					gameMenus.buttonFunctions.replaySceneActual(sceneListItem.id, idx);
+					gameMenus.buttonFunctions.replaySceneActual(
+						sceneListItem.id,
+						idx,
+						replayDisabled
+					);
 				},
 			});
 
