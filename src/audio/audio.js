@@ -4,7 +4,7 @@ const audio = {
 	muted: false,
 	prevVolume: 0.4,
 	domNodes: {
-		audioControls: document.getElementById('header__volume_control'),
+		audioControls: document.getElementById('header__sound'),
 		slider: document.getElementById('header__volume_control_input'),
 		muter: document.getElementById('header__volume_control_button'),
 		muterIconUnmuted: document.getElementById(

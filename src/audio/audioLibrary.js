@@ -2,7 +2,11 @@ const audioLibrary = {
 	// prettier-ignore
 	manifest: {
 		music: {
-			'sublight_patrol_theme': 'i_am_grid_-_sublight-patrol-theme-2025-3a.mp3'
+			'sublight_patrol_theme': 'i.am.grid_-_Sublight-Patrol-Theme-2025.mp3',
+			'tensioner': 'i.am.grid_-_Tensioner.mp3',
+			'sneakers': 'i.am.grid_-_Sneakers.mp3',
+			'in_a_silent_way': 'i.am.grid_-_In-a-Silent-Way.mp3',
+			'mission_override': 'i.am.grid_-_Mission-Override.mp3'
 		},
 		soundEffects: {
 			'laser_type1_1': 'laser_type1_1.mp3',
@@ -51,7 +55,11 @@ const audioLibrary = {
 	// prettier-ignore
 	library: {
 		music: {
-			sublight_patrol_theme: { id: 'sublight_patrol_theme' }
+			sublight_patrol_theme: { id: 'sublight_patrol_theme', title: 'Sublight Patrol Theme', artist: 'i.am.grid' },
+			tensioner: { id: 'tensioner', title: 'Tensioner', artist: 'i.am.grid' },
+			sneakers: { id: 'sneakers', title: 'Sneakers', artist: 'i.am.grid' },
+			in_a_silent_way: { id: 'in_a_silent_way', title: 'In a Silent Way', artist: 'i.am.grid' },
+			mission_override: { id: 'mission_override', title: 'Mission Override', artist: 'i.am.grid' }
 		},
 		soundEffects: {
 			laser_type1: { id: 'laser_type1', variants: 4 },

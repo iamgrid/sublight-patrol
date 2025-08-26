@@ -196,39 +196,67 @@ input[type='range']::-ms-thumb {
 	opacity: 0;
 }
 
-.header__volume_control {
+.header__sound {
 	position: absolute;
 	top: 0;
 	right: 0;
 	z-index: 2;
-	margin-right: 72px;
+	margin-right: 12px;
 	display: none;
-	align-items: center;
 	opacity: 0;
 	transition: opacity 1s;
+	display: flex;
+	gap: 10px;
 }
 
-.header__volume_control_button {
+.header__volume_control {
+	display: flex;
+	align-items: center;
+}
+
+.header__sound button {
 	background: transparent;
 	border: 0;
 	cursor: pointer;
 	padding-left: 0;
 }
 
-.header__volume_control_button__icon {
+.header__volume_control_button__icon, .header__music-button-icon {
 	transform: translateY(1px);
 }
 
-#header__volume_control_button__icon--muted {
+#header__volume_control_button__icon--muted, #header__music-button-icon--disabled {
 	display: none;
 }
 
-.header__volume_control_button svg {
+.header__sound svg {
 	display: block;
 }
 
-.header__volume_control_button:hover {
-	text-shadow: 0 0 0 #707070;
+.header__sound button:hover svg {
+	fill: #707070;
+}
+
+.header__music {
+	display: flex;
+	align-items: center;
+}
+
+.header__music-playing {
+	font-size: 0.7em;
+	font-weight: bold;
+	color: #ffffff90;
+	transform: translateY(2px);
+	width: 140px;
+	overflow-x: hidden;
+	text-wrap: nowrap;
+	/* display: block; */
+}
+
+.header__music-playing span {
+	font-weight: normal;
+	text-transform: uppercase;
+	color: #ffffff60;
 }
 
 .header__volume_control_button--muted {
