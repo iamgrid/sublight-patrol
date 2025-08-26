@@ -4,23 +4,26 @@ const audio = {
 	muted: false,
 	prevVolume: 0.4,
 	domNodes: {
-		audioControls: document.getElementById('header__sound'),
-		slider: document.getElementById('header__volume_control_input'),
-		muter: document.getElementById('header__volume_control_button'),
+		volumePanel: document.getElementById('header__volume-control'),
+		musicPanel: document.getElementById('header__music'),
+		slider: document.getElementById('header__volume-control_input'),
+		muter: document.getElementById('header__volume-control_button'),
 		muterIconUnmuted: document.getElementById(
-			'header__volume_control_button__icon--unmuted'
+			'header__volume-control_button__icon--unmuted'
 		),
 		muterIconMuted: document.getElementById(
-			'header__volume_control_button__icon--muted'
+			'header__volume-control_button__icon--muted'
 		),
 	},
 
 	init() {
 		const functionSignature = 'audio.js@init()';
 		console.log(functionSignature);
-		audio.domNodes.audioControls.style.display = 'flex';
+		audio.domNodes.volumePanel.style.display = 'flex';
+		audio.domNodes.musicPanel.style.display = 'flex';
 		setTimeout(() => {
-			audio.domNodes.audioControls.style.opacity = 1;
+			audio.domNodes.volumePanel.style.opacity = 1;
+			audio.domNodes.musicPanel.style.opacity = 1;
 		}, 200);
 		audio.domNodes.slider.oninput = audio.setVolume;
 		audio.domNodes.slider.onchange = audio.setVolume;
@@ -34,7 +37,7 @@ const audio = {
 		const functionSignature = 'audio.js@setVolume()';
 
 		let mode = 'adjust';
-		if (event.currentTarget.id === 'header__volume_control_button') {
+		if (event.currentTarget.id === 'header__volume-control_button') {
 			mode = 'mute-unmute';
 			console.log(functionSignature, 'mute-unmute mode');
 		}

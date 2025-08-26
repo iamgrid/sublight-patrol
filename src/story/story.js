@@ -40,6 +40,7 @@ const story = {
 		hudShouldBeShowing: null,
 		activeKeyboardLayout: null,
 		hud: null,
+		pairedTrack: null,
 	}, // gets its values in App.js
 	themeMusicInterval: null,
 	sceneList: [
@@ -299,6 +300,12 @@ const story = {
 			story.handlers.playVolume.current = currentSceneObject.playVolume;
 			story.handlers.playVolume.recalculateSoftBoundaries();
 			story.handlers.playVolumeBoundaries.reDraw(currentSceneObject.playVolume);
+			story.handlers.pairedTrack.actual = currentSceneObject.pairedTrack;
+			console.log(
+				functionSignature,
+				'pairedTrack set to:',
+				story.handlers.pairedTrack.actual
+			);
 			story.sceneTransitionIsInProgress = false;
 			story.missionFailureWasTriggered = false;
 

@@ -3,12 +3,13 @@ import controlSchemes from '../../controlSchemes';
 // import timing from '../../utils/timing';
 import plates from '../../plates';
 import gameMenus from '../../gameMenus';
-// import audioLibrary from '../../audio/audioLibrary';
+import audioLibrary from '../../audio/audioLibrary';
 // import music from '../../audio/music';
 
 const mainMenu = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
 	id: 'mainMenu',
+	pairedTrack: audioLibrary.library.music.sublight_patrol_theme.id,
 	playVolume: {
 		minX: -100,
 		maxX: 1300,

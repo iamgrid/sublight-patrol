@@ -1,10 +1,38 @@
 import audioLibrary from './audioLibrary';
 
 const music = {
-	handlers: { resources: null, PIXI_sound: null }, // gets its values in App.js
+	handlers: { resources: null, PIXI_sound: null, pairedTrack: null }, // gets its values in App.js
 	manifest: audioLibrary.manifest.music,
 	library: audioLibrary.library.music,
+	musicIsEnabled: true,
 	playingTrack: null,
+	domNodes: {
+		musicPanel: document.getElementById('header__music'),
+		enableMusicButton: document.getElementById('header__music-button'),
+		playingReadout: document.getElementById('header__music-playing'),
+	},
+
+	init() {
+		music.domNodes.musicPanel.onclick = music.toggleMusic;
+	},
+
+	toggleMusic() {
+		// const functionSignature = 'music.js@toggleMusic()';
+
+		const enable = !music.musicIsEnabled;
+
+		// console.log(functionSignature, music.musicIsEnabled);
+		document.getElementById(
+			'header__music-button-icon--enabled'
+		).style.display = enable ? 'block' : 'none';
+		document.getElementById(
+			'header__music-button-icon--disabled'
+		).style.display = enable ? 'none' : 'block';
+
+		// music.domNodes.playingReadout.innerHTML = "<span>Paused</span>";
+
+		music.musicIsEnabled = enable;
+	},
 
 	playTrack(libraryItemId, startAt = 0) {
 		if (music.handlers.resources === null) return;
@@ -30,6 +58,8 @@ const music = {
 				music.playingTrack = null;
 			},
 		});
+
+		music.domNodes.playingReadout.innerHTML = `<span>Playing:</span> ${music.library[libraryItemId].title}`;
 	},
 
 	stopPlaying() {

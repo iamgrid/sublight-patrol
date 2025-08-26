@@ -5,10 +5,12 @@ import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
 import timing from '../../utils/timing';
 import { messageLayer } from '../../utils/helpers';
+import audioLibrary from '../../audio/audioLibrary';
 
 const scene003 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene003', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
+	pairedTrack: audioLibrary.library.music.in_a_silent_way.id,
 	titlePlate: {
 		subTitle: 'Dock and Awe',
 		title: 'Mission 3 of 4: Capturing the Prototype',

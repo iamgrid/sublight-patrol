@@ -9,6 +9,7 @@ import music from '../../audio/music';
 const intro = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
 	id: 'intro',
+	pairedTrack: audioLibrary.library.music.sublight_patrol_theme.id,
 	playVolume: {
 		minX: -100,
 		maxX: 1300,

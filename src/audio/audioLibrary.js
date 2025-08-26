@@ -2,11 +2,11 @@ const audioLibrary = {
 	// prettier-ignore
 	manifest: {
 		music: {
-			'sublight_patrol_theme': 'i.am.grid_-_Sublight-Patrol-Theme-2025.mp3',
+			'sublight_patrol_theme': 'i.am.grid_-_Sublight_Patrol_Theme_2025.mp3',
 			'tensioner': 'i.am.grid_-_Tensioner.mp3',
 			'sneakers': 'i.am.grid_-_Sneakers.mp3',
-			'in_a_silent_way': 'i.am.grid_-_In-a-Silent-Way.mp3',
-			'mission_override': 'i.am.grid_-_Mission-Override.mp3'
+			'in_a_silent_way': 'i.am.grid_-_In_a_Silent_Way.mp3',
+			'mission_override': 'i.am.grid_-_Mission_Override.mp3'
 		},
 		soundEffects: {
 			'laser_type1_1': 'laser_type1_1.mp3',

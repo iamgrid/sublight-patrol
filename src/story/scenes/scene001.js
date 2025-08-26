@@ -5,10 +5,12 @@ import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
 import timing from '../../utils/timing';
 import { messageLayer } from '../../utils/helpers';
+import audioLibrary from '../../audio/audioLibrary';
 
 const scene001 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene001', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
+	pairedTrack: audioLibrary.library.music.tensioner.id,
 	titlePlate: {
 		subTitle: "Welcome to space. It's time to put your big boy pants on!",
 		title: 'Mission 1 of 4: Looters on Aisle 3',

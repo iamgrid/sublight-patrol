@@ -196,50 +196,50 @@ input[type='range']::-ms-thumb {
 	opacity: 0;
 }
 
-.header__sound {
+.header__volume-control {
 	position: absolute;
 	top: 0;
 	right: 0;
 	z-index: 2;
-	margin-right: 12px;
+	margin-right: 34px;
 	display: none;
 	opacity: 0;
 	transition: opacity 1s;
 	display: flex;
-	gap: 10px;
-}
-
-.header__volume_control {
-	display: flex;
 	align-items: center;
 }
 
-.header__sound button {
+.header__volume-control button, .header__music button {
 	background: transparent;
 	border: 0;
 	cursor: pointer;
 	padding-left: 0;
 }
 
-.header__volume_control_button__icon, .header__music-button-icon {
-	transform: translateY(1px);
-}
-
-#header__volume_control_button__icon--muted, #header__music-button-icon--disabled {
-	display: none;
-}
-
-.header__sound svg {
+.header__volume-control svg, .header__music svg {
 	display: block;
 }
 
-.header__sound button:hover svg {
+.header__volume-control button:hover, .header__music button:hover {
 	fill: #707070;
 }
 
+.header__volume-control_button__icon, .header__music-button-icon {
+	transform: translateY(1px);
+}
+
+#header__volume-control_button__icon--muted, #header__music-button-icon--disabled {
+	display: none;
+}
+
 .header__music {
-	display: flex;
+	position: absolute;
+	z-index: 3;
 	align-items: center;
+	padding-left: 28px;
+	display: none;
+	opacity: 0;
+	transition: opacity 1s;
 }
 
 .header__music-playing {
@@ -247,10 +247,9 @@ input[type='range']::-ms-thumb {
 	font-weight: bold;
 	color: #ffffff90;
 	transform: translateY(2px);
-	width: 140px;
+	/*width: 200px;
 	overflow-x: hidden;
-	text-wrap: nowrap;
-	/* display: block; */
+	text-wrap: nowrap;*/
 }
 
 .header__music-playing span {
@@ -259,15 +258,15 @@ input[type='range']::-ms-thumb {
 	color: #ffffff60;
 }
 
-.header__volume_control_button--muted {
+.header__volume-control_button--muted {
 	padding-left: 1px;
 }
 
-.header__volume_control_button:focus {
+.header__volume-control_button:focus {
 	outline: transparent;
 }
 
-.header__volume_control_input {
+.header__volume-control_input {
 	width: 104px;
 }
 

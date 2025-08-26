@@ -5,10 +5,12 @@ import controlSchemes from '../../controlSchemes';
 // import plates from '../../plates';
 import timing from '../../utils/timing';
 import { messageLayer } from '../../utils/helpers';
+import audioLibrary from '../../audio/audioLibrary';
 
 const scene002 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
 	id: 'scene002', // gameplay scene ids must start with 'scene' to be recognized by story.js@advance()
+	pairedTrack: audioLibrary.library.music.sneakers.id,
 	titlePlate: {
 		subTitle: 'Wait, the Zee were after the meds?',
 		title: 'Mission 2 of 4: Escaping the Hunting Party',

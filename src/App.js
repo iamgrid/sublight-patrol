@@ -109,6 +109,10 @@ export default class App extends PIXI.Application {
 			actual: false,
 		};
 
+		this.pairedTrack = {
+			actual: audioLibrary.library.music.sublight_patrol_theme.id,
+		};
+
 		this.activeKeyboardLayout = {
 			current: null,
 			currentStoryBeatLayout: null,
@@ -233,6 +237,7 @@ export default class App extends PIXI.Application {
 			hudShouldBeShowing: this.hudShouldBeShowing,
 			activeKeyboardLayout: this.activeKeyboardLayout,
 			hud: this.hud,
+			pairedTrack: this.pairedTrack,
 		};
 
 		audio.handlers = {
@@ -250,7 +255,9 @@ export default class App extends PIXI.Application {
 		music.handlers = {
 			resources: this.loader.resources,
 			PIXI_sound: PIXI.sound,
+			pairedTrack: this.pairedTrack,
 		};
+		music.init();
 
 		this.entityWasDespawned = story.entityWasDespawned;
 
