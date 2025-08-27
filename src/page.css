@@ -247,10 +247,14 @@ input[type='range']::-ms-thumb {
 	font-weight: bold;
 	color: #ffffff90;
 	transform: translateY(2px);
-	/*width: 200px;
-	overflow-x: hidden;
-	text-wrap: nowrap;*/
+	transition: opacity ease-in-out 1s;
+	opacity: 0;
+	cursor: default;
 }
+
+/* .header__music:hover .header__music-playing {
+	opacity: 1;
+} */
 
 .header__music-playing span {
 	font-weight: normal;

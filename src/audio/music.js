@@ -32,14 +32,43 @@ const music = {
 		// music.domNodes.playingReadout.innerHTML = "<span>Paused</span>";
 
 		music.musicIsEnabled = enable;
+
+		if (!enable) {
+			music.stopPlaying();
+			music.updateReadout('<span>Playback disabled</span>');
+		} else {
+			music.playTrack(music.handlers.pairedTrack.actual);
+		}
+	},
+
+	updateReadout(newHTML) {
+		music.domNodes.playingReadout.innerHTML = newHTML;
+		music.domNodes.playingReadout.style.opacity = 1;
+
+		setTimeout(() => {
+			music.domNodes.playingReadout.style.opacity = 0;
+		}, 8000);
 	},
 
 	playTrack(libraryItemId, startAt = 0) {
-		if (music.handlers.resources === null) return;
+		const functionSignature = 'music.js@playTrack()';
+
+		console.log(functionSignature, libraryItemId, startAt);
+
+		if (music.handlers.resources === null) {
+			console.error(functionSignature, 'music.handlers.resources is null');
+			return;
+		}
+
+		if (!music.musicIsEnabled) {
+			console.log(functionSignature, 'music.musicIsEnabled is false');
+			return;
+		}
 
 		if (music.playingTrack !== null) {
 			console.log(
-				'@playTrack(): music.playingTrack is not null, stopping it first'
+				functionSignature,
+				'music.playingTrack is not null, stopping it first'
 			);
 			music.stopPlaying();
 		}
@@ -59,7 +88,9 @@ const music = {
 			},
 		});
 
-		music.domNodes.playingReadout.innerHTML = `<span>Playing:</span> ${music.library[libraryItemId].title}`;
+		music.updateReadout(
+			`<span>Playing:</span> ${music.library[libraryItemId].title}`
+		);
 	},
 
 	stopPlaying() {
