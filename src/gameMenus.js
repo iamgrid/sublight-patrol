@@ -322,20 +322,30 @@ const gameMenus = {
 			return;
 		}
 
-		let bestSceneId = localStoragePlayerProgress.bestSceneId;
-		let bestSceneIndex = sceneList.findIndex((sc) => sc.id === bestSceneId);
-
+		// localStoragePlayerProgress.bestSceneId denotes that the player has seen a scene,
+		// not that they have necessarily completed it
+		let highestReplayableSceneId = localStoragePlayerProgress.bestSceneId;
+		const bestSceneIndex = sceneList.findIndex(
+			(sc) => sc.id === localStoragePlayerProgress.bestSceneId
+		);
 		const lastGameplaySceneId = sceneList[sceneList.length - 1].id;
 
 		if (
-			!localStoragePlayerProgress.playerHasCompletedTheGame &&
-			lastGameplaySceneId === bestSceneId
+			localStoragePlayerProgress.playerHasCompletedTheGame &&
+			lastGameplaySceneId === highestReplayableSceneId
 		) {
-			bestSceneId = sceneList[bestSceneIndex - 1].id;
-			bestSceneIndex = bestSceneIndex - 1;
+			// player can replay the last gameplay scene
+		} else if (!localStoragePlayerProgress.bestSceneId.startsWith('scene')) {
+			// player has never progressed beyond the intro/main menu
+		} else {
+			highestReplayableSceneId = sceneList[bestSceneIndex - 1].id;
 		}
 
-		gameMenus.currentFocus = bestSceneId;
+		let highestReplayableSceneIndex = sceneList.findIndex(
+			(sc) => sc.id === highestReplayableSceneId
+		);
+
+		gameMenus.currentFocus = highestReplayableSceneId;
 
 		let startY = 30;
 
@@ -369,7 +379,7 @@ const gameMenus = {
 			}
 
 			let replayDisabled = true;
-			if (idx <= bestSceneIndex) {
+			if (idx <= highestReplayableSceneIndex) {
 				replayDisabled = false;
 			}
 

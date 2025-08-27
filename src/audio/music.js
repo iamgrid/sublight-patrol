@@ -6,6 +6,7 @@ const music = {
 	library: audioLibrary.library.music,
 	musicIsEnabled: true,
 	playingTrack: null,
+	readoutTimeout: null,
 	domNodes: {
 		musicPanel: document.getElementById('header__music'),
 		enableMusicButton: document.getElementById('header__music-button'),
@@ -35,7 +36,7 @@ const music = {
 
 		if (!enable) {
 			music.stopPlaying();
-			music.updateReadout('<span>Playback disabled</span>');
+			music.updateReadout('<span>Music playback disabled</span>');
 		} else {
 			music.playTrack(music.handlers.pairedTrack.actual);
 		}
@@ -43,11 +44,16 @@ const music = {
 
 	updateReadout(newHTML) {
 		music.domNodes.playingReadout.innerHTML = newHTML;
-		music.domNodes.playingReadout.style.opacity = 1;
+		music.domNodes.playingReadout.classList.remove(
+			'header__music-playing--fade-out'
+		);
 
-		setTimeout(() => {
-			music.domNodes.playingReadout.style.opacity = 0;
-		}, 8000);
+		clearTimeout(music.readoutTimeout);
+		music.readoutTimeout = setTimeout(() => {
+			music.domNodes.playingReadout.classList.add(
+				'header__music-playing--fade-out'
+			);
+		}, 6500);
 	},
 
 	playTrack(libraryItemId, startAt = 0) {
@@ -65,20 +71,37 @@ const music = {
 			return;
 		}
 
+		if (music.playingTrack === libraryItemId) {
+			console.log(
+				functionSignature,
+				'music.playingTrack is already the requested track'
+			);
+			return;
+		}
+
 		if (music.playingTrack !== null) {
 			console.log(
 				functionSignature,
-				'music.playingTrack is not null, stopping it first'
+				'music.playingTrack is not null and is not the requested track, stopping playback first'
 			);
 			music.stopPlaying();
 		}
 
 		music.playingTrack = libraryItemId;
 
+		let volume = 0.4;
+		if (libraryItemId === audioLibrary.library.music.sublight_patrol_theme.id) {
+			volume = 0.5;
+		} else if (
+			libraryItemId === audioLibrary.library.music.mission_override.id
+		) {
+			volume = 0.28;
+		}
+
 		music.handlers.resources[libraryItemId].sound.play({
 			loop: false,
 			singleInstance: false,
-			volume: 0.5,
+			volume,
 			start: startAt,
 			complete: () => {
 				console.log(
@@ -88,14 +111,47 @@ const music = {
 			},
 		});
 
+		music.handlers.resources[libraryItemId].sound.volume = 1; // reset volume in case this track was previously faded out
+
 		music.updateReadout(
 			`<span>Playing:</span> ${music.library[libraryItemId].title}`
 		);
 	},
 
+	fadeOutPlayingTrack() {
+		const functionSignature = 'music.js@fadeOutPlayingTrack()';
+		console.log(functionSignature);
+		if (music.playingTrack === null) {
+			console.log(functionSignature, 'music.playingTrack is null');
+			return;
+		}
+
+		const fadeAudio = setInterval(() => {
+			const currentVolume =
+				music.handlers.resources[music.playingTrack].sound.volume; // volume here will start from 1
+
+			// console.log(
+			// 	functionSignature,
+			// 	'fadeAudio interval fn()',
+			// 	'currentVolume',
+			// 	currentVolume
+			// );
+			if (currentVolume > 0.025) {
+				music.handlers.resources[music.playingTrack].sound.volume -= 0.025;
+			} else {
+				clearInterval(fadeAudio);
+				music.stopPlaying();
+			}
+		}, 120);
+	},
+
 	stopPlaying() {
-		console.log('@stopPlaying()');
-		if (music.playingTrack === null) return;
+		const functionSignature = 'music.js@stopPlaying()';
+		console.log(functionSignature);
+		if (music.playingTrack === null) {
+			console.log(functionSignature, 'music.playingTrack is null');
+			return;
+		}
 
 		music.handlers.resources[music.playingTrack].sound.stop();
 		music.playingTrack = null;

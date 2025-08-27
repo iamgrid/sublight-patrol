@@ -214,6 +214,7 @@ input[type='range']::-ms-thumb {
 	border: 0;
 	cursor: pointer;
 	padding-left: 0;
+	outline: 0;
 }
 
 .header__volume-control svg, .header__music svg {
@@ -240,21 +241,31 @@ input[type='range']::-ms-thumb {
 	display: none;
 	opacity: 0;
 	transition: opacity 1s;
+	cursor: pointer;
 }
 
 .header__music-playing {
+	width: 240px;
 	font-size: 0.7em;
 	font-weight: bold;
 	color: #ffffff90;
 	transform: translateY(2px);
-	transition: opacity ease-in-out 1s;
-	opacity: 0;
-	cursor: default;
+	transition: opacity 0.25s;
+	text-align: left;
 }
 
-/* .header__music:hover .header__music-playing {
-	opacity: 1;
-} */
+@keyframes fadeOut {
+	from { opacity: 1; }
+	to { opacity: 0; }
+}
+
+.header__music-playing--fade-out {
+	animation: fadeOut 1s forwards;
+}
+
+.header__music:hover .header__music-playing {
+	opacity: 1 !important;
+}
 
 .header__music-playing span {
 	font-weight: normal;

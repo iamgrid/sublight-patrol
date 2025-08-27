@@ -6,6 +6,7 @@ import controlSchemes from '../../controlSchemes';
 import timing from '../../utils/timing';
 import { messageLayer } from '../../utils/helpers';
 import audioLibrary from '../../audio/audioLibrary';
+import music from '../../audio/music';
 
 const scene002 = {
 	handlers: { checkBeatCompletion: null, storyStateFns: null }, // gets its values in story.js@advance()
@@ -180,6 +181,14 @@ const scene002 = {
 						behaviorAssignedStationX: 980,
 						behaviorAssignedStationY: 170,
 					}
+				);
+
+				timing.setTimeout(
+					() => {
+						music.playTrack(scene002.pairedTrack);
+					},
+					timing.modes.play,
+					5000
 				);
 
 				timing.setTimeout(

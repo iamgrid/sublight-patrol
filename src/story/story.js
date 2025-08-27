@@ -457,11 +457,14 @@ const story = {
 			currentSceneBeatObj.keyboardLayout;
 
 		if (currentSceneListObject.id === storyConstants.scenes.mainMenu) {
+			if (
+				music.playingTrack !==
+				audioLibrary.library.music.sublight_patrol_theme.id
+			) {
+				music.stopPlaying();
+			}
 			setTimeout(() => {
-				if (
-					story.currentScene === storyConstants.scenes.mainMenu &&
-					music.playingTrack === null
-				) {
+				if (story.currentScene === storyConstants.scenes.mainMenu) {
 					console.log(
 						'story.js@advance timeout fn() -> mainMenu scene, playing theme music'
 					);
@@ -1108,6 +1111,8 @@ const story = {
 
 				story.sceneTransitionIsInProgress = true;
 
+				music.fadeOutPlayingTrack();
+
 				plates.loadPlate('mission_success', 1000);
 				plates.fadeInPlate(25, 1000);
 				timing.toggleEntityMovement(
@@ -1131,7 +1136,11 @@ const story = {
 					() => {
 						const functionSignature =
 							'story.js@checkBeatCompletion() -> setTimeoutFn()';
-						story.advance(functionSignature, null, 0);
+						if (story.playerIsReplayingScenes) {
+							story.advance(functionSignature, 'mainMenu', 0, true);
+						} else {
+							story.advance(functionSignature, null, 0);
+						}
 					},
 					timing.modes.play,
 					8500
