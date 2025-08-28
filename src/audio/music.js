@@ -42,18 +42,21 @@ const music = {
 		}
 	},
 
-	updateReadout(newHTML) {
+	updateReadout(newHTML, pulseOpacity = true) {
 		music.domNodes.playingReadout.innerHTML = newHTML;
-		music.domNodes.playingReadout.classList.remove(
-			'header__music-playing--fade-out'
-		);
 
-		clearTimeout(music.readoutTimeout);
-		music.readoutTimeout = setTimeout(() => {
-			music.domNodes.playingReadout.classList.add(
+		if (pulseOpacity) {
+			music.domNodes.playingReadout.classList.remove(
 				'header__music-playing--fade-out'
 			);
-		}, 6500);
+
+			clearTimeout(music.readoutTimeout);
+			music.readoutTimeout = setTimeout(() => {
+				music.domNodes.playingReadout.classList.add(
+					'header__music-playing--fade-out'
+				);
+			}, 6500);
+		}
 	},
 
 	playTrack(libraryItemId, startAt = 0) {
@@ -112,6 +115,7 @@ const music = {
 					'music@playTrack() -> sound.play() -> complete(): track playback completed'
 				);
 				music.playingTrack = null;
+				music.updateReadout('<span>(Track playback complete)</span>', false);
 			},
 		});
 
@@ -159,6 +163,8 @@ const music = {
 
 		music.handlers.resources[music.playingTrack].sound.stop();
 		music.playingTrack = null;
+
+		music.updateReadout('<span>(Nothing is playing)</span>', false);
 	},
 };
 
