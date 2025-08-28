@@ -21,7 +21,7 @@ const behavior = {
 		checkAgainstCurrentObjectives: null,
 		playVolume: null,
 	}, // gets its values in App.js
-	enemyFighterDetectionRange: 600,
+	enemyFighterDetectionRange: 750,
 	maxShotTravelDistance: 1000,
 	hullHealthPrcToFleeAt: 30,
 	yOffsetToleranceForFiring: 110, // the widest entity currently in the game is 49px wide, so this tolerance should be at least half of that, e.g. 25px

@@ -427,7 +427,7 @@ const pieces = {
 			shieldRechargeRate: 6,
 			maxSystemStrength: 250,
 			thrusters: {
-				main: 10,
+				main: 8,
 				side: 7,
 				front: 7,
 			},

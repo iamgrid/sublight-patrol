@@ -95,7 +95,11 @@ const music = {
 		} else if (
 			libraryItemId === audioLibrary.library.music.mission_override.id
 		) {
-			volume = 0.28;
+			volume = 0.22;
+		} else if (
+			libraryItemId === audioLibrary.library.music.in_a_silent_way.id
+		) {
+			volume = 0.44;
 		}
 
 		music.handlers.resources[libraryItemId].sound.play({

@@ -19,8 +19,8 @@ const scene002 = {
 	playVolume: {
 		minX: -2000,
 		maxX: 6000,
-		minY: -2500,
-		maxY: 2500,
+		minY: -4000,
+		maxY: 4000,
 		softBoundary: 300,
 	},
 	playerStartingPosition: {
