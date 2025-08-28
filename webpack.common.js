@@ -28,7 +28,10 @@ module.exports = {
 			title: 'sublight patrol',
 		}),
 		new CopyPlugin({
-			patterns: [{ from: 'src/assets', to: 'assets' }],
+			patterns: [
+				{ from: 'src/assets', to: 'assets' },
+				{ from: 'src/hall-of-finishers', to: 'hall-of-finishers' },
+			],
 		}),
 		new MiniCssExtractPlugin({
 			filename: '[name].[contenthash].css',

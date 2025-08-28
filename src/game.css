@@ -949,3 +949,19 @@
 #game__hud-meter-target-hull-bar {
 	width: 100px;
 }
+
+.game__finishers {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	/* display: none; */
+	/* set to display: flex; to show */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}

@@ -36,6 +36,7 @@ import Matte from './components/Matte';
 import gameMenus from './gameMenus';
 import plates from './plates';
 import audioLibrary from './audio/audioLibrary';
+import finishers from './finishers';
 
 export default class App extends PIXI.Application {
 	constructor() {
@@ -126,6 +127,7 @@ export default class App extends PIXI.Application {
 		c.init();
 		gameLog.init();
 		shields.init();
+		finishers.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v13.png');
 

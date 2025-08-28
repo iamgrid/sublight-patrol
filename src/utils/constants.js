@@ -1,5 +1,6 @@
 const c = {
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
+	finisherStars: 4,
 	latestLocalStorageVersionDate: '16 Jul 2025 16:40:00 GMT',
 	debug: {
 		reducers: false,
@@ -191,6 +192,8 @@ const c = {
 			this.alertsAndWarnings.alerts[key].k = key;
 		}
 	},
+	siteToken:
+		'Q0THohJSutDkfj7PyDIr0np5c36BErU9cDZNlxMigspXeG3FS03MAwx7x6Lo9oxluoDJYbDAezJsXXvHev3nNbUPAiDZBp6lgZNSCKanns',
 };
 
 export default c;
