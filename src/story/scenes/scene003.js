@@ -24,8 +24,8 @@ const scene003 = {
 		softBoundary: 300,
 	},
 	playerStartingPosition: {
-		posX: 120,
-		posY: 120,
+		posX: 100,
+		posY: 225,
 	},
 	entities: {
 		harpax_37188: {

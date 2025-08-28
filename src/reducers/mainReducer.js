@@ -937,7 +937,8 @@ export default function mainReducer(state, action) {
 			if (newHangarContents.length < state.game.playerShips.hangarBerths) {
 				if (
 					(action.preventDuplicates &&
-						!newHangarContents.includes(action.fighterTypeId)) ||
+						!newHangarContents.includes(action.fighterTypeId) &&
+						state.game.playerShips.current !== action.fighterTypeId) ||
 					!action.preventDuplicates
 				) {
 					newHangarContents.push(action.fighterTypeId);
