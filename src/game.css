@@ -957,9 +957,9 @@
 	left: 0;
 	right: 0;
 	z-index: 100;
-	/* display: none; */
+	display: none;
 	/* set to display: flex; to show */
-	display: flex;
+	/* display: flex; */
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
