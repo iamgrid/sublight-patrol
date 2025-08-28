@@ -86,6 +86,22 @@ const scene001 = {
 			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
+		mylok_1: {
+			id: 'mylok_1',
+			groupId: sc.zangariGroupNames.mylok,
+			type: 'zangari_fighter_type_2',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		mylok_2: {
+			id: 'mylok_2',
+			groupId: sc.zangariGroupNames.mylok,
+			type: 'zangari_fighter_type_2',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
 		b2508_001: {
 			id: 'b2508_001',
 			groupId: 'b2508',
@@ -378,11 +394,6 @@ const scene001 = {
 				return {
 					show: [
 						{
-							type: c.objectiveTypes.mustHaveArrived.id,
-							entityId: scene001.entities.htran_091.id,
-							requiredPercentage: 100,
-						},
-						{
 							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
 							groupId: scene001.entities.argoon_1.groupId,
 							requiredPercentage: 100,
@@ -431,6 +442,59 @@ const scene001 = {
 					{
 						behaviorAssignedStationX: 2240,
 						behaviorAssignedStationY: 320,
+					}
+				);
+			},
+		},
+		{
+			keyboardLayout: controlSchemes.play.id,
+			cameraMode: c.cameraModes.gameplay,
+			isTheFinalGameplayBeat: false,
+			registerObjectives() {
+				return {
+					show: [
+						{
+							type: c.objectiveTypes.mustHaveArrived.id,
+							entityId: scene001.entities.htran_091.id,
+							requiredPercentage: 100,
+						},
+						{
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: scene001.entities.mylok_1.groupId,
+							requiredPercentage: 100,
+						},
+					],
+					advanceWhen: [
+						{
+							type: c.objectiveTypes.forcedToFleeOrDestroyed.id,
+							groupId: scene001.entities.mylok_1.groupId,
+							requiredPercentage: 100,
+						},
+					],
+				};
+			},
+			execute() {
+				entities.spawn(
+					scene001.entities.mylok_1,
+					{
+						posX: 3900,
+						posY: 170,
+					},
+					{
+						behaviorAssignedStationX: 2180,
+						behaviorAssignedStationY: 230,
+					}
+				);
+
+				entities.spawn(
+					scene001.entities.mylok_2,
+					{
+						posX: 3900,
+						posY: 0,
+					},
+					{
+						behaviorAssignedStationX: 2240,
+						behaviorAssignedStationY: 130,
 					}
 				);
 			},
