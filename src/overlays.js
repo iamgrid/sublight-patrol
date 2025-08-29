@@ -351,7 +351,7 @@ export default function overlays() {
 							<section class="finishers-entry__section finishers-entry__section__stats">
 								<!-- <h3>Stats</h3> -->
 								<div class="finishers-entry__readout finishers-entry__readout__finished-at">
-									<div class="finishers-entry__readout-label">Completed the game on</div>
+									<div class="finishers-entry__readout-label">Game completed on</div>
 									<div class="finishers-entry__finished-at" id="finishers-entry__finished-at"></div>
 								</div>
 								<div class="finishers-entry__readout finishers-entry__readout__final-fighter">

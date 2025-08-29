@@ -1041,12 +1041,15 @@
 	/* height: 286px; */
 	overflow: hidden;
 	background-color: #3a3730;
-	border: 1px solid #ad8834;
+	border: 1px solid #766741;
+	border-right-color: #543b00;
+	border-bottom-color: #543b00;
 }
 
 .finishers-entry__proper {
 	margin: 16px;
 	border: 5px double #ad8834;
+	border-radius: 16px;
 	padding: 18px 24px;
 	position: relative;
 }
@@ -1061,9 +1064,9 @@
 }
 
 .finishers-entry__stars {
-	color: #ad8834;
+	color: #d7ad4a;
 	background-color: #3a3730;
-	padding: 3px 24px;
+	padding: 3px 48px;
 	font-size: 22px;
 	cursor: default;
 }

@@ -4,16 +4,18 @@ import { makeName, shortenGameVersion } from './utils/helpers';
 
 const finishers = {
 	handlers: { state: null }, // gets its values in App.js
-	playerNickname: 'Anonymous',
 	playerNicknameIsValid: true,
-	playerUrl: '',
 	playerUrlIsValid: true,
-	playerFinishedAtDateTime: '',
-	playerCurrentFighterId: '',
-	playerHangarContents: '',
-	gameVersion: '',
-	finisherStars: 0,
-	finalMissionName: '',
+	finisherInfo: {
+		playerNickname: 'Anonymous',
+		playerUrl: '',
+		playerFinishedAtDateTime: '',
+		playerCurrentFighterId: '',
+		playerHangarContents: '',
+		gameVersion: '',
+		finisherStars: 0,
+		finalMissionName: '',
+	},
 	init() {
 		const functionSignature = 'finishers.js@init()';
 		console.log(functionSignature);
@@ -50,26 +52,26 @@ const finishers = {
 		) {
 			updatedNickname = 'Anonymous';
 		}
-		finishers.playerNickname = updatedNickname;
+		finishers.finisherInfo.playerNickname = updatedNickname;
 		document.getElementById('finishers-entry__nickname').innerText =
-			finishers.playerNickname;
+			finishers.finisherInfo.playerNickname;
 
 		const updatedUrl = document.getElementById(
 			'game__finishers__finisher-url'
 		).value;
-		finishers.playerUrl = updatedUrl;
+		finishers.finisherInfo.playerUrl = updatedUrl;
 		let displayUrl = updatedUrl;
 
 		const notProvidedStr = '-';
 
 		if (
-			finishers.playerUrl.length === 0 ||
-			finishers.playerUrl === 'https://' ||
+			finishers.finisherInfo.playerUrl.length === 0 ||
+			finishers.finisherInfo.playerUrl === 'https://' ||
 			!finishers.playerUrlIsValid
 		) {
 			displayUrl = notProvidedStr;
 		} else {
-			displayUrl = `<a href="${finishers.playerUrl}" target="_blank">${finishers.playerUrl}</a>`;
+			displayUrl = `<a href="${finishers.finisherInfo.playerUrl}" target="_blank">${finishers.finisherInfo.playerUrl}</a>`;
 		}
 
 		document.getElementById(
@@ -78,7 +80,8 @@ const finishers = {
 
 		if (firstRun) {
 			const nowDateObj = new Date();
-			finishers.playerFinishedAtDateTime = nowDateObj.toISOString();
+			finishers.finisherInfo.playerFinishedAtDateTime =
+				nowDateObj.toISOString();
 
 			// displayDateTime format: "August 29, 2025 3:16 PM"
 			const options = {
@@ -98,65 +101,47 @@ const finishers = {
 
 			console.log(functionSignature, { currentState });
 
-			finishers.playerCurrentFighterId = currentState.game.playerShips.current;
+			finishers.finisherInfo.playerCurrentFighterId =
+				currentState.game.playerShips.current;
 			document.getElementById('finishers-entry__final-fighter').innerText =
-				makeName(finishers.playerCurrentFighterId);
+				makeName(finishers.finisherInfo.playerCurrentFighterId);
 
-			finishers.playerHangarContents = JSON.stringify(
+			finishers.finisherInfo.playerHangarContents = JSON.stringify(
 				currentState.game.playerShips.hangarContents
 			);
 			// document.getElementById('finishers-entry__final-hangar').innerText =
-			// 	finishers.playerHangarContents;
+			// 	finishers.finisherInfo.playerHangarContents;
 
-			finishers.gameVersion = c.gameVersion;
+			finishers.finisherInfo.gameVersion = shortenGameVersion(c.gameVersion);
 			document.getElementById('finishers-entry__game-version').innerText =
-				shortenGameVersion(finishers.gameVersion);
+				finishers.finisherInfo.gameVersion;
 
-			finishers.finalMissionName = sc.finalMissionTitle;
+			finishers.finisherInfo.finalMissionName = sc.finalMissionTitle;
 			document.getElementById('finishers-entry__final-mission').innerText =
-				finishers.finalMissionName;
+				finishers.finisherInfo.finalMissionName;
 
-			finishers.finisherStars = c.finisherStars;
+			finishers.finisherInfo.finisherStars = c.finisherStars;
 			document.getElementById(
 				'finishers-entry__stars'
-			).innerHTML = `<span>${'★'.repeat(finishers.finisherStars)}</span>`;
+			).innerHTML = `<span>${'★'.repeat(
+				finishers.finisherInfo.finisherStars
+			)}</span>`;
 
 			finisherNicknameInputEl.select();
 		}
 	},
 	postFinisherInfo(event) {
 		const functionSignature = 'finishers.js@postFinisherInfo()';
-		console.log(functionSignature, event);
+		console.log(functionSignature);
 
 		event.preventDefault();
-	},
-	postFinisherInfoProper(
-		playerNickname,
-		playerFinishedAtDateTime,
-		playerUrl,
-		playerCurrentFighterId,
-		playerHangarContents,
-		gameVersion,
-		finisherStars,
-		finalMissionName
-	) {
-		const functionSignature = 'finishers.js@postFinisherInfoProper()';
-
-		const finisherInfo = {
-			playerNickname,
-			playerFinishedAtDateTime,
-			playerUrl,
-			playerCurrentFighterId,
-			playerHangarContents,
-			gameVersion,
-			finisherStars,
-			finalMissionName,
-		};
 
 		// eslint-disable-next-line no-undef
-		const spToken = process.env.SUBLIGHT_PATROL_TOKEN;
+		// const spToken = process.env.SUBLIGHT_PATROL_TOKEN;
 
-		console.log(functionSignature, { finisherInfo, spToken });
+		console.log(functionSignature, {
+			finisherInfo: finishers.finisherInfo,
+		});
 	},
 };
 
