@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackAutoInject = require('webpack-auto-inject-version');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
 	entry: {
@@ -36,6 +37,7 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: '[name].[contenthash].css',
 		}),
+		new Dotenv(),
 	],
 	output: {
 		hashDigestLength: 8,

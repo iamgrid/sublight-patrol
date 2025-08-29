@@ -320,54 +320,62 @@ export default function overlays() {
 		<div class="game__finishers" id="game__finishers">
 			<form class="game__finishers__form" id="game__finishers__form">
 				<div class="game__finishers__form__field">
-					<label for="game__finishers__finisher-name">Your Nickname:</label>
-					<input type="text" id="game__finishers__finisher-name" name="game__finishers__finisher-name" maxlength="40" value="Anonymous">
+					<label for="game__finishers__finisher-nickname">Your Nickname:</label>
+					<input type="text" id="game__finishers__finisher-nickname" name="game__finishers__finisher-nickname" maxlength="40" value="Anonymous" autocomplete="off">
 				</div>
 				<div class="game__finishers__form__field">
 					<label for="game__finishers__finisher-url">Your Url (optional):</label>
-					<input type="text" id="game__finishers__finisher-url" name="game__finishers__finisher-url" maxlength="500" value="https://">
+					<input type="text" id="game__finishers__finisher-url" name="game__finishers__finisher-url" maxlength="128" value="https://" autocomplete="off">
 				</div>
 				<div class="game__finishers__button-wrapper">
 					<button type="submit" id="game__finishers__submit-button">Submit</button>
 				</div>
 			</form>
 			<div class="game__finishers__preview" id="game__finishers__preview">
+				<h2>A Preview of Your Entry in the Sublight Patrol <a href="/hall-of-finishers/" target="_blank" class="hall-of-finishers-link">Hall of Finishers</a>:</h2>
 				<div class="finishers-entry">
-					<div class="finishers-entry__stars" id="finishers-entry__stars"><span>★★★★</span></div>
-					<div class="finishers-entry__readout finishers-entry__readout__nickname">
-						<div class="finishers-entry__readout-label">Nickname:</div>
-						<div class="finishers-entry__nickname" id="finishers-entry__nickname"></div>
+					<div class="finishers-entry__proper">
+						<div class="finishers-entry__stars-wrapper">
+							<div class="finishers-entry__stars" id="finishers-entry__stars"><span>★★★★</span></div>
+						</div>
+						<section class="finishers-entry__section finishers-entry__section__top">
+							<div class="finishers-entry__readout finishers-entry__readout__nickname">
+								<div class="finishers-entry__readout-label">Nickname</div>
+								<div class="finishers-entry__nickname" id="finishers-entry__nickname"></div>
+							</div>
+							<div class="finishers-entry__readout finishers-entry__readout__url">
+								<div class="finishers-entry__url" id="finishers-entry__url"></div>
+							</div>
+						</section>
+						<div class="finishers-entry__bottom-wrapper">
+							<section class="finishers-entry__section finishers-entry__section__stats">
+								<!-- <h3>Stats</h3> -->
+								<div class="finishers-entry__readout finishers-entry__readout__finished-at">
+									<div class="finishers-entry__readout-label">Completed the game on</div>
+									<div class="finishers-entry__finished-at" id="finishers-entry__finished-at"></div>
+								</div>
+								<div class="finishers-entry__readout finishers-entry__readout__final-fighter">
+									<div class="finishers-entry__readout-label">Final Fighter</div>
+									<div class="finishers-entry__final-fighter" id="finishers-entry__final-fighter"></div>
+								</div>
+								<!-- <div class="finishers-entry__readout finishers-entry__readout__final-hangar">
+									<div class="finishers-entry__readout-label">Final Hangar Contents</div>
+									<div class="finishers-entry__final-hangar" id="finishers-entry__final-hangar"></div>
+								</div> -->
+							</section>
+							<section class="finishers-entry__section finishers-entry__section__game-version">
+								<!-- <h3>Game Version</h3> -->
+								<div class="finishers-entry__readout finishers-entry__readout__game-version">
+									<div class="finishers-entry__readout-label">Game Version</div>
+									<div class="finishers-entry__game-version" id="finishers-entry__game-version"></div>
+								</div>
+								<div class="finishers-entry__readout finishers-entry__readout__final-mission">
+									<div class="finishers-entry__readout-label">Final Mission</div>
+									<div class="finishers-entry__final-mission" id="finishers-entry__final-mission"></div>
+								</div>
+							</section>
+						</div>
 					</div>
-					<div class="finishers-entry__readout finishers-entry__readout__url">
-						<div class="finishers-entry__readout-label">Url:</div>
-						<div class="finishers-entry__url" id="finishers-entry__url"></div>
-					</div>
-					<section class="finishers-entry__section finishers-entry__section__stats">
-						<h3>Stats</h3>
-						<div class="finishers-entry__readout finishers-entry__readout__finished-at">
-							<div class="finishers-entry__readout-label">Finished At:</div>
-							<div class="finishers-entry__finished-at" id="finishers-entry__finished-at"></div>
-						</div>
-						<div class="finishers-entry__readout finishers-entry__readout__final-fighter">
-							<div class="finishers-entry__readout-label">Final Fighter:</div>
-							<div class="finishers-entry__final-fighter" id="finishers-entry__final-fighter"></div>
-						</div>
-						<div class="finishers-entry__readout finishers-entry__readout__final-hangar">
-							<div class="finishers-entry__readout-label">Final Hangar Contents:</div>
-							<div class="finishers-entry__final-hangar" id="finishers-entry__final-hangar"></div>
-						</div>
-					</section>
-					<section class="finishers-entry__section finishers-entry__section__game-version">
-						<h3>Game Version</h3>
-						<div class="finishers-entry__readout finishers-entry__readout__game-version">
-							<div class="finishers-entry__readout-label">Game Version:</div>
-							<div class="finishers-entry__game-version" id="finishers-entry__game-version"></div>
-						</div>
-						<div class="finishers-entry__readout finishers-entry__readout__final-mission">
-							<div class="finishers-entry__readout-label">Final Mission:</div>
-							<div class="finishers-entry__final-mission" id="finishers-entry__final-mission"></div>
-						</div>
-					</section>
 				</div>
 			</div>
 		</div>

@@ -4,7 +4,9 @@ import controlSchemes from '../../controlSchemes';
 import plates from '../../plates';
 import gameMenus from '../../gameMenus';
 import audioLibrary from '../../audio/audioLibrary';
+import { shortenGameVersion } from '../../utils/helpers';
 // import music from '../../audio/music';
+import finishers from '../../finishers';
 
 const mainMenu = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
@@ -25,13 +27,11 @@ const mainMenu = {
 			execute(options) {
 				document.getElementById('game__intro').style.display = 'none';
 
-				// music.playTrack(
-				// 	audioLibrary.library.music.sublight_patrol_theme.id,
-				// 	25.0395
-				// );
-				// console.log('mainMenu.js@storyBeats[0].execute()', options);
-				const shortenedGameVersion =
-					c.gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';
+				document.getElementById('game__finishers').style.display = 'flex';
+
+				finishers.updatePreview(true);
+
+				const shortenedGameVersion = shortenGameVersion(c.gameVersion);
 				document.getElementById('game__main_menu_version').innerHTML =
 					shortenedGameVersion;
 				if (options.hurryUp) {

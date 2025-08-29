@@ -1366,3 +1366,7 @@ export function hello() {
 		''
 	);
 }
+
+export function shortenGameVersion(gameVersion) {
+	return gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';
+}

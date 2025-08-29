@@ -127,7 +127,6 @@ export default class App extends PIXI.Application {
 		c.init();
 		gameLog.init();
 		shields.init();
-		finishers.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v13.png');
 
@@ -213,6 +212,9 @@ export default class App extends PIXI.Application {
 		this.stage.addChild(this.hudStage);
 		this.stage.addChild(this.Matte);
 		this.stage.addChild(this.menuStage);
+
+		finishers.handlers.state = this.gameState;
+		finishers.init();
 
 		plates.handlers = {
 			Matte: this.Matte,

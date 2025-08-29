@@ -48,6 +48,12 @@ html {
 	letter-spacing: 0.05em;
 }
 
+input, select, button {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	letter-spacing: 0.05em;
+}
+
 body {
 	margin-top: 2em;
 	background-color: #303030;
@@ -477,4 +483,13 @@ footer {
 
 .toggle-footer__link--open .toggle-footer__chevron {
 	transform: rotate(0deg);
+}
+
+.hall-of-finishers-link {
+	color: #ad8834;
+	transition: var(--bezier);
+}
+
+.hall-of-finishers-link:hover {
+	color: #d8ad49;
 }

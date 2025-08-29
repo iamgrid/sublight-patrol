@@ -959,9 +959,146 @@
 	z-index: 100;
 	display: none;
 	/* set to display: flex; to show */
-	/* display: flex; */
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	/* justify-content: center; */
+	background: #151515;
+	margin: 8px;
+}
+
+.game__finishers__form {
+	border: 1px solid #194044;
+	background: #14262A;
+	color: white;
+	padding: 4px 24px;
+	margin-top: 12px;
+}
+
+.game__finishers__form__field {
+	display: flex;
 	gap: 12px;
+	margin-bottom: 6px;
+}
+
+.game__finishers__form label {
+	width: 130px;
+	text-align: right;
+	font-size: 0.8em;
+	color: #32bfe6;
+}
+
+.game__finishers__form input {
+	background: black;
+	border: 2px inset #194044;
+	border-radius: 0;
+	color: white;
+	font-weight: bold;
+	font-size: 0.8em;
+	outline: 0;
+	padding: 0 5px;
+	width: 300px;
+}
+
+.game__finishers__form input::selection {
+	background-color: #32bfe6;
+	color: black;
+}
+
+.game__finishers__form button {
+	outline: 0;
+	border: 2px outset #194044;
+	background-color: #0f7e9d;
+	color: white;
+	border-radius: 0;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 0.7em;
+	padding: 5px 10px;
+	margin-top: 5px;
+	cursor: pointer;
+}
+
+.game__finishers__form button:hover, .game__finishers__form button:focus, .game__finishers__form button:active {
+	background-color: #26a8cb;
+}
+
+.game__finishers__preview h2 {
+	font-size: 0.7em;
+	font-weight: normal;
+	color: gray;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+	margin-top: 9px;
+}
+
+.game__finishers__preview h2 .hall-of-finishers-link {
+	text-decoration: none;
+}
+
+.finishers-entry {
+	width: 1100px;
+	/* height: 286px; */
+	overflow: hidden;
+	background-color: #3a3730;
+	border: 1px solid #ad8834;
+}
+
+.finishers-entry__proper {
+	margin: 16px;
+	border: 5px double #ad8834;
+	padding: 18px 24px;
+	position: relative;
+}
+
+.finishers-entry__stars-wrapper {
+	position: absolute;
+	width: 1098px;
+	transform: translate(-45px, -36px);
+	/* background: green; */
+	display: flex;
+	justify-content: center;
+}
+
+.finishers-entry__stars {
+	color: #ad8834;
+	background-color: #3a3730;
+	padding: 3px 24px;
+	font-size: 22px;
+	cursor: default;
+}
+
+.finishers-entry__readout {
+	margin-top: 6px;
+}
+
+.finishers-entry .finishers-entry__readout:first-child {
+	margin-top: 0;
+}
+
+.finishers-entry__readout-label {
+	text-transform: uppercase;
+	font-size: 0.7em;
+	letter-spacing: 0.7em;
+	transform: translateX(0.35em);
+	color: #ffffff40;
+}
+
+.finishers-entry__nickname {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.finishers-entry__url {
+	font-size: 0.8em;
+	color: gray;
+}
+
+.finishers-entry__url a, .finishers-entry__url span {
+	color: gray;
+}
+
+.finishers-entry__bottom-wrapper {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
 }
