@@ -14,6 +14,7 @@ const storyConstants = {
 		scene003: 'scene003',
 		scene004: 'scene004',
 	},
+	finalMissionTitle: 'Mission 4 of 4: Save the Princess, Save the System',
 	zangariGroupNames: {
 		argoon: 'argoon',
 		habeen: 'habeen',

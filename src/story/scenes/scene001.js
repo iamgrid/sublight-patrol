@@ -184,7 +184,6 @@ const scene001 = {
 			type: 'shuttle',
 			playerRelation: 'friendly',
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: 'No cargo',
 			hasBeenScanned: true,
 		},
 		harpax_52164: {
@@ -370,7 +369,7 @@ const scene001 = {
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
 								message:
-									'<p>Your job is to chase off the enemy fighters present while making sure the remaining containers stay in one piece until our shuttle can arrive to pick up the goods.</p><p>Good hunting!</p>',
+									'<p>Your task is to chase off the enemy fighters present while making sure the remaining containers stay in one piece until our shuttle can arrive to pick up the goods.</p><p>Good hunting!</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,

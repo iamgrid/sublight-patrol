@@ -164,9 +164,7 @@ const pieces = {
 			width: 36,
 			length: 86,
 		},
-		mutable: {
-			contents: 'Commuters',
-		},
+		mutable: {},
 	},
 	zangari_shuttle: {
 		immutable: {
@@ -174,9 +172,7 @@ const pieces = {
 			model: '/ships/ZangariShuttle',
 			colors: c.groups.zangari.groupId,
 		},
-		mutable: {
-			contents: null,
-		},
+		mutable: {},
 	},
 
 	freighter_l1: {
@@ -197,9 +193,7 @@ const pieces = {
 			width: 34,
 			length: 88,
 		},
-		mutable: {
-			contents: null,
-		},
+		mutable: {},
 	},
 	freighter_l2: {
 		immutable: {

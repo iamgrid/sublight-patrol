@@ -14,7 +14,7 @@ const scene004 = {
 	pairedTrack: audioLibrary.library.music.mission_override.id,
 	titlePlate: {
 		subTitle: 'Meow or Never',
-		title: 'Mission 4 of 4: Save the Princess, Save the System',
+		title: sc.finalMissionTitle,
 	},
 	playVolume: {
 		minX: -12000,
@@ -35,8 +35,6 @@ const scene004 = {
 			playerRelation: 'friendly',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: '',
-			contentClassification: c.entityContentClassifications.missionObjective,
 			hasBeenScanned: true,
 		},
 		gold_1: {
@@ -46,8 +44,6 @@ const scene004 = {
 			playerRelation: 'friendly',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: '',
-			contentClassification: c.entityContentClassifications.irrelevant,
 			hasBeenScanned: true,
 		},
 		gold_2: {
@@ -57,8 +53,6 @@ const scene004 = {
 			playerRelation: 'friendly',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: '',
-			contentClassification: c.entityContentClassifications.irrelevant,
 			hasBeenScanned: true,
 		},
 		gold_3: {
@@ -68,8 +62,6 @@ const scene004 = {
 			playerRelation: 'friendly',
 			behaviorAllowedToFlee: false,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
-			contents: '',
-			contentClassification: c.entityContentClassifications.irrelevant,
 			hasBeenScanned: true,
 		},
 		harpax_80946: {
