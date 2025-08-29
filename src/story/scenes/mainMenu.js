@@ -1,11 +1,9 @@
 import c from '../../utils/constants';
 import controlSchemes from '../../controlSchemes';
-// import timing from '../../utils/timing';
 import plates from '../../plates';
 import gameMenus from '../../gameMenus';
 import audioLibrary from '../../audio/audioLibrary';
 import { shortenGameVersion } from '../../utils/helpers';
-// import music from '../../audio/music';
 import finishers from '../../finishers';
 
 const mainMenu = {
@@ -28,7 +26,6 @@ const mainMenu = {
 				document.getElementById('game__intro').style.display = 'none';
 
 				document.getElementById('game__finishers').style.display = 'flex';
-
 				finishers.updatePreview(true);
 
 				const shortenedGameVersion = shortenGameVersion(c.gameVersion);

@@ -1,3 +1,6 @@
 <?php
-	$siteToken = 'Q0THohJSutDkfj7PyDIr0np5c36BErU9cDZNlxMigspXeG3FS03MAwx7x6Lo9oxluoDJYbDAezJsXXvHev3nNbUPAiDZBp6lgZNSCKanns';
+	require("token.inc");
+
+	// print_r($sublight_patrol_token);
+	print "hello from endpoint.php!";
 ?>
