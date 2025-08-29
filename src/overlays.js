@@ -332,7 +332,7 @@ export default function overlays() {
 				</div>
 			</form>
 			<div class="game__finishers__preview" id="game__finishers__preview">
-				<h2>A Preview of Your Entry in the Sublight Patrol <a href="/hall-of-finishers/" target="_blank" class="hall-of-finishers-link">Hall of Finishers</a>:</h2>
+				<h2>A Preview of Your Entry in the Sublight Patrol <a href="/sublight-patrol/hall-of-finishers/" target="_blank" class="hall-of-finishers-link">Hall of Finishers</a>:</h2>
 				<div class="finishers-entry">
 					<div class="finishers-entry__proper">
 						<div class="finishers-entry__stars-wrapper">
