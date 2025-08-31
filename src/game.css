@@ -1041,6 +1041,7 @@
 	/* height: 286px; */
 	overflow: hidden;
 	background-color: #3a3730;
+	background: linear-gradient(137deg, #3a3730 0%, #565547 10%, #3a3730 35%, #3a3730 50%, #545343 75%, #3a3730 100%);
 	border: 1px solid #766741;
 	border-right-color: #543b00;
 	border-bottom-color: #543b00;
@@ -1048,7 +1049,7 @@
 
 .finishers-entry__proper {
 	margin: 16px;
-	border: 5px double #ad8834;
+	border: 5px double #ffc52185;
 	border-radius: 16px;
 	padding: 18px 24px;
 	position: relative;
