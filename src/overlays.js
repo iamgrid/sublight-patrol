@@ -319,13 +319,17 @@ export default function overlays() {
 		</div>
 		<div class="game__finishers" id="game__finishers">
 			<form class="game__finishers__form" id="game__finishers__form">
-				<div class="game__finishers__form__field">
+				<div class="game__finishers__form__field game__finishers__form__field__nickname">
 					<label for="game__finishers__finisher-nickname">Your Nickname:</label>
 					<input type="text" id="game__finishers__finisher-nickname" name="game__finishers__finisher-nickname" maxlength="40" value="Anonymous" autocomplete="off">
 				</div>
-				<div class="game__finishers__form__field">
+				<div class="game__finishers__form__field game__finishers__form__field__location">
+					<label for="game__finishers__finisher-location">Your Location (optional):</label>
+					<input type="text" id="game__finishers__finisher-location" name="game__finishers__finisher-location" maxlength="80" value="" autocomplete="off" placeholder="London, United Kingdom">
+				</div>
+				<div class="game__finishers__form__field game__finishers__form__field__url">
 					<label for="game__finishers__finisher-url">Your Url (optional):</label>
-					<input type="text" id="game__finishers__finisher-url" name="game__finishers__finisher-url" maxlength="128" value="https://" autocomplete="off">
+					<input type="text" id="game__finishers__finisher-url" name="game__finishers__finisher-url" maxlength="500" value="https://" autocomplete="off">
 				</div>
 				<div class="game__finishers__button-wrapper">
 					<button type="submit" id="game__finishers__submit-button">Submit</button>
@@ -336,7 +340,7 @@ export default function overlays() {
 				<div class="finishers-entry">
 					<div class="finishers-entry__proper">
 						<div class="finishers-entry__stars-wrapper">
-							<div class="finishers-entry__stars" id="finishers-entry__stars"><span>★★★★</span></div>
+							<div class="finishers-entry__stars" id="finishers-entry__stars" title="The number of stars you earn for finishing increase when I add more missions to the game or increase the difficulty in other ways."><span>★★★★</span></div>
 						</div>
 						<section class="finishers-entry__section finishers-entry__section__top">
 							<div class="finishers-entry__readout finishers-entry__readout__nickname">
@@ -344,7 +348,7 @@ export default function overlays() {
 								<div class="finishers-entry__nickname" id="finishers-entry__nickname"></div>
 							</div>
 							<div class="finishers-entry__readout finishers-entry__readout__url">
-								<div class="finishers-entry__url" id="finishers-entry__url"></div>
+								<div class="finishers-entry__finisher-details" id="finishers-entry__finisher-details"></div>
 							</div>
 						</section>
 						<div class="finishers-entry__bottom-wrapper">

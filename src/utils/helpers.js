@@ -1370,3 +1370,10 @@ export function hello() {
 export function shortenGameVersion(gameVersion) {
 	return gameVersion.substring(0, c.gameVersion.lastIndexOf(',')) + ')';
 }
+
+export function shortenDisplayUrl(displayUrl, maxLength = 30) {
+	if (displayUrl.length > maxLength) {
+		return displayUrl.substring(0, maxLength) + '...';
+	}
+	return displayUrl;
+}

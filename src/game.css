@@ -965,7 +965,7 @@
 	/* set to display: flex; to show */
 	flex-direction: column;
 	align-items: center;
-	/* justify-content: center; */
+	justify-content: center;
 	background: #151515;
 	margin: 8px;
 }
@@ -974,21 +974,24 @@
 	border: 1px solid #194044;
 	background: #14262A;
 	color: white;
-	padding: 4px 24px;
-	margin-top: 12px;
+	padding: 4px 14px;
+	/* margin-top: 12px; */
+	display: flex;
+	gap: 12px;
 }
 
 .game__finishers__form__field {
 	display: flex;
-	gap: 12px;
-	margin-bottom: 6px;
+	gap: 6px;
+	/* margin-bottom: 6px; */
+	align-items: center;
 }
 
 .game__finishers__form label {
-	width: 130px;
 	text-align: right;
 	font-size: 0.8em;
 	color: #32bfe6;
+	white-space: nowrap;
 }
 
 .game__finishers__form input {
@@ -999,13 +1002,20 @@
 	font-weight: bold;
 	font-size: 0.8em;
 	outline: 0;
-	padding: 0 5px;
-	width: 300px;
+	padding: 4px 5px;
 }
 
 .game__finishers__form input::selection {
 	background-color: #32bfe6;
 	color: black;
+}
+
+#game__finishers__finisher-nickname {
+	width: 165px;
+}
+
+#game__finishers__finisher-location, #game__finishers__finisher-url {
+	width: 203px;
 }
 
 .game__finishers__form button {
@@ -1018,7 +1028,6 @@
 	text-transform: uppercase;
 	font-size: 0.7em;
 	padding: 5px 10px;
-	margin-top: 5px;
 	cursor: pointer;
 }
 
@@ -1033,7 +1042,8 @@
 	text-transform: uppercase;
 	margin: 0;
 	padding: 0;
-	margin-top: 9px;
+	margin-top: 24px;
+	margin-bottom: 7px;
 }
 
 .game__finishers__preview h2 .hall-of-finishers-link {
@@ -1097,13 +1107,13 @@
 	font-size: 1.1em;
 }
 
-.finishers-entry__url {
+.finishers-entry__finisher-details {
 	font-size: 0.8em;
-	color: gray;
+	color: #ffffff40;
 }
 
-.finishers-entry__url a, .finishers-entry__url span {
-	color: gray;
+.finishers-entry__finisher-details a, .finishers-entry__finisher-details span {
+	color: #ffffff70;
 }
 
 .finishers-entry__bottom-wrapper {

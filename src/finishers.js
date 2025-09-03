@@ -1,6 +1,10 @@
 import c from './utils/constants';
 import sc from './story/storyConstants';
-import { makeName, shortenGameVersion } from './utils/helpers';
+import {
+	makeName,
+	shortenDisplayUrl,
+	shortenGameVersion,
+} from './utils/helpers';
 import controlSchemes from './controlSchemes';
 
 const finishers = {
@@ -9,6 +13,7 @@ const finishers = {
 	playerUrlIsValid: true,
 	finisherInfo: {
 		playerNickname: 'Anonymous',
+		playerLocation: '',
 		playerUrl: '',
 		playerFinishedAtDateTime: '',
 		playerCurrentFighterId: '',
@@ -32,6 +37,11 @@ const finishers = {
 				finishers.updatePreview();
 			});
 		document
+			.getElementById('game__finishers__finisher-location')
+			.addEventListener('input', () => {
+				finishers.updatePreview();
+			});
+		document
 			.getElementById('game__finishers__finisher-url')
 			.addEventListener('input', () => {
 				finishers.updatePreview();
@@ -46,24 +56,29 @@ const finishers = {
 		);
 
 		let updatedNickname = finisherNicknameInputEl.value;
-		if (
-			updatedNickname === '' ||
-			updatedNickname.length < 2 ||
-			updatedNickname.length > 40
-		) {
+		if (updatedNickname.length < 2) {
 			updatedNickname = 'Anonymous';
 		}
 		finishers.finisherInfo.playerNickname = updatedNickname;
 		document.getElementById('finishers-entry__nickname').innerText =
 			finishers.finisherInfo.playerNickname;
 
+		let updatedFinisherLocation = document.getElementById(
+			'game__finishers__finisher-location'
+		).value;
+
+		const notProvidedStr = '-';
+
+		if (updatedFinisherLocation.length < 2) {
+			updatedFinisherLocation = notProvidedStr;
+		}
+		finishers.finisherInfo.playerLocation = updatedFinisherLocation;
+
 		const updatedUrl = document.getElementById(
 			'game__finishers__finisher-url'
 		).value;
 		finishers.finisherInfo.playerUrl = updatedUrl;
 		let displayUrl = updatedUrl;
-
-		const notProvidedStr = '-';
 
 		if (
 			finishers.finisherInfo.playerUrl.length === 0 ||
@@ -72,12 +87,17 @@ const finishers = {
 		) {
 			displayUrl = notProvidedStr;
 		} else {
-			displayUrl = `<a href="${finishers.finisherInfo.playerUrl}" target="_blank">${finishers.finisherInfo.playerUrl}</a>`;
+			displayUrl = `<a href="${
+				finishers.finisherInfo.playerUrl
+			}" target="_blank">${shortenDisplayUrl(
+				finishers.finisherInfo.playerUrl,
+				30
+			)}</a>`;
 		}
 
 		document.getElementById(
-			'finishers-entry__url'
-		).innerHTML = `Url: <span>${displayUrl}</span>`;
+			'finishers-entry__finisher-details'
+		).innerHTML = `Location: <span>${finishers.finisherInfo.playerLocation}</span> &nbsp;&middot;&nbsp; Url: <span>${displayUrl}</span>`;
 
 		if (firstRun) {
 			const nowDateObj = new Date();
