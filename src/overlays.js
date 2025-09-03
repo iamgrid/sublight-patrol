@@ -276,7 +276,7 @@ export default function overlays() {
 		</div>
 		<div class="game__intro" id="game__intro">
 			<div class="game__intro-plate" id="game__intro-plate-1">
-				<div class="game__intro-plate__big-text" id="game__intro-plate-1__big-text">i_am_grid</div>
+				<div class="game__intro-plate__big-text" id="game__intro-plate-1__big-text">i.am.grid</div>
 				<div class="game__intro-plate__small-text" id="game__intro-plate-1__small-text">presents</div>
 			</div>
 			<div class="game__intro-plate" id="game__intro-plate-2">

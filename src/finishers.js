@@ -1,6 +1,7 @@
 import c from './utils/constants';
 import sc from './story/storyConstants';
 import { makeName, shortenGameVersion } from './utils/helpers';
+import controlSchemes from './controlSchemes';
 
 const finishers = {
 	handlers: { state: null }, // gets its values in App.js
@@ -126,8 +127,6 @@ const finishers = {
 			).innerHTML = `<span>${'★'.repeat(
 				finishers.finisherInfo.finisherStars
 			)}</span>`;
-
-			finisherNicknameInputEl.select();
 		}
 	},
 	postFinisherInfo(event) {
@@ -142,6 +141,19 @@ const finishers = {
 		console.log(functionSignature, {
 			finisherInfo: finishers.finisherInfo,
 		});
+	},
+	show() {
+		finishers.updatePreview(true);
+		document.getElementById('game__finishers').style.display = 'flex';
+
+		controlSchemes.suspendCurrentLayout();
+
+		document.getElementById('game__finishers__finisher-nickname').select();
+	},
+	hide() {
+		document.getElementById('game__finishers').style.display = 'none';
+
+		controlSchemes.restoreSuspendedLayout();
 	},
 };
 

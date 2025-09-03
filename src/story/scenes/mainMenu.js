@@ -25,8 +25,7 @@ const mainMenu = {
 			execute(options) {
 				document.getElementById('game__intro').style.display = 'none';
 
-				// document.getElementById('game__finishers').style.display = 'flex';
-				// finishers.updatePreview(true);
+				// finishers.show();
 
 				const shortenedGameVersion = shortenGameVersion(c.gameVersion);
 				document.getElementById('game__main_menu_version').innerHTML =

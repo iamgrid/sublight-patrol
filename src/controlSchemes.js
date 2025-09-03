@@ -5,7 +5,7 @@ import {
 	gameLog,
 	messageLayer,
 } from './utils/helpers';
-import Keyboard from 'pixi.js-keyboard';
+import keyboard from './Keyboard';
 import gameMenus from './gameMenus';
 import entities from './entities/entities';
 import shots from './shots';
@@ -17,8 +17,33 @@ const controlSchemes = {
 	// https://www.npmjs.com/package/pixi.js-keyboard
 
 	currentlyShowingLayout: null,
+	suspendedLayout: null,
+	init() {
+		window.addEventListener(
+			'keydown',
+			controlSchemes.preventDefaultOnKeys,
+			false
+		);
+	},
+	preventDefaultOnKeys(event) {
+		// prevent keyboard scroll events (space and arrow keys) on window
+		// https://keycode.info/
+
+		const prevent = [
+			'Enter',
+			'Space',
+			'ArrowLeft',
+			'ArrowUp',
+			'ArrowRight',
+			'ArrowDown',
+		];
+		if (prevent.includes(event.code)) event.preventDefault();
+	},
 	showLayout(layout) {
 		if (controlSchemes.currentlyShowingLayout !== layout) {
+			const functionSignature = 'controlSchemes.js@showLayout()';
+			if (c.debug.controlSchemes) console.log(functionSignature);
+
 			const currentDescriptions = controlSchemes[layout].descriptions;
 			if (c.debug.controlSchemes) console.log('showLayout: ', layout);
 
@@ -37,6 +62,48 @@ const controlSchemes = {
 		}
 	},
 
+	suspendCurrentLayout() {
+		const functionSignature = 'controlSchemes.js@suspendCurrentLayout()';
+		if (c.debug.controlSchemes) console.log(functionSignature);
+
+		controlSchemes.suspendedLayout = controlSchemes.currentlyShowingLayout;
+		controlSchemes.currentlyShowingLayout = null;
+		keyboard.clear();
+		keyboard.removeEventListeners();
+
+		window.removeEventListener(
+			'keydown',
+			controlSchemes.preventDefaultOnKeys,
+			false
+		);
+
+		document.getElementById('footer__controls').innerHTML = '&nbsp;';
+	},
+
+	restoreSuspendedLayout() {
+		const functionSignature = 'controlSchemes.js@restoreSuspendedLayout()';
+		if (c.debug.controlSchemes) console.log(functionSignature);
+
+		if (typeof controlSchemes.suspendedLayout !== 'string') {
+			console.warn(
+				`${functionSignature} - controlSchemes.suspendedLayout is not a string:`,
+				controlSchemes.suspendedLayout
+			);
+			return;
+		}
+		controlSchemes.showLayout(controlSchemes.suspendedLayout);
+
+		keyboard.addEventListeners();
+
+		window.addEventListener(
+			'keydown',
+			controlSchemes.preventDefaultOnKeys,
+			false
+		);
+
+		controlSchemes.suspendedLayout = null;
+	},
+
 	pause: {
 		id: 'pause',
 		descriptions: [
@@ -46,32 +113,35 @@ const controlSchemes = {
 			{ keys: 'up, down', function: 'Scroll combat log' },
 		],
 		execute() {
+			// const functionSignature = 'controlSchemes.js@pause.execute()';
+			// if (c.debug.controlSchemes) console.log(functionSignature);
+
 			controlSchemes.showLayout(controlSchemes.pause.id);
 
-			if (Keyboard.isKeyPressed('Escape')) {
+			if (keyboard.isKeyPressed('Escape')) {
 				soundEffects.playOnce(null, soundEffects.library.menu_activate.id);
 				window.pixiapp.togglePause();
 			}
 
-			if (Keyboard.isKeyPressed('ArrowRight')) {
+			if (keyboard.isKeyPressed('ArrowRight')) {
 				gameMenus.cycleFocus('forward');
 			}
 
-			if (Keyboard.isKeyPressed('ArrowLeft')) {
+			if (keyboard.isKeyPressed('ArrowLeft')) {
 				gameMenus.cycleFocus('back');
 			}
 
-			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
+			if (keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
 				gameMenus.activateFocusedButton();
 			}
 
 			const gameLogProperDiv = document.getElementById('game__log-proper');
 
 			if (gameLog.store.length > 4) {
-				if (Keyboard.isKeyDown('ArrowUp')) {
+				if (keyboard.isKeyDown('ArrowUp')) {
 					gameLogProperDiv.scrollBy(0, -4);
 				}
-				if (Keyboard.isKeyDown('ArrowDown')) {
+				if (keyboard.isKeyDown('ArrowDown')) {
 					gameLogProperDiv.scrollBy(0, 4);
 				}
 			}
@@ -92,6 +162,9 @@ const controlSchemes = {
 			{ keys: 'e', function: 'EMP' },
 		],
 		execute(playerId, currentState, dispatch, camera) {
+			// const functionSignature = 'controlSchemes.js@play.execute()';
+			// if (c.debug.controlSchemes) console.log(functionSignature);
+
 			controlSchemes.showLayout(controlSchemes.play.id);
 
 			function playerStageEntityVelocity(newLatVelocity, newLongVelocity) {
@@ -107,7 +180,7 @@ const controlSchemes = {
 				moveTargetingReticule(newTargetId, entities.stageEntities);
 			}
 
-			if (Keyboard.isKeyPressed('Escape')) {
+			if (keyboard.isKeyPressed('Escape')) {
 				soundEffects.playOnce(null, soundEffects.library.menu_activate.id);
 				window.pixiapp.togglePause();
 			}
@@ -115,15 +188,15 @@ const controlSchemes = {
 			if (playerId !== 'destroyed_player') {
 				let latDirection = 0;
 				let longDirection = 0;
-				if (Keyboard.isKeyDown('ArrowUp')) {
+				if (keyboard.isKeyDown('ArrowUp')) {
 					latDirection = -1;
-				} else if (Keyboard.isKeyDown('ArrowDown')) {
+				} else if (keyboard.isKeyDown('ArrowDown')) {
 					latDirection = 1;
 				}
 
-				if (Keyboard.isKeyDown('ArrowLeft')) {
+				if (keyboard.isKeyDown('ArrowLeft')) {
 					longDirection = -1;
-				} else if (Keyboard.isKeyDown('ArrowRight')) {
+				} else if (keyboard.isKeyDown('ArrowRight')) {
 					longDirection = 1;
 				}
 
@@ -135,21 +208,21 @@ const controlSchemes = {
 					callbackFn: playerStageEntityVelocity,
 				});
 
-				if (Keyboard.isKeyPressed('Space')) {
+				if (keyboard.isKeyPressed('Space')) {
 					shots.startShooting(playerId);
 				}
 
-				if (Keyboard.isKeyPressed('KeyM')) {
+				if (keyboard.isKeyPressed('KeyM')) {
 					if (messageLayer.messageIsShowing) {
 						messageLayer.advance();
 					}
 				}
 
-				if (Keyboard.isKeyReleased('Space')) {
+				if (keyboard.isKeyReleased('Space')) {
 					shots.stopShooting(playerId);
 				}
 
-				if (Keyboard.isKeyPressed('KeyD')) {
+				if (keyboard.isKeyPressed('KeyD')) {
 					dispatch({
 						type: c.actions.TARGET,
 						do: 'pointed-nearest',
@@ -158,7 +231,7 @@ const controlSchemes = {
 					});
 				}
 
-				if (Keyboard.isKeyPressed('KeyS')) {
+				if (keyboard.isKeyPressed('KeyS')) {
 					dispatch({
 						type: c.actions.TARGET,
 						do: 'next',
@@ -167,7 +240,7 @@ const controlSchemes = {
 					});
 				}
 
-				if (Keyboard.isKeyPressed('KeyA')) {
+				if (keyboard.isKeyPressed('KeyA')) {
 					dispatch({
 						type: c.actions.TARGET,
 						do: 'previous',
@@ -176,7 +249,7 @@ const controlSchemes = {
 					});
 				}
 
-				if (Keyboard.isKeyPressed('KeyC')) {
+				if (keyboard.isKeyPressed('KeyC')) {
 					dispatch({
 						type: c.actions.TARGET,
 						do: 'clear',
@@ -184,7 +257,7 @@ const controlSchemes = {
 					});
 				}
 
-				if (Keyboard.isKeyPressed('KeyL')) {
+				if (keyboard.isKeyPressed('KeyL')) {
 					const currentTarget = currentState.game.targeting;
 					console.log(
 						`%c target id: ${currentTarget}`,
@@ -200,7 +273,7 @@ const controlSchemes = {
 					}
 				}
 
-				if (Keyboard.isKeyPressed('KeyF')) {
+				if (keyboard.isKeyPressed('KeyF')) {
 					if (!camera.isFlipping) {
 						if (currentState.entities.player.facing === 1) {
 							entities.stageEntities[playerId].targetRotation = Math.PI;
@@ -223,10 +296,10 @@ const controlSchemes = {
 					}
 				}
 
-				if (Keyboard.isKeyPressed('KeyE')) {
+				if (keyboard.isKeyPressed('KeyE')) {
 					emp.toggleEMP(playerId, true);
 				}
-				if (Keyboard.isKeyReleased('KeyE')) {
+				if (keyboard.isKeyReleased('KeyE')) {
 					emp.toggleEMP(playerId, false);
 				}
 			}
@@ -240,17 +313,20 @@ const controlSchemes = {
 			{ keys: 'enter', function: 'Activate menu button' },
 		],
 		execute() {
+			// const functionSignature = 'controlSchemes.js@gameMenus.execute()';
+			// if (c.debug.controlSchemes) console.log(functionSignature);
+
 			controlSchemes.showLayout(controlSchemes.gameMenus.id);
 
-			if (Keyboard.isKeyPressed('ArrowRight')) {
+			if (keyboard.isKeyPressed('ArrowRight')) {
 				gameMenus.cycleFocus('forward');
 			}
 
-			if (Keyboard.isKeyPressed('ArrowLeft')) {
+			if (keyboard.isKeyPressed('ArrowLeft')) {
 				gameMenus.cycleFocus('back');
 			}
 
-			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
+			if (keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
 				gameMenus.activateFocusedButton();
 			}
 		},
@@ -264,21 +340,24 @@ const controlSchemes = {
 			{ keys: 'esc', function: 'Return to main menu' },
 		],
 		execute() {
+			// const functionSignature = 'controlSchemes.js@replaySceneMenu.execute()';
+			// if (c.debug.controlSchemes) console.log(functionSignature);
+
 			controlSchemes.showLayout(controlSchemes.replaySceneMenu.id);
 
-			if (Keyboard.isKeyPressed('ArrowDown')) {
+			if (keyboard.isKeyPressed('ArrowDown')) {
 				gameMenus.cycleFocus('forward');
 			}
 
-			if (Keyboard.isKeyPressed('ArrowUp')) {
+			if (keyboard.isKeyPressed('ArrowUp')) {
 				gameMenus.cycleFocus('back');
 			}
 
-			if (Keyboard.isKeyPressed('Escape')) {
+			if (keyboard.isKeyPressed('Escape')) {
 				gameMenus.returnToMainMenu();
 			}
 
-			if (Keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
+			if (keyboard.isKeyPressed('Enter', 'NumpadEnter')) {
 				gameMenus.activateFocusedButton();
 			}
 		},
@@ -288,30 +367,38 @@ const controlSchemes = {
 		id: 'intro',
 		descriptions: [{ keys: 'space', function: 'Skip to main menu' }],
 		execute(playerId, currentState, dispatch, camera, skipToMainMenu) {
+			// const functionSignature = 'controlSchemes.js@intro.execute()';
+			// if (c.debug.controlSchemes) console.log(functionSignature);
+
 			controlSchemes.showLayout(controlSchemes.intro.id);
 
-			if (Keyboard.isKeyPressed('Space')) {
+			// keyboard.clear();
+
+			if (keyboard.isKeyPressed('Space')) {
 				console.log('controlSchemes.js@intro.execute()');
 				skipToMainMenu();
 			}
 		},
 	},
 
-	cutscenes: {
-		id: 'cutscenes',
-		descriptions: [
-			{ keys: 'esc', function: 'Pause game' },
-			{ keys: 'space', function: 'Advance dialog' },
-			{ keys: 'enter', function: 'Skip cutscene' },
-		],
-		execute() {
-			controlSchemes.showLayout(controlSchemes.cutscenes.id);
+	// cutscenes: {
+	// 	id: 'cutscenes',
+	// 	descriptions: [
+	// 		{ keys: 'esc', function: 'Pause game' },
+	// 		{ keys: 'space', function: 'Advance dialog' },
+	// 		{ keys: 'enter', function: 'Skip cutscene' },
+	// 	],
+	// 	execute() {
+	// 		const functionSignature = "controlSchemes.js@cutscenes.execute()";
+	// 		if (c.debug.controlSchemes) console.log(functionSignature);
 
-			if (Keyboard.isKeyPressed('Escape')) {
-				window.pixiapp.togglePause();
-			}
-		},
-	},
+	// 		controlSchemes.showLayout(controlSchemes.cutscenes.id);
+
+	// 		if (keyboard.isKeyPressed('Escape')) {
+	// 			window.pixiapp.togglePause();
+	// 		}
+	// 	},
+	// },
 };
 
 export default controlSchemes;

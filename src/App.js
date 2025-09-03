@@ -22,7 +22,7 @@ import hud from './hud';
 import initialGameState from './initialGameState';
 import mainReducer from './reducers/mainReducer';
 import useReducer from './utils/useReducer';
-import Keyboard from 'pixi.js-keyboard';
+import keyboard from './Keyboard';
 import StarscapeLayer from './components/StarscapeLayer';
 import PlayVolumeBoundaries from './components/PlayVolumeBoundaries';
 import entities from './entities/entities';
@@ -123,6 +123,9 @@ export default class App extends PIXI.Application {
 	}
 
 	init() {
+		keyboard.addEventListeners();
+		controlSchemes.init();
+
 		entities.init();
 		c.init();
 		gameLog.init();
@@ -328,7 +331,9 @@ export default class App extends PIXI.Application {
 
 	gameLoop(delta) {
 		this.pixiState(delta);
-		Keyboard.update();
+		if (controlSchemes.suspendedLayout === null) {
+			keyboard.update();
+		}
 	}
 
 	play(delta) {
@@ -381,13 +386,15 @@ export default class App extends PIXI.Application {
 		};
 
 		// console.log({ currentKeyboardLayout });
-		controlSchemes[currentKeyboardLayout].execute(
-			playerId,
-			currentState,
-			this.dispatch,
-			this.camera,
-			skipToMainMenu
-		);
+		if (controlSchemes.suspendedLayout === null) {
+			controlSchemes[currentKeyboardLayout].execute(
+				playerId,
+				currentState,
+				this.dispatch,
+				this.camera,
+				skipToMainMenu
+			);
+		}
 
 		// update entity positions based on their velocities
 		let repositionHasRun = false;

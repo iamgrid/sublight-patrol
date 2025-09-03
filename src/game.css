@@ -444,6 +444,10 @@
 	transition: opacity ease-in-out 1s;
 }
 
+#game__intro-plate-1__big-text {
+	text-transform: none;
+}
+
 .game__intro-plate__small-text {
 	text-transform: uppercase;
 	font-size: 12px;
