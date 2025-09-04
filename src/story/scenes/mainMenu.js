@@ -4,7 +4,7 @@ import plates from '../../plates';
 import gameMenus from '../../gameMenus';
 import audioLibrary from '../../audio/audioLibrary';
 import { shortenGameVersion } from '../../utils/helpers';
-// import finishers from '../../finishers';
+import finishers from '../../finishers';
 
 const mainMenu = {
 	handlers: { checkBeatCompletion: null }, // gets its values in story.js@advance()
@@ -25,7 +25,7 @@ const mainMenu = {
 			execute(options) {
 				document.getElementById('game__intro').style.display = 'none';
 
-				// finishers.show();
+				finishers.show();
 
 				const shortenedGameVersion = shortenGameVersion(c.gameVersion);
 				document.getElementById('game__main_menu_version').innerHTML =

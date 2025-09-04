@@ -7,10 +7,15 @@ import {
 } from './utils/helpers';
 import controlSchemes from './controlSchemes';
 
+const nickRegex = new RegExp(/^[a-zA-Z0-9 .\-_'()]+$/);
+const locationRegex = new RegExp(/^[a-zA-Z0-9 .\-_'(),]+$/);
+const urlRegex = new RegExp(
+	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/
+);
+
 const finishers = {
 	handlers: { state: null }, // gets its values in App.js
-	playerNicknameIsValid: true,
-	playerUrlIsValid: true,
+	formInputsAreValid: false,
 	finisherInfo: {
 		playerNickname: 'Anonymous',
 		playerLocation: '',
@@ -51,13 +56,24 @@ const finishers = {
 		const functionSignature = 'finishers.js@updatePreview()';
 		console.log(functionSignature);
 
+		let nicknameIsValid = true;
+		let locationIsValid = true;
+		let urlIsValid = true;
+
 		const finisherNicknameInputEl = document.getElementById(
 			'game__finishers__finisher-nickname'
 		);
 
+		const nickNotProvidedStr = 'Anonymous';
+
 		let updatedNickname = finisherNicknameInputEl.value;
 		if (updatedNickname.length < 2) {
-			updatedNickname = 'Anonymous';
+			updatedNickname = nickNotProvidedStr;
+		} else {
+			nicknameIsValid = nickRegex.test(updatedNickname);
+			if (!nicknameIsValid) {
+				updatedNickname = nickNotProvidedStr;
+			}
 		}
 		finishers.finisherInfo.playerNickname = updatedNickname;
 		document.getElementById('finishers-entry__nickname').innerText =
@@ -71,6 +87,11 @@ const finishers = {
 
 		if (updatedFinisherLocation.length < 2) {
 			updatedFinisherLocation = notProvidedStr;
+		} else {
+			locationIsValid = locationRegex.test(updatedFinisherLocation);
+			if (!locationIsValid) {
+				updatedFinisherLocation = notProvidedStr;
+			}
 		}
 		finishers.finisherInfo.playerLocation = updatedFinisherLocation;
 
@@ -82,22 +103,94 @@ const finishers = {
 
 		if (
 			finishers.finisherInfo.playerUrl.length === 0 ||
-			finishers.finisherInfo.playerUrl === 'https://' ||
-			!finishers.playerUrlIsValid
+			finishers.finisherInfo.playerUrl === 'https://'
 		) {
 			displayUrl = notProvidedStr;
 		} else {
-			displayUrl = `<a href="${
-				finishers.finisherInfo.playerUrl
-			}" target="_blank">${shortenDisplayUrl(
-				finishers.finisherInfo.playerUrl,
-				30
-			)}</a>`;
+			urlIsValid = urlRegex.test(finishers.finisherInfo.playerUrl);
+			if (urlIsValid) {
+				displayUrl = `<a href="${
+					finishers.finisherInfo.playerUrl
+				}" target="_blank">${shortenDisplayUrl(
+					finishers.finisherInfo.playerUrl,
+					30
+				)}</a>`;
+			} else {
+				displayUrl = notProvidedStr;
+			}
 		}
 
 		document.getElementById(
 			'finishers-entry__finisher-details'
 		).innerHTML = `Location: <span>${finishers.finisherInfo.playerLocation}</span> &nbsp;&middot;&nbsp; Url: <span>${displayUrl}</span>`;
+
+		if (nicknameIsValid) {
+			finisherNicknameInputEl.classList.remove('input--invalid');
+			document
+				.getElementById('game__finishers__finisher-nickname-validation')
+				.classList.add('validation-bubble--hidden');
+		} else {
+			finisherNicknameInputEl.classList.add('input--invalid');
+			document
+				.getElementById('game__finishers__finisher-nickname-validation')
+				.classList.remove('validation-bubble--hidden');
+		}
+
+		if (locationIsValid) {
+			document
+				.getElementById('game__finishers__finisher-location')
+				.classList.remove('input--invalid');
+			document
+				.getElementById('game__finishers__finisher-location-validation')
+				.classList.add('validation-bubble--hidden');
+		} else {
+			document
+				.getElementById('game__finishers__finisher-location')
+				.classList.add('input--invalid');
+			document
+				.getElementById('game__finishers__finisher-location-validation')
+				.classList.remove('validation-bubble--hidden');
+		}
+
+		if (urlIsValid) {
+			document
+				.getElementById('game__finishers__finisher-url')
+				.classList.remove('input--invalid');
+			document
+				.getElementById('game__finishers__finisher-url-validation')
+				.classList.add('validation-bubble--hidden');
+		} else {
+			document
+				.getElementById('game__finishers__finisher-url')
+				.classList.add('input--invalid');
+			document
+				.getElementById('game__finishers__finisher-url-validation')
+				.classList.remove('validation-bubble--hidden');
+		}
+
+		let formIsValid = false;
+		if (nicknameIsValid && locationIsValid && urlIsValid) {
+			formIsValid = true;
+		}
+
+		finishers.formInputsAreValid = formIsValid;
+
+		// console.log(functionSignature, {
+		// 	nicknameIsValid,
+		// 	locationIsValid,
+		// 	urlIsValid,
+		// 	formIsValid,
+		// });
+
+		if (formIsValid) {
+			document
+				.getElementById('game__finishers__submit-button')
+				.removeAttribute('disabled');
+		} else {
+			document
+				.getElementById('game__finishers__submit-button')
+				.setAttribute('disabled', 'disabled');
+		}
 
 		if (firstRun) {
 			const nowDateObj = new Date();
@@ -154,6 +247,14 @@ const finishers = {
 		console.log(functionSignature);
 
 		event.preventDefault();
+
+		if (!finishers.formInputsAreValid) {
+			console.warn(
+				functionSignature,
+				'Form inputs are not valid, returning early...'
+			);
+			return;
+		}
 
 		// eslint-disable-next-line no-undef
 		// const spToken = process.env.SUBLIGHT_PATROL_TOKEN;

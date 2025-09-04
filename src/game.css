@@ -1006,6 +1006,10 @@
 	padding: 4px 5px;
 }
 
+.game__finishers__form .input--invalid {
+	border-color: #893838;
+}
+
 .game__finishers__form input::selection {
 	background-color: #32bfe6;
 	color: black;
@@ -1019,7 +1023,7 @@
 	width: 203px;
 }
 
-.game__finishers__form button {
+#game__finishers__submit-button {
 	outline: 0;
 	border: 2px outset #194044;
 	background-color: #0f7e9d;
@@ -1032,8 +1036,14 @@
 	cursor: pointer;
 }
 
-.game__finishers__form button:hover, .game__finishers__form button:focus, .game__finishers__form button:active {
+#game__finishers__submit-button:hover, #game__finishers__submit-button:focus, #game__finishers__submit-button:active {
 	background-color: #26a8cb;
+}
+
+#game__finishers__submit-button:disabled, #game__finishers__submit-button:disabled:hover {
+	background-color: #5d5d5d;
+	border-color: #3e3e3e;
+	cursor: default;
 }
 
 .game__finishers__preview h2 {
@@ -1123,17 +1133,32 @@
 }
 
 .validation-bubble {
-	width: 220px;
+	width: 230px;
 	position: absolute;
-	margin-top: 49px;
+	margin-top: 33px;
 	top: 0;
 	background: var(--c-validation-bubble-bg);
-	padding: 10px;
+	padding: 12px 18px;
 	font-size: 12px;
+	font-weight: bold;
+	line-height: 19px;
 	color: #fff;
 	border-radius: 3px;
-	box-shadow: 0 0 3px #00000040;
+	box-shadow: 0 0 5px #00000080;
 	z-index: 31;
+	text-align: left;
+}
+
+.game__finishers__form__field__nickname .validation-bubble {
+	transform: translateX(106px);
+}
+
+.game__finishers__form__field__location .validation-bubble {
+	transform: translateX(162px);
+}
+
+.game__finishers__form__field__url .validation-bubble {
+	transform: translateX(126px);
 }
 
 .validation-bubble:before {
