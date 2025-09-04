@@ -350,7 +350,7 @@ const finishers = {
 			document.getElementById('game__dialog--finisher-form').showModal();
 		} else {
 			document.getElementById('game__dialog--continue__message').innerText =
-				'Thank you! Your plaque is now displayed in the Hall of Finishers.';
+				'Thank you! Your new plaque is now up in the Hall of Finishers! ;)';
 			document.getElementById('game__dialog--continue').showModal();
 
 			document.getElementById(
