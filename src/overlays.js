@@ -31,6 +31,34 @@ export default function overlays() {
 				</div>
 			</div>
 		</div>
+		<div class="game__dialogs" id="game__dialogs">
+			<dialog class="game__dialog game__dialog--red game__dialog--confirm" id="game__dialog--confirm">
+				<form method="dialog">
+					<div id="game__dialog--confirm__message">Are you sure you want to proceed?</div>
+					<div class="game__dialog__buttons">
+						<button type="button" class="sp-button" id="game__dialog--confirm__cancel-button">Cancel</button>
+						<button type="button" class="sp-button" id="game__dialog--confirm__confirm-button"><b>Confirm</b></button>
+					</div>
+				</form>
+			</dialog>
+			<dialog class="game__dialog game__dialog--red game__dialog--finisher-form" id="game__dialog--finisher-form">
+				<form method="dialog">
+					<div id="game__dialog--finisher-form__message"></div>
+					<div class="game__dialog__buttons">
+						<button type="button" class="sp-button" id="game__dialog--finisher-form__try-again-button">I'd like to try again</button>
+						<button type="button" class="sp-button" id="game__dialog--finisher-form__exit-button">Exit finisher form (takes you to the game's main menu)</button>
+					</div>
+				</form>
+			</dialog>
+			<dialog class="game__dialog game__dialog--green game__dialog--continue" id="game__dialog--continue">
+				<form method="dialog">
+					<div id="game__dialog--continue__message"></div>
+					<div class="game__dialog__buttons">
+						<button type="button" class="sp-button" id="game__dialog--continue__continue-button">Continue</button>
+					</div>
+				</form>
+			</dialog>
+		</div>
 		<div class="game__alertsAndWarnings" id="game__alertsAndWarnings">
 			<div 
 				class="game__alertsAndWarnings-alerts" 
@@ -335,7 +363,7 @@ export default function overlays() {
 					<div class="validation-bubble validation-bubble--hidden" id="game__finishers__finisher-url-validation">This field accepts a valid url with a maximum length of 500 characters</div>
 				</div>
 				<div class="game__finishers__button-wrapper">
-					<button type="submit" id="game__finishers__submit-button">Submit</button>
+					<button type="submit" id="game__finishers__submit-button" class="sp-button">Submit</button>
 				</div>
 			</form>
 			<div class="game__finishers__preview" id="game__finishers__preview">

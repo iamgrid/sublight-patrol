@@ -157,6 +157,29 @@ input[type='range']::-ms-thumb {
 	cursor: pointer;
 }
 
+.sp-button {
+	outline: 0;
+	border: 2px outset #194044;
+	background-color: #0f7e9d;
+	color: white;
+	border-radius: 0;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 0.7em;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.sp-button:hover, .sp-button:focus, .sp-button:active {
+	background-color: #26a8cb;
+}
+
+.sp-button:disabled, .sp-button:disabled:hover {
+	background-color: #5d5d5d;
+	border-color: #3e3e3e;
+	cursor: default;
+}
+
 .container {
 	width: 1200px;
 	margin: 0 auto;

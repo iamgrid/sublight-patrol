@@ -51,6 +51,22 @@ const finishers = {
 			.addEventListener('input', () => {
 				finishers.updatePreview();
 			});
+
+		document.getElementById(
+			'game__dialog--finisher-form__try-again-button'
+		).onclick = () => {
+			finishers.closeDialog();
+
+			document.getElementById('game__finishers__finisher-nickname').select();
+		};
+
+		document.getElementById(
+			'game__dialog--finisher-form__exit-button'
+		).onclick = () => {
+			finishers.closeDialog();
+
+			finishers.hide();
+		};
 	},
 	updatePreview(firstRun = false) {
 		const functionSignature = 'finishers.js@updatePreview()';
@@ -242,11 +258,15 @@ const finishers = {
 			)}</span>`;
 		}
 	},
-	postFinisherInfo(event) {
+	async postFinisherInfo(event) {
 		const functionSignature = 'finishers.js@postFinisherInfo()';
 		console.log(functionSignature);
 
 		event.preventDefault();
+
+		console.log(functionSignature, {
+			finisherInfo: finishers.finisherInfo,
+		});
 
 		if (!finishers.formInputsAreValid) {
 			console.warn(
@@ -256,12 +276,90 @@ const finishers = {
 			return;
 		}
 
+		let formSubmissionSuccessful = false;
+		let displayMessage = '';
+
+		const internalErrorMessage =
+			'Submitting your form inputs failed with an internal error. I apologize for the inconvenience!';
+
 		// eslint-disable-next-line no-undef
-		// const spToken = process.env.SUBLIGHT_PATROL_TOKEN;
+		const spToken = process.env.SUBLIGHT_PATROL_TOKEN;
+
+		if (!spToken || spToken.length === 0) {
+			console.error(functionSignature, 'No SP token found, returning early...');
+			displayMessage = internalErrorMessage;
+			formSubmissionSuccessful = false;
+		} else {
+			const postData = {
+				...finishers.finisherInfo,
+			};
+
+			let resultData = null;
+
+			try {
+				const result = await fetch(
+					`${c.rootUrl}/hall-of-finishers/endpoint.php`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'x-sp-token': spToken,
+						},
+						body: JSON.stringify(postData),
+					}
+				);
+
+				resultData = await result.json();
+
+				console.log(functionSignature, { resultData });
+			} catch (error) {
+				console.error(functionSignature, 'fetch failed with error:', { error });
+				displayMessage = internalErrorMessage;
+				formSubmissionSuccessful = false;
+			}
+
+			if (resultData !== null) {
+				if (resultData.success) {
+					displayMessage =
+						'Thank you! Your form inputs have been submitted successfully.';
+					formSubmissionSuccessful = true;
+				} else {
+					let messageFromServer = '[no message was provided]';
+					if (resultData.message && resultData.message.length > 0) {
+						messageFromServer = resultData.message;
+					}
+					displayMessage = `Submitting your form inputs failed with the following error from the server:<br/>${messageFromServer}`;
+					formSubmissionSuccessful = false;
+				}
+			} else {
+				console.error(functionSignature, 'resultData is null');
+				displayMessage = internalErrorMessage;
+				formSubmissionSuccessful = false;
+			}
+		}
 
 		console.log(functionSignature, {
-			finisherInfo: finishers.finisherInfo,
+			formSubmissionSuccessful,
+			displayMessage,
 		});
+
+		if (!formSubmissionSuccessful) {
+			document.getElementById(
+				'game__dialog--finisher-form__message'
+			).innerText = displayMessage;
+			document.getElementById('game__dialog--finisher-form').showModal();
+		} else {
+			document.getElementById('game__dialog--continue__message').innerText =
+				'Thank you! Your plaque is now displayed in the Hall of Finishers.';
+			document.getElementById('game__dialog--continue').showModal();
+
+			document.getElementById(
+				'game__dialog--continue__continue-button'
+			).onclick = () => {
+				finishers.closeDialog();
+				finishers.hide();
+			};
+		}
 	},
 	show() {
 		finishers.updatePreview(true);
@@ -275,6 +373,9 @@ const finishers = {
 		document.getElementById('game__finishers').style.display = 'none';
 
 		controlSchemes.restoreSuspendedLayout();
+	},
+	closeDialog() {
+		document.getElementById('game__dialog--finisher-form').close();
 	},
 };
 

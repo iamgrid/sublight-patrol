@@ -1023,29 +1023,6 @@
 	width: 203px;
 }
 
-#game__finishers__submit-button {
-	outline: 0;
-	border: 2px outset #194044;
-	background-color: #0f7e9d;
-	color: white;
-	border-radius: 0;
-	font-weight: bold;
-	text-transform: uppercase;
-	font-size: 0.7em;
-	padding: 5px 10px;
-	cursor: pointer;
-}
-
-#game__finishers__submit-button:hover, #game__finishers__submit-button:focus, #game__finishers__submit-button:active {
-	background-color: #26a8cb;
-}
-
-#game__finishers__submit-button:disabled, #game__finishers__submit-button:disabled:hover {
-	background-color: #5d5d5d;
-	border-color: #3e3e3e;
-	cursor: default;
-}
-
 .game__finishers__preview h2 {
 	font-size: 0.7em;
 	font-weight: normal;
@@ -1188,4 +1165,27 @@
 	border-top: 5px solid var(--c-validation-bubble-bg);
 	top: unset;
 	bottom: -5px;
+}
+
+.game__dialog {
+	border-color: #a7a7a7;
+	background-color: #363636;
+	color: #a7a7a7;
+	box-shadow: 0 0 20px #00000090;
+}
+
+.game__dialog__buttons {
+	margin-top: 12px;
+}
+
+.game__dialog--red {
+	background-color: #461c1c;
+	color: #ffb4b4;
+	border-color: #ffb4b4;
+}
+
+.game__dialog--green {
+	background-color: #1c4624;
+	color: #b4ffce;
+	border-color: #b4ffce;
 }
