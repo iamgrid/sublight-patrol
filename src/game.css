@@ -985,6 +985,7 @@
 	gap: 6px;
 	/* margin-bottom: 6px; */
 	align-items: center;
+	position: relative;
 }
 
 .game__finishers__form label {
@@ -1119,4 +1120,47 @@
 .finishers-entry__bottom-wrapper {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
+}
+
+.validation-bubble {
+	width: 220px;
+	position: absolute;
+	margin-top: 49px;
+	top: 0;
+	background: var(--c-validation-bubble-bg);
+	padding: 10px;
+	font-size: 12px;
+	color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 0 3px #00000040;
+	z-index: 31;
+}
+
+.validation-bubble:before {
+	content: "";
+	width: 0px;
+	height: 0px;
+	position: absolute;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 5px solid var(--c-validation-bubble-bg);
+	left: 19px;
+	top: -5px;
+}
+
+.validation-bubble--hidden {
+	display: none;
+}
+
+.validation-bubble--show-above-field {
+	top: unset;
+	bottom: 0;
+	margin-bottom: 31px;
+}
+
+.validation-bubble--show-above-field:before {
+	border-bottom: unset;
+	border-top: 5px solid var(--c-validation-bubble-bg);
+	top: unset;
+	bottom: -5px;
 }

@@ -3,6 +3,7 @@
 	--hud-slide-time: 0.5s;
 	--hud-slide-function: cubic-bezier(0, 0.3, 0.7, 1);
 	--hud-fade-time: 0.35s;
+	--c-validation-bubble-bg: #bb3030;
 }
 
 * {

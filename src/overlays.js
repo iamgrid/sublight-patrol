@@ -322,14 +322,17 @@ export default function overlays() {
 				<div class="game__finishers__form__field game__finishers__form__field__nickname">
 					<label for="game__finishers__finisher-nickname">Your Nickname:</label>
 					<input type="text" id="game__finishers__finisher-nickname" name="game__finishers__finisher-nickname" maxlength="40" value="Anonymous" autocomplete="off">
+					<div class="validation-bubble validation-bubble--hidden">This field accepts 40 of the following characters: ASCII letters, numbers, spaces, dots, dashes, underscores, singlequotes and parentheses</div>
 				</div>
 				<div class="game__finishers__form__field game__finishers__form__field__location">
 					<label for="game__finishers__finisher-location">Your Location (optional):</label>
 					<input type="text" id="game__finishers__finisher-location" name="game__finishers__finisher-location" maxlength="80" value="" autocomplete="off" placeholder="London, United Kingdom">
+					<div class="validation-bubble validation-bubble--hidden">This field accepts 80 of the following characters: ASCII letters, numbers, spaces, dots, dashes, underscores, singlequotes and parentheses</div>
 				</div>
 				<div class="game__finishers__form__field game__finishers__form__field__url">
 					<label for="game__finishers__finisher-url">Your Url (optional):</label>
 					<input type="text" id="game__finishers__finisher-url" name="game__finishers__finisher-url" maxlength="500" value="https://" autocomplete="off">
+					<div class="validation-bubble validation-bubble--hidden">This field accepts a valid url with a maximum length of 500 characters</div>
 				</div>
 				<div class="game__finishers__button-wrapper">
 					<button type="submit" id="game__finishers__submit-button">Submit</button>
