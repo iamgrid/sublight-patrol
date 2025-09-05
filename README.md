@@ -20,7 +20,7 @@ To make this same token visible to `hall-of-finishers/endpoint.php` we also need
 ?>
 ```
 
-The project presupposes the presence of a MySQL database with a `finishers` table with the following fieldset:
+The project presupposes the presence of a MySQL database with a `sublight_patrol_finishers` table with the following fieldset:
 
 ```
 CREATE TABLE `sublight_patrol_finishers` (
@@ -43,4 +43,24 @@ ALTER TABLE `sublight_patrol_finishers`
 COMMIT;
 ```
 
-[TODO: Insert instructions for db_connect.inc]
+The MySQL database connection settings go into `hall-of-finishers/db_connect.inc` like so:
+
+```
+<?php
+	$sp_db_host = "%your_host_here%";
+	$sp_db_user = "%your_mysql_user_here%";
+	$sp_db_pass = "%your_mysql_user_password_here%";
+	$sp_db_db = "%your_mysql_db_here%";
+
+	$sp_db = mysqli_connect($sp_db_host, $sp_db_user, $sp_db_pass, $sp_db_db); 
+	if (!$sp_db) { 
+		die('Could not connect to MySQL: ' . mysqli_error()); 
+	}
+
+	mysqli_autocommit($sp_db, FALSE);
+	mysqli_set_charset($sp_db, "utf8");
+
+?>
+```
+
+The `package.json` `start` script (which is used to run the project locally using a WebPack dev server) assumes the presence of a globally installed `cross-env` npm package.
