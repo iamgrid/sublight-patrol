@@ -32,9 +32,9 @@ export default function overlays() {
 			</div>
 		</div>
 		<div class="game__dialogs" id="game__dialogs">
-			<dialog class="game__dialog game__dialog--red game__dialog--confirm" id="game__dialog--confirm">
+			<dialog class="game__dialog game__dialog--confirm game__dialog--yellow" id="game__dialog--confirm">
 				<form method="dialog">
-					<div id="game__dialog--confirm__message">Are you sure you want to proceed?</div>
+					<div id="game__dialog--confirm__message"></div>
 					<div class="game__dialog__buttons">
 						<button type="button" class="sp-button" id="game__dialog--confirm__cancel-button">Cancel</button>
 						<button type="button" class="sp-button" id="game__dialog--confirm__confirm-button"><b>Confirm</b></button>
@@ -50,7 +50,7 @@ export default function overlays() {
 					</div>
 				</form>
 			</dialog>
-			<dialog class="game__dialog game__dialog--green game__dialog--continue" id="game__dialog--continue">
+			<dialog class="game__dialog game__dialog--continue" id="game__dialog--continue">
 				<form method="dialog">
 					<div id="game__dialog--continue__message"></div>
 					<div class="game__dialog__buttons">

@@ -1184,6 +1184,12 @@
 	border-color: #ffb4b4;
 }
 
+.game__dialog--yellow {
+	background-color: #57471e;
+	color: #feffb4;
+	border-color: #feffb4;
+}
+
 .game__dialog--green {
 	background-color: #1c4624;
 	color: #b4ffce;

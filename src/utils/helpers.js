@@ -1377,3 +1377,116 @@ export function shortenDisplayUrl(displayUrl, maxLength = 30) {
 	}
 	return displayUrl;
 }
+
+export function showConfirmationDialog(
+	message,
+	onConfirm,
+	onCancel = null,
+	controlSchemesHandler = null
+) {
+	const functionSignature = 'helpers.js@showConfirmationDialog()';
+
+	function arrowKeyHandler(event) {
+		if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+			if (
+				document.activeElement.id === 'game__dialog--confirm__confirm-button'
+			) {
+				document.getElementById('game__dialog--confirm__cancel-button').focus();
+			} else {
+				document
+					.getElementById('game__dialog--confirm__confirm-button')
+					.focus();
+			}
+		}
+	}
+
+	if (controlSchemesHandler !== null) {
+		controlSchemesHandler.suspendCurrentLayout();
+
+		window.addEventListener('keydown', arrowKeyHandler);
+	} else {
+		console.log(functionSignature, 'controlSchemesHandler is null');
+	}
+
+	document.getElementById('game__dialog--confirm__message').innerText = message;
+
+	document.getElementById('game__dialog--confirm__confirm-button').onclick =
+		() => {
+			onConfirm();
+			document.getElementById('game__dialog--confirm').close();
+			if (controlSchemesHandler !== null) {
+				controlSchemesHandler.restoreSuspendedLayout();
+			}
+		};
+
+	function dialogCancelEventFn() {
+		if (controlSchemesHandler !== null) {
+			controlSchemesHandler.restoreSuspendedLayout();
+
+			window.removeEventListener('keydown', arrowKeyHandler);
+		}
+	}
+
+	function onCancelProper() {
+		if (typeof onCancel === 'function') {
+			onCancel();
+		}
+		document.getElementById('game__dialog--confirm').close();
+		dialogCancelEventFn();
+	}
+
+	document.getElementById('game__dialog--confirm__cancel-button').onclick =
+		onCancelProper;
+
+	// handle dialog cancel event, which is triggered when the user uses the [escape] key
+	document
+		.getElementById('game__dialog--confirm')
+		.addEventListener('cancel', dialogCancelEventFn, { once: true });
+
+	document.getElementById('game__dialog--confirm').showModal();
+	document.getElementById('game__dialog--confirm__confirm-button').focus();
+}
+
+export function showContinueDialog(
+	message,
+	dialogColor = 'yellow',
+	onContinue = null,
+	controlSchemesHandler = null
+) {
+	const functionSignature = 'helpers.js@showContinueDialog()';
+	if (controlSchemesHandler !== null) {
+		controlSchemesHandler.suspendCurrentLayout();
+	} else {
+		console.log(functionSignature, 'controlSchemesHandler is null');
+	}
+
+	document.getElementById('game__dialog--continue__message').innerText =
+		message;
+
+	document
+		.getElementById('game__dialog--continue')
+		.classList.add(`game__dialog--${dialogColor}`);
+	document.getElementById('game__dialog--continue__continue-button').onclick =
+		() => {
+			if (onContinue !== null) {
+				onContinue();
+			}
+			document.getElementById('game__dialog--continue').close();
+			if (controlSchemesHandler !== null) {
+				controlSchemesHandler.restoreSuspendedLayout();
+			}
+		};
+
+	function dialogCancelEventFn() {
+		if (controlSchemesHandler !== null) {
+			controlSchemesHandler.restoreSuspendedLayout();
+		}
+	}
+
+	// handle dialog cancel event, which is triggered when the user uses the [escape] key
+	document
+		.getElementById('game__dialog--continue')
+		.addEventListener('cancel', dialogCancelEventFn, { once: true });
+	document.getElementById('game__dialog--continue').showModal();
+	document.getElementById('game__dialog--continue__continue-button').focus();
+}

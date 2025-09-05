@@ -4,6 +4,7 @@ import {
 	makeName,
 	shortenDisplayUrl,
 	shortenGameVersion,
+	showContinueDialog,
 } from './utils/helpers';
 import controlSchemes from './controlSchemes';
 
@@ -349,16 +350,27 @@ const finishers = {
 			).innerText = displayMessage;
 			document.getElementById('game__dialog--finisher-form').showModal();
 		} else {
-			document.getElementById('game__dialog--continue__message').innerText =
-				'Thank you! Your new plaque is now up in the Hall of Finishers! ;)';
-			document.getElementById('game__dialog--continue').showModal();
+			// document.getElementById('game__dialog--continue__message').innerText =
+			// 	'Thank you! Your new plaque is now up in the Hall of Finishers! ;)';
+			// document
+			// 	.getElementById('game__dialog--continue')
+			// 	.classList.add('game__dialog--green');
+			// document.getElementById('game__dialog--continue').showModal();
 
-			document.getElementById(
-				'game__dialog--continue__continue-button'
-			).onclick = () => {
-				finishers.closeDialog();
-				finishers.hide();
-			};
+			// document.getElementById(
+			// 	'game__dialog--continue__continue-button'
+			// ).onclick = () => {
+			// 	finishers.closeDialog();
+			// 	finishers.hide();
+			// };
+
+			showContinueDialog(
+				'Thank you! Your new plaque is now up in the Hall of Finishers! ;)',
+				'green',
+				() => {
+					finishers.hide();
+				}
+			);
 		}
 	},
 	show() {

@@ -22,6 +22,8 @@ import {
 	alertsAndWarnings,
 	messageLayer,
 	getHasThePlayerCompletedTheGame,
+	showConfirmationDialog,
+	showContinueDialog,
 } from '../utils/helpers';
 import formations from '../behavior/formations';
 import shots from '../shots';
@@ -551,13 +553,22 @@ const story = {
 		}
 
 		if (askForConfirmation) {
-			if (
-				confirm(
-					'Returning to the main menu will reset your progress on the current mission. Continue anyway?'
-				)
-			) {
-				mainMenuProper();
-			}
+			// if (
+			// 	confirm(
+			// 		'Returning to the main menu will reset your progress on the current mission. Continue anyway?'
+			// 	)
+			// ) {
+			// 	mainMenuProper();
+			// }
+
+			showConfirmationDialog(
+				'Returning to the main menu will reset your progress on the current mission. Continue anyway?',
+				() => {
+					mainMenuProper();
+				},
+				null,
+				controlSchemes
+			);
 		} else {
 			mainMenuProper();
 		}
@@ -572,7 +583,13 @@ const story = {
 			goAhead = true;
 		} else {
 			if (!getHasThePlayerMadeProgress(localStoragePlayerProgress)) {
-				alert(story.noProgressYetMessage);
+				// alert(story.noProgressYetMessage);
+				showContinueDialog(
+					story.noProgressYetMessage,
+					'yellow',
+					null,
+					controlSchemes
+				);
 			} else {
 				goAhead = true;
 			}
@@ -606,7 +623,13 @@ const story = {
 			goAhead = true;
 		} else {
 			if (replayDisabled) {
-				alert("I'm sorry, you haven't unlocked that scene yet.");
+				// alert("I'm sorry, you haven't unlocked that scene yet.");
+				showContinueDialog(
+					"I'm sorry, you haven't unlocked that scene yet.",
+					'yellow',
+					null,
+					controlSchemes
+				);
 			} else {
 				goAhead = true;
 			}
@@ -662,13 +685,22 @@ const story = {
 		if (!getHasThePlayerMadeProgress(localStoragePlayerProgress)) {
 			newGameProper();
 		} else {
-			if (
-				confirm(
-					'Starting a new game will erase your previous progress. Continue anyway?'
-				)
-			) {
-				newGameProper();
-			}
+			// if (
+			// 	confirm(
+			// 		'Starting a new game will erase your previous progress. Continue anyway?'
+			// 	)
+			// ) {
+			// 	newGameProper();
+			// }
+
+			showConfirmationDialog(
+				'Starting a new game will erase your previous progress. Continue anyway?',
+				() => {
+					newGameProper();
+				},
+				null,
+				controlSchemes
+			);
 		}
 	},
 
@@ -684,9 +716,21 @@ const story = {
 		);
 
 		if (!relevantPlayerProgress && !hasThePlayerCompletedTheGame) {
-			alert(story.noProgressYetMessage);
+			// alert(story.noProgressYetMessage);
+			showContinueDialog(
+				story.noProgressYetMessage,
+				'yellow',
+				null,
+				controlSchemes
+			);
 		} else if (hasThePlayerCompletedTheGame) {
-			alert(story.playerAlreadyCompletedGameMessage);
+			// alert(story.playerAlreadyCompletedGameMessage);
+			showContinueDialog(
+				story.playerAlreadyCompletedGameMessage,
+				'yellow',
+				null,
+				controlSchemes
+			);
 		} else {
 			story.playerIsReplayingScenes = false;
 
