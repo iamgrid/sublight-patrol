@@ -4,6 +4,7 @@ import {
 	makeName,
 	shortenDisplayUrl,
 	shortenGameVersion,
+	showConfirmationDialog,
 	showContinueDialog,
 } from './utils/helpers';
 import controlSchemes from './controlSchemes';
@@ -17,12 +18,13 @@ const urlRegex = new RegExp(
 const finishers = {
 	handlers: { state: null }, // gets its values in App.js
 	formInputsAreValid: false,
+	defaultNickname: 'Anonymous',
 	finisherInfo: {
 		playerNickname: 'Anonymous',
 		playerLocation: '',
 		playerUrl: '',
 		playerFinishedAtDateTime: '',
-		playerCurrentFighterId: '',
+		playerFinalFighter: '',
 		playerHangarContents: '',
 		gameVersion: '',
 		finisherStars: 0,
@@ -81,15 +83,13 @@ const finishers = {
 			'game__finishers__finisher-nickname'
 		);
 
-		const nickNotProvidedStr = 'Anonymous';
-
 		let updatedNickname = finisherNicknameInputEl.value;
 		if (updatedNickname.length < 2) {
-			updatedNickname = nickNotProvidedStr;
+			updatedNickname = finishers.defaultNickname;
 		} else {
 			nicknameIsValid = nickRegex.test(updatedNickname);
 			if (!nicknameIsValid) {
-				updatedNickname = nickNotProvidedStr;
+				updatedNickname = finishers.defaultNickname;
 			}
 		}
 		finishers.finisherInfo.playerNickname = updatedNickname;
@@ -232,14 +232,13 @@ const finishers = {
 
 			console.log(functionSignature, { currentState });
 
-			finishers.finisherInfo.playerCurrentFighterId =
+			finishers.finisherInfo.playerFinalFighter =
 				currentState.game.playerShips.current;
 			document.getElementById('finishers-entry__final-fighter').innerText =
-				makeName(finishers.finisherInfo.playerCurrentFighterId);
+				makeName(finishers.finisherInfo.playerFinalFighter);
 
-			finishers.finisherInfo.playerHangarContents = JSON.stringify(
-				currentState.game.playerShips.hangarContents
-			);
+			finishers.finisherInfo.playerHangarContents =
+				currentState.game.playerShips.hangarContents.join(', ');
 			// document.getElementById('finishers-entry__final-hangar').innerText =
 			// 	finishers.finisherInfo.playerHangarContents;
 
@@ -259,11 +258,29 @@ const finishers = {
 			)}</span>`;
 		}
 	},
-	async postFinisherInfo(event) {
+	postFinisherInfo(event) {
+		const functionSignature = 'finishers.js@postFinisherInfo()';
+		console.log(functionSignature);
+		event.preventDefault();
+
+		if (finishers.finisherInfo.playerNickname === finishers.defaultNickname) {
+			showConfirmationDialog(
+				`Are you sure you'd like to be listed as "${finishers.defaultNickname}"?`,
+				() => {
+					finishers.postFinisherInfoProper(event);
+				}
+			);
+		} else {
+			finishers.postFinisherInfoProper();
+		}
+	},
+	async postFinisherInfoProper() {
 		const functionSignature = 'finishers.js@postFinisherInfo()';
 		console.log(functionSignature);
 
-		event.preventDefault();
+		if (finishers.finisherInfo.playerUrl === 'https://') {
+			finishers.finisherInfo.playerUrl = '-';
+		}
 
 		console.log(functionSignature, {
 			finisherInfo: finishers.finisherInfo,
@@ -304,7 +321,7 @@ const finishers = {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
-							'x-sp-token': spToken,
+							'X-SP-Token': spToken,
 						},
 						body: JSON.stringify(postData),
 					}
@@ -347,25 +364,11 @@ const finishers = {
 		if (!formSubmissionSuccessful) {
 			document.getElementById(
 				'game__dialog--finisher-form__message'
-			).innerText = displayMessage;
+			).innerHTML = displayMessage;
 			document.getElementById('game__dialog--finisher-form').showModal();
 		} else {
-			// document.getElementById('game__dialog--continue__message').innerText =
-			// 	'Thank you! Your new plaque is now up in the Hall of Finishers! ;)';
-			// document
-			// 	.getElementById('game__dialog--continue')
-			// 	.classList.add('game__dialog--green');
-			// document.getElementById('game__dialog--continue').showModal();
-
-			// document.getElementById(
-			// 	'game__dialog--continue__continue-button'
-			// ).onclick = () => {
-			// 	finishers.closeDialog();
-			// 	finishers.hide();
-			// };
-
 			showContinueDialog(
-				'Thank you! Your new plaque is now up in the Hall of Finishers! ;)',
+				'Thank you! Your new plaque is now up in the <a href="/sublight-patrol/hall-of-finishers/" target="_blank">Hall of Finishers</a>! ;)',
 				'green',
 				() => {
 					finishers.hide();

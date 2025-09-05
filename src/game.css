@@ -1174,24 +1174,29 @@
 	box-shadow: 0 0 20px #00000090;
 }
 
+.game__dialog a {
+	color: white;
+	font-weight: bold;
+}
+
 .game__dialog__buttons {
 	margin-top: 12px;
 }
 
 .game__dialog--red {
-	background-color: #461c1c;
+	background-color: #433030;
 	color: #ffb4b4;
 	border-color: #ffb4b4;
 }
 
 .game__dialog--yellow {
-	background-color: #57471e;
+	background-color: #4f4939;
 	color: #feffb4;
 	border-color: #feffb4;
 }
 
 .game__dialog--green {
-	background-color: #1c4624;
+	background-color: #3e5442;
 	color: #b4ffce;
 	border-color: #b4ffce;
 }

@@ -1382,7 +1382,8 @@ export function showConfirmationDialog(
 	message,
 	onConfirm,
 	onCancel = null,
-	controlSchemesHandler = null
+	controlSchemesHandler = null,
+	addArrowKeyHandler = true
 ) {
 	const functionSignature = 'helpers.js@showConfirmationDialog()';
 
@@ -1402,13 +1403,15 @@ export function showConfirmationDialog(
 
 	if (controlSchemesHandler !== null) {
 		controlSchemesHandler.suspendCurrentLayout();
-
-		window.addEventListener('keydown', arrowKeyHandler);
 	} else {
 		console.log(functionSignature, 'controlSchemesHandler is null');
 	}
 
-	document.getElementById('game__dialog--confirm__message').innerText = message;
+	if (addArrowKeyHandler) {
+		window.addEventListener('keydown', arrowKeyHandler);
+	}
+
+	document.getElementById('game__dialog--confirm__message').innerHTML = message;
 
 	document.getElementById('game__dialog--confirm__confirm-button').onclick =
 		() => {
@@ -1460,7 +1463,7 @@ export function showContinueDialog(
 		console.log(functionSignature, 'controlSchemesHandler is null');
 	}
 
-	document.getElementById('game__dialog--continue__message').innerText =
+	document.getElementById('game__dialog--continue__message').innerHTML =
 		message;
 
 	document

@@ -4,3 +4,4 @@ dist
 /debug.log
 .env
 token.inc
+db_connect.inc
