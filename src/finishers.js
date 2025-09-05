@@ -73,7 +73,7 @@ const finishers = {
 	},
 	updatePreview(firstRun = false) {
 		const functionSignature = 'finishers.js@updatePreview()';
-		console.log(functionSignature);
+		// console.log(functionSignature);
 
 		let nicknameIsValid = true;
 		let locationIsValid = true;
@@ -294,6 +294,17 @@ const finishers = {
 			return;
 		}
 
+		// store user inputs in localStorage for next time
+		localStorage.setItem(
+			'sp-finisher-nickname',
+			finishers.finisherInfo.playerNickname
+		);
+		localStorage.setItem(
+			'sp-finisher-location',
+			finishers.finisherInfo.playerLocation
+		);
+		localStorage.setItem('sp-finisher-url', finishers.finisherInfo.playerUrl);
+
 		let formSubmissionSuccessful = false;
 		let displayMessage = '';
 
@@ -377,6 +388,22 @@ const finishers = {
 		}
 	},
 	show() {
+		const storedNickname = localStorage.getItem('sp-finisher-nickname');
+		if (storedNickname && storedNickname.length >= 2) {
+			document.getElementById('game__finishers__finisher-nickname').value =
+				storedNickname;
+		}
+		const storedLocation = localStorage.getItem('sp-finisher-location');
+		if (storedLocation && storedLocation.length >= 2) {
+			document.getElementById('game__finishers__finisher-location').value =
+				storedLocation;
+		}
+		const storedUrl = localStorage.getItem('sp-finisher-url');
+		if (storedUrl && storedUrl.length >= 2) {
+			document.getElementById('game__finishers__finisher-url').value =
+				storedUrl;
+		}
+
 		finishers.updatePreview(true);
 		document.getElementById('game__finishers').style.display = 'flex';
 
