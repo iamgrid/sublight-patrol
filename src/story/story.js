@@ -30,6 +30,7 @@ import shots from '../shots';
 import gameMenus from '../gameMenus';
 import controlSchemes from '../controlSchemes';
 import audioLibrary from '../audio/audioLibrary';
+import finishers from '../finishers';
 
 const story = {
 	handlers: {
@@ -257,6 +258,8 @@ const story = {
 						timing.modes.play,
 						1000
 					);
+
+					finishers.show();
 
 					plates.fadeOutPlate(25, 7000);
 					timing.setTimeout(

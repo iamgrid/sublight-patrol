@@ -388,6 +388,8 @@ const finishers = {
 		}
 	},
 	show() {
+		window.pixiapp.pauseForFinisherForm();
+
 		const storedNickname = localStorage.getItem('sp-finisher-nickname');
 		if (storedNickname && storedNickname.length >= 2) {
 			document.getElementById('game__finishers__finisher-nickname').value =
@@ -415,6 +417,7 @@ const finishers = {
 		document.getElementById('game__finishers').style.display = 'none';
 
 		controlSchemes.restoreSuspendedLayout();
+		window.pixiapp.unpauseAfterFinisherForm();
 	},
 	closeDialog() {
 		document.getElementById('game__dialog--finisher-form').close();

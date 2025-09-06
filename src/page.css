@@ -525,7 +525,7 @@ footer {
 
 .footer__soundtrack a {
 	display: block;
-	opacity: 0.3;
+	opacity: 0.32;
 	transition: var(--bezier);
 	margin-top: 3px;
 }

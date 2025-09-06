@@ -575,28 +575,61 @@ export default class App extends PIXI.Application {
 	}
 
 	togglePause(dontFadeMatte = '') {
+		const functionSignature = 'App.js@togglePause()';
+
 		const pauseDiv = document.getElementById('game__pause');
 		if (!timing.isPaused()) {
 			gameLog.toggleStatusExpansion.bind(gameLog, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
-			soundEffects.muteUnmuteAllLoops('App.js@togglePause 1', true);
+			soundEffects.muteUnmuteAllLoops(`${functionSignature} - 1`, true);
 			this.pixiState = this.pause;
-			if (dontFadeMatte === '') gameMenus.fadeInMatte('App.js@togglePause 2');
+			if (dontFadeMatte === '')
+				gameMenus.fadeInMatte(`${functionSignature} - 2`);
 			gameMenus.showPauseButtonSet();
 		} else {
 			gameLog.toggleStatusExpansion.bind(gameLog, '', 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			timing.currentMode = timing.modes.play;
-			soundEffects.muteUnmuteAllLoops('App.js@togglePause 3', false);
+			soundEffects.muteUnmuteAllLoops(`${functionSignature} - 3`, false);
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 			gameMenus.clearButtons();
 			if (dontFadeMatte === '') {
-				gameMenus.fadeOutMatte('App.js@togglePause 4');
+				gameMenus.fadeOutMatte(`${functionSignature} - 4`);
 			} else {
 				document.getElementById('game__plates').style.opacity = 1;
 			}
 		}
+	}
+
+	pauseForFinisherForm() {
+		const functionSignature = 'App.js@pauseForFinisherForm()';
+		if (timing.isPaused()) {
+			console.warn(
+				functionSignature,
+				'Cannot pause for finisher form, game is already paused.'
+			);
+			return;
+		}
+
+		timing.currentMode = timing.modes.pause;
+		soundEffects.muteUnmuteAllLoops(`${functionSignature} - 1`, true);
+		this.pixiState = this.pause;
+		this.shownStateOnPause = true;
+	}
+
+	unpauseAfterFinisherForm() {
+		const functionSignature = 'App.js@unpauseAfterFinisherForm()';
+		if (!timing.isPaused()) {
+			console.warn(
+				functionSignature,
+				'Cannot unpause after finisher form, game is currently unpaused.'
+			);
+			return;
+		}
+
+		timing.currentMode = timing.modes.play;
+		this.pixiState = this.play;
 	}
 }
