@@ -369,7 +369,7 @@ footer {
 .footer__text {
 	font-size: 0.8em;
 	line-height: 1.7em;
-	color: #ffffff30;
+	color: #ffffff32;
 	padding-bottom: 0.6em;
 	padding-top: 0.6em;
 	/* correcting for the left padding on footer__home: */
@@ -516,4 +516,28 @@ footer {
 
 .hall-of-finishers-link:hover {
 	color: #d8ad49;
+}
+
+.footer__soundtrack {
+	display: inline-flex;
+	gap: 5px;
+}
+
+.footer__soundtrack a {
+	display: block;
+	opacity: 0.3;
+	transition: var(--bezier);
+	margin-top: 3px;
+}
+
+.footer__soundtrack a svg {
+	display: block;
+}
+
+.footer__soundtrack a:hover {
+	opacity: 0.7;
+}
+
+.footer__icon-link--soundcloud {
+	margin-left: 3px;
 }
