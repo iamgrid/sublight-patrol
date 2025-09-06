@@ -16,8 +16,11 @@
 	</head>
 	<body class="customScroll">
 		<div class="content">
-		<h1 class="plaque-display-case-h1">Sublight Patrol Hall of Finishers</h1>
-		<h3 class="plaque-display-case-h3">Plaque Display Case</h3>
+		<header>
+			<a class="sublight-patrol-logo" title="Return to the game" href="https://iamgrid.co.uk/sublight-patrol"></a>
+			<h1 class="plaque-display-case-h1">Hall of Finishers</h1>
+			<h3 class="plaque-display-case-h3">Plaque Display Case</h3>
+		</header>
 <?php
 	print "<div class=\"entries\">\n";
 	
