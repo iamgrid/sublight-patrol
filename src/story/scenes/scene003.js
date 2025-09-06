@@ -509,7 +509,7 @@ const scene003 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: holdZeroX - 180,
+						behaviorAssignedStationX: holdZeroX - 90,
 						behaviorAssignedStationY: holdZeroY,
 					}
 				);

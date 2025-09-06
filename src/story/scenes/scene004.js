@@ -359,7 +359,7 @@ const scene004 = {
 								whereAndWhen:
 									'briefing received while en route, 17 minutes ago',
 								message:
-									"<p>Here's the rundown of what you're in for:<br/>The Harpax Palace was trying to see Princess Nia and her retinue safe by sneaking them to the Nim system in an unmarked freighter. Turns out the Zangari have a spy in the palace... Or had a spy there I should say. Long story short the freighter is now under their control, burning away from our system at full thrust.</p><p>It's not looking good son. The Zee have their best and brightest covering that vessel. Chasing all of them off solo and disabling the freighter before it reaches the edge of the gravity well and jumps to lightspeed would be too tall an order for most - but maybe not for you.</p>",
+									"<p>Here's the rundown of what you're in for:<br/>The Harpax Palace was trying to see Princess Nia and her retinue safe by sneaking them to the Nim system in an unmarked freighter. Turns out the Zangari have a spy in the palace... Or had a spy there I should say. Long story short, the freighter is now under their control, burning away from our system at full thrust.</p><p>It's not looking good, son. The Zee have their best and brightest covering that vessel. Chasing all of them off solo and disabling the freighter before it reaches the edge of the gravity well and jumps to lightspeed would be a feat beyond most — but perhaps not beyond you.</p>",
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
@@ -615,7 +615,7 @@ const scene004 = {
 						posY: 0,
 					},
 					{
-						behaviorAssignedStationX: holdZeroX - 180,
+						behaviorAssignedStationX: holdZeroX - 130,
 						behaviorAssignedStationY: holdZeroY,
 					}
 				);
