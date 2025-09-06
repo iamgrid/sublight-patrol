@@ -63,4 +63,8 @@ The MySQL database connection settings go into `hall-of-finishers/db_connect.inc
 ?>
 ```
 
+## Dev server and building the project
+
 The `package.json` `start` script (which is used to run the project locally using a WebPack dev server) assumes the presence of a globally installed `cross-env` npm package.
+
+Before running `npm run build` or  `npm run buildWoVersionBump` (which builds the project without bumping the version number in `package.json`) you have to run the following command: `set NODE_OPTIONS=--openssl-legacy-provider`.

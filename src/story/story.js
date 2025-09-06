@@ -259,9 +259,15 @@ const story = {
 						1000
 					);
 
-					finishers.show();
+					timing.setTimeout(
+						() => {
+							finishers.show();
+						},
+						timing.modes.play,
+						6000
+					);
 
-					plates.fadeOutPlate(25, 7000);
+					plates.fadeOutPlate(25, 8000);
 					timing.setTimeout(
 						() => {
 							const functionSignature =
