@@ -1,6 +1,7 @@
 <?php
 	require("db_connect.inc");
 	require("renderPlaque.inc");
+	require("settings.inc");
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +18,7 @@
 	<body class="customScroll">
 		<div class="content">
 		<header>
-			<a class="sublight-patrol-logo" title="Return to the game" href="https://iamgrid.co.uk/sublight-patrol"></a>
+			<a class="sublight-patrol-logo" title="Return to the game" href="<?php echo $gameRootUrl; ?>"></a>
 			<h1 class="plaque-display-case-h1">Hall of Finishers</h1>
 			<h3 class="plaque-display-case-h3">Plaque Display Case</h3>
 		</header>
@@ -38,7 +39,7 @@
 	print "</div>\n";
 ?>
 		<div class="return-link-wrapper">
-			<a class="return-link" href="/sublight-patrol/hall-of-finishers/">Return to the main hall</a>
+			<a class="return-link" href="<?php echo $gameRootUrl; ?>hall-of-finishers/">Return to the main hall</a>
 		</div>
 		</div>
 	</body>

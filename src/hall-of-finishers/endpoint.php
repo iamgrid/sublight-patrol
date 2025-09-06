@@ -1,6 +1,7 @@
 <?php
 	require("token.inc");
 	require("db_connect.inc");
+	require("settings.inc");
 
 	function mres($string){
 		global $sp_db;
@@ -128,8 +129,8 @@
 	}
 
 	header('Content-Type: application/json');
-	// allow CORS
-	header("Access-Control-Allow-Origin: *");
+	// header("Access-Control-Allow-Origin: *"); // allow CORS
+	header("Access-Control-Allow-Origin: " . $websiteRootUrl);
 	header("Access-Control-Allow-Methods: POST, OPTIONS");
 	header("Access-Control-Allow-Headers: Origin, X-SP-Token, Content-Type");
 
