@@ -1,4 +1,4 @@
 <?php
-	$websiteRootUrl = "https://iamgrid.co.uk/";
-	$gameRootUrl = $websiteRootUrl . "sublight-patrol/";
+	$websiteRootUrl = "https://iamgrid.co.uk";
+	$gameRootUrl = $websiteRootUrl . "/sublight-patrol/";
 ?>
