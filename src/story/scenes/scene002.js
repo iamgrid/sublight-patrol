@@ -383,7 +383,7 @@ const scene002 = {
 								speaker: 'Ensign Devon',
 								whereAndWhen: 'here and now',
 								message:
-									'<p>Wait, is that some new kind of Zee fighter? Type 4?!</p><p>... Hmm, even though the emitters are clearly in place it looks to be lacking shields. Regardless, I do not like the look of that thing one bit Lieutenant, be careful!</p>',
+									'<p>Wait, is that some new kind of Zee fighter? Type 4?!</p><p>... Hmm, even though the emitters are clearly in place, it looks to be lacking shields. Regardless, I do not like the look of that thing one bit Lieutenant, be careful!</p>',
 							},
 						]);
 					},

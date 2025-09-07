@@ -17,8 +17,8 @@ const scene001 = {
 		title: 'Mission 1 of 4: Looters on Aisle 3',
 	},
 	playVolume: {
-		minX: -2000,
-		maxX: 4000,
+		minX: -3000,
+		maxX: 6000,
 		minY: -4000,
 		maxY: 4000,
 		softBoundary: 300,
@@ -75,11 +75,19 @@ const scene001 = {
 			groupId: sc.zangariGroupNames.argoon,
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
-			behaviorAllowedToFlee: false,
+			behaviorAllowedToFlee: true,
 			behaviorAssignedGoal: c.possibleGoals.holdStation,
 		},
 		argoon_3: {
 			id: 'argoon_3',
+			groupId: sc.zangariGroupNames.argoon,
+			type: 'zangari_fighter_type_1',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		argoon_4: {
+			id: 'argoon_4',
 			groupId: sc.zangariGroupNames.argoon,
 			type: 'zangari_fighter_type_1',
 			playerRelation: 'hostile',
@@ -96,6 +104,14 @@ const scene001 = {
 		},
 		mylok_2: {
 			id: 'mylok_2',
+			groupId: sc.zangariGroupNames.mylok,
+			type: 'zangari_fighter_type_2',
+			playerRelation: 'hostile',
+			behaviorAllowedToFlee: true,
+			behaviorAssignedGoal: c.possibleGoals.holdStation,
+		},
+		mylok_3: {
+			id: 'mylok_3',
 			groupId: sc.zangariGroupNames.mylok,
 			type: 'zangari_fighter_type_2',
 			playerRelation: 'hostile',
@@ -362,14 +378,14 @@ const scene001 = {
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
 								message:
-									'<p>Good morning Lieutenant!</p><p>The Harpax Ministry of Health has tasked us with recovering a case of indispensable medicine from Container Yard H17 which has recently been overrun by the Zangari.</p>',
+									'<p>Good morning, Lieutenant!</p><p>The Harpax Ministry of Health has tasked us with recovering a case of indispensable medicine from Container Yard H17, which has recently been overrun by the Zangari.</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 53 minutes ago',
 								message:
-									'<p>Your task is to chase off the enemy fighters present while making sure the remaining containers stay in one piece until our shuttle can arrive to pick up the goods.</p><p>Good hunting!</p>',
+									'<p>Your job for today: Chase off the enemy fighters present, while making sure the remaining containers stay intact until our shuttle can arrive to pick up the goods.</p><p>Good hunting!</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,
@@ -411,7 +427,7 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.argoon_1,
 					{
-						posX: 3900,
+						posX: 5900,
 						posY: 170,
 					},
 					{
@@ -423,7 +439,7 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.argoon_2,
 					{
-						posX: 3900,
+						posX: 5900,
 						posY: 0,
 					},
 					{
@@ -435,12 +451,23 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.argoon_3,
 					{
-						posX: 3900,
+						posX: 5900,
 						posY: 220,
 					},
 					{
 						behaviorAssignedStationX: 2240,
 						behaviorAssignedStationY: 320,
+					}
+				);
+				entities.spawn(
+					scene001.entities.argoon_4,
+					{
+						posX: 5900,
+						posY: 270,
+					},
+					{
+						behaviorAssignedStationX: 2300,
+						behaviorAssignedStationY: 230,
 					}
 				);
 			},
@@ -476,7 +503,7 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.mylok_1,
 					{
-						posX: 3900,
+						posX: 5900,
 						posY: 170,
 					},
 					{
@@ -488,12 +515,23 @@ const scene001 = {
 				entities.spawn(
 					scene001.entities.mylok_2,
 					{
-						posX: 3900,
+						posX: 5900,
 						posY: 0,
 					},
 					{
 						behaviorAssignedStationX: 2240,
 						behaviorAssignedStationY: 130,
+					}
+				);
+				entities.spawn(
+					scene001.entities.mylok_3,
+					{
+						posX: 5900,
+						posY: 220,
+					},
+					{
+						behaviorAssignedStationX: 2240,
+						behaviorAssignedStationY: 320,
 					}
 				);
 			},

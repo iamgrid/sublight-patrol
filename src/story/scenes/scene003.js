@@ -315,14 +315,14 @@ const scene003 = {
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 1 hour and 27 minutes ago',
 								message:
-									'<p>Have a seat Lieutenant.</p><p>The recording of your debrief regarding your encounter with the Type 4 Zangari fighter prototype has been making quite the splash with Command.</p><p>Let me tell you, if the Zee figure out the right power distribution to get the shields and all four cannons working in tandem on that kitten... Our whole operation here might be in serious jeopardy.</p>',
+									'<p>Have a seat, Lieutenant.</p><p>The recording of your debrief regarding your encounter with the Type 4 Zangari fighter prototype has been making quite the splash with Command.</p><p>Let me tell you, if the Zee figure out the right power distribution to get the shields and all four cannons working in tandem on that kitten... Our whole operation here might be in serious jeopardy.</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
 								speaker: 'Commander Harris',
 								whereAndWhen: 'pre-flight briefing, 1 hour and 27 minutes ago',
 								message:
-									'<p>Intelligence got lucky and was able to locate another T4 prototype overnighting at a moderately defended fuel depot. You my friend are going in to disable that fighter so we can purloin it and provide Engineering with the opportunity for a proper look-see.</p><p>Be advised though, the asset is reporting that the Zee went with a shields and two powered cannons combo on this T4. Remember, you need to keep those shields mostly drained for your EMP to be able to do its thing.</p><p>Happy hunting Lieutenant!</p>',
+									'<p>Intelligence got lucky and was able to locate another T4 prototype overnighting at a moderately defended fuel depot. You, my friend, are going in to disable that fighter so we can purloin it and provide Engineering with the opportunity for a proper look-see.</p><p>Be advised though, the asset is reporting that the Zee went with a shields and two powered cannons combo on this T4. Remember, you need to keep those shields mostly drained for your EMP to be able to do its thing.</p><p>Happy hunting Lieutenant!</p>',
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.system,

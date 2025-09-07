@@ -324,7 +324,7 @@ const pieces = {
 		immutable: {
 			typeShorthand: 'Z1',
 			model: '/ships/ZangariFighterType1',
-			maxHullStrength: 75,
+			maxHullStrength: 100,
 			hasShields: false,
 			maxSystemStrength: 250,
 			thrusters: {
@@ -335,8 +335,8 @@ const pieces = {
 			hasEMP: false,
 			hasCannons: true,
 			colors: c.groups.zangari.groupId,
-			cannonPower: 4,
-			cannonFiringSpeed: 0.32,
+			cannonPower: 5,
+			cannonFiringSpeed: 0.3,
 			cannonShots: 16,
 			cannonCooldown: 1,
 			cannonSoundEffect: audioLibrary.library.soundEffects.laser_type2.id,

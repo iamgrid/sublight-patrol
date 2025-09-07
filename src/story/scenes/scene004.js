@@ -359,7 +359,7 @@ const scene004 = {
 								whereAndWhen:
 									'briefing received while en route, 17 minutes ago',
 								message:
-									"<p>Here's the rundown of what you're in for:<br/>The Harpax Palace was trying to see Princess Nia and her retinue safe by sneaking them to the Nim system in an unmarked freighter. Turns out the Zangari have a spy in the palace... Or had a spy there I should say. Long story short, the freighter is now under their control, burning away from our system at full thrust.</p><p>It's not looking good, son. The Zee have their best and brightest covering that vessel. Chasing all of them off solo and disabling the freighter before it reaches the edge of the gravity well and jumps to lightspeed would be a feat beyond most — but perhaps not beyond you.</p>",
+									"<p>Here's what you're in for:<br/>The Harpax Palace was trying to see Princess Nia and her retinue safe by sneaking them to the Nim system in an unmarked freighter. Turns out the Zangari have a spy in the palace... Or had a spy there I should say. Long story short, the freighter is now under their control, burning away from our system at full thrust.</p><p>It's not looking good, son. The Zee have their best and brightest covering that vessel. Chasing all of them off solo and disabling the freighter before it reaches the edge of the gravity well and jumps to lightspeed would be a feat beyond most—but perhaps not beyond you.</p>",
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
@@ -367,7 +367,7 @@ const scene004 = {
 								whereAndWhen:
 									'briefing received while en route, 17 minutes ago',
 								message:
-									"<p>One bit of good news: to give you an edge Command made the call to temporarily add the Zangari T4 you helped pilfer to your mobile hangar complement.</p><p>Engineering made quick work of the power systems issue, but as you can imagine, they're also quite protective of their shiny new green murder kitten... Could turn our understanding of starship design on its head and all that nonsense... As I told the Head of Engineering, fretting about a piece of machinery when the life of a future head of state is on the line...<br/>Ok, I really ought to get out of your ear right now.</p>",
+									"<p>One bit of good news: to give you an edge, Command made the call to temporarily add the Zangari T4 you helped pilfer to your mobile hangar complement.</p><p>Engineering made quick work of the power systems issue, but as you can imagine, they're also quite protective of their shiny new green murder kitten... Could turn our understanding of starship design on its head and all that nonsense... As I told the Head of Engineering, fretting about a piece of machinery when the life of a future head of state is on the line...<br/>Ok, I really ought to get out of your ear right now.</p>",
 							},
 							{
 								messageType: messageLayer.MESSAGE_TYPE_IDS.dialog,
@@ -375,7 +375,7 @@ const scene004 = {
 								whereAndWhen:
 									'briefing received while en route, 17 minutes ago',
 								message:
-									"<p>Ahem, Godspeed Captain! I don't have to tell you how much the Princess means to people around here. I trust that you'll see her home safe! Harris out.</p>",
+									"<p>Ahem, Godspeed, Captain! I don't have to tell you how much the Princess means to people around here. I trust that you'll see her home safe! Harris out.</p>",
 							},
 						]);
 					},
@@ -663,7 +663,7 @@ const scene004 = {
 								speaker: 'Ensign Devon (piloting shuttle HTran 091)',
 								whereAndWhen: 'here and now',
 								message:
-									"<p>That was quite a show Captain!</p><p>Gold group made it here just now, they sound quite disappointed to have missed out on all the action! Still, I'm glad they're here to make sure all of us get home safe.</p><p>Wanna take point on the escort?</p>",
+									"<p>That was quite a show, Captain!</p><p>Gold group made it here just now, they sound quite disappointed to have missed out on all the action! Still, I'm glad they're here to make sure all of us get home safe.</p><p>Wanna take point on the escort?</p>",
 							},
 						]);
 					},
