@@ -1,6 +1,6 @@
 # Sublight Patrol
 
-A side-scrolling space shooter browser game built with JavaScript and WebGL (using PixiJS)
+An open source and noncommercial side-scrolling space shooter browser game built with JavaScript and WebGL (using PixiJS)
 
 ## Live version
 Sublight Patrol is live at https://iamgrid.co.uk/sublight-patrol/ .
