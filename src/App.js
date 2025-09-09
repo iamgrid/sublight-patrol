@@ -80,6 +80,86 @@ export default class App extends PIXI.Application {
 			this.playVolume
 		);
 
+		this.transitionsInProgress = {
+			states: {
+				scene: false,
+				missionFailed: false,
+				playerShipDestroyedRespawning: false,
+				playerShipDestroyedGameOver: false,
+			},
+			functions: {
+				registerTransition: (type) => {
+					const functionSignature =
+						'App.js@transitionsInProgress.registerTransition()';
+
+					console.log(functionSignature, 'type:', type);
+
+					if (this.transitionsInProgress.states[type] === undefined) {
+						console.error(
+							functionSignature,
+							'Cannot register transition, type not recognized:',
+							type
+						);
+						return;
+					}
+
+					if (this.transitionsInProgress.states[type] === true) {
+						console.warn(
+							functionSignature,
+							`Transition of type "${type}" is already in progress, returning early...`
+						);
+						return;
+					}
+
+					this.transitionsInProgress.states[type] = true;
+
+					console.log(
+						functionSignature,
+						'states:',
+						this.transitionsInProgress.states
+					);
+				},
+				transitionComplete: (type) => {
+					const functionSignature =
+						'App.js@transitionsInProgress.transitionComplete()';
+
+					console.log(functionSignature, 'type:', type);
+
+					if (this.transitionsInProgress.states[type] === undefined) {
+						console.error(
+							functionSignature,
+							'Cannot complete transition, type not recognized:',
+							type
+						);
+						return;
+					}
+					this.transitionsInProgress.states[type] = false;
+
+					console.log(
+						functionSignature,
+						'states:',
+						this.transitionsInProgress.states
+					);
+				},
+				getIsATransitionAlreadyInProgress: () => {
+					const functionSignature =
+						'App.js@transitionsInProgress.getIsATransitionAlreadyInProgress()';
+
+					console.log(
+						functionSignature,
+						'states:',
+						this.transitionsInProgress.states
+					);
+
+					const returnValue = Object.values(
+						this.transitionsInProgress.states
+					).includes(true);
+					console.log(functionSignature, { returnValue });
+					return returnValue;
+				},
+			},
+		};
+
 		const [state, dispatch] = useReducer(
 			mainReducer,
 			JSON.parse(JSON.stringify(initialGameState))
@@ -241,6 +321,7 @@ export default class App extends PIXI.Application {
 			playVolume: this.playVolume,
 			playVolumeBoundaries: this.playVolumeBoundaries,
 			frameZero: this.frameZero,
+			transitionsInProgress: this.transitionsInProgress,
 			hudShouldBeShowing: this.hudShouldBeShowing,
 			activeKeyboardLayout: this.activeKeyboardLayout,
 			hud: this.hud,
@@ -273,6 +354,7 @@ export default class App extends PIXI.Application {
 			state: this.gameState,
 			stage: this.mainStage,
 			pixiHUD: this.pixiHUD,
+			transitionsInProgress: this.transitionsInProgress,
 			entityWasDespawned: this.entityWasDespawned,
 			refocusCameraOnTL: this.refocusCameraOnTL.bind(this),
 		};
@@ -539,7 +621,18 @@ export default class App extends PIXI.Application {
 		timing.tick(timing.modes.play, this.ticker.deltaMS);
 	}
 
-	refocusCameraOnTL(cameraTLX, cameraTLY, delta, inSlipStream) {
+	refocusCameraOnTL(cameraTLX, cameraTLY, delta, inSlipStream, log = false) {
+		const functionSignature = 'App.js@refocusCameraOnTL()';
+
+		if (log) {
+			console.log(functionSignature, {
+				cameraTLX,
+				cameraTLY,
+				delta,
+				inSlipStream,
+			});
+		}
+
 		this.mainStage.position.set(cameraTLX, cameraTLY);
 
 		// starscape movement
@@ -563,6 +656,7 @@ export default class App extends PIXI.Application {
 			console.info('stageEntities:', entities.stageEntities);
 			console.info('stageShots:', shots.stageShots);
 			console.info('timing:', timing);
+			console.info('transitionsInProgress:', this.transitionsInProgress);
 			// console.info('playVolume:', this.playVolume);
 			this.shownStateOnPause = true;
 		}

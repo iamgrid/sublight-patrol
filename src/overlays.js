@@ -308,8 +308,8 @@ export default function overlays() {
 				<div class="game__intro-plate__small-text" id="game__intro-plate-1__small-text">presents</div>
 			</div>
 			<div class="game__intro-plate" id="game__intro-plate-2">
-				<div class="game__intro-plate__small-text" id="game__intro-plate-2__small-text">a</div>
-				<div class="game__intro-plate__big-text" id="game__intro-plate-2__big-text">side-scrolling<br>space shooter<br>browser game</div>
+				<div class="game__intro-plate__small-text" id="game__intro-plate-2__small-text">an</div>
+				<div class="game__intro-plate__big-text" id="game__intro-plate-2__big-text">open source and noncommercial<br>side-scrolling space shooter<br>browser game</div>
 			</div>
 			<div class="game__intro-plate" id="game__intro-plate-3">
 				<div class="game__intro-plate__small-text" id="game__intro-plate-3__small-text-1">built in</div>

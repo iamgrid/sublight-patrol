@@ -1234,15 +1234,14 @@ export function readPlayerProgress(validate = false) {
 			latestLocalStorageVersionDateObj.toUTCString()
 		);
 
+		let storedDataIsOutOfDate = false;
+
 		if (dataTSDateObj < latestLocalStorageVersionDateObj) {
 			console.error(
 				`${functionSignature} - dataTS is older than the latest local storage version date.`
 			);
 			playerProgressIsValid = false;
-
-			alert(
-				"According to your browser's storage, you have played Sublight Patrol before, but your progress can not be taken into account as it happened in an outdated version of the game. I apologize for making you start over!"
-			);
+			storedDataIsOutOfDate = true;
 		}
 
 		if (typeof parsedPlayerProgress.bestSceneId !== 'string') {
@@ -1322,6 +1321,18 @@ export function readPlayerProgress(validate = false) {
 			console.error(
 				`${functionSignature} - Local storage player progress is invalid our out of date, alerting player and returning null.`
 			);
+
+			console.error(functionSignature, { parsedPlayerProgress });
+
+			if (storedDataIsOutOfDate) {
+				alert(
+					"According to your browser's storage, you have played Sublight Patrol before, but your progress can not be taken into account as it happened in an out of date version of the game. I apologize for making you start over!"
+				);
+			} else {
+				alert(
+					"According to your browser's storage, you have played Sublight Patrol before, but your progress can not be taken into account as the object storing it looks to have been corrupted. I apologize for making you start over!"
+				);
+			}
 
 			return null;
 		} else {

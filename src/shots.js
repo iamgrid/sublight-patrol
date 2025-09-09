@@ -467,11 +467,6 @@ const shots = {
 				break;
 			}
 			case c.damageTypes.destruction: {
-				let effect = soundEffects.library.misc_explosion.id;
-				if (fancyEffects) {
-					effect = soundEffects.library.ship_explosion.id;
-				}
-
 				// despawn only runs after the blowUp animation finished,
 				// so we have to unregister the entity from some modules right now
 				shields.removeEntity(entityId);
@@ -482,6 +477,10 @@ const shots = {
 				}
 				soundEffects.removeAllSoundInstancesForEntity(entityId);
 
+				let effect = soundEffects.library.misc_explosion.id;
+				if (fancyEffects) {
+					effect = soundEffects.library.ship_explosion.id;
+				}
 				soundEffects.playOnce(entityId, effect);
 
 				if (entityStore !== 'player') {

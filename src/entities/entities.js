@@ -25,6 +25,7 @@ const entities = {
 		state: null,
 		stage: null,
 		pixiHUD: null,
+		transitionsInProgress: null,
 		entityWasDespawned: null,
 		refocusCameraOnTL: null,
 	}, // gets its values in App.js
@@ -135,7 +136,13 @@ const entities = {
 
 	spawn(typeOrEntityObject, pos, incomingProps = {}, storeIn = 'targetable') {
 		const functionSignature = 'entities.js@spawn()';
-		// console.log(functionSignature, typeOrEntityObject, pos, incomingProps, storeIn);
+		console.log(
+			functionSignature,
+			typeOrEntityObject,
+			pos,
+			incomingProps,
+			storeIn
+		);
 
 		if (typeOrEntityObject === undefined || pos === undefined) {
 			console.error(
@@ -398,17 +405,34 @@ const entities = {
 
 	playerShipDestruction() {
 		const functionSignature = 'entities.js@playerShipDestruction()';
-		let currentState = entities.handlers.state();
-		const shipsInHangar = currentState.game.playerShips.hangarContents.length;
+		console.log(functionSignature);
+
+		if (
+			entities.handlers.transitionsInProgress.functions.getIsATransitionAlreadyInProgress()
+		) {
+			console.warn(
+				functionSignature,
+				'Another tracked transition is already in progress, returning early...'
+			);
+			return;
+		}
 
 		// when playerShipDestruction runs, the mainReducer REMOVE_ENTITY action has already
 		// taken care of updating the players hangar and assigning the next fighter to the player
 		// if one was available
+
+		let currentState = entities.handlers.state();
+		const shipsInHangar = currentState.game.playerShips.hangarContents.length;
+
 		const nextShip = currentState.game.playerShips.current;
 		const nextSuffix = currentState.game.playerShips.currentIdSuffix;
 
 		if (shipsInHangar < 1 && nextShip === null) {
-			console.log('Game over');
+			console.log(functionSignature, '%c Game over', 'color: red');
+
+			entities.handlers.transitionsInProgress.functions.registerTransition(
+				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedGameOver
+			);
 
 			plates.fadeInMatte(25, 0);
 			timing.toggleEntityMovement(false, `${functionSignature} 1`, 1000);
@@ -430,7 +454,15 @@ const entities = {
 				8500
 			);
 		} else {
-			console.log(functionSignature, 'Spawn player with their next ship');
+			console.log(
+				functionSignature,
+				'%c Spawn player with their next ship',
+				'color: green'
+			);
+
+			entities.handlers.transitionsInProgress.functions.registerTransition(
+				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedRespawning
+			);
 
 			const newPlayerId = c.playerIdPartial + nextSuffix;
 			const newPlayerShipType = nextShip;
@@ -445,6 +477,13 @@ const entities = {
 				// if the current scene has a player starting position, use it
 				newPlayerShipX = currentState.game.currentScenePlayerStartingPositionX;
 				newPlayerShipY = currentState.game.currentScenePlayerStartingPositionY;
+
+				console.log(
+					functionSignature,
+					'Using current scene starting position:',
+					newPlayerShipX,
+					newPlayerShipY
+				);
 			} else {
 				const destroyedPlayerPosition = getPosition(
 					'destroyed_player',
@@ -452,8 +491,14 @@ const entities = {
 				);
 				newPlayerShipX = destroyedPlayerPosition[0];
 				newPlayerShipY = destroyedPlayerPosition[1];
+
+				console.log(
+					functionSignature,
+					'Using destroyed player last position:',
+					newPlayerShipX,
+					newPlayerShipY
+				);
 			}
-			3;
 
 			plates.fadeInMatte(25, 0);
 			timing.toggleEntityMovement(false, `${functionSignature} 3`, 1000);
@@ -505,7 +550,13 @@ const entities = {
 
 			console.log(functionSignature, 'cameraTL:', cameraTL);
 
-			entities.handlers.refocusCameraOnTL(cameraTL[0], cameraTL[1], 0, false);
+			entities.handlers.refocusCameraOnTL(
+				cameraTL[0],
+				cameraTL[1],
+				0,
+				false,
+				true
+			);
 
 			plates.fadeOutMatte(25, 5000);
 			timing.toggleEntityMovement(true, `${functionSignature} 5`, 4300);
@@ -521,6 +572,10 @@ const entities = {
 				() => {
 					shots.registerEntityCannons(newPlayerId);
 					hud.reInitPixiHUD(newPlayerId);
+
+					entities.handlers.transitionsInProgress.functions.transitionComplete(
+						c.TRACKED_TRANSITION_TYPES.playerShipDestroyedRespawning
+					);
 				},
 				timing.modes.play,
 				3000,

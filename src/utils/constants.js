@@ -39,6 +39,12 @@ const c = {
 		REVERT_PLAYER_PROGRESS_TO_DEFAULTS: 'REVERT_PLAYER_PROGRESS_TO_DEFAULTS',
 		GAME_COMPLETED: 'GAME_COMPLETED',
 	},
+	TRACKED_TRANSITION_TYPES: {
+		scene: 'scene',
+		missionFailed: 'missionFailed',
+		playerShipDestroyedRespawning: 'playerShipDestroyedRespawning',
+		playerShipDestroyedGameOver: 'playerShipDestroyedGameOver',
+	},
 	repeatMainMenuMusicEveryXSecs: 150,
 	gameCanvas: {
 		width: 1200,

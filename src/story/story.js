@@ -40,6 +40,7 @@ const story = {
 		playVolume: null,
 		playVolumeBoundaries: null,
 		frameZero: null,
+		transitionsInProgress: null,
 		hudShouldBeShowing: null,
 		activeKeyboardLayout: null,
 		hud: null,
@@ -98,8 +99,8 @@ const story = {
 	],
 	currentScene: null,
 	currentSceneBeat: null,
-	sceneTransitionIsInProgress: false,
-	missionFailureWasTriggered: false,
+	// sceneTransitionIsInProgress: false,
+	// missionFailureWasTriggered: false,
 	playerIsReplayingScenes: false,
 	playerReachedTheFinalStoryBeatOfTheFinalGameplayScene: false,
 	currentObjectives: {
@@ -317,8 +318,20 @@ const story = {
 				'pairedTrack set to:',
 				story.handlers.pairedTrack.actual
 			);
-			story.sceneTransitionIsInProgress = false;
-			story.missionFailureWasTriggered = false;
+			// story.sceneTransitionIsInProgress = false;
+			story.handlers.transitionsInProgress.functions.transitionComplete(
+				c.TRACKED_TRANSITION_TYPES.scene
+			);
+			story.handlers.transitionsInProgress.functions.transitionComplete(
+				c.TRACKED_TRANSITION_TYPES.missionFailed
+			);
+			story.handlers.transitionsInProgress.functions.transitionComplete(
+				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedRespawning
+			);
+			story.handlers.transitionsInProgress.functions.transitionComplete(
+				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedGameOver
+			);
+			// story.missionFailureWasTriggered = false;
 
 			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
 				const localStoragePlayerProgress = readPlayerProgress(true);
@@ -406,7 +419,9 @@ const story = {
 		if (c.debug.sequentialEvents) console.log(currentSceneObject);
 
 		if (!currentSceneBeatObj.isTheFinalGameplayBeat) {
-			story.sceneTransitionIsInProgress = false;
+			story.handlers.transitionsInProgress.functions.transitionComplete(
+				c.TRACKED_TRANSITION_TYPES.scene
+			);
 		}
 
 		if (cleanUpNeeded) {
@@ -1025,8 +1040,22 @@ const story = {
 
 		story.checkBeatCompletion();
 
-		if (failState && !story.missionFailureWasTriggered) {
-			story.missionFailureWasTriggered = true;
+		if (failState) {
+			if (
+				story.handlers.transitionsInProgress.functions.getIsATransitionAlreadyInProgress()
+			) {
+				console.warn(
+					functionSignature,
+					'Failstate is true, but a tracked transition is already in progress, returning early...'
+				);
+				return;
+			}
+
+			// story.missionFailureWasTriggered = true;
+			story.handlers.transitionsInProgress.functions.registerTransition(
+				c.TRACKED_TRANSITION_TYPES.missionFailed
+			);
+			music.fadeOutPlayingTrack();
 			if (c.debug.objectives)
 				console.log('MISSION FAILED!', story.currentObjectives);
 			plates.loadPlate('mission_failed', -1, 'Mission failed');
@@ -1154,15 +1183,21 @@ const story = {
 			} else {
 				// advance to the next scene
 
-				if (story.sceneTransitionIsInProgress) {
+				// if (story.sceneTransitionIsInProgress) {
+				if (
+					story.handlers.transitionsInProgress.functions.getIsATransitionAlreadyInProgress()
+				) {
 					console.warn(
 						functionSignature,
-						'gameplay scene transition is already in progress, returning early'
+						'A tracked transition is already in progress, returning early...'
 					);
 					return;
 				}
 
-				story.sceneTransitionIsInProgress = true;
+				// story.sceneTransitionIsInProgress = true;
+				story.handlers.transitionsInProgress.functions.registerTransition(
+					c.TRACKED_TRANSITION_TYPES.scene
+				);
 
 				music.fadeOutPlayingTrack();
 
