@@ -45,6 +45,7 @@ const story = {
 		activeKeyboardLayout: null,
 		hud: null,
 		pairedTrack: null,
+		resetCameraCurrentShift: null,
 	}, // gets its values in App.js
 	themeMusicInterval: null,
 	sceneList: [
@@ -331,7 +332,7 @@ const story = {
 			story.handlers.transitionsInProgress.functions.transitionComplete(
 				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedGameOver
 			);
-			// story.missionFailureWasTriggered = false;
+			story.handlers.resetCameraCurrentShift();
 
 			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
 				const localStoragePlayerProgress = readPlayerProgress(true);

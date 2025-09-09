@@ -81,6 +81,8 @@ const hud = {
 	update(targeting, playerShips, allEntities, positions, playerId) {
 		// const functionSignature = 'hud.js@update()';
 
+		// console.log(functionSignature, 'playerId:', playerId);
+
 		// player ships
 
 		const rocketEmoji = '&#x1F680';

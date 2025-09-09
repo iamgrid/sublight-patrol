@@ -28,6 +28,7 @@ const entities = {
 		transitionsInProgress: null,
 		entityWasDespawned: null,
 		refocusCameraOnTL: null,
+		resetCameraCurrentShift: null,
 	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
@@ -320,6 +321,8 @@ const entities = {
 
 		this.stageEntities[newEntity.id] = stageEntity;
 
+		console.log(functionSignature, { positionStore, positionArray });
+
 		// adding entity to state
 		entities.handlers.dispatch({
 			type: c.actions.ADD_ENTITY,
@@ -529,32 +532,33 @@ const entities = {
 						},
 						'player'
 					);
+
+					// camera needs to be repositioned to the new player craft
+
+					console.log(
+						functionSignature,
+						"Repositioning camera to the player's new craft"
+					);
+
+					const cameraTL = getCameraTLBasedOnPlayerPosition(
+						newPlayerShipX,
+						newPlayerShipY,
+						1
+					);
+
+					console.log(functionSignature, 'cameraTL:', cameraTL);
+
+					entities.handlers.refocusCameraOnTL(
+						cameraTL[0],
+						cameraTL[1],
+						0,
+						false
+					);
+
+					entities.handlers.resetCameraCurrentShift();
 				},
 				timing.modes.play,
 				1100,
-				true
-			);
-
-			// camera needs to be repositioned to the new player craft
-
-			console.log(
-				functionSignature,
-				"Repositioning camera to the player's new craft"
-			);
-
-			const cameraTL = getCameraTLBasedOnPlayerPosition(
-				newPlayerShipX,
-				newPlayerShipY,
-				1
-			);
-
-			console.log(functionSignature, 'cameraTL:', cameraTL);
-
-			entities.handlers.refocusCameraOnTL(
-				cameraTL[0],
-				cameraTL[1],
-				0,
-				false,
 				true
 			);
 

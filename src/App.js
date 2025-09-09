@@ -199,6 +199,8 @@ export default class App extends PIXI.Application {
 			currentStoryBeatLayout: null,
 		};
 
+		this.currentPlayerId = null;
+
 		this.init();
 	}
 
@@ -326,6 +328,7 @@ export default class App extends PIXI.Application {
 			activeKeyboardLayout: this.activeKeyboardLayout,
 			hud: this.hud,
 			pairedTrack: this.pairedTrack,
+			resetCameraCurrentShift: this.resetCameraCurrentShift.bind(this),
 		};
 
 		audio.handlers = {
@@ -357,6 +360,7 @@ export default class App extends PIXI.Application {
 			transitionsInProgress: this.transitionsInProgress,
 			entityWasDespawned: this.entityWasDespawned,
 			refocusCameraOnTL: this.refocusCameraOnTL.bind(this),
+			resetCameraCurrentShift: this.resetCameraCurrentShift.bind(this),
 		};
 
 		this.checkAgainstCurrentObjectives = story.checkAgainstCurrentObjectives;
@@ -419,6 +423,7 @@ export default class App extends PIXI.Application {
 	}
 
 	play(delta) {
+		const functionSignature = 'App.js@play()';
 		if (timing.isEntityMovementEnabled()) {
 			// behavior tick
 			behavior.tick();
@@ -445,6 +450,19 @@ export default class App extends PIXI.Application {
 		let currentState = this.gameState();
 
 		const playerId = currentState.entities.player.id;
+
+		if (this.currentPlayerId !== playerId) {
+			console.log(
+				functionSignature,
+				'playerId changed from',
+				this.currentPlayerId,
+				'to',
+				playerId
+			);
+			this.currentPlayerId = playerId;
+		}
+
+		// console.log('playerId:', playerId);
 
 		// loop volumes
 		soundEffects.adjustLoopVolumes(playerId, currentState.positions);
@@ -570,12 +588,6 @@ export default class App extends PIXI.Application {
 			}
 
 			const cameraTLY = cameraTL[1];
-			// this.mainStage.position.set(cameraTLX, cameraTLY);
-
-			// // starscape movement
-			// this.starScapeLayers.forEach((el) =>
-			// 	el.onUpdate(delta, this.inSlipStream, cameraTLX, cameraTLY)
-			// );
 
 			this.refocusCameraOnTL(cameraTLX, cameraTLY, delta, this.inSlipStream);
 
@@ -621,17 +633,15 @@ export default class App extends PIXI.Application {
 		timing.tick(timing.modes.play, this.ticker.deltaMS);
 	}
 
-	refocusCameraOnTL(cameraTLX, cameraTLY, delta, inSlipStream, log = false) {
-		const functionSignature = 'App.js@refocusCameraOnTL()';
+	refocusCameraOnTL(cameraTLX, cameraTLY, delta, inSlipStream) {
+		// const functionSignature = 'App.js@refocusCameraOnTL()';
 
-		if (log) {
-			console.log(functionSignature, {
-				cameraTLX,
-				cameraTLY,
-				delta,
-				inSlipStream,
-			});
-		}
+		// console.log(functionSignature, {
+		// 	cameraTLX,
+		// 	cameraTLY,
+		// 	delta,
+		// 	inSlipStream,
+		// });
 
 		this.mainStage.position.set(cameraTLX, cameraTLY);
 
@@ -639,6 +649,10 @@ export default class App extends PIXI.Application {
 		this.starScapeLayers.forEach((el) =>
 			el.onUpdate(delta, inSlipStream, cameraTLX, cameraTLY)
 		);
+	}
+
+	resetCameraCurrentShift() {
+		this.camera.currentShift = 100;
 	}
 
 	pause() {
