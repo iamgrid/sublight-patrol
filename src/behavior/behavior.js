@@ -19,7 +19,7 @@ const behavior = {
 		state: null,
 		stageEntities: null,
 		checkAgainstCurrentObjectives: null,
-		playVolume: null,
+		// playVolume: null,
 	}, // gets its values in App.js
 	enemyFighterDetectionRange: 750,
 	maxShotTravelDistance: 1000,
@@ -707,24 +707,12 @@ const behavior = {
 			}
 			newLongVelocity = newFacing * tempLongVel;
 
-			// Don't move beyond the behavior boundaries (X axis)
-			let boundaryOverride = false;
-			if (
-				entityX + newLongVelocity <
-					behavior.handlers.playVolume.softBoundaries.minX ||
-				entityX + newLongVelocity >
-					behavior.handlers.playVolume.softBoundaries.maxX
-			) {
-				newLongVelocity = 0;
-				boundaryOverride = true;
-			}
-
 			if (c.debug.behaviorPerTick)
 				console.log(
 					entity.id,
 					'is outside its preferred attack distance, moving closer:',
 					entity.behaviorPreferredAttackDistance,
-					{ longDistance, maxLongVelocity, newLongVelocity, boundaryOverride }
+					{ longDistance, maxLongVelocity, newLongVelocity }
 				);
 		} else if (longDistance < entity.immutable.length * 3) {
 			// way too close to the enemy, backing up
@@ -898,16 +886,6 @@ const behavior = {
 					}
 				}
 			}
-		}
-
-		// Don't move beyond the behavior boundaries (Y axis)
-		if (
-			entityY + newLatVelocity <
-				behavior.handlers.playVolume.softBoundaries.minY ||
-			entityY + newLatVelocity >
-				behavior.handlers.playVolume.softBoundaries.maxY
-		) {
-			newLatVelocity = 0;
 		}
 
 		const velocityUpdates = {

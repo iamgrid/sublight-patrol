@@ -224,6 +224,7 @@ export default function mainReducer(state, action) {
 			];
 		}
 		case c.actions.UPDATE_ENTITY_COORDS: {
+			const functionSignature = 'mainReducer.js@UPDATE_ENTITY_COORDS()';
 			const entitiesToUpdate = [];
 			const currentCanMoveStore = state.positions.canMove;
 			const currentVelocities = state.velocities;
@@ -241,6 +242,9 @@ export default function mainReducer(state, action) {
 			if (entitiesToUpdate.length === 0) return null;
 
 			const newCanMoveStore = { ...currentCanMoveStore };
+
+			const currentPlayVolume = action.payload.currentPlayVolume;
+
 			entitiesToUpdate.forEach((entityId) => {
 				let efficacy = 1;
 				const latVelocity = currentVelocities[`${entityId}--latVelocity`];
@@ -249,13 +253,52 @@ export default function mainReducer(state, action) {
 				let xChange = 0;
 				let yChange = 0;
 
+				let isEntityAllowedToLeaveBoundaryAndDespawn = false;
+
+				const targetableStoreEntity = getStoreEntity(entityId, state);
+				if (!targetableStoreEntity) {
+					console.error(functionSignature, 'No entity for id:', entityId);
+				}
+				if (
+					targetableStoreEntity.behaviorCurrentGoal ===
+						c.possibleGoals.maintainVelocity ||
+					targetableStoreEntity.behaviorCurrentGoal === c.possibleGoals.flee
+				) {
+					isEntityAllowedToLeaveBoundaryAndDespawn = true;
+				}
+
 				if (latVelocity !== 0) {
 					yChange = Math.round(latVelocity * efficacy);
-					newCanMoveStore[`${entityId}--posY`] += yChange;
+					let newPosY = newCanMoveStore[`${entityId}--posY`] + yChange;
+					let latMovementAllowed = true;
+					if (
+						!isEntityAllowedToLeaveBoundaryAndDespawn &&
+						(newPosY < currentPlayVolume.minY ||
+							newPosY > currentPlayVolume.maxY)
+					) {
+						latMovementAllowed = false;
+					}
+
+					if (latMovementAllowed) {
+						newCanMoveStore[`${entityId}--posY`] = newPosY;
+					}
 				}
 				if (longVelocity !== 0) {
 					xChange = Math.round(longVelocity * efficacy);
-					newCanMoveStore[`${entityId}--posX`] += xChange;
+					let newPosX = newCanMoveStore[`${entityId}--posX`] + xChange;
+					// newCanMoveStore[`${entityId}--posX`] = newPosX;
+					let longMovementAllowed = true;
+					if (
+						!isEntityAllowedToLeaveBoundaryAndDespawn &&
+						(newPosX < currentPlayVolume.minX ||
+							newPosX > currentPlayVolume.maxX)
+					) {
+						longMovementAllowed = false;
+					}
+
+					if (longMovementAllowed) {
+						newCanMoveStore[`${entityId}--posX`] = newPosX;
+					}
 				}
 
 				// console.log(

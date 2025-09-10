@@ -15,7 +15,6 @@ const intro = {
 		maxX: 1300,
 		minY: -100,
 		maxY: 550,
-		softBoundary: 50,
 	},
 	storyBeats: [
 		{

@@ -370,7 +370,7 @@ export default class App extends PIXI.Application {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			checkAgainstCurrentObjectives: this.checkAgainstCurrentObjectives,
-			playVolume: this.playVolume,
+			// playVolume: this.playVolume,
 		};
 
 		shots.handlers = {
@@ -526,35 +526,44 @@ export default class App extends PIXI.Application {
 				playerY > this.playVolume.softBoundaries.maxY
 			) {
 				if (!this.showingCoordWarning && !this.showingCoordAlert) {
-					alertsAndWarnings.add(c.alertsAndWarnings.warnings.leavingVolume);
+					alertsAndWarnings.add(c.alertsAndWarnings.warnings.closeToVolumeEdge);
 					this.showingCoordWarning = true;
 				}
 			} else {
 				if (this.showingCoordWarning) {
-					alertsAndWarnings.remove(c.alertsAndWarnings.warnings.leavingVolume);
+					alertsAndWarnings.remove(
+						c.alertsAndWarnings.warnings.closeToVolumeEdge
+					);
 					this.showingCoordWarning = false;
 				}
 			}
 
 			if (
-				playerX < this.playVolume.current.minX ||
-				playerX > this.playVolume.current.maxX ||
-				playerY < this.playVolume.current.minY ||
-				playerY > this.playVolume.current.maxY
+				playerX <
+					this.playVolume.current.minX +
+						c.showAlertWhenThisCloseToTheBoundary ||
+				playerX >
+					this.playVolume.current.maxX -
+						c.showAlertWhenThisCloseToTheBoundary ||
+				playerY <
+					this.playVolume.current.minY +
+						c.showAlertWhenThisCloseToTheBoundary ||
+				playerY >
+					this.playVolume.current.maxY - c.showAlertWhenThisCloseToTheBoundary
 			) {
 				if (!this.showingCoordAlert) {
 					if (this.showingCoordWarning) {
 						alertsAndWarnings.remove(
-							c.alertsAndWarnings.warnings.leavingVolume
+							c.alertsAndWarnings.warnings.closeToVolumeEdge
 						);
 						this.showingCoordWarning = false;
 					}
-					alertsAndWarnings.add(c.alertsAndWarnings.alerts.leftVolume);
+					alertsAndWarnings.add(c.alertsAndWarnings.alerts.onVolumeEdge);
 					this.showingCoordAlert = true;
 				}
 			} else {
 				if (this.showingCoordAlert) {
-					alertsAndWarnings.remove(c.alertsAndWarnings.alerts.leftVolume);
+					alertsAndWarnings.remove(c.alertsAndWarnings.alerts.onVolumeEdge);
 					this.showingCoordAlert = false;
 				}
 			}
@@ -602,6 +611,9 @@ export default class App extends PIXI.Application {
 		if (timing.isEntityMovementEnabled()) {
 			this.dispatch({
 				type: c.actions.UPDATE_ENTITY_COORDS,
+				payload: {
+					currentPlayVolume: this.playVolume.current,
+				},
 				callbackFn: reposition,
 			});
 

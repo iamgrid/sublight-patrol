@@ -176,7 +176,7 @@ export function recalculateSoftBoundaries() {
 		if (side === 'softBoundary') continue;
 		this.softBoundaries[side] = decreaseNumberBy(
 			this.current[side],
-			this.current.softBoundary
+			c.showWarningWhenThisCloseToTheBoundary
 		);
 	}
 }

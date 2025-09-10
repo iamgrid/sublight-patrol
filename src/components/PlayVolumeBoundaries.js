@@ -1,4 +1,5 @@
 import * as PIXI from '../pixi';
+import c from '../utils/constants';
 
 export default class PlayVolumeBoundaries extends PIXI.Container {
 	constructor() {
@@ -20,10 +21,12 @@ export default class PlayVolumeBoundaries extends PIXI.Container {
 		this.sprites['boundaryRect'].beginFill(0x0, 0);
 		// console.log('this.playVolume:', this.playVolume);
 		this.sprites['boundaryRect'].drawRect(
-			this.playVolume.minX,
-			this.playVolume.minY,
-			Math.abs(this.playVolume.maxX - this.playVolume.minX),
-			Math.abs(this.playVolume.maxY - this.playVolume.minY)
+			this.playVolume.minX - c.boundaryBorderPadding,
+			this.playVolume.minY - c.boundaryBorderPadding,
+			Math.abs(this.playVolume.maxX - this.playVolume.minX) +
+				c.boundaryBorderPadding * 2,
+			Math.abs(this.playVolume.maxY - this.playVolume.minY) +
+				c.boundaryBorderPadding * 2
 		);
 		this.sprites['boundaryRect'].endFill();
 

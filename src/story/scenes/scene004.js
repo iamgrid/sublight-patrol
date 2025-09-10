@@ -21,7 +21,6 @@ const scene004 = {
 		maxX: 12000,
 		minY: -4000,
 		maxY: 4000,
-		softBoundary: 300,
 	},
 	playerStartingPosition: {
 		posX: -11000,

@@ -17,11 +17,10 @@ const scene003 = {
 		title: 'Mission 3 of 4: Capturing the Prototype',
 	},
 	playVolume: {
-		minX: -2000,
-		maxX: 6000,
+		minX: -3000,
+		maxX: 7000,
 		minY: -4000,
 		maxY: 4000,
-		softBoundary: 300,
 	},
 	playerStartingPosition: {
 		posX: 0,

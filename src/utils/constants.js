@@ -50,6 +50,9 @@ const c = {
 		width: 1200,
 		height: 450,
 	},
+	boundaryBorderPadding: 50, // the border visually representing the edges of the mission volume is this many pixels outside the actual mission volume
+	showWarningWhenThisCloseToTheBoundary: 800, // when the player is this many pixels from the edge of the mission volume show a warning
+	showAlertWhenThisCloseToTheBoundary: 50, // when the player is this many pixels from the edge of the mission volume show an alert
 	zIndices: {
 		background: 0, // buoys, stations and other non-shootable entities
 		shots: 100000,
@@ -67,13 +70,13 @@ const c = {
 	],
 	alertsAndWarnings: {
 		warnings: {
-			leavingVolume: {
+			closeToVolumeEdge: {
 				m: 'You are approaching the edge of the mission volume',
 			},
 			no_emp: { m: 'Your current ship has no EMP capability' },
 		},
 		alerts: {
-			leftVolume: { m: 'You are beyond the edge of the mission volume!' },
+			onVolumeEdge: { m: 'You are on the edge of the mission volume!' },
 			systemsOffline: { m: 'Systems offline.' },
 		},
 	},
