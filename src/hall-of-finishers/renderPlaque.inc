@@ -17,20 +17,20 @@
 			$renderUrl = "<a href=\"" . $feRow['player_url'] . "\" target=\"_blank\" rel=\"noopener noreferrer\">" . $displayUrl . "</a>";
 		}
 
-		print "<div class=\"finishers-entry\">\n";
+		print "<div class=\"finishers-entry\" data-entry-nickname=\"" . $feRow['player_nickname'] . "\" id=\"finishers-entry-" . $feRow['id'] . "\">\n";
 		print "<div class=\"finishers-entry__proper\">\n";
 
 		print "<div class=\"finishers-entry__stars-wrapper\">\n";
-		print "<div class=\"finishers-entry__stars\" id=\"finishers-entry__stars\" title=\"The number of stars you earn for finishing increase when I add more missions to the game or increase the difficulty in other ways.\"><span>" . str_repeat("★", $feRow['finisher_stars']) . "</span></div>\n";
+		print "<div class=\"finishers-entry__stars\" title=\"The number of stars you earn for finishing increase when I add more missions to the game or increase the difficulty in other ways.\"><span>" . str_repeat("★", $feRow['finisher_stars']) . "</span></div>\n";
 		print "</div>\n";
 
 		print "<section class=\"finishers-entry__section finishers-entry__section__top\">\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__nickname\">\n";
 		print "<div class=\"finishers-entry__readout-label\">Nickname</div>\n";
-		print "<div class=\"finishers-entry__nickname\" id=\"finishers-entry__nickname\">" . $feRow['player_nickname'] . "</div>\n";
+		print "<div class=\"finishers-entry__nickname\">" . $feRow['player_nickname'] . "</div>\n";
 		print "</div>\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__url\">\n";
-		print "<div class=\"finishers-entry__finisher-details\" id=\"finishers-entry__finisher-details\">Location: <span>" . $feRow['player_location'] . "</span> &middot; Url: " . $renderUrl . "</div>\n";
+		print "<div class=\"finishers-entry__finisher-details\">Location: <span>" . $feRow['player_location'] . "</span> &middot; Url: " . $renderUrl . "</div>\n";
 		print "</div>\n";
 		print "</section>\n";
 
@@ -39,22 +39,22 @@
 		print "<section class=\"finishers-entry__section finishers-entry__section__stats\">\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__finished-at\">\n";
 		print "<div class=\"finishers-entry__readout-label\">Game completed on</div>\n";
-		print "<div class=\"finishers-entry__finished-at\" id=\"finishers-entry__finished-at\">" . $feRow['player_finished_at_datetime'] . "</div>\n";
+		print "<div class=\"finishers-entry__finished-at\" id=\"finishers-entry__finished-at-" . $feRow['id'] . "\">" . $feRow['player_finished_at_datetime'] . "</div>\n";
 		print "</div>\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__final-fighter\">\n";
 		print "<div class=\"finishers-entry__readout-label\">Final Fighter</div>\n";
-		print "<div class=\"finishers-entry__final-fighter\" id=\"finishers-entry__final-fighter\">" . convertVesselTypeName($feRow['player_final_fighter']) . "</div>\n";
+		print "<div class=\"finishers-entry__final-fighter\">" . convertVesselTypeName($feRow['player_final_fighter']) . "</div>\n";
 		print "</div>\n";
 		print "</section>\n";
 
 		print "<section class=\"finishers-entry__section finishers-entry__section__game-version\">\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__game-version\">\n";
 		print "<div class=\"finishers-entry__readout-label\">Game Version</div>\n";
-		print "<div class=\"finishers-entry__game-version\" id=\"finishers-entry__game-version\">" . $feRow['game_version'] . "</div>\n";
+		print "<div class=\"finishers-entry__game-version\">" . $feRow['game_version'] . "</div>\n";
 		print "</div>\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__final-mission\">\n";
 		print "<div class=\"finishers-entry__readout-label\">Final Mission</div>\n";
-		print "<div class=\"finishers-entry__final-mission\" id=\"finishers-entry__final-mission\">" . $feRow['final_mission_name'] . "</div>\n";
+		print "<div class=\"finishers-entry__final-mission\">" . $feRow['final_mission_name'] . "</div>\n";
 		print "</div>\n";
 		print "</section>\n";
 

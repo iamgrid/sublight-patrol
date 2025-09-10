@@ -14,6 +14,7 @@
 			rel="stylesheet"
 		/>
 		<link rel="stylesheet" href="hall-of-finishers.css" />
+		<script src="hall-of-finishers.js" defer></script>
 	</head>
 	<body class="customScroll">
 		<div class="content">
