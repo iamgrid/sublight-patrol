@@ -137,7 +137,7 @@ const intro = {
 				);
 
 				// text fade-out
-				timingIterator += 5;
+				timingIterator += 6;
 
 				timing.setTimeout(
 					() => {
@@ -153,7 +153,7 @@ const intro = {
 				);
 
 				// PLATE 3
-				timingIterator += 2.5; // in seconds
+				timingIterator += 1.5; // in seconds
 
 				timing.setTimeout(
 					() => {
