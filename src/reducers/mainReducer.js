@@ -972,7 +972,9 @@ export default function mainReducer(state, action) {
 					},
 				},
 				entities: {
-					player: {},
+					player: {
+						id: state.entities.player.id,
+					},
 					targetable: [],
 					other: [],
 				},

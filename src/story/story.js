@@ -45,7 +45,7 @@ const story = {
 		activeKeyboardLayout: null,
 		hud: null,
 		pairedTrack: null,
-		resetCameraCurrentShift: null,
+		resetCameraAndMoveToPlayerXY: null,
 	}, // gets its values in App.js
 	themeMusicInterval: null,
 	sceneList: [
@@ -306,6 +306,8 @@ const story = {
 		);
 		const currentSceneObject = currentSceneListObject.sceneObject;
 
+		let isGameplayScene = false;
+
 		if (playSceneBeat === 0) {
 			if (currentSceneListObject.hasEntities) {
 				story.currentStoryEntities = currentSceneObject.entities;
@@ -332,12 +334,12 @@ const story = {
 			story.handlers.transitionsInProgress.functions.transitionComplete(
 				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedGameOver
 			);
-			story.handlers.resetCameraCurrentShift();
 
 			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
 				const localStoragePlayerProgress = readPlayerProgress(true);
 				if (currentSceneListObject.id === storyConstants.scenes.intro) {
 					// intro scene
+
 					if (localStoragePlayerProgress === null) {
 						// this player is a first time visitor
 						if (c.debug.localStorage)
@@ -363,6 +365,9 @@ const story = {
 					}
 				} else {
 					// gameplay scenes
+
+					isGameplayScene = true;
+
 					const playersBestSceneId = localStoragePlayerProgress.bestSceneId;
 					const playersBestSceneIndex = story.sceneList.findIndex(
 						(sc) => sc.id === playersBestSceneId
@@ -385,22 +390,37 @@ const story = {
 			}
 		}
 
-		let currentStateScene = currentState.game.currentScene;
-		if (currentStateScene !== story.currentScene) {
-			let newCurrentScenePlayerStartingPositionX = null;
-			let newCurrentScenePlayerStartingPositionY = null;
+		let newCurrentScenePlayerStartingPositionX = null;
+		let newCurrentScenePlayerStartingPositionY = null;
 
+		if (isGameplayScene) {
 			if (
 				'playerStartingPosition' in currentSceneObject &&
 				'posX' in currentSceneObject.playerStartingPosition &&
-				'posY' in currentSceneObject.playerStartingPosition
+				'posY' in currentSceneObject.playerStartingPosition &&
+				typeof currentSceneObject.playerStartingPosition.posX === 'number' &&
+				typeof currentSceneObject.playerStartingPosition.posY === 'number'
 			) {
 				newCurrentScenePlayerStartingPositionX =
 					currentSceneObject.playerStartingPosition.posX;
 				newCurrentScenePlayerStartingPositionY =
 					currentSceneObject.playerStartingPosition.posY;
+			} else {
+				console.error(
+					functionSignature,
+					`playerStartingPosition for scene '${currentSceneListObject.id}' is not defined or invalid.`
+				);
 			}
 
+			story.handlers.resetCameraAndMoveToPlayerXY(
+				newCurrentScenePlayerStartingPositionX,
+				newCurrentScenePlayerStartingPositionY,
+				functionSignature
+			);
+		}
+
+		let currentStateScene = currentState.game.currentScene;
+		if (currentStateScene !== story.currentScene) {
 			story.handlers.dispatch({
 				type: c.actions.SET_CURRENT_SCENE,
 				newCurrentScene: story.currentScene,

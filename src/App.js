@@ -328,7 +328,8 @@ export default class App extends PIXI.Application {
 			activeKeyboardLayout: this.activeKeyboardLayout,
 			hud: this.hud,
 			pairedTrack: this.pairedTrack,
-			resetCameraCurrentShift: this.resetCameraCurrentShift.bind(this),
+			resetCameraAndMoveToPlayerXY:
+				this.resetCameraAndMoveToPlayerXY.bind(this),
 		};
 
 		audio.handlers = {
@@ -359,8 +360,8 @@ export default class App extends PIXI.Application {
 			pixiHUD: this.pixiHUD,
 			transitionsInProgress: this.transitionsInProgress,
 			entityWasDespawned: this.entityWasDespawned,
-			refocusCameraOnTL: this.refocusCameraOnTL.bind(this),
-			resetCameraCurrentShift: this.resetCameraCurrentShift.bind(this),
+			resetCameraAndMoveToPlayerXY:
+				this.resetCameraAndMoveToPlayerXY.bind(this),
 		};
 
 		this.checkAgainstCurrentObjectives = story.checkAgainstCurrentObjectives;
@@ -452,6 +453,10 @@ export default class App extends PIXI.Application {
 		const playerId = currentState.entities.player.id;
 
 		if (this.currentPlayerId !== playerId) {
+			if (typeof playerId !== 'string' || playerId.length === 0) {
+				console.warn(functionSignature, 'playerId is not valid:', playerId);
+			}
+
 			console.log(
 				functionSignature,
 				'playerId changed from',
@@ -651,8 +656,29 @@ export default class App extends PIXI.Application {
 		);
 	}
 
-	resetCameraCurrentShift() {
+	resetCameraAndMoveToPlayerXY(playerX, playerY, calledBy) {
+		const functionSignature = 'App.js@resetCameraAndMoveToPlayerXY()';
+		console.log(
+			functionSignature,
+			"Repositioning camera to the player's craft",
+			'calledBy:',
+			calledBy,
+			'playerX:',
+			playerX,
+			'playerY:',
+			playerY
+		);
+
+		const cameraTL = getCameraTLBasedOnPlayerPosition(playerX, playerY, 1);
+
+		console.log(functionSignature, { cameraTL });
+
+		this.refocusCameraOnTL(cameraTL[0], cameraTL[1], 0, false);
+
 		this.camera.currentShift = 100;
+		this.camera.isFlipping = false;
+		this.camera.newFacing = 1;
+		this.camera.flipTimer = 0;
 	}
 
 	pause() {

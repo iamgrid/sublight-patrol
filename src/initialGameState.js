@@ -21,7 +21,9 @@ const initialGameState = {
 		playerHasCompletedTheGame: false,
 	},
 	entities: {
-		player: {},
+		player: {
+			id: 'red_1a',
+		},
 		targetable: [],
 		other: [],
 	},

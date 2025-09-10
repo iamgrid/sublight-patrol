@@ -25,7 +25,7 @@ const scene004 = {
 	},
 	playerStartingPosition: {
 		posX: -11000,
-		posY: 225,
+		posY: 0,
 	},
 	entities: {
 		htran_091: {

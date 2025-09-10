@@ -3,13 +3,7 @@ import { randomNumber } from '../utils/formulas';
 import idCreator from '../utils/idCreator';
 import pieces from './pieces';
 import models from './models';
-import {
-	getPosition,
-	shields,
-	makeName,
-	gameLog,
-	getCameraTLBasedOnPlayerPosition,
-} from '../utils/helpers';
+import { getPosition, shields, makeName, gameLog } from '../utils/helpers';
 import soundEffects from '../audio/soundEffects';
 import formations from '../behavior/formations';
 import timing from '../utils/timing';
@@ -27,8 +21,7 @@ const entities = {
 		pixiHUD: null,
 		transitionsInProgress: null,
 		entityWasDespawned: null,
-		refocusCameraOnTL: null,
-		resetCameraCurrentShift: null,
+		resetCameraAndMoveToPlayerXY: null,
 	}, // gets its values in App.js
 	types: {},
 	stageEntities: {},
@@ -517,6 +510,8 @@ const entities = {
 			timing.setTrigger(
 				'spawn in player with a new ship',
 				() => {
+					const functionSignature =
+						'entities.js@playerShipDestruction()@setTrigger()';
 					entities.spawn(
 						newPlayerShipType,
 						{
@@ -535,27 +530,28 @@ const entities = {
 
 					// camera needs to be repositioned to the new player craft
 
-					console.log(
-						functionSignature,
-						"Repositioning camera to the player's new craft"
-					);
+					// const cameraTL = getCameraTLBasedOnPlayerPosition(
+					// 	newPlayerShipX,
+					// 	newPlayerShipY,
+					// 	1
+					// );
 
-					const cameraTL = getCameraTLBasedOnPlayerPosition(
+					// console.log(functionSignature, 'cameraTL:', cameraTL);
+
+					// entities.handlers.refocusCameraOnTL(
+					// 	cameraTL[0],
+					// 	cameraTL[1],
+					// 	0,
+					// 	false
+					// );
+
+					// entities.handlers.resetCameraCurrentShift();
+
+					entities.handlers.resetCameraAndMoveToPlayerXY(
 						newPlayerShipX,
 						newPlayerShipY,
-						1
+						functionSignature
 					);
-
-					console.log(functionSignature, 'cameraTL:', cameraTL);
-
-					entities.handlers.refocusCameraOnTL(
-						cameraTL[0],
-						cameraTL[1],
-						0,
-						false
-					);
-
-					entities.handlers.resetCameraCurrentShift();
 				},
 				timing.modes.play,
 				1100,
