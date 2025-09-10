@@ -1399,6 +1399,18 @@ export function showConfirmationDialog(
 	const functionSignature = 'helpers.js@showConfirmationDialog()';
 
 	function arrowKeyHandler(event) {
+		// const functionSignature =
+		// 	'helpers.js@showConfirmationDialog()@arrowKeyHandler()';
+		// console.log(
+		// 	functionSignature,
+		// 	'key pressed:',
+		// 	event.key,
+		// 	'confirmation dialog is showing:',
+		// 	window.spConfirmationDialogIsShowing
+		// );
+
+		if (!window.spConfirmationDialogIsShowing) return;
+
 		if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
 			if (
 				document.activeElement.id === 'game__dialog--confirm__confirm-button'
@@ -1419,7 +1431,10 @@ export function showConfirmationDialog(
 	}
 
 	if (addArrowKeyHandler) {
-		window.addEventListener('keydown', arrowKeyHandler);
+		if (!window.spConfirmationDialogArrowKeyHandlerAdded) {
+			window.addEventListener('keydown', arrowKeyHandler);
+			window.spConfirmationDialogArrowKeyHandlerAdded = true;
+		}
 	}
 
 	document.getElementById('game__dialog--confirm__message').innerHTML = message;
@@ -1437,7 +1452,7 @@ export function showConfirmationDialog(
 		if (controlSchemesHandler !== null) {
 			controlSchemesHandler.restoreSuspendedLayout();
 
-			window.removeEventListener('keydown', arrowKeyHandler);
+			window.spConfirmationDialogIsShowing = false;
 		}
 	}
 
@@ -1458,6 +1473,7 @@ export function showConfirmationDialog(
 		.addEventListener('cancel', dialogCancelEventFn, { once: true });
 
 	document.getElementById('game__dialog--confirm').showModal();
+	window.spConfirmationDialogIsShowing = true;
 	document.getElementById('game__dialog--confirm__confirm-button').focus();
 }
 
