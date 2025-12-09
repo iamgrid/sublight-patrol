@@ -28,7 +28,7 @@
 		print "<div class=\"finishers-entry__proper\">\n";
 
 		print "<div class=\"finishers-entry__stars-wrapper\">\n";
-		print "<div class=\"finishers-entry__stars\" title=\"The number of stars you earn for finishing increase when I add more missions to the game or increase the difficulty in other ways.\"><span>" . str_repeat("★", $feRow['finisher_stars']) . "</span></div>\n";
+		print "<div class=\"finishers-entry__stars\" title=\"The number of stars you earn for finishing increase when I add more missions to the game.\"><span>" . str_repeat("★", $feRow['finisher_stars']) . "</span></div>\n";
 		print "</div>\n";
 
 		print "<section class=\"finishers-entry__section finishers-entry__section__top\">\n";

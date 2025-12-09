@@ -371,7 +371,7 @@ export default function overlays() {
 				<div class="finishers-entry">
 					<div class="finishers-entry__proper">
 						<div class="finishers-entry__stars-wrapper">
-							<div class="finishers-entry__stars" id="finishers-entry__stars" title="The number of stars you earn for finishing increase when I add more missions to the game or increase the difficulty in other ways."><span>★★★★</span></div>
+							<div class="finishers-entry__stars" id="finishers-entry__stars" title="The number of stars you earn for finishing increase when I add more missions to the game."><span>★★★★</span></div>
 						</div>
 						<section class="finishers-entry__section finishers-entry__section__top">
 							<div class="finishers-entry__readout finishers-entry__readout__nickname">
