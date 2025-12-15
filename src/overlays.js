@@ -319,8 +319,9 @@ export default function overlays() {
 			</div>
 		</div>
 		<div class="game__pause" id="game__pause">
-			<div class="game__pause-text">[Paused]</div>
-			<div class="game__pause-objectives" id="game__pause-objectives"></div>
+			<div class="game__pause__text">[Paused]</div>
+			<div class="game__pause__difficulty">Game Difficulty: <span class="game__pause__difficulty-value" id="game__pause__difficulty-value">Unknown</span></div>
+			<div class="game__pause__objectives" id="game__pause__objectives"></div>
 		</div>
 		<div class="game__log game__log--hidden" id="game__log" title="Combat log">
 			<div class="game__log-expand" id="game__log-expand">
@@ -368,7 +369,7 @@ export default function overlays() {
 			</form>
 			<div class="game__finishers__preview" id="game__finishers__preview">
 				<h2>A Preview of Your Entry in the Sublight Patrol <a href="/sublight-patrol/hall-of-finishers/" target="_blank" class="hall-of-finishers-link">Hall of Finishers</a>:</h2>
-				<div class="finishers-entry">
+				<div class="finishers-entry" id="finishers-entry">
 					<div class="finishers-entry__proper">
 						<div class="finishers-entry__stars-wrapper">
 							<div class="finishers-entry__stars" id="finishers-entry__stars" title="The number of stars you earn for finishing increase when I add more missions to the game."><span>★★★★</span></div>
@@ -383,30 +384,24 @@ export default function overlays() {
 							</div>
 						</section>
 						<div class="finishers-entry__bottom-wrapper">
-							<section class="finishers-entry__section finishers-entry__section__stats">
-								<!-- <h3>Stats</h3> -->
-								<div class="finishers-entry__readout finishers-entry__readout__finished-at">
-									<div class="finishers-entry__readout-label">Game completed on</div>
-									<div class="finishers-entry__finished-at" id="finishers-entry__finished-at"></div>
+							<section class="finishers-entry__section finishers-entry__section__left">
+								<div class="finishers-entry__readout finishers-entry__readout__game-difficulty">
+									<div class="finishers-entry__readout-label">Game Difficulty</div>
+									<div class="finishers-entry__game-difficulty" id="finishers-entry__game-difficulty"></div>
 								</div>
 								<div class="finishers-entry__readout finishers-entry__readout__final-fighter">
 									<div class="finishers-entry__readout-label">Final Fighter</div>
 									<div class="finishers-entry__final-fighter" id="finishers-entry__final-fighter"></div>
 								</div>
-								<!-- <div class="finishers-entry__readout finishers-entry__readout__final-hangar">
-									<div class="finishers-entry__readout-label">Final Hangar Contents</div>
-									<div class="finishers-entry__final-hangar" id="finishers-entry__final-hangar"></div>
-								</div> -->
 							</section>
-							<section class="finishers-entry__section finishers-entry__section__game-version">
-								<!-- <h3>Game Version</h3> -->
-								<div class="finishers-entry__readout finishers-entry__readout__game-version">
+							<section class="finishers-entry__section finishers-entry__section__right">
+								<div class="finishers-entry__readout finishers-entry__readout__finished-at">
+									<div class="finishers-entry__readout-label">Game completed on</div>
+									<div class="finishers-entry__finished-at" id="finishers-entry__finished-at"></div>
+								</div>
+								<div class="finishers-entry__readout finishers-entry__readout__game-version" id="finishers-entry__readout__game-version">
 									<div class="finishers-entry__readout-label">Game Version</div>
 									<div class="finishers-entry__game-version" id="finishers-entry__game-version"></div>
-								</div>
-								<div class="finishers-entry__readout finishers-entry__readout__final-mission">
-									<div class="finishers-entry__readout-label">Final Mission</div>
-									<div class="finishers-entry__final-mission" id="finishers-entry__final-mission"></div>
 								</div>
 							</section>
 						</div>

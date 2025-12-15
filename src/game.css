@@ -525,7 +525,7 @@
 	visibility: hidden;
 }
 
-.game__pause-text {
+.game__pause__text {
 	text-align: center;
 	margin-top: 11px;
 	font-size: 0.8em;
@@ -541,23 +541,36 @@
 	transition: opacity ease 0.5s;
 }
 
-.game__pause--show .game__pause-text {
+.game__pause--show .game__pause__text {
 	animation: 0.5s ease-in-out infinite alternate doPulse;
 }
 
-.game__pause-objectives {
+.game__pause__difficulty {
+	color: rgb(104, 242, 255);
+    position: absolute;
+    right: 36px;
+    font-size: 0.8em;
+    transform: translateY(-26px);
+	text-transform: capitalize;
+}
+
+.game__pause__difficulty-value {
+	font-weight: bold;
+}
+
+.game__pause__objectives {
 	text-align: left;
 	padding: 56px 10px 12px;
 	height: 300px;
 	font-size: 12px;
 }
 
-.game__pause-objectives-title {
+.game__pause__objectives-title {
 	margin-bottom: 3px;
 	font-weight: bold;
 }
 
-.game__pause-objectives-list {
+.game__pause__objectives-list {
 	margin: 0;
 	padding-left: 2em;
 }
@@ -1140,6 +1153,10 @@
 .finishers-entry__bottom-wrapper {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
+}
+
+.finishers-entry__game-difficulty {
+	text-transform: capitalize;
 }
 
 .validation-bubble {

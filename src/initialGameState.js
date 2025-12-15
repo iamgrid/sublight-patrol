@@ -2,6 +2,7 @@ import c from './utils/constants.js';
 
 const initialGameState = {
 	game: {
+		gameDifficulty: c.gameDifficulty.HARD,
 		currentScene: null,
 		currentScenePlayerStartingPositionX: null,
 		currentScenePlayerStartingPositionY: null,

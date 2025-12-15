@@ -220,6 +220,7 @@ input[type='range']::-ms-thumb {
 	transform: translateX(0.5em);
 	opacity: 1;
 	transition: opacity 1s ease-in-out;
+	cursor: default;
 }
 
 .header__title--hidden {

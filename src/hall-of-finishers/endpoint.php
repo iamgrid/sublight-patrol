@@ -16,6 +16,7 @@
 		"playerLocation",
 		"playerUrl",
 		"playerFinishedAtDateTime",
+		"gameDifficulty",
 		"playerFinalFighter",
 		"playerHangarContents",
 		"gameVersion",
@@ -54,6 +55,7 @@
 					$nicknameRegex = "/^[a-zA-Z0-9 .\-_'()]{2,40}$/";
 					$locationRegex = "/^[a-zA-Z0-9 .\-_'(),]{0,80}$/";
 					$finishedAtDateTimeRegex = "/^[0-9-T:.Z]+$/";
+					$gameDifficultyRegex = "/^(EASY|NORMAL|HARD)$/";
 					$currentFighterIdRegex = "/^[a-z0-9_]{2,32}$/";
 					$hangarContentsRegex = "/^[a-z0-9_, ]*$/";
 					$gameVersionRegex = "/^[a-zA-Z0-9. (),]{10,80}$/";
@@ -69,6 +71,9 @@
 					} else if (!preg_match($finishedAtDateTimeRegex, $input["playerFinishedAtDateTime"])) {
 						$success = false;
 						$responseMessage = "playerFinishedAtDateTime is not valid.";
+					} else if (!preg_match($gameDifficultyRegex, $input["gameDifficulty"])) {
+						$success = false;
+						$responseMessage = "gameDifficulty is not valid.";
 					} else if (!preg_match($currentFighterIdRegex, $input["playerFinalFighter"])) {
 						$success = false;
 						$responseMessage = "playerFinalFighter is not valid.";
@@ -95,6 +100,7 @@
 								`player_location`,
 								`player_url`,
 								`player_finished_at_datetime`,
+								`game_difficulty`,
 								`player_final_fighter`,
 								`player_hangar_contents`,
 								`game_version`,
@@ -105,6 +111,7 @@
 								'" . mres($input["playerLocation"]) . "',
 								'" . mres($input["playerUrl"]) . "',
 								'" . mres($input["playerFinishedAtDateTime"]) . "',
+								'" . mres($input["gameDifficulty"]) . "',
 								'" . mres($input["playerFinalFighter"]) . "',
 								'" . mres($input["playerHangarContents"]) . "',
 								'" . mres($input["gameVersion"]) . "',

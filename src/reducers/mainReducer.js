@@ -164,6 +164,15 @@ export default function mainReducer(state, action) {
 				},
 			};
 		}
+		case c.actions.SET_GAME_DIFFICULTY: {
+			return {
+				...state,
+				game: {
+					...state.game,
+					gameDifficulty: action.newGameDifficulty,
+				},
+			};
+		}
 		case c.actions.CHANGE_ENTITY_VELOCITIES: {
 			const [currentLatVel, currentLongVel] = getVelocity(
 				action.id,

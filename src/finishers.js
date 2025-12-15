@@ -24,6 +24,7 @@ const finishers = {
 		playerLocation: '',
 		playerUrl: '',
 		playerFinishedAtDateTime: '',
+		gameDifficulty: '',
 		playerFinalFighter: '',
 		playerHangarContents: '',
 		gameVersion: '',
@@ -214,6 +215,17 @@ const finishers = {
 			finishers.finisherInfo.playerFinishedAtDateTime =
 				nowDateObj.toISOString();
 
+			const currentState = finishers.handlers.state();
+
+			finishers.finisherInfo.gameDifficulty = currentState.game.gameDifficulty;
+			document
+				.getElementById('finishers-entry')
+				.classList.add(
+					`finishers-entry--${finishers.finisherInfo.gameDifficulty}`
+				);
+			document.getElementById('finishers-entry__game-difficulty').innerText =
+				finishers.finisherInfo.gameDifficulty.toLowerCase();
+
 			// displayDateTime format: "August 29, 2025 3:16 PM"
 			const options = {
 				hour12: true,
@@ -228,8 +240,6 @@ const finishers = {
 			document.getElementById('finishers-entry__finished-at').innerText =
 				displayDateTime;
 
-			const currentState = finishers.handlers.state();
-
 			console.log(functionSignature, { currentState });
 
 			finishers.finisherInfo.playerFinalFighter =
@@ -239,16 +249,15 @@ const finishers = {
 
 			finishers.finisherInfo.playerHangarContents =
 				currentState.game.playerShips.hangarContents.join(', ');
-			// document.getElementById('finishers-entry__final-hangar').innerText =
-			// 	finishers.finisherInfo.playerHangarContents;
 
 			finishers.finisherInfo.gameVersion = shortenGameVersion(c.gameVersion);
 			document.getElementById('finishers-entry__game-version').innerText =
 				finishers.finisherInfo.gameVersion;
 
 			finishers.finisherInfo.finalMissionName = sc.finalMissionTitle;
-			document.getElementById('finishers-entry__final-mission').innerText =
-				finishers.finisherInfo.finalMissionName;
+			document.getElementById(
+				'finishers-entry__game-version'
+			).title = `Final Mission: ${finishers.finisherInfo.finalMissionName}`;
 
 			finishers.finisherInfo.finisherStars = c.finisherStars;
 			document.getElementById(

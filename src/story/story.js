@@ -1273,7 +1273,7 @@ const story = {
 		// console.log('updateObjectiveDisplay() called');
 		const re = [];
 		re.push(
-			"<div class='game__pause-objectives-title'>Current objectives:</div>\n<ul class='game__pause-objectives-list'>"
+			"<div class='game__pause__objectives-title'>Current objectives:</div>\n<ul class='game__pause__objectives-list'>"
 		);
 
 		const objectiveLis = story.currentObjectives.show.map((obj) => {
@@ -1284,7 +1284,7 @@ const story = {
 		re.push(objectiveLis.join(''));
 
 		re.push('</ul>');
-		document.getElementById('game__pause-objectives').innerHTML = re.join('');
+		document.getElementById('game__pause__objectives').innerHTML = re.join('');
 	},
 
 	returnObjectiveText(objectiveObj, meansProgress = false) {

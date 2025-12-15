@@ -414,6 +414,9 @@ export default class App extends PIXI.Application {
 
 		// Create an update loop
 		this.ticker.add(this.gameLoop.bind(this));
+
+		// Uncomment the line below to work on the finishers form
+		// finishers.show();
 	}
 
 	gameLoop(delta) {
@@ -725,6 +728,9 @@ export default class App extends PIXI.Application {
 
 		const pauseDiv = document.getElementById('game__pause');
 		if (!timing.isPaused()) {
+			const currentState = this.gameState();
+			document.getElementById('game__pause__difficulty-value').innerText =
+				currentState.game.gameDifficulty.toLowerCase();
 			gameLog.toggleStatusExpansion.bind(gameLog, '', 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
