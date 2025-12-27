@@ -579,6 +579,12 @@ const story = {
 		hurryUp = false,
 		restorePlayerShipsLostOnThisMission = false
 	) {
+		const functionSignature = 'story.js@mainMenu()';
+		console.log(functionSignature, {
+			askForConfirmation,
+			hurryUp,
+			restorePlayerShipsLostOnThisMission,
+		});
 		function mainMenuProper() {
 			const functionSignature = 'story.js@mainMenu() -> mainMenuProper()';
 			if (restorePlayerShipsLostOnThisMission) {
@@ -642,7 +648,7 @@ const story = {
 
 		if (goAhead) {
 			story.handlers.activeKeyboardLayout.current =
-				controlSchemes.replaySceneMenu.id;
+				controlSchemes.gameMenusVertical.id;
 			story.removeMainMenuTopPortion();
 			gameMenus.clearButtons();
 			gameMenus.showReplaySceneButtonSet(story.sceneList);
@@ -699,54 +705,62 @@ const story = {
 
 		const localStoragePlayerProgress = readPlayerProgress();
 
-		function newGameProper() {
-			const functionSignature = 'story.js@newGameProper()';
-
-			console.log(functionSignature);
-
-			story.handlers.dispatch({
-				type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
-			});
-
-			story.playerIsReplayingScenes = false;
-
-			music.stopPlaying();
-			gameMenus.clearButtons();
-			story.removeMainMenuTopPortion();
-
-			storePlayerProgress(
-				`${functionSignature}`,
-				story.handlers.state,
-				storyConstants.scenes.scene001
-			);
-
-			hud.requestFullReRender = true;
-
-			gameLog.clear();
-
-			story.advance(functionSignature);
-		}
-
 		if (!getHasThePlayerMadeProgress(localStoragePlayerProgress)) {
-			newGameProper();
+			story.newGameDifficulty();
 		} else {
-			// if (
-			// 	confirm(
-			// 		'Starting a new game will erase your previous progress. Continue anyway?'
-			// 	)
-			// ) {
-			// 	newGameProper();
-			// }
-
 			showConfirmationDialog(
 				'Starting a new game will erase your previous progress. Continue anyway?',
 				() => {
-					newGameProper();
+					story.newGameDifficulty();
 				},
 				null,
 				controlSchemes
 			);
 		}
+	},
+
+	newGameDifficulty() {
+		const functionSignature = 'story.js@newGameDifficulty()';
+		console.log(functionSignature);
+
+		story.handlers.activeKeyboardLayout.current =
+			controlSchemes.gameMenusVertical.id;
+		story.removeMainMenuTopPortion();
+		gameMenus.clearButtons();
+		gameMenus.showGameDifficultyButtonSet();
+	},
+
+	newGameProper(gameDifficulty) {
+		const functionSignature = 'story.js@newGameProper()';
+
+		console.log(functionSignature);
+
+		story.handlers.dispatch({
+			type: c.actions.REVERT_PLAYER_PROGRESS_TO_DEFAULTS,
+		});
+
+		story.handlers.dispatch({
+			type: c.actions.SET_GAME_DIFFICULTY,
+			newGameDifficulty: gameDifficulty,
+		});
+
+		story.playerIsReplayingScenes = false;
+
+		music.stopPlaying();
+		gameMenus.clearButtons();
+		story.removeGameDifficultyLabels();
+
+		storePlayerProgress(
+			`${functionSignature}`,
+			story.handlers.state,
+			storyConstants.scenes.scene001
+		);
+
+		hud.requestFullReRender = true;
+
+		gameLog.clear();
+
+		story.advance(functionSignature);
 	},
 
 	continueGame() {
@@ -800,10 +814,20 @@ const story = {
 			.classList.remove('header__title--hidden');
 	},
 
+	removeGameDifficultyLabels() {
+		document
+			.getElementById('game__game_difficulty')
+			.classList.remove('game__game_difficulty--shown');
+		document
+			.getElementById('header__title')
+			.classList.remove('header__title--hidden');
+	},
+
 	init() {
 		gameMenus.buttonFunctions.restartMission = story.restartMission;
 		gameMenus.buttonFunctions.mainMenu = story.mainMenu;
 		gameMenus.buttonFunctions.newGame = story.newGame;
+		gameMenus.buttonFunctions.newGameProper = story.newGameProper;
 		gameMenus.buttonFunctions.continueGame = story.continueGame;
 		gameMenus.buttonFunctions.replaySceneMenu = story.replaySceneMenu;
 		gameMenus.buttonFunctions.replaySceneActual = story.replaySceneActual;

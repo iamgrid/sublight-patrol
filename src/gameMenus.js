@@ -24,6 +24,7 @@ const gameMenus = {
 		restartMission: null,
 		mainMenu: null,
 		newGame: null,
+		newGameProper: null,
 		continueGame: null,
 		replaySceneMenu: null,
 		replaySceneActual: null,
@@ -435,6 +436,101 @@ const gameMenus = {
 		gameMenus.fadeInButtons();
 	},
 
+	showGameDifficultyButtonSet() {
+		const functionSignature = 'gameMenus.js@showGameDifficultyButtonSet()';
+		gameMenus.currentFocus = 'difficultyEasy';
+
+		const startX = 250;
+		const startY = 136;
+		const spacingY = 60;
+
+		gameMenus.stageButtons['difficultyEasy'] = new Button({
+			coordsAndDimensions: {
+				x: startX,
+				y: startY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Easy',
+			isFocused: true,
+			style: BUTTON_STYLES.B,
+			doActivate: () => {
+				if (c.debug.menuButtons)
+					console.log(functionSignature, 'doActivate difficultyEasy');
+				gameMenus.buttonFunctions.newGameProper(c.gameDifficulty.EASY);
+			},
+		});
+
+		gameMenus.stageButtons['difficultyNormal'] = new Button({
+			coordsAndDimensions: {
+				x: startX,
+				y: startY + spacingY,
+				width: 200,
+				height: 32,
+			},
+			label: 'Normal',
+			isFocused: false,
+			style: BUTTON_STYLES.B,
+			doActivate: () => {
+				if (c.debug.menuButtons)
+					console.log(functionSignature, 'doActivate difficultyNormal');
+				gameMenus.buttonFunctions.newGameProper(c.gameDifficulty.NORMAL);
+			},
+		});
+
+		gameMenus.stageButtons['difficultyHard'] = new Button({
+			coordsAndDimensions: {
+				x: startX,
+				y: startY + spacingY * 2,
+				width: 200,
+				height: 32,
+			},
+			label: 'Hard',
+			isFocused: false,
+			style: BUTTON_STYLES.B,
+			doActivate: () => {
+				if (c.debug.menuButtons)
+					console.log(functionSignature, 'doActivate difficultyHard');
+				gameMenus.buttonFunctions.newGameProper(c.gameDifficulty.HARD);
+			},
+		});
+
+		gameMenus.stageButtons['difficultyCancel'] = new Button({
+			coordsAndDimensions: {
+				x: 500,
+				y: startY + 36 + spacingY * 3,
+				width: 200,
+				height: 32,
+			},
+			label: 'Cancel',
+			isFocused: false,
+			doActivate: () => {
+				if (c.debug.menuButtons)
+					console.log(functionSignature, 'doActivate difficultyCancel');
+				gameMenus.returnToMainMenu();
+			},
+		});
+
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['difficultyEasy']
+		);
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['difficultyNormal']
+		);
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['difficultyHard']
+		);
+		gameMenus.handlers.menuStage.addChild(
+			gameMenus.stageButtons['difficultyCancel']
+		);
+
+		gameMenus.fadeInButtons();
+
+		document
+			.getElementById('game__game_difficulty')
+			.classList.add('game__game_difficulty--shown');
+	},
+
 	fadeInButtons() {
 		gameMenus.handlers.menuStage.alpha = 0;
 		const increments = 5;
@@ -511,7 +607,18 @@ const gameMenus = {
 	},
 
 	returnToMainMenu() {
-		// This function is called when the player presses Escape in the replay scene menu
+		// This function is called when the player presses Escape in the game difficulty menu or replay scene menu
+
+		if (
+			document
+				.getElementById('game__game_difficulty')
+				.classList.contains('game__game_difficulty--shown')
+		) {
+			document
+				.getElementById('game__game_difficulty')
+				.classList.remove('game__game_difficulty--shown');
+		}
+
 		gameMenus.buttonFunctions.mainMenu(false, true, false);
 	},
 };

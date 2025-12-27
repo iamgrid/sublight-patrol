@@ -295,6 +295,20 @@ export default function overlays() {
 			</div>
 			<div class="game__main_menu_version" id="game__main_menu_version"></div>
 		</div>
+		<div class="game__game_difficulty" id="game__game_difficulty">
+			<div class="game__game_difficulty__title">Please choose your game difficulty:</div>
+			<div class="game__game_difficulty__options">
+				<div class="game__game_difficulty__option">
+					<div class="game__game_difficulty__dash">-</div><div>"I'm here for the story"</div>
+				</div>
+				<div class="game__game_difficulty__option">
+					<div class="game__game_difficulty__dash">-</div><div>"I'm comfortable playing games on a computer keyboard"</div>
+				</div>
+				<div class="game__game_difficulty__option">
+					<div class="game__game_difficulty__dash">-</div><div>"I'm here for that gold plaque"</div>
+				</div>
+			</div>
+		</div>
 		<div class="game__plates" id="game__plates">
 			<div class="game__plates_plate" id="game__plates_plate">
 				<div class="game__plates_plate_atl" id="game__plates_plate_atl"></div>

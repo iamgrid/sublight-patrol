@@ -513,6 +513,48 @@
 	transition: opacity 1s ease-in-out;
 }
 
+.game__game_difficulty {
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 15;
+	opacity: 0;
+	visibility: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.game__game_difficulty--shown {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.5s;
+}
+
+.game__game_difficulty__title {
+	font-size: 1.2em;
+	padding-top: 60px;
+	color: #ffffff5c;
+}
+
+.game__game_difficulty__options {
+	padding-top: 54px;
+	padding-left: 453px;
+}
+
+.game__game_difficulty__option {
+	text-align: left;
+	padding-bottom: 34px;
+	line-height: 26px;
+	display: flex;
+}
+
+.game__game_difficulty__dash {
+	color: #ffffff60;
+	padding: 0 18px;
+}
+
 .game__pause {
 	position: absolute;
 	bottom: 0;

@@ -332,18 +332,18 @@ const controlSchemes = {
 		},
 	},
 
-	replaySceneMenu: {
-		id: 'replaySceneMenu',
+	gameMenusVertical: {
+		id: 'gameMenusVertical',
 		descriptions: [
 			{ keys: 'up, down', function: 'Cycle menu buttons' },
 			{ keys: 'enter', function: 'Activate menu button' },
 			{ keys: 'esc', function: 'Return to main menu' },
 		],
 		execute() {
-			// const functionSignature = 'controlSchemes.js@replaySceneMenu.execute()';
+			// const functionSignature = 'controlSchemes.js@gameMenusVertical.execute()';
 			// if (c.debug.controlSchemes) console.log(functionSignature);
 
-			controlSchemes.showLayout(controlSchemes.replaySceneMenu.id);
+			controlSchemes.showLayout(controlSchemes.gameMenusVertical.id);
 
 			if (keyboard.isKeyPressed('ArrowDown')) {
 				gameMenus.cycleFocus('forward');
