@@ -1084,6 +1084,7 @@ export default function mainReducer(state, action) {
 				...state,
 				game: {
 					...state.game,
+					gameDifficulty: localStoragePlayerProgress.gameDifficulty,
 					playerHasCompletedTheGame:
 						localStoragePlayerProgress.playerHasCompletedTheGame,
 					playerShips: updatedPlayerShips,

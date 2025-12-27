@@ -2,7 +2,7 @@ const c = {
 	rootUrl: 'https://iamgrid.co.uk/sublight-patrol',
 	gameVersion: '[AIV]v{version} ({date})[/AIV]',
 	finisherStars: 4,
-	latestLocalStorageVersionDate: '16 Jul 2025 16:40:00 GMT',
+	latestLocalStorageVersionDate: '27 Dec 2025 17:28:00 GMT',
 	debug: {
 		reducers: false,
 		behavior: true,

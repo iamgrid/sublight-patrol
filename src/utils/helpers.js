@@ -1148,6 +1148,7 @@ export function storePlayerProgress(calledBy, state, bestSceneId) {
 	const currentState = state();
 	const statePlayerShips = currentState.game.playerShips;
 	const playerProgress = {
+		gameDifficulty: currentState.game.gameDifficulty,
 		bestSceneId: bestSceneId,
 		playerShips: {
 			current: statePlayerShips.current,
@@ -1200,6 +1201,7 @@ export function readPlayerProgress(validate = false) {
 
 		if (
 			!('bestSceneId' in parsedPlayerProgress) ||
+			!('gameDifficulty' in parsedPlayerProgress) ||
 			!('playerShips' in parsedPlayerProgress) ||
 			!('dataTS' in parsedPlayerProgress) ||
 			!('playerHasCompletedTheGame' in parsedPlayerProgress)
@@ -1260,6 +1262,22 @@ export function readPlayerProgress(validate = false) {
 		if (!bestSceneIsValid) {
 			console.error(
 				`${functionSignature} - bestSceneId is not a valid scene ID.`
+			);
+			playerProgressIsValid = false;
+		}
+
+		if (typeof parsedPlayerProgress.gameDifficulty !== 'string') {
+			console.error(`${functionSignature} - gameDifficulty is not a string.`);
+			playerProgressIsValid = false;
+		}
+
+		if (
+			!Object.keys(c.gameDifficulty).includes(
+				parsedPlayerProgress.gameDifficulty
+			)
+		) {
+			console.error(
+				`${functionSignature} - gameDifficulty is not a valid difficulty ID.`
 			);
 			playerProgressIsValid = false;
 		}
