@@ -60,6 +60,8 @@ const entities = {
 			'zangari_fighter_type_4',
 			'ship',
 		]);
+
+		console.log('Entity types initialized:', this.types);
 	},
 
 	assembleType(fromPiecesReversed) {
@@ -68,8 +70,8 @@ const entities = {
 			immutable: { ...pieces.entity.immutable },
 			mutable: { ...pieces.entity.mutable },
 		};
-		const entityType = fromPieces[fromPieces.length - 1];
-		re.immutable.entityType = makeName(entityType);
+		const entityTypeName = fromPieces[fromPieces.length - 1];
+		re.immutable.entityType = makeName(entityTypeName);
 
 		const hasMaxValue = [];
 
@@ -96,23 +98,85 @@ const entities = {
 			Object.assign(re.mutable, currentPiece.mutable);
 		});
 
+		let easyRe = {};
+		let normalRe = {};
+
+		let hasEasyVariant = false;
+
+		if (pieces[entityTypeName + '__EASY'] instanceof Object) {
+			hasEasyVariant = true;
+			console.log(
+				`Found EASY difficulty adjustments for entity type [${entityTypeName}]`
+			);
+			const easyPiece = pieces[entityTypeName + '__EASY'];
+			easyRe = {
+				immutable: { ...re.immutable },
+				mutable: { ...re.mutable },
+			};
+			Object.assign(easyRe.immutable, easyPiece.immutable);
+			Object.assign(easyRe.mutable, easyPiece.mutable);
+		}
+
+		let hasNormalVariant = false;
+
+		if (pieces[entityTypeName + '__NORMAL'] instanceof Object) {
+			hasNormalVariant = true;
+			console.log(
+				`Found NORMAL difficulty adjustments for entity type [${entityTypeName}]`
+			);
+			const normalPiece = pieces[entityTypeName + '__NORMAL'];
+			normalRe = {
+				immutable: { ...re.immutable },
+				mutable: { ...re.mutable },
+			};
+			Object.assign(normalRe.immutable, normalPiece.immutable);
+			Object.assign(normalRe.mutable, normalPiece.mutable);
+		}
+
 		// setting mutables to maximum where available
 		hasMaxValue.forEach((el) => {
 			const actualName = el.substr(3, 1).toLowerCase() + el.substr(4);
-			if (re.mutable[actualName] !== 'undefined')
+			if (re.mutable[actualName] !== 'undefined') {
 				re.mutable[actualName] = re.immutable[el];
+				if (hasEasyVariant) {
+					easyRe.mutable[actualName] = easyRe.immutable[el];
+				}
+				if (hasNormalVariant) {
+					normalRe.mutable[actualName] = normalRe.immutable[el];
+				}
+			}
 		});
 
 		re.immutable.colors = c.groups[re.immutable.colors];
+		if (hasEasyVariant) {
+			easyRe.immutable.colors = c.groups[easyRe.immutable.colors];
+		}
+		if (hasNormalVariant) {
+			normalRe.immutable.colors = c.groups[normalRe.immutable.colors];
+		}
 
 		// emitting warning about immutables with a null value
-		this.checkForNullValues(`Entity types - ${entityType}`, re.immutable);
+		this.checkForNullValues(`Entity types - ${entityTypeName}`, re.immutable);
 
 		// locking in object keys and values
 		Object.freeze(re.immutable);
 		Object.freeze(re.mutable);
+		if (hasEasyVariant) {
+			Object.freeze(easyRe.immutable);
+			Object.freeze(easyRe.mutable);
+		}
+		if (hasNormalVariant) {
+			Object.freeze(normalRe.immutable);
+			Object.freeze(normalRe.mutable);
+		}
 
-		this.types[entityType] = re;
+		this.types[entityTypeName] = re;
+		if (hasEasyVariant) {
+			this.types[entityTypeName + '__EASY'] = easyRe;
+		}
+		if (hasNormalVariant) {
+			this.types[entityTypeName + '__NORMAL'] = normalRe;
+		}
 	},
 
 	checkForNullValues(identifier, object) {
@@ -171,8 +235,33 @@ const entities = {
 			return null;
 		}
 
+		let entityTypeObj = this.types[type];
+
+		// game difficulty adjustments
+		if (storeIn !== 'player') {
+			const currentState = entities.handlers.state();
+
+			if (currentState.game.gameDifficulty !== c.gameDifficulty.HARD) {
+				const entityTypeNameWDifficulty = `${type}__${currentState.game.gameDifficulty}`;
+				console.log(
+					functionSignature,
+					'looking for entity difficulty variant in "types":',
+					entityTypeNameWDifficulty
+				);
+
+				if (pieces[entityTypeNameWDifficulty] instanceof Object) {
+					console.log(
+						functionSignature,
+						'difficulty variant object located',
+						entityTypeNameWDifficulty
+					);
+					entityTypeObj = this.types[entityTypeNameWDifficulty];
+				}
+			}
+		}
+
 		// entity object creation
-		const newEntity = { ...this.types[type].mutable, ...props };
+		const newEntity = { ...entityTypeObj.mutable, ...props };
 
 		// facing
 		let facing = 1;
@@ -180,7 +269,7 @@ const entities = {
 		newEntity.facing = facing;
 
 		// adding prototype
-		newEntity.__proto__ = this.types[type];
+		newEntity.__proto__ = entityTypeObj;
 
 		// assigning entity store
 		let doStoreIn = storeIn;

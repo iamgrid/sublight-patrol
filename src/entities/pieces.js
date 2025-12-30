@@ -349,6 +349,20 @@ const pieces = {
 		},
 		mutable: {},
 	},
+	zangari_fighter_type_1__EASY: {
+		immutable: {
+			cannonPower: 3,
+			maxHullStrength: 60,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_1__NORMAL: {
+		immutable: {
+			cannonPower: 4,
+			maxHullStrength: 80,
+		},
+		mutable: {},
+	},
 	zangari_fighter_type_2: {
 		immutable: {
 			typeShorthand: 'Z2',
