@@ -210,7 +210,6 @@ export default class App extends PIXI.Application {
 
 		entities.init();
 		c.init();
-		gameLog.init();
 		shields.init();
 
 		this.loader.add('spriteSheet', './assets/sprite_sheet_v13.png');
@@ -731,7 +730,7 @@ export default class App extends PIXI.Application {
 			const currentState = this.gameState();
 			document.getElementById('game__pause__difficulty-value').innerText =
 				currentState.game.gameDifficulty.toLowerCase();
-			gameLog.toggleStatusExpansion.bind(gameLog, '', 'show')();
+			gameLog.toggleStatusExpansion.bind(gameLog, 'show')();
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
 			soundEffects.muteUnmuteAllLoops(`${functionSignature} - 1`, true);
@@ -740,7 +739,7 @@ export default class App extends PIXI.Application {
 				gameMenus.fadeInMatte(`${functionSignature} - 2`);
 			gameMenus.showPauseButtonSet();
 		} else {
-			gameLog.toggleStatusExpansion.bind(gameLog, '', 'hide')();
+			gameLog.toggleStatusExpansion.bind(gameLog, 'hide')();
 			pauseDiv.classList.remove('game__pause--show');
 			timing.currentMode = timing.modes.play;
 			soundEffects.muteUnmuteAllLoops(`${functionSignature} - 3`, false);

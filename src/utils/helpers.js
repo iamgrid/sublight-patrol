@@ -1126,7 +1126,7 @@ export const gameLog = {
 		}
 	},
 
-	toggleStatusExpansion(event, mode) {
+	toggleStatusExpansion(mode) {
 		const mainDivClasses = document.getElementById('game__log').classList;
 
 		let doExpand = !this.isExpanded;
@@ -1150,11 +1150,6 @@ export const gameLog = {
 				gameLog.scrollToBottom();
 			}, 50);
 		}
-	},
-
-	init() {
-		document.getElementById('game__log').onclick =
-			gameLog.toggleStatusExpansion.bind(gameLog);
 	},
 
 	clear() {
