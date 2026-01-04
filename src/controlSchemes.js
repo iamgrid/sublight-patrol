@@ -212,9 +212,21 @@ const controlSchemes = {
 					shots.startShooting(playerId);
 				}
 
-				if (keyboard.isKeyPressed('KeyM')) {
+				if (
+					keyboard.isKeyPressed('KeyM') &&
+					!(keyboard.isKeyDown('ShiftLeft') || keyboard.isKeyDown('ShiftRight'))
+				) {
 					if (messageLayer.messageIsShowing) {
 						messageLayer.advance();
+					}
+				}
+
+				if (
+					keyboard.isKeyPressed('KeyM') &&
+					(keyboard.isKeyDown('ShiftLeft') || keyboard.isKeyDown('ShiftRight'))
+				) {
+					if (messageLayer.messageIsShowing) {
+						messageLayer.skipDialog();
 					}
 				}
 

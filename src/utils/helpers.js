@@ -823,6 +823,15 @@ export const messageLayer = {
 		messageLayer.messageIsShowing = true;
 		messageLayer.queuedMessages[queueIndex].messageWasShown = true;
 
+		messageLayer.addMessageToGameLog(
+			speaker,
+			message,
+			whereAndWhen,
+			messageType
+		);
+	},
+
+	addMessageToGameLog(speaker, message, whereAndWhen, messageType) {
 		let gameLogColor = gameLog.ENTRY_COLORS.aqua;
 		if (messageType === messageLayer.MESSAGE_TYPE_IDS.system) {
 			gameLogColor = gameLog.ENTRY_COLORS.gray;
@@ -865,6 +874,30 @@ export const messageLayer = {
 			timing.toggleEntityMovement(true, functionSignature);
 		}
 		// }
+	},
+
+	skipDialog() {
+		const functionSignature = 'helpers.js@messageLayer.skipDialog()';
+		console.log(functionSignature, 'Skipping dialog...');
+
+		messageLayer.queuedMessages.forEach((el) => {
+			if (el.messageWasShown) return;
+
+			messageLayer.addMessageToGameLog(
+				el.speaker,
+				el.message,
+				el.whereAndWhen,
+				el.messageType
+			);
+
+			el.messageWasShown = true;
+		});
+
+		// fade current message
+		document.getElementById('game__messagelayer-proper').style.opacity = '0';
+		messageLayer.messageIsShowing = false;
+
+		timing.toggleEntityMovement(true, functionSignature);
 	},
 
 	queueMessages(messages) {
