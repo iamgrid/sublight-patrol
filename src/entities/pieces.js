@@ -141,6 +141,7 @@ const pieces = {
 			behaviorPreferredAttackDistance: null,
 			behaviorAllowedToAvoidShots: true,
 			behaviorAllowedToFlee: true,
+			behaviorChangeAllowed: true,
 		},
 	},
 

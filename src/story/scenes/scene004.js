@@ -78,6 +78,7 @@ const scene004 = {
 			playerRelation: 'neutral',
 			behaviorAssignedGoal: c.possibleGoals.maintainVelocity,
 			behaviorAllowedToFlee: false,
+			behaviorChangeAllowed: false,
 			contents: 'Princess Nia & retinue',
 			hasBeenScanned: false,
 		},

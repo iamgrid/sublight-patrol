@@ -53,7 +53,13 @@ const behavior = {
 			// 	'entity isDisabled:',
 			// 	entity.isDisabled
 			// );
-			if (!entity.immutable.hasBehavior || entity.isDisabled) return;
+			if (
+				!entity.immutable.hasBehavior ||
+				!entity.behaviorChangeAllowed ||
+				entity.isDisabled
+			) {
+				return;
+			}
 
 			// this entity is allowed to make a decision right now
 			let updatesToEntity = [];
