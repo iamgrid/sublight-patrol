@@ -392,6 +392,20 @@ const pieces = {
 		},
 		mutable: {},
 	},
+	zangari_fighter_type_2__EASY: {
+		immutable: {
+			cannonPower: 3,
+			maxHullStrength: 90,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_2__NORMAL: {
+		immutable: {
+			cannonPower: 4,
+			maxHullStrength: 120,
+		},
+		mutable: {},
+	},
 	zangari_fighter_type_3: {
 		immutable: {
 			typeShorthand: 'Z3',
@@ -422,6 +436,20 @@ const pieces = {
 			],
 			width: 52,
 			length: 58,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_3__EASY: {
+		immutable: {
+			cannonPower: 3,
+			maxShieldStrength: 25,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_3__NORMAL: {
+		immutable: {
+			cannonPower: 3,
+			maxShieldStrength: 60,
 		},
 		mutable: {},
 	},
@@ -459,6 +487,22 @@ const pieces = {
 		},
 		mutable: {},
 	},
+	zangari_fighter_type_4__EASY: {
+		immutable: {
+			cannonPower: 3,
+			maxHullStrength: 70,
+			maxShieldStrength: 50,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_4__NORMAL: {
+		immutable: {
+			cannonPower: 5,
+			maxHullStrength: 100,
+			maxShieldStrength: 120,
+		},
+		mutable: {},
+	},
 	zangari_fighter_type_4a: {
 		immutable: {
 			typeShorthand: 'Z4A',
@@ -474,6 +518,20 @@ const pieces = {
 		},
 		mutable: {},
 	},
+	zangari_fighter_type_4a__EASY: {
+		immutable: {
+			cannonPower: 3,
+			maxHullStrength: 100,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_4a__NORMAL: {
+		immutable: {
+			cannonPower: 5,
+			maxHullStrength: 125,
+		},
+		mutable: {},
+	},
 	zangari_fighter_type_4b: {
 		immutable: {
 			typeShorthand: 'Z4B',
@@ -482,6 +540,22 @@ const pieces = {
 				{ lengthWise: 17, widthWise: 4 },
 				{ lengthWise: 17, widthWise: -4 },
 			],
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_4b__EASY: {
+		immutable: {
+			cannonPower: 3,
+			maxHullStrength: 70,
+			maxShieldStrength: 50,
+		},
+		mutable: {},
+	},
+	zangari_fighter_type_4b__NORMAL: {
+		immutable: {
+			cannonPower: 5,
+			maxHullStrength: 100,
+			maxShieldStrength: 120,
 		},
 		mutable: {},
 	},
