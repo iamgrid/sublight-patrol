@@ -239,6 +239,9 @@ const finishers = {
 
 			document.getElementById('finishers-entry__finished-at').innerText =
 				displayDateTime;
+			document.getElementById(
+				'finishers-entry__readout__finished-at'
+			).title = `The date and time shown are in your local timezone.\n(The same timestamp converts to UTC as '${nowDateObj.toUTCString()}'.)`;
 
 			console.log(functionSignature, { currentState });
 
@@ -249,6 +252,17 @@ const finishers = {
 
 			finishers.finisherInfo.playerHangarContents =
 				currentState.game.playerShips.hangarContents.join(', ');
+			const displayHangarContentsArr =
+				currentState.game.playerShips.hangarContents.map((fighter) =>
+					makeName(fighter)
+				);
+			let displayHangarContentsStr = displayHangarContentsArr.join(', ');
+			if (displayHangarContentsStr.length === 0) {
+				displayHangarContentsStr = '- empty -';
+			}
+			document.getElementById(
+				'finishers-entry__readout__final-fighter'
+			).title = `Hangar Contents: ${displayHangarContentsStr}`;
 
 			finishers.finisherInfo.gameVersion = shortenGameVersion(c.gameVersion);
 			document.getElementById('finishers-entry__game-version').innerText =
@@ -256,7 +270,7 @@ const finishers = {
 
 			finishers.finisherInfo.finalMissionName = sc.finalMissionTitle;
 			document.getElementById(
-				'finishers-entry__game-version'
+				'finishers-entry__readout__game-version'
 			).title = `Final Mission: ${finishers.finisherInfo.finalMissionName}`;
 
 			finishers.finisherInfo.finisherStars = c.finisherStars;

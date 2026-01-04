@@ -23,6 +23,12 @@
 			}
 			$renderUrl = "<a href=\"" . $feRow['player_url'] . "\" target=\"_blank\" rel=\"noopener noreferrer\">" . $displayUrl . "</a>";
 		}
+		$hangarContentsArr = explode(", ", $feRow['player_hangar_contents']);
+		$convertedHangarContentsArr = array_map('convertVesselTypeName', $hangarContentsArr);
+		$convertedHangarContents = implode(", ", $convertedHangarContentsArr);
+		if (empty($convertedHangarContents)) {
+			$convertedHangarContents = "- empty -";
+		}
 
 		print "<div class=\"finishers-entry finishers-entry--" . $gameDifficulty . "\" data-entry-nickname=\"" . $feRow['player_nickname'] . "\" id=\"finishers-entry-" . $feRow['id'] . "\">\n";
 		print "<div class=\"finishers-entry__proper\">\n";
@@ -48,19 +54,19 @@
 		print "<div class=\"finishers-entry__readout-label\">Game Difficulty</div>\n";
 		print "<div class=\"finishers-entry__game-difficulty\">" . capitalize($feRow['game_difficulty']) . "</div>\n";
 		print "</div>\n";
-		print "<div class=\"finishers-entry__readout finishers-entry__readout__final-fighter\">\n";
-		print "<div class=\"finishers-entry__readout-label\">Final Fighter</div>\n";
+		print "<div class=\"finishers-entry__readout finishers-entry__readout__final-fighter\" title=\"Hangar Contents: " . $convertedHangarContents . "\">\n";
+		print "<div class=\"finishers-entry__readout-label\">Final Fighter<span class=\"info-icon\">ℹ️</span></div>\n";
 		print "<div class=\"finishers-entry__final-fighter\">" . convertVesselTypeName($feRow['player_final_fighter']) . "</div>\n";
 		print "</div>\n";
 		print "</section>\n";
 
 		print "<section class=\"finishers-entry__section finishers-entry__section__right\">\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__finished-at\">\n";
-		print "<div class=\"finishers-entry__readout-label\">Game completed on</div>\n";
+		print "<div class=\"finishers-entry__readout-label\">Game completed on<span class=\"info-icon\">ℹ️</span></div>\n";
 		print "<div class=\"finishers-entry__finished-at\" id=\"finishers-entry__finished-at-" . $feRow['id'] . "\">" . $feRow['player_finished_at_datetime'] . "</div>\n";
 		print "</div>\n";
 		print "<div class=\"finishers-entry__readout finishers-entry__readout__game-version\" title=\"Final Mission: " . $feRow['final_mission_name'] . "\">\n";
-		print "<div class=\"finishers-entry__readout-label\">Game Version</div>\n";
+		print "<div class=\"finishers-entry__readout-label\">Game Version<span class=\"info-icon\">ℹ️</span></div>\n";
 		print "<div class=\"finishers-entry__game-version\">" . $feRow['game_version'] . "</div>\n";
 		print "</div>\n";
 		print "</section>\n";

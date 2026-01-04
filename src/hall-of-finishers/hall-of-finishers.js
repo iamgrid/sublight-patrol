@@ -26,7 +26,9 @@ const sPHOF = {
 					);
 					domElement.textContent = displayDateTime;
 
-					domElement.title = `The date and time shown are in your local timezone.\n(The same timestamp converts to UTC as '${finishedAtDateObj.toUTCString()}'.)`;
+					const parentElement = domElement.parentElement;
+					const title = `The date and time shown are in your local timezone.\n(The same timestamp converts to UTC as '${finishedAtDateObj.toUTCString()}'.)`;
+					parentElement.setAttribute('title', title);
 				} else {
 					console.warn(
 						functionSignature,

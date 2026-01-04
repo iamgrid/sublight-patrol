@@ -403,18 +403,18 @@ export default function overlays() {
 									<div class="finishers-entry__readout-label">Game Difficulty</div>
 									<div class="finishers-entry__game-difficulty" id="finishers-entry__game-difficulty"></div>
 								</div>
-								<div class="finishers-entry__readout finishers-entry__readout__final-fighter">
-									<div class="finishers-entry__readout-label">Final Fighter</div>
+								<div class="finishers-entry__readout finishers-entry__readout__final-fighter" id="finishers-entry__readout__final-fighter">
+									<div class="finishers-entry__readout-label">Final Fighter<span class="info-icon">ℹ️</span></div>
 									<div class="finishers-entry__final-fighter" id="finishers-entry__final-fighter"></div>
 								</div>
 							</section>
 							<section class="finishers-entry__section finishers-entry__section__right">
-								<div class="finishers-entry__readout finishers-entry__readout__finished-at">
-									<div class="finishers-entry__readout-label">Game completed on</div>
+								<div class="finishers-entry__readout finishers-entry__readout__finished-at" id="finishers-entry__readout__finished-at">
+									<div class="finishers-entry__readout-label">Game completed on<span class="info-icon">ℹ️</span></div>
 									<div class="finishers-entry__finished-at" id="finishers-entry__finished-at"></div>
 								</div>
 								<div class="finishers-entry__readout finishers-entry__readout__game-version" id="finishers-entry__readout__game-version">
-									<div class="finishers-entry__readout-label">Game Version</div>
+									<div class="finishers-entry__readout-label">Game Version<span class="info-icon">ℹ️</span></div>
 									<div class="finishers-entry__game-version" id="finishers-entry__game-version"></div>
 								</div>
 							</section>
