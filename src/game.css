@@ -1254,10 +1254,24 @@
 	background-color: #363636;
 	color: #a7a7a7;
 	box-shadow: 0 0 20px #00000090;
+	max-width: 1200px;
 }
 
 .game__dialog a {
 	color: white;
+	font-weight: bold;
+}
+
+.game__dialog p {
+	margin: 0;
+	margin-top: 6px;
+}
+
+.game__dialog p:first-child {
+	margin-top: 0;
+}
+
+.game__dialog b {
 	font-weight: bold;
 }
 
@@ -1281,4 +1295,9 @@
 	background-color: #3e5442;
 	color: #b4ffce;
 	border-color: #b4ffce;
+}
+
+.mobile-hangar-diagram {
+	border: 1px solid #ffffff8f;
+	margin-top: 8px;
 }

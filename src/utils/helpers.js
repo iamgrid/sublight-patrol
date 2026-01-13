@@ -1557,12 +1557,16 @@ export function showContinueDialog(
 		if (controlSchemesHandler !== null) {
 			controlSchemesHandler.restoreSuspendedLayout();
 		}
+		if (onContinue !== null) {
+			onContinue();
+		}
 	}
 
 	// handle dialog cancel event, which is triggered when the user uses the [escape] key
 	document
 		.getElementById('game__dialog--continue')
 		.addEventListener('cancel', dialogCancelEventFn, { once: true });
+
 	document.getElementById('game__dialog--continue').showModal();
 	document.getElementById('game__dialog--continue__continue-button').focus();
 }
