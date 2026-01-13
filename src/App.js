@@ -17,6 +17,7 @@ import {
 	hello,
 	getPosition,
 	getCameraTLBasedOnPlayerPosition,
+	// showConfirmationDialog,
 } from './utils/helpers';
 import hud from './hud';
 import initialGameState from './initialGameState';
@@ -169,9 +170,6 @@ export default class App extends PIXI.Application {
 
 		timing.startTime = new Date().getTime();
 
-		console.log(entities.types);
-		// console.log(story);
-
 		this.shownStateOnPause = false;
 
 		this.frameZero = {
@@ -201,10 +199,33 @@ export default class App extends PIXI.Application {
 
 		this.currentPlayerId = null;
 
-		this.init();
+		this.checkUserHardwareCapabilities();
 	}
 
-	init() {
+	checkUserHardwareCapabilities() {
+		const functionSignature = 'App.js@checkUserHardwareCapabilities()';
+
+		console.log(functionSignature, 'Checking user hardware capabilities...');
+
+		const isPointerTypeFine = window.matchMedia('(pointer:fine)').matches;
+		console.log(functionSignature, 'isPointerTypeFine:', isPointerTypeFine);
+
+		if (!isPointerTypeFine) {
+			if (
+				confirm(
+					'I apologize, Sublight Patrol has been designed for PCs and Macs and does not have a control scheme for touch-based devices.\n\nDo you want to try running the game anyway?'
+				)
+			) {
+				this.preloadAndInit();
+			} else {
+				window.location.href = 'https://iamgrid.co.uk';
+			}
+		} else {
+			this.preloadAndInit();
+		}
+	}
+
+	preloadAndInit() {
 		keyboard.addEventListeners();
 		controlSchemes.init();
 

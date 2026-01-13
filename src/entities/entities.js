@@ -29,6 +29,7 @@ const entities = {
 	foregroundEntityZIndexIterator: c.zIndices.foreground,
 
 	init() {
+		const functionSignature = 'entities.js@init()';
 		this.assembleType(['container']);
 		this.assembleType(['buoy']);
 		this.assembleType(['fuel_depot']);
@@ -61,7 +62,7 @@ const entities = {
 			'ship',
 		]);
 
-		console.log('Entity types initialized:', this.types);
+		console.log(functionSignature, 'Entity types initialized:', this.types);
 	},
 
 	assembleType(fromPiecesReversed) {
@@ -105,9 +106,9 @@ const entities = {
 
 		if (pieces[entityTypeName + '__EASY'] instanceof Object) {
 			hasEasyVariant = true;
-			console.log(
-				`Found EASY difficulty adjustments for entity type [${entityTypeName}]`
-			);
+			// console.log(
+			// 	`Found EASY difficulty adjustments for entity type [${entityTypeName}]`
+			// );
 			const easyPiece = pieces[entityTypeName + '__EASY'];
 			easyRe = {
 				immutable: { ...re.immutable },
@@ -121,9 +122,9 @@ const entities = {
 
 		if (pieces[entityTypeName + '__NORMAL'] instanceof Object) {
 			hasNormalVariant = true;
-			console.log(
-				`Found NORMAL difficulty adjustments for entity type [${entityTypeName}]`
-			);
+			// console.log(
+			// 	`Found NORMAL difficulty adjustments for entity type [${entityTypeName}]`
+			// );
 			const normalPiece = pieces[entityTypeName + '__NORMAL'];
 			normalRe = {
 				immutable: { ...re.immutable },
