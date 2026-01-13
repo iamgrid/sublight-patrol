@@ -49,6 +49,7 @@ input, select, button {
 
 body {
 	background-color: #303030;
+	padding: 0 20px;
 }
 
 .content {
