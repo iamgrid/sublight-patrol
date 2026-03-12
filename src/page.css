@@ -253,18 +253,21 @@ input[type='range']::-ms-thumb {
 	fill: var(--atp-active);
 }
 
-.atp--active {
+/* .atp--active {
 	border-radius: 25px 0 0 0;
 	background-color: var(--atp-bg);
 	border: 1px solid var(--atp-border);
 	box-shadow: 0 0 5px #00000080;
-}
+} */
 
 .atp header {
+	position: absolute;
 	display: grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
 	gap: 5px;
+	z-index: 1002;
+	width: 300px;
 }
 
 .atp__title {
@@ -283,11 +286,22 @@ input[type='range']::-ms-thumb {
 
 .atp main {
 	display: none;
+	z-index: 1001;
+	transition: opacity 0.25s ease-in-out;
+	/* transition-delay: 1s; */
+	opacity: 0;
 }
 
 .atp--active main {
 	display: block;
-	padding: 0px 15px 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 25px 0 0 0;
+	background-color: var(--atp-bg);
+	border: 1px solid var(--atp-border);
+	box-shadow: 0 0 5px #00000080;
+	padding: 50px 15px 10px;
 	text-align: left;
 	font-size: 11px;
 	width: 300px;

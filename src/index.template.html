@@ -53,7 +53,7 @@
 				</button>
 				<div class="atp__title">About this Project</div>
 			</header>
-			<main>
+			<main id="atp__main">
 				<p>
 					An open source and noncommercial side-scrolling space shooter browser
 					game for your PC and Mac
@@ -72,8 +72,32 @@
 						href="https://github.com/iamgrid/sublight-patrol/blob/master/src/behavior/behavior.js"
 						target="_blank"
 						>behavior.js</a
-					><span> - </span>see how the NPCs make decisions based on their
-					environment and state
+					><span> - </span>See how the NPCs make decisions based on their
+					environment and state.
+				</p>
+				<p>
+					<a
+						href="https://github.com/iamgrid/sublight-patrol/blob/master/src/reducers/mainReducer.js"
+						target="_blank"
+						>mainReducer.js</a
+					><span> - </span>Ever since first trying Redux I've really loved the
+					idea of reducers, named actions and pure functions for managing state.
+					So the state reducer pattern was the first tool I reached for when
+					building Sublight Patrol, and it ended up being a really good fit for
+					a game like this where you have a lot of different entities and
+					systems all needing to interact with the same state in complex ways.
+				</p>
+				<p>
+					<a
+						href="https://github.com/iamgrid/sublight-patrol/blob/master/src/story/scenes/scene003.js"
+						target="_blank"
+						>scene003.js</a
+					><span> - </span>You can think of the numbered scene files in the
+					story folder as the "screenplay" for the different scenes in the game.
+					Dig into scene003.js to see how "Mission 3: Capturing the Prototype"
+					is put together, e.g. what NPCs are in play and what their behavior
+					is, and how the different story beats are triggered as the player
+					works her way through the objectives presented.
 				</p>
 			</main>
 		</div>

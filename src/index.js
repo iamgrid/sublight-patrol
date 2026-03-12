@@ -55,10 +55,17 @@ document.getElementById('toggle-footer__link').onclick = toggleFooter;
 
 function toggleATP() {
 	const atpDiv = document.getElementById('atp');
+	const atpMain = document.getElementById('atp__main');
 	if (atpDiv.classList.contains('atp--active')) {
-		atpDiv.classList.remove('atp--active');
+		atpMain.style.opacity = '0';
+		setTimeout(() => {
+			atpDiv.classList.remove('atp--active');
+		}, 300);
 	} else {
 		atpDiv.classList.add('atp--active');
+		setTimeout(() => {
+			atpMain.style.opacity = '1';
+		}, 300);
 	}
 }
 
