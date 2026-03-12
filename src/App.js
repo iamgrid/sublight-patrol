@@ -78,7 +78,7 @@ export default class App extends PIXI.Application {
 		};
 
 		this.playVolume.recalculateSoftBoundaries = recalculateSoftBoundaries.bind(
-			this.playVolume
+			this.playVolume,
 		);
 
 		this.transitionsInProgress = {
@@ -99,7 +99,7 @@ export default class App extends PIXI.Application {
 						console.error(
 							functionSignature,
 							'Cannot register transition, type not recognized:',
-							type
+							type,
 						);
 						return;
 					}
@@ -107,7 +107,7 @@ export default class App extends PIXI.Application {
 					if (this.transitionsInProgress.states[type] === true) {
 						console.warn(
 							functionSignature,
-							`Transition of type "${type}" is already in progress, returning early...`
+							`Transition of type "${type}" is already in progress, returning early...`,
 						);
 						return;
 					}
@@ -117,7 +117,7 @@ export default class App extends PIXI.Application {
 					console.log(
 						functionSignature,
 						'states:',
-						this.transitionsInProgress.states
+						this.transitionsInProgress.states,
 					);
 				},
 				transitionComplete: (type) => {
@@ -130,7 +130,7 @@ export default class App extends PIXI.Application {
 						console.error(
 							functionSignature,
 							'Cannot complete transition, type not recognized:',
-							type
+							type,
 						);
 						return;
 					}
@@ -139,7 +139,7 @@ export default class App extends PIXI.Application {
 					console.log(
 						functionSignature,
 						'states:',
-						this.transitionsInProgress.states
+						this.transitionsInProgress.states,
 					);
 				},
 				getIsATransitionAlreadyInProgress: () => {
@@ -149,11 +149,11 @@ export default class App extends PIXI.Application {
 					console.log(
 						functionSignature,
 						'states:',
-						this.transitionsInProgress.states
+						this.transitionsInProgress.states,
 					);
 
 					const returnValue = Object.values(
-						this.transitionsInProgress.states
+						this.transitionsInProgress.states,
 					).includes(true);
 					console.log(functionSignature, { returnValue });
 					return returnValue;
@@ -163,7 +163,7 @@ export default class App extends PIXI.Application {
 
 		const [state, dispatch] = useReducer(
 			mainReducer,
-			JSON.parse(JSON.stringify(initialGameState))
+			JSON.parse(JSON.stringify(initialGameState)),
 		);
 		this.gameState = state;
 		this.dispatch = dispatch;
@@ -213,7 +213,7 @@ export default class App extends PIXI.Application {
 		if (!isPointerTypeFine) {
 			if (
 				confirm(
-					'I apologize, Sublight Patrol has been designed for PCs and Macs and does not have a control scheme for touch-based devices.\n\nDo you want to try running the game anyway?'
+					'I apologize, Sublight Patrol was designed for PCs and Macs and does not have a control scheme for touch-based devices.\n\nDo you want to try running the game anyway?',
 				)
 			) {
 				this.preloadAndInit();
@@ -242,7 +242,7 @@ export default class App extends PIXI.Application {
 		for (let soundName in soundEffects.manifest) {
 			this.loader.add(
 				soundName,
-				'./assets/sound_effects/' + soundEffects.manifest[soundName]
+				'./assets/sound_effects/' + soundEffects.manifest[soundName],
 			);
 		}
 
@@ -277,7 +277,7 @@ export default class App extends PIXI.Application {
 				soundEffects.playOnce(
 					null,
 					audioLibrary.library.soundEffects.menu_cycle.id,
-					1
+					1,
 				);
 				this.init_pt2();
 			}
@@ -419,7 +419,7 @@ export default class App extends PIXI.Application {
 		};
 
 		this.starScapeLayers = c.starScapeLayers.map(
-			(el) => new StarscapeLayer(el)
+			(el) => new StarscapeLayer(el),
 		);
 
 		this.starScapeLayers.forEach((el) => this.starScapeStage.addChild(el));
@@ -485,7 +485,7 @@ export default class App extends PIXI.Application {
 				'playerId changed from',
 				this.currentPlayerId,
 				'to',
-				playerId
+				playerId,
 			);
 			this.currentPlayerId = playerId;
 		}
@@ -520,7 +520,7 @@ export default class App extends PIXI.Application {
 				currentState,
 				this.dispatch,
 				this.camera,
-				skipToMainMenu
+				skipToMainMenu,
 			);
 		}
 
@@ -535,7 +535,7 @@ export default class App extends PIXI.Application {
 					entities.stageEntities,
 					currentState.positions.canMove,
 					playerId,
-					this.playVolume.current
+					this.playVolume.current,
 				);
 			}
 
@@ -555,7 +555,7 @@ export default class App extends PIXI.Application {
 			} else {
 				if (this.showingCoordWarning) {
 					alertsAndWarnings.remove(
-						c.alertsAndWarnings.warnings.closeToVolumeEdge
+						c.alertsAndWarnings.warnings.closeToVolumeEdge,
 					);
 					this.showingCoordWarning = false;
 				}
@@ -577,7 +577,7 @@ export default class App extends PIXI.Application {
 				if (!this.showingCoordAlert) {
 					if (this.showingCoordWarning) {
 						alertsAndWarnings.remove(
-							c.alertsAndWarnings.warnings.closeToVolumeEdge
+							c.alertsAndWarnings.warnings.closeToVolumeEdge,
 						);
 						this.showingCoordWarning = false;
 					}
@@ -596,7 +596,7 @@ export default class App extends PIXI.Application {
 			const cameraTL = getCameraTLBasedOnPlayerPosition(
 				playerX,
 				playerY,
-				currentState.entities.player.facing
+				currentState.entities.player.facing,
 			);
 
 			let cameraTLX;
@@ -654,7 +654,7 @@ export default class App extends PIXI.Application {
 				currentState.game.playerShips,
 				currentState.entities,
 				currentState.positions,
-				playerId
+				playerId,
 			);
 
 			// scanning
@@ -687,7 +687,7 @@ export default class App extends PIXI.Application {
 
 		// starscape movement
 		this.starScapeLayers.forEach((el) =>
-			el.onUpdate(delta, inSlipStream, cameraTLX, cameraTLY)
+			el.onUpdate(delta, inSlipStream, cameraTLX, cameraTLY),
 		);
 	}
 
@@ -701,7 +701,7 @@ export default class App extends PIXI.Application {
 			'playerX:',
 			playerX,
 			'playerY:',
-			playerY
+			playerY,
 		);
 
 		const cameraTL = getCameraTLBasedOnPlayerPosition(playerX, playerY, 1);
@@ -724,7 +724,7 @@ export default class App extends PIXI.Application {
 
 			console.info(
 				'%c Game paused, logging state:',
-				'padding-top: 10px; color: yellow'
+				'padding-top: 10px; color: yellow',
 			);
 			console.info(currentState);
 			console.info('currentFormations:', formations.currentFormations);
@@ -780,7 +780,7 @@ export default class App extends PIXI.Application {
 		if (timing.isPaused()) {
 			console.warn(
 				functionSignature,
-				'Cannot pause for finisher form, game is already paused.'
+				'Cannot pause for finisher form, game is already paused.',
 			);
 			return;
 		}
@@ -796,7 +796,7 @@ export default class App extends PIXI.Application {
 		if (!timing.isPaused()) {
 			console.warn(
 				functionSignature,
-				'Cannot unpause after finisher form, game is currently unpaused.'
+				'Cannot unpause after finisher form, game is currently unpaused.',
 			);
 			return;
 		}

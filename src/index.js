@@ -53,4 +53,15 @@ function toggleFooter() {
 
 document.getElementById('toggle-footer__link').onclick = toggleFooter;
 
+function toggleATP() {
+	const atpDiv = document.getElementById('atp');
+	if (atpDiv.classList.contains('atp--active')) {
+		atpDiv.classList.remove('atp--active');
+	} else {
+		atpDiv.classList.add('atp--active');
+	}
+}
+
+document.getElementById('atp__cog').onclick = toggleATP;
+
 window.pixiapp = new App();

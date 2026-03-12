@@ -56,8 +56,8 @@ input, select, button {
 }
 
 body {
-	margin-top: 2em;
 	background-color: #303030;
+	position: relative;
 }
 
 input[type='range'] {
@@ -180,14 +180,153 @@ input[type='range']::-ms-thumb {
 	cursor: default;
 }
 
+.atp {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	margin: 12px 0 0 12px;
+	/* --atp-inactive: #00000060; */
+	/* --atp-active: #000000ff; */
+	border: 1px solid #ffffff00;
+}
+
+.atp__cog {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background: unset;
+	width: 56px;
+	height: 56px;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* background: purple; */
+}
+
+/* .dark .atp__cog { */
+.atp {
+	--atp-inactive: #ffffff60;
+	--atp-active: #ffffffff;
+	--atp-text: #ffffff;
+	--atp-bg: #000000c0;
+	--atp-border: #ffffff80;
+}
+
+.atp__cog svg {
+	transform: scale(1.1);
+	display: block;
+	padding-bottom: 0;
+}
+
+.atp__cog .svg-cog {
+	transform-origin: center;
+	animation-duration: 1.5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+	animation-name: spinAnimation;
+	animation-play-state: paused;
+	transition: fill 0.25s ease-in-out;
+}
+
+.atp__cog .svg-cog, .atp__cog .svg-qm {
+	fill: var(--atp-inactive);
+}
+
+@keyframes spinAnimation { 
+	from {
+		transform: rotate(0);
+	}	
+	to { 
+		transform: rotate(360deg);
+	} 
+}
+
+.atp--active .svg-cog, 
+.atp__cog:hover .svg-cog {
+	animation-play-state: running;
+	fill: var(--atp-active);
+}
+
+.atp__cog:hover .svg-qm, .atp--active .svg-qm {
+	fill: var(--atp-active);
+}
+
+.atp--active {
+	border-radius: 25px 0 0 0;
+	background-color: var(--atp-bg);
+	border: 1px solid var(--atp-border);
+	box-shadow: 0 0 5px #00000080;
+}
+
+.atp header {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: 5px;
+}
+
+.atp__title {
+	text-align: left;
+	text-transform: uppercase;
+	font-size: 11px;
+	letter-spacing: 4px;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+	cursor: default;
+}
+
+.atp--active .atp__title, .atp:hover .atp__title {
+	opacity: 1;
+}
+
+.atp main {
+	display: none;
+}
+
+.atp--active main {
+	display: block;
+	padding: 0px 15px 10px;
+	text-align: left;
+	font-size: 11px;
+	width: 300px;
+}
+
+.atp main p {
+	line-height: 15px;
+	text-align: justify;
+}
+
+.atp main p:first-child {
+	margin-top: 0;
+}
+
+.atp main a {
+	font-weight: bold;
+	color: var(--atp-text);
+}
+
+.atp main a:hover {
+	opacity: 0.8;
+}
+
+.atp main h1 {
+	font-size: 14px;
+}
+
+.atp main span {
+	opacity: 0.65;
+}
+
 .container {
 	width: 1200px;
 	margin: 0 auto;
+	padding-top: 2em;
 }
 
 @media all and (min-height: 740px) {
 	body {
-		margin-top: 0;
 		display: grid;
 		align-content: center;
 		justify-content: center;
@@ -195,6 +334,7 @@ input[type='range']::-ms-thumb {
 
 	.container {
 		margin: 1em 0 0;
+		padding-top: 0;
 	}
 }
 
