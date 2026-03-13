@@ -186,16 +186,12 @@ input[type='range']::-ms-thumb {
 	left: 0;
 	z-index: 1000;
 	margin: 12px 0 0 12px;
-	/* --atp-inactive: #00000060; */
-	/* --atp-active: #000000ff; */
+	/* --atp-cog-inactive: #00000060; */
+	/* --atp-cog-active: #000000ff; */
 	border: 1px solid #ffffff00;
 }
 
 .atp__cog {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	background: unset;
 	width: 56px;
 	height: 56px;
 	cursor: pointer;
@@ -207,8 +203,8 @@ input[type='range']::-ms-thumb {
 
 /* .dark .atp__cog { */
 .atp {
-	--atp-inactive: #ffffff60;
-	--atp-active: #ffffffff;
+	--atp-cog-inactive: #ffffff60;
+	--atp-cog-active: #ffffffff;
 	--atp-text: #ffffff;
 	--atp-bg: #000000c0;
 	--atp-border: #ffffff80;
@@ -231,7 +227,7 @@ input[type='range']::-ms-thumb {
 }
 
 .atp__cog .svg-cog, .atp__cog .svg-qm {
-	fill: var(--atp-inactive);
+	fill: var(--atp-cog-inactive);
 }
 
 @keyframes spinAnimation { 
@@ -243,14 +239,13 @@ input[type='range']::-ms-thumb {
 	} 
 }
 
-.atp--active .svg-cog, 
-.atp__cog:hover .svg-cog {
+.atp--active .svg-cog {
 	animation-play-state: running;
-	fill: var(--atp-active);
+	fill: var(--atp-cog-active);
 }
 
-.atp__cog:hover .svg-qm, .atp--active .svg-qm {
-	fill: var(--atp-active);
+.atp--active .svg-qm {
+	fill: var(--atp-cog-active);
 }
 
 /* .atp--active {
@@ -260,28 +255,64 @@ input[type='range']::-ms-thumb {
 	box-shadow: 0 0 5px #00000080;
 } */
 
-.atp header {
+.atp__header {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 58px;
+	background: unset;
 	position: absolute;
 	display: grid;
 	grid-template-columns: auto 1fr;
 	align-items: center;
 	gap: 5px;
 	z-index: 1002;
-	width: 300px;
+	cursor: pointer;
 }
 
 .atp__title {
+	display: none;
+	color: var(--atp-text);
 	text-align: left;
 	text-transform: uppercase;
 	font-size: 11px;
 	letter-spacing: 4px;
 	opacity: 0;
 	transition: opacity 0.25s ease-in-out;
-	cursor: default;
 }
 
-.atp--active .atp__title, .atp:hover .atp__title {
+.atp--active .atp__title {
+	display: block;
 	opacity: 1;
+}
+
+.atp--active .atp__header {
+	width: 262px;
+}
+
+@media all and (min-width: 500px) {
+	.atp__header {
+		width: 262px;
+	}
+
+	.atp__title {
+		display: block;
+	}
+}
+
+@media (pointer: fine) {
+	.atp__header:hover .svg-cog {
+		animation-play-state: running;
+		fill: var(--atp-cog-active);
+	}
+
+	.atp__header:hover .svg-qm {
+		fill: var(--atp-cog-active);
+	}
+
+	.atp__header:hover .atp__title {
+		opacity: 1;
+	}
 }
 
 .atp main {

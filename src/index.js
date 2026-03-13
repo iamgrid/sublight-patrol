@@ -53,22 +53,34 @@ function toggleFooter() {
 
 document.getElementById('toggle-footer__link').onclick = toggleFooter;
 
+let atpState = 'hidden';
+let isATPTransitioning = false;
+
 function toggleATP() {
+	if (isATPTransitioning) {
+		return;
+	}
 	const atpDiv = document.getElementById('atp');
 	const atpMain = document.getElementById('atp__main');
-	if (atpDiv.classList.contains('atp--active')) {
+	if (atpState === 'visible') {
+		isATPTransitioning = true;
 		atpMain.style.opacity = '0';
 		setTimeout(() => {
 			atpDiv.classList.remove('atp--active');
+			isATPTransitioning = false;
+			atpState = 'hidden';
 		}, 300);
 	} else {
+		isATPTransitioning = true;
 		atpDiv.classList.add('atp--active');
 		setTimeout(() => {
 			atpMain.style.opacity = '1';
-		}, 300);
+			isATPTransitioning = false;
+			atpState = 'visible';
+		}, 50);
 	}
 }
 
-document.getElementById('atp__cog').onclick = toggleATP;
+document.getElementById('atp__header').onclick = toggleATP;
 
 window.pixiapp = new App();
