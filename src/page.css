@@ -185,7 +185,7 @@ input[type='range']::-ms-thumb {
 	top: 0;
 	left: 0;
 	z-index: 1000;
-	margin: 12px 0 0 12px;
+	margin: 14px 0 0 14px;
 	/* --atp-cog-inactive: #00000060; */
 	/* --atp-cog-active: #000000ff; */
 	border: 1px solid #ffffff00;
@@ -332,7 +332,8 @@ input[type='range']::-ms-thumb {
 	background-color: var(--atp-bg);
 	border: 1px solid var(--atp-border);
 	box-shadow: 0 0 5px #00000080;
-	padding: 50px 15px 5px;
+	/* padding: 50px 15px 5px; */
+	padding: 55px 15px 4px;
 	text-align: left;
 	font-size: 11px;
 	width: 300px;
