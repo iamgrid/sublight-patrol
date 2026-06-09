@@ -1292,12 +1292,41 @@
 }
 
 .game__dialog--green {
-	background-color: #3e5442;
+	background-color: #29362b;
 	color: #b4ffce;
 	border-color: #b4ffce;
+}
+
+.game__dialog--teal {
+	background-color: #14262A;
+	color: #d3e3e7;
+	border-color: #326469;
 }
 
 .mobile-hangar-diagram {
 	border: 1px solid #ffffff8f;
 	margin-top: 8px;
+}
+
+.first-craft-lost-message {
+	text-align: left;
+	font-size: 15px;
+	width: 700px;
+	height: 400px;
+	overflow-y: scroll;
+	padding: 10px;
+}
+
+.first-craft-lost-message__image-wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.first-craft-lost-message__craft {
+	margin-top: 8px;
+}
+
+.first-craft-lost-message__challenge {
+	color:rgb(0, 225, 255);
+	margin-top: 30px;
 }

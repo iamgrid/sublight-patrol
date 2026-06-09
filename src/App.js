@@ -17,6 +17,7 @@ import {
 	hello,
 	getPosition,
 	getCameraTLBasedOnPlayerPosition,
+	// showFirstCraftLostDialog,
 	// showConfirmationDialog,
 } from './utils/helpers';
 import hud from './hud';
@@ -435,8 +436,14 @@ export default class App extends PIXI.Application {
 		// Create an update loop
 		this.ticker.add(this.gameLoop.bind(this));
 
-		// Uncomment the line below to work on the finishers form
+		// Uncomment the line below to work on the finishers form:
 		// finishers.show();
+
+		// Uncomment the four lines below to test the "first craft lost" dialog:
+		// showFirstCraftLostDialog(() => {}, {
+		// 	suspendCurrentLayout: () => {},
+		// 	restoreSuspendedLayout: () => {},
+		// });
 	}
 
 	gameLoop(delta) {
