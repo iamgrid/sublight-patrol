@@ -7,6 +7,7 @@ const music = {
 	musicIsEnabled: true,
 	playingTrack: null,
 	readoutTimeout: null,
+	isPaused: false,
 	domNodes: {
 		musicPanel: document.getElementById('header__music'),
 		enableMusicButton: document.getElementById('header__music-button'),
@@ -24,10 +25,10 @@ const music = {
 
 		// console.log(functionSignature, music.musicIsEnabled);
 		document.getElementById(
-			'header__music-button-icon--enabled'
+			'header__music-button-icon--enabled',
 		).style.display = enable ? 'block' : 'none';
 		document.getElementById(
-			'header__music-button-icon--disabled'
+			'header__music-button-icon--disabled',
 		).style.display = enable ? 'none' : 'block';
 
 		// music.domNodes.playingReadout.innerHTML = "<span>Paused</span>";
@@ -47,13 +48,13 @@ const music = {
 
 		if (pulseOpacity) {
 			music.domNodes.playingReadout.classList.remove(
-				'header__music-playing--fade-out'
+				'header__music-playing--fade-out',
 			);
 
 			clearTimeout(music.readoutTimeout);
 			music.readoutTimeout = setTimeout(() => {
 				music.domNodes.playingReadout.classList.add(
-					'header__music-playing--fade-out'
+					'header__music-playing--fade-out',
 				);
 			}, 6500);
 		}
@@ -77,7 +78,7 @@ const music = {
 		if (music.playingTrack === libraryItemId) {
 			console.log(
 				functionSignature,
-				'music.playingTrack is already the requested track'
+				'music.playingTrack is already the requested track',
 			);
 			return;
 		}
@@ -85,12 +86,13 @@ const music = {
 		if (music.playingTrack !== null) {
 			console.log(
 				functionSignature,
-				'music.playingTrack is not null and is not the requested track, stopping playback first'
+				'music.playingTrack is not null and is not the requested track, stopping playback first',
 			);
 			music.stopPlaying();
 		}
 
 		music.playingTrack = libraryItemId;
+		music.isPaused = false;
 
 		let volume = 0.4;
 		if (libraryItemId === audioLibrary.library.music.sublight_patrol_theme.id) {
@@ -112,7 +114,7 @@ const music = {
 			start: startAt,
 			complete: () => {
 				console.log(
-					'music@playTrack() -> sound.play() -> complete(): track playback completed'
+					'music@playTrack() -> sound.play() -> complete(): track playback completed',
 				);
 				music.playingTrack = null;
 				music.updateReadout('<span>(Track playback complete)</span>', false);
@@ -122,7 +124,7 @@ const music = {
 		music.handlers.resources[libraryItemId].sound.volume = 1; // reset volume in case this track was previously faded out
 
 		music.updateReadout(
-			`<span>Playing:</span> ${music.library[libraryItemId].title}`
+			`<span>Playing:</span> ${music.library[libraryItemId].title}`,
 		);
 	},
 
@@ -153,6 +155,59 @@ const music = {
 		}, 120);
 	},
 
+	pausePlayingTrack() {
+		const functionSignature = 'music.js@pausePlayingTrack()';
+		console.log(functionSignature);
+		if (music.playingTrack === null) {
+			console.log(
+				functionSignature,
+				'music.playingTrack is null, returning early...',
+			);
+			return;
+		}
+
+		if (music.isPaused) {
+			console.log(
+				functionSignature,
+				'music.isPaused is true, returning early...',
+			);
+			return;
+		}
+
+		music.handlers.resources[music.playingTrack].sound.pause();
+		music.isPaused = true;
+
+		music.updateReadout('<span>(Paused)</span>');
+	},
+
+	resumePlayingTrack() {
+		const functionSignature = 'music.js@resumePlayingTrack()';
+		console.log(functionSignature);
+
+		if (music.playingTrack === null) {
+			console.log(
+				functionSignature,
+				'music.playingTrack is null, returning early...',
+			);
+			return;
+		}
+
+		if (!music.isPaused) {
+			console.log(
+				functionSignature,
+				'music.isPaused is false, returning early...',
+			);
+			return;
+		}
+
+		music.handlers.resources[music.playingTrack].sound.resume();
+		music.isPaused = false;
+
+		music.updateReadout(
+			`<span>Playing:</span> ${music.library[music.playingTrack].title}`,
+		);
+	},
+
 	stopPlaying() {
 		const functionSignature = 'music.js@stopPlaying()';
 		console.log(functionSignature);
@@ -163,6 +218,7 @@ const music = {
 
 		music.handlers.resources[music.playingTrack].sound.stop();
 		music.playingTrack = null;
+		music.isPaused = false;
 
 		music.updateReadout('<span>(Nothing is playing)</span>', false);
 	},

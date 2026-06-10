@@ -12,6 +12,7 @@ import {
 	showFirstCraftLostDialog,
 } from '../utils/helpers';
 import soundEffects from '../audio/soundEffects';
+import music from '../audio/music';
 import formations from '../behavior/formations';
 import timing from '../utils/timing';
 import plates from '../plates';
@@ -26,6 +27,7 @@ const entities = {
 		dispatch: null,
 		state: null,
 		stage: null,
+		// music: null,
 		pixiHUD: null,
 		transitionsInProgress: null,
 		entityWasDespawned: null,
@@ -600,6 +602,7 @@ const entities = {
 				() => {
 					soundEffects.muteUnmuteAllLoops(`${functionSignature} 4`, true);
 					if (nextShip === c.playableFighterTypeIds.fenrir_dominator) {
+						music.pausePlayingTrack();
 						showFirstCraftLostDialog(() => {
 							entities.playerShipDestruction2(
 								nextShip,
@@ -608,6 +611,7 @@ const entities = {
 								newPlayerShipX,
 								newPlayerShipY,
 							);
+							music.resumePlayingTrack();
 						}, controlSchemes);
 					} else {
 						entities.playerShipDestruction2(

@@ -378,6 +378,7 @@ export default class App extends PIXI.Application {
 			dispatch: this.dispatch,
 			state: this.gameState,
 			stage: this.mainStage,
+			// music: this.music,
 			pixiHUD: this.pixiHUD,
 			transitionsInProgress: this.transitionsInProgress,
 			entityWasDespawned: this.entityWasDespawned,
@@ -762,6 +763,7 @@ export default class App extends PIXI.Application {
 			pauseDiv.classList.add('game__pause--show');
 			timing.currentMode = timing.modes.pause;
 			soundEffects.muteUnmuteAllLoops(`${functionSignature} - 1`, true);
+			music.pausePlayingTrack();
 			this.pixiState = this.pause;
 			if (dontFadeMatte === '')
 				gameMenus.fadeInMatte(`${functionSignature} - 2`);
@@ -771,6 +773,7 @@ export default class App extends PIXI.Application {
 			pauseDiv.classList.remove('game__pause--show');
 			timing.currentMode = timing.modes.play;
 			soundEffects.muteUnmuteAllLoops(`${functionSignature} - 3`, false);
+			music.resumePlayingTrack();
 			this.pixiState = this.play;
 			this.shownStateOnPause = false;
 			gameMenus.clearButtons();

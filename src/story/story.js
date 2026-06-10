@@ -152,7 +152,7 @@ const story = {
 					storePlayerProgress(
 						`${functionSignature} - add fighter to player hangar`,
 						story.handlers.state,
-						currentState.game.currentScene
+						currentState.game.currentScene,
 					);
 				},
 			});
@@ -201,7 +201,7 @@ const story = {
 			) {
 				console.log(
 					functionSignature,
-					"The player has no fighters left, so the story shouldn't be advancing, returning early..."
+					"The player has no fighters left, so the story shouldn't be advancing, returning early...",
 				);
 				return;
 			}
@@ -223,7 +223,7 @@ const story = {
 			} else {
 				// playScene attribute is null, so we need to advance to the next scene
 				let index = story.sceneList.findIndex(
-					(el) => el.id === story.currentScene
+					(el) => el.id === story.currentScene,
 				);
 				index++;
 				if (story.sceneList[index] !== undefined) {
@@ -237,7 +237,7 @@ const story = {
 						if (c.debug.sequentialEvents)
 							console.log(
 								functionSignature,
-								'player is replaying scenes, returning to the main menu'
+								'player is replaying scenes, returning to the main menu',
 							);
 						story.mainMenu(false, false, false);
 						return;
@@ -247,7 +247,7 @@ const story = {
 					if (c.debug.sequentialEvents)
 						console.log(
 							functionSignature,
-							'PLAYER HAS COMPLETED ALL LEVELS OF THE GAME'
+							'PLAYER HAS COMPLETED ALL LEVELS OF THE GAME',
 						);
 					plates.fullMatte();
 					plates.loadPlate('the_end');
@@ -258,7 +258,7 @@ const story = {
 							soundEffects.muteUnmuteAllLoops('story.js@advance() 2', true);
 						},
 						timing.modes.play,
-						1000
+						1000,
 					);
 
 					timing.setTimeout(
@@ -266,7 +266,7 @@ const story = {
 							finishers.show();
 						},
 						timing.modes.play,
-						6000
+						6000,
 					);
 
 					plates.fadeOutPlate(25, 8000);
@@ -277,7 +277,7 @@ const story = {
 							story.advance(functionSignature, 'mainMenu', 0);
 						},
 						timing.modes.play,
-						8200
+						8200,
 					);
 					story.handlers.dispatch({
 						type: c.actions.GAME_COMPLETED,
@@ -288,7 +288,7 @@ const story = {
 							storePlayerProgress(
 								`${functionSignature} - player has completed all levels of the game`,
 								story.handlers.state,
-								currentState.game.currentScene
+								currentState.game.currentScene,
 							);
 						},
 					});
@@ -302,7 +302,7 @@ const story = {
 			console.log(functionSignature, 'story.currentScene:', story.currentScene);
 
 		const currentSceneListObject = story.sceneList.find(
-			(el) => el.id === story.currentScene
+			(el) => el.id === story.currentScene,
 		);
 		const currentSceneObject = currentSceneListObject.sceneObject;
 
@@ -319,20 +319,20 @@ const story = {
 			console.log(
 				functionSignature,
 				'pairedTrack set to:',
-				story.handlers.pairedTrack.actual
+				story.handlers.pairedTrack.actual,
 			);
 			// story.sceneTransitionIsInProgress = false;
 			story.handlers.transitionsInProgress.functions.transitionComplete(
-				c.TRACKED_TRANSITION_TYPES.scene
+				c.TRACKED_TRANSITION_TYPES.scene,
 			);
 			story.handlers.transitionsInProgress.functions.transitionComplete(
-				c.TRACKED_TRANSITION_TYPES.missionFailed
+				c.TRACKED_TRANSITION_TYPES.missionFailed,
 			);
 			story.handlers.transitionsInProgress.functions.transitionComplete(
-				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedRespawning
+				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedRespawning,
 			);
 			story.handlers.transitionsInProgress.functions.transitionComplete(
-				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedGameOver
+				c.TRACKED_TRANSITION_TYPES.playerShipDestroyedGameOver,
 			);
 
 			if (currentSceneListObject.id !== storyConstants.scenes.mainMenu) {
@@ -345,18 +345,18 @@ const story = {
 						if (c.debug.localStorage)
 							console.log(
 								functionSignature,
-								'localStorage value is either missing or invalid, populating with the defaults from initialGameState.js'
+								'localStorage value is either missing or invalid, populating with the defaults from initialGameState.js',
 							);
 						storePlayerProgress(
 							`${functionSignature} - intro scene, first time visitor`,
 							story.handlers.state,
-							storyConstants.scenes.intro
+							storyConstants.scenes.intro,
 						);
 					} else {
 						if (c.debug.localStorage)
 							console.log(
 								'updating player progress from localStorage:',
-								localStoragePlayerProgress
+								localStoragePlayerProgress,
 							);
 						story.handlers.dispatch({
 							type: c.actions.UPDATE_PLAYER_PROGRESS_BASED_ON_LOCAL_STORAGE,
@@ -370,10 +370,10 @@ const story = {
 
 					const playersBestSceneId = localStoragePlayerProgress.bestSceneId;
 					const playersBestSceneIndex = story.sceneList.findIndex(
-						(sc) => sc.id === playersBestSceneId
+						(sc) => sc.id === playersBestSceneId,
 					);
 					const currentSceneIndex = story.sceneList.findIndex(
-						(sc2) => sc2.id === currentSceneListObject.id
+						(sc2) => sc2.id === currentSceneListObject.id,
 					);
 
 					let writeBestSceneId = playersBestSceneId;
@@ -384,7 +384,7 @@ const story = {
 					storePlayerProgress(
 						`${functionSignature} - gameplay scene`,
 						story.handlers.state,
-						writeBestSceneId
+						writeBestSceneId,
 					);
 				}
 			}
@@ -408,14 +408,14 @@ const story = {
 			} else {
 				console.error(
 					functionSignature,
-					`playerStartingPosition for scene '${currentSceneListObject.id}' is not defined or invalid.`
+					`playerStartingPosition for scene '${currentSceneListObject.id}' is not defined or invalid.`,
 				);
 			}
 
 			story.handlers.resetCameraAndMoveToPlayerXY(
 				newCurrentScenePlayerStartingPositionX,
 				newCurrentScenePlayerStartingPositionY,
-				functionSignature
+				functionSignature,
 			);
 		}
 
@@ -441,7 +441,7 @@ const story = {
 
 		if (!currentSceneBeatObj.isTheFinalGameplayBeat) {
 			story.handlers.transitionsInProgress.functions.transitionComplete(
-				c.TRACKED_TRANSITION_TYPES.scene
+				c.TRACKED_TRANSITION_TYPES.scene,
 			);
 		}
 
@@ -457,14 +457,14 @@ const story = {
 			gameLog.add(
 				gameLog.ENTRY_COLORS.white,
 				`---&nbsp;&nbsp;&nbsp;${currentSceneObject.titlePlate.title}&nbsp;&nbsp;&nbsp;---`,
-				timing.times.play
+				timing.times.play,
 			);
 			plates.fullMatte();
 			plates.loadPlate(
 				'mission_title',
 				-1,
 				currentSceneObject.titlePlate.title,
-				currentSceneObject.titlePlate.subTitle
+				currentSceneObject.titlePlate.subTitle,
 			);
 			timing.toggleEntityMovement(false, 'story.js@advance() 3');
 			soundEffects.muteUnmuteAllLoops('story.js@advance() 4', true);
@@ -476,7 +476,7 @@ const story = {
 					soundEffects.muteUnmuteAllLoops('story.js@advance() 6', false);
 				},
 				timing.modes.play,
-				6000
+				6000,
 			);
 			plates.fadeOutPlate(25, 9000);
 		}
@@ -513,7 +513,7 @@ const story = {
 			setTimeout(() => {
 				if (story.currentScene === storyConstants.scenes.mainMenu) {
 					console.log(
-						'story.js@advance timeout fn() -> mainMenu scene, playing theme music'
+						'story.js@advance timeout fn() -> mainMenu scene, playing theme music',
 					);
 					music.playTrack(audioLibrary.library.music.sublight_patrol_theme.id);
 				}
@@ -536,7 +536,7 @@ const story = {
 					shots.registerEntityCannons(playerId);
 				},
 				timing.modes.play,
-				1500
+				1500,
 			);
 			timing.setTrigger(
 				'story-hud-trigger2',
@@ -546,7 +546,7 @@ const story = {
 					// hud.toggle('story.js@advance() 4', true);
 				},
 				timing.modes.play,
-				6000
+				6000,
 			);
 		} else {
 			story.handlers.hudShouldBeShowing.actual = false;
@@ -565,7 +565,7 @@ const story = {
 		gameLog.add(
 			gameLog.ENTRY_COLORS.white,
 			'Mission restarted...',
-			timing.times.play
+			timing.times.play,
 		);
 		story.handlers.dispatch({
 			type: c.actions.RESTORE_PLAYER_SHIPS_LOST_ON_THIS_MISSION,
@@ -577,7 +577,7 @@ const story = {
 	mainMenu(
 		askForConfirmation = true,
 		hurryUp = false,
-		restorePlayerShipsLostOnThisMission = false
+		restorePlayerShipsLostOnThisMission = false,
 	) {
 		const functionSignature = 'story.js@mainMenu()';
 		console.log(functionSignature, {
@@ -618,7 +618,7 @@ const story = {
 					mainMenuProper();
 				},
 				null,
-				controlSchemes
+				controlSchemes,
 			);
 		} else {
 			mainMenuProper();
@@ -639,7 +639,7 @@ const story = {
 					story.noProgressYetMessage,
 					'yellow',
 					null,
-					controlSchemes
+					controlSchemes,
 				);
 			} else {
 				goAhead = true;
@@ -662,7 +662,7 @@ const story = {
 		if (c.debug.sequentialEvents || c.debug.menuButtons) {
 			console.log(
 				functionSignature,
-				`called with sceneId: ${sceneId}, sceneIndex: ${sceneIndex}, replayDisabled: ${replayDisabled}`
+				`called with sceneId: ${sceneId}, sceneIndex: ${sceneIndex}, replayDisabled: ${replayDisabled}`,
 			);
 			console.log(functionSignature, {
 				localStoragePlayerProgress,
@@ -679,7 +679,7 @@ const story = {
 					"I'm sorry, you haven't unlocked that scene yet.",
 					'yellow',
 					null,
-					controlSchemes
+					controlSchemes,
 				);
 			} else {
 				goAhead = true;
@@ -714,7 +714,7 @@ const story = {
 					story.newGameDifficulty();
 				},
 				null,
-				controlSchemes
+				controlSchemes,
 			);
 		}
 	},
@@ -753,7 +753,7 @@ const story = {
 		storePlayerProgress(
 			`${functionSignature}`,
 			story.handlers.state,
-			storyConstants.scenes.scene001
+			storyConstants.scenes.scene001,
 		);
 
 		hud.requestFullReRender = true;
@@ -768,10 +768,10 @@ const story = {
 		const localStoragePlayerProgress = readPlayerProgress();
 
 		const relevantPlayerProgress = getHasThePlayerMadeProgress(
-			localStoragePlayerProgress
+			localStoragePlayerProgress,
 		);
 		const hasThePlayerCompletedTheGame = getHasThePlayerCompletedTheGame(
-			localStoragePlayerProgress
+			localStoragePlayerProgress,
 		);
 
 		if (!relevantPlayerProgress && !hasThePlayerCompletedTheGame) {
@@ -780,7 +780,7 @@ const story = {
 				story.noProgressYetMessage,
 				'yellow',
 				null,
-				controlSchemes
+				controlSchemes,
 			);
 		} else if (hasThePlayerCompletedTheGame) {
 			// alert(story.playerAlreadyCompletedGameMessage);
@@ -788,7 +788,7 @@ const story = {
 				story.playerAlreadyCompletedGameMessage,
 				'yellow',
 				null,
-				controlSchemes
+				controlSchemes,
 			);
 		} else {
 			story.playerIsReplayingScenes = false;
@@ -800,7 +800,7 @@ const story = {
 			story.advance(
 				functionSignature,
 				localStoragePlayerProgress.bestSceneId,
-				0
+				0,
 			);
 		}
 	},
@@ -858,14 +858,14 @@ const story = {
 					story.currentObjectives.show.findIndex(
 						(el) =>
 							el.type === c.objectiveTypes.disabled.id &&
-							el.entityId === awitem.entityId
+							el.entityId === awitem.entityId,
 					);
 
 				if (equivalentShowObjectiveIdx === -1) {
 					console.error(
 						functionSignature,
 						'the "advanceWhen" in the update has a disabled-type objective but no equivalent "show" objective could be located:',
-						{ updates, 'story.currentObjectives': story.currentObjectives }
+						{ updates, 'story.currentObjectives': story.currentObjectives },
 					);
 				}
 
@@ -885,7 +885,7 @@ const story = {
 			gameLog.add(
 				gameLog.ENTRY_COLORS.yellow,
 				'Mission objectives updated.',
-				timing.times.play
+				timing.times.play,
 			);
 		}
 
@@ -895,7 +895,7 @@ const story = {
 	checkAgainstCurrentObjectives(
 		entityId,
 		eventId,
-		wasPreviouslyInspected = false
+		wasPreviouslyInspected = false,
 	) {
 		const functionSignature = 'story.js@checkAgainstCurrentObjectives()';
 		if (c.debug.objectives)
@@ -904,7 +904,7 @@ const story = {
 		if (typeof eventId !== 'string') {
 			console.error(
 				'eventId must be a string, this was received instead:',
-				eventId
+				eventId,
 			);
 		}
 
@@ -1010,7 +1010,7 @@ const story = {
 						if (c.debug.objectives)
 							console.log(
 								functionSignature,
-								'remainingPercentage < requiredPercentage, setting objective to failed'
+								'remainingPercentage < requiredPercentage, setting objective to failed',
 							);
 						failState = true;
 						el.objectiveObj.failed = true;
@@ -1038,7 +1038,7 @@ const story = {
 			if (hasUpdated && el.store !== 'advanceWhen') {
 				const [itemColor, objectiveText] = story.returnObjectiveText(
 					el.objectiveObj,
-					meansProgress
+					meansProgress,
 				);
 				updatedObjectiveMessages.push({
 					color: itemColor,
@@ -1091,14 +1091,14 @@ const story = {
 			) {
 				console.warn(
 					functionSignature,
-					'Failstate is true, but a tracked transition is already in progress, returning early...'
+					'Failstate is true, but a tracked transition is already in progress, returning early...',
 				);
 				return;
 			}
 
 			// story.missionFailureWasTriggered = true;
 			story.handlers.transitionsInProgress.functions.registerTransition(
-				c.TRACKED_TRANSITION_TYPES.missionFailed
+				c.TRACKED_TRANSITION_TYPES.missionFailed,
 			);
 			music.fadeOutPlayingTrack();
 			if (c.debug.objectives)
@@ -1109,17 +1109,17 @@ const story = {
 			timing.toggleEntityMovement(
 				false,
 				'story.js@checkAgainstCurrentObjectives() 1',
-				3000
+				3000,
 			);
 			timing.setTimeout(
 				() => {
 					soundEffects.muteUnmuteAllLoops(
 						'story.js@checkAgainstCurrentObjectives() 2',
-						true
+						true,
 					);
 				},
 				timing.modes.play,
-				3000
+				3000,
 			);
 			plates.fadeOutPlate(25, 4000);
 			timing.setTimeout(
@@ -1127,7 +1127,7 @@ const story = {
 					gameMenus.showMissionFailedButtonSet();
 				},
 				timing.modes.play,
-				5100
+				5100,
 			);
 		}
 	},
@@ -1138,7 +1138,7 @@ const story = {
 		let updatedObjectiveMessages = [];
 
 		const currentSceneObject = story.sceneList.find(
-			(el) => el.id === story.currentScene
+			(el) => el.id === story.currentScene,
 		).sceneObject;
 		const isTheFinalGameplayBeat =
 			currentSceneObject.storyBeats[story.currentSceneBeat]
@@ -1167,7 +1167,7 @@ const story = {
 						obj2.currentPercentage = 100;
 						const [itemColor, objectiveText] = story.returnObjectiveText(
 							obj2,
-							true
+							true,
 						);
 						updatedObjectiveMessages.push({
 							color: itemColor,
@@ -1215,7 +1215,7 @@ const story = {
 			if (c.debug.objectives)
 				console.log(
 					'ALLCOMPLETE IS TRUE, ADVANCE TO THE NEXT STORY BEAT!',
-					story.currentObjectives
+					story.currentObjectives,
 				);
 
 			if (story.currentSceneBeat < currentSceneObject.storyBeats.length - 1) {
@@ -1223,7 +1223,7 @@ const story = {
 				story.advance(
 					functionSignature,
 					story.currentScene,
-					story.currentSceneBeat + 1
+					story.currentSceneBeat + 1,
 				);
 			} else {
 				// advance to the next scene
@@ -1234,14 +1234,14 @@ const story = {
 				) {
 					console.warn(
 						functionSignature,
-						'A tracked transition is already in progress, returning early...'
+						'A tracked transition is already in progress, returning early...',
 					);
 					return;
 				}
 
 				// story.sceneTransitionIsInProgress = true;
 				story.handlers.transitionsInProgress.functions.registerTransition(
-					c.TRACKED_TRANSITION_TYPES.scene
+					c.TRACKED_TRANSITION_TYPES.scene,
 				);
 
 				music.fadeOutPlayingTrack();
@@ -1251,17 +1251,17 @@ const story = {
 				timing.toggleEntityMovement(
 					false,
 					'story.js@checkBeatCompletion() 1',
-					2000
+					2000,
 				);
 				timing.setTimeout(
 					() => {
 						soundEffects.muteUnmuteAllLoops(
 							'story.js@checkBeatCompletion() 2',
-							true
+							true,
 						);
 					},
 					timing.modes.play,
-					2000
+					2000,
 				);
 				plates.fadeInMatte(50, 1000);
 				plates.fadeOutPlate(50, 5000);
@@ -1276,7 +1276,7 @@ const story = {
 						}
 					},
 					timing.modes.play,
-					8500
+					8500,
 				);
 			}
 		}
@@ -1289,7 +1289,7 @@ const story = {
 
 		story.checkAgainstCurrentObjectives(
 			entityId,
-			c.objectiveTypes.hasDespawned.id
+			c.objectiveTypes.hasDespawned.id,
 		);
 	},
 
@@ -1297,7 +1297,7 @@ const story = {
 		// console.log('updateObjectiveDisplay() called');
 		const re = [];
 		re.push(
-			"<div class='game__pause__objectives-title'>Current objectives:</div>\n<ul class='game__pause__objectives-list'>"
+			"<div class='game__pause__objectives-title'>Current objectives:</div>\n<ul class='game__pause__objectives-list'>",
 		);
 
 		const objectiveLis = story.currentObjectives.show.map((obj) => {
@@ -1328,7 +1328,7 @@ const story = {
 		if (objectiveObj.failed) itemColor = gameLog.ENTRY_COLORS.red;
 		if (objectiveObj.groupId === undefined) {
 			let entityClassification = story.assertClassification(
-				objectiveObj.entityId
+				objectiveObj.entityId,
 			);
 			let mainText = c.objectiveTypes[objectiveObj.type].desc;
 			let parensText = 'incomplete';
@@ -1341,12 +1341,12 @@ const story = {
 				mainText = c.objectiveTypes[objectiveObj.type].desc;
 			}
 			objectiveText = `${entityClassification}${makeName(
-				objectiveObj.entityId
+				objectiveObj.entityId,
 			)} ${mainText} (${parensText})`;
 		} else {
 			let groupClassification = '';
 			let firstInGroup = Object.values(story.currentStoryEntities).find(
-				(en) => en.groupId === objectiveObj.groupId
+				(en) => en.groupId === objectiveObj.groupId,
 			);
 			if (firstInGroup !== undefined)
 				groupClassification = story.assertClassification(firstInGroup.id);
@@ -1393,10 +1393,14 @@ const story = {
 	},
 
 	registerThemeMusicInterval() {
-		if (c.debug.sequentialEvents)
-			console.log('story.js@registerThemeMusicInterval() called');
+		const functionSignature = 'story.js@registerThemeMusicInterval()';
+		if (c.debug.sequentialEvents) console.log(functionSignature, 'called');
 		if (story.themeMusicInterval !== null) {
-			clearInterval(story.themeMusicInterval);
+			console.log(
+				functionSignature,
+				'themeMusicInterval is not null, returning early...',
+			);
+			return;
 		}
 		story.themeMusicInterval = setInterval(() => {
 			const functionSignature =
@@ -1405,7 +1409,7 @@ const story = {
 				if (music.playingTrack !== null) {
 					console.log(
 						functionSignature,
-						'music.playingTrack is not null, returning'
+						'music.playingTrack is not null, returning',
 					);
 				} else {
 					console.log(functionSignature, 'playing theme music');
