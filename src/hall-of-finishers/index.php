@@ -9,6 +9,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>i.am.grid &middot; Sublight Patrol Hall of Finishers</title>
+		<link rel="icon" href="https://iamgrid.co.uk/portfolio_assets/favicon.ico" type="image/x-icon"/>
 		<link
 			href="https://fonts.googleapis.com/css?family=Roboto:300,700&subset=latin-ext"
 			rel="stylesheet"
